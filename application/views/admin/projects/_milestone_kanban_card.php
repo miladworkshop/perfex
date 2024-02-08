@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
-<li data-task-id="<?php echo $task['id']; ?>" class="task<?php if (has_permission('tasks', '', 'create') || has_permission('tasks', '', 'edit')) {
+<li data-task-id="<?php echo $task['id']; ?>" class="task<?php if (staff_can('create',  'tasks') || staff_can('edit',  'tasks')) {
     echo ' sortable';
 } ?><?php if ($task['current_user_is_assigned']) {
     echo ' current-user-task';
@@ -36,7 +36,7 @@ if (count($assignees) > 0 && $assignees[0] != '') { ?>
                 <p class="tw-mb-0 tw-mt-1 tw-text-sm">
                     <?php echo format_task_status($task['status'], true); ?>
                 </p>
-                <?php if (has_permission('tasks', '', 'create')) { ?>
+                <?php if (staff_can('create',  'tasks')) { ?>
                 <p class="tw-mb-0 tw-text-sm tw-font-medium">
                     <?php echo _l('task_total_logged_time'); ?>
                     <?php echo seconds_to_time_format($task['total_logged_time']); ?>

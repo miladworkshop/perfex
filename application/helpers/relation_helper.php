@@ -20,8 +20,9 @@ function get_relation_data($type, $rel_id = '', $extra = [])
 
     $data = [];
     if ($type == 'customer' || $type == 'customers') {
-        $where_clients = ''; 
-        if ($q) {
+        $where_clients = '';
+
+        if ($q && !$rel_id) {
             $where_clients .= '(company LIKE "%' . $CI->db->escape_like_str($q) . '%" ESCAPE \'!\' OR CONCAT(firstname, " ", lastname) LIKE "%' . $CI->db->escape_like_str($q) . '%" ESCAPE \'!\' OR email LIKE "%' . $CI->db->escape_like_str($q) . '%" ESCAPE \'!\') AND ' . db_prefix() . 'clients.active = 1';
         }
 
@@ -34,9 +35,9 @@ function get_relation_data($type, $rel_id = '', $extra = [])
             if (isset($extra['client_id']) && $extra['client_id'] != '') {
                 $where_contacts .= ' AND '. db_prefix() . 'contacts.userid='. $extra['client_id'];
             }
-            
+
             if ($CI->input->post('tickets_contacts')) {
-                if (!has_permission('customers', '', 'view') && get_option('staff_members_open_tickets_to_all_contacts') == 0) {
+                if (staff_cant('view', 'customers') && get_option('staff_members_open_tickets_to_all_contacts') == 0) {
                     $where_contacts .= ' AND ' . db_prefix() . 'contacts.userid IN (SELECT customer_id FROM ' . db_prefix() . 'customer_admins WHERE staff_id=' . get_staff_user_id() . ')';
                 }
             }
@@ -334,7 +335,8 @@ function get_relation_values($relation, $type)
         'addedfrom' => $addedfrom,
         'subtext'   => $subtext,
         'type'      => $type,
-        ]);
+        'relation'  => $relation,
+    ]);
 }
 
 /**
@@ -349,13 +351,13 @@ function init_relation_options($data, $type, $rel_id = '')
 {
     $_data = [];
 
-    $has_permission_projects_view  = has_permission('projects', '', 'view');
-    $has_permission_customers_view = has_permission('customers', '', 'view');
-    $has_permission_contracts_view = has_permission('contracts', '', 'view');
-    $has_permission_invoices_view  = has_permission('invoices', '', 'view');
-    $has_permission_estimates_view = has_permission('estimates', '', 'view');
-    $has_permission_expenses_view  = has_permission('expenses', '', 'view');
-    $has_permission_proposals_view = has_permission('proposals', '', 'view');
+    $has_permission_projects_view  = staff_can('view',  'projects');
+    $has_permission_customers_view = staff_can('view',  'customers');
+    $has_permission_contracts_view = staff_can('view',  'contracts');
+    $has_permission_invoices_view  = staff_can('view',  'invoices');
+    $has_permission_estimates_view = staff_can('view',  'estimates');
+    $has_permission_expenses_view  = staff_can('view',  'expenses');
+    $has_permission_proposals_view = staff_can('view',  'proposals');
     $is_admin                      = is_admin();
     $CI                            = & get_instance();
     $CI->load->model('projects_model');
@@ -369,7 +371,7 @@ function init_relation_options($data, $type, $rel_id = '')
                 }
             }
         } elseif ($type == 'lead') {
-            if (!has_permission('leads', '', 'view')) {
+            if (staff_cant('view', 'leads')) {
                 if ($relation['assigned'] != get_staff_user_id() && $relation['addedfrom'] != get_staff_user_id() && $relation['is_public'] != 1 && $rel_id != $relation_values['id']) {
                     continue;
                 }

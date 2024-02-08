@@ -75,16 +75,7 @@
                         class="mbot20 inline-block full-width"><?php echo _l('home_widget_view_all'); ?></a>
                     <div class="clearfix"></div>
                     <div class="_hidden_inputs _filters _tasks_filters">
-                        <?php
-                           echo form_hidden('my_tasks', true);
-                           foreach ($task_statuses as $status) {
-                               $val = 'true';
-                               if ($status['id'] == Tasks_model::STATUS_COMPLETE) {
-                                   $val = '';
-                               }
-                               echo form_hidden('task_status_' . $status['id'], $val);
-                           }
-                           ?>
+                        <?php echo form_hidden('my_tasks', true); ?>
                     </div>
                     <?php $this->load->view('admin/tasks/_table'); ?>
                 </div>

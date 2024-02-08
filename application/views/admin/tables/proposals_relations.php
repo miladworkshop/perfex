@@ -43,7 +43,7 @@ if ($rel_type == 'customer') {
 
 $where = [$where];
 
-if (!has_permission('proposals', '', 'view')) {
+if (staff_cant('view', 'proposals')) {
     array_push($where, 'AND ' . get_proposals_sql_where_staff(get_staff_user_id()));
 }
 
@@ -71,7 +71,7 @@ foreach ($rResult as $aRow) {
     $numberOutput .= '<div class="row-options">';
 
     $numberOutput .= '<a href="' . site_url('proposal/' . $aRow['id'] . '/' . $aRow['hash']) . '" target="_blank">' . _l('view') . '</a>';
-    if (has_permission('proposals', '', 'edit')) {
+    if (staff_can('edit',  'proposals')) {
         $numberOutput .= ' | <a href="' . admin_url('proposals/proposal/' . $aRow['id']) . '">' . _l('edit') . '</a>';
     }
     $numberOutput .= '</div>';

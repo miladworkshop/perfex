@@ -53,7 +53,7 @@ class LeadProfileBadges
      */
     public function proposals()
     {
-        if (!staff_can('view', 'proposals')) {
+        if (staff_cant('view', 'proposals')) {
             $where = get_proposals_sql_where_staff($this->staffId);
             $this->CI->db->where($where);
         }
@@ -98,7 +98,7 @@ class LeadProfileBadges
         $this->CI->db->where('rel_type', 'lead');
         $this->CI->db->where('datefinished is NULL');
 
-        if (!staff_can('view', 'tasks')) {
+        if (staff_cant('view', 'tasks')) {
             $this->CI->db->where(get_tasks_where_string(false));
         }
 

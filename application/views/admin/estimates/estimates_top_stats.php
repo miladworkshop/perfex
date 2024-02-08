@@ -45,8 +45,9 @@
                     <div class="tw-flex tw-items-baseline tw-text-base tw-font-semibold tw-text-primary-600">
                         <?php echo $percent_data['total_by_status']; ?> / <?php echo $percent_data['total']; ?>
                         <span class="tw-ml-2 tw-text-sm tw-font-medium tw-text-neutral-500">
-                            <a href="#" data-cview="estimates_<?php echo $status; ?>"
-                                onclick="dt_custom_view('estimates_<?php echo $status; ?>','.table-estimates','estimates_<?php echo $status; ?>',true); return false;">
+                            <a href="#" 
+                                @click.prevent="extra.estimatesRules = <?php echo app\services\utilities\Js::from($estimates_table->findRule('status')->setValue([$status])); ?>"
+                                >
                                 <?php echo _l('view'); ?>
                             </a>
                         </span>
@@ -56,9 +57,7 @@
                     </div>
                 </dd>
             </div>
-
-            <?php
-            } ?>
+            <?php } ?>
         </dl>
     </div>
     <hr />

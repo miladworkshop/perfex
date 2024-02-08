@@ -27,16 +27,9 @@ class Contracts_model extends App_Model
             $this->db->where(db_prefix() . 'contracts.id', $id);
             $contract = $this->db->get(db_prefix() . 'contracts')->row();
             if ($contract) {
+                $merge_fields = $this->get_merge_fields($contract);
                 $contract->attachments = $this->get_contract_attachments('', $contract->id);
                 if ($contract->content !== null && $for_editor == false) {
-                    $this->load->library('merge_fields/client_merge_fields');
-                    $this->load->library('merge_fields/contract_merge_fields');
-                    $this->load->library('merge_fields/other_merge_fields');
-
-                    $merge_fields = [];
-                    $merge_fields = array_merge($merge_fields, $this->contract_merge_fields->format($id));
-                    $merge_fields = array_merge($merge_fields, $this->client_merge_fields->format($contract->client));
-                    $merge_fields = array_merge($merge_fields, $this->other_merge_fields->format());
                     foreach ($merge_fields as $key => $val) {
                         if (stripos($contract->content, $key) !== false) {
                             $contract->content = str_ireplace($key, $val, $contract->content);
@@ -201,15 +194,41 @@ class Contracts_model extends App_Model
         return $affectedRows > 0;
     }
 
-    public function clear_signature($id)
+    public function add_signature($id): bool
+    {
+        $contract = $this->get($id, [], true);
+        if ($contract) {
+            $content = override_merge_fields($this->get_merge_fields($contract), $contract->content);
+
+            $this->db->where('id', $id);
+            $this->db->update(db_prefix().'contracts', array_merge(get_acceptance_info_array(), [
+                'signed' => 1,
+                'content' => $content
+            ]));
+
+            // Notify contract creator that customer signed the contract
+            send_contract_signed_notification_to_staff($id);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public function clear_signature($id): bool
     {
         $this->db->select('signature');
         $this->db->where('id', $id);
         $contract = $this->db->get(db_prefix() . 'contracts')->row();
 
         if ($contract) {
+            $contractData = $this->get($id, [], true);
+
             $this->db->where('id', $id);
-            $this->db->update(db_prefix() . 'contracts', array_merge(get_acceptance_info_array(true), ['signed' => 0]));
+            $this->db->update(db_prefix() . 'contracts', array_merge(get_acceptance_info_array(true), [
+                'signed' => 0,
+                'content' => restore_merge_fields($contractData->content)
+            ]));
 
             if (!empty($contract->signature)) {
                 unlink(get_upload_path_by_type('contract') . $id . '/' . $contract->signature);
@@ -370,6 +389,7 @@ class Contracts_model extends App_Model
         $fields         = $this->db->list_fields(db_prefix() . 'contracts');
         $newContactData = [];
 
+        $contract->content = restore_merge_fields($contract->content);
         foreach ($fields as $field) {
             if (isset($contract->$field)) {
                 $newContactData[$field] = $contract->$field;
@@ -479,8 +499,17 @@ class Contracts_model extends App_Model
      */
     public function mark_as_signed($id)
     {
+        $contract = $this->get($id, [], true);
+        if (!is_object($contract)) {
+            return  false;
+        }
+        $content = override_merge_fields($this->get_merge_fields($contract), $contract->content);
+
         $this->db->where('id', $id);
-        $this->db->update('contracts', ['marked_as_signed' => 1]);
+        $this->db->update('contracts', [
+            'marked_as_signed' => 1,
+            'content' => $content,
+        ]);
 
         return $this->db->affected_rows() > 0;
     }
@@ -494,8 +523,16 @@ class Contracts_model extends App_Model
      */
     public function unmark_as_signed($id)
     {
+        $contract = $this->get($id, [], true);
+        if (!is_object($contract)) {
+            return  false;
+        }
+
         $this->db->where('id', $id);
-        $this->db->update('contracts', ['marked_as_signed' => 0]);
+        $this->db->update('contracts', [
+            'marked_as_signed' => 0,
+            'content' => restore_merge_fields($contract->content),
+        ]);
 
         return $this->db->affected_rows() > 0;
     }
@@ -818,5 +855,23 @@ class Contracts_model extends App_Model
     public function get_contracts_types_values_chart_data()
     {
         return $this->contract_types_model->get_values_chart_data();
+    }
+
+    /**
+     * @param object $contract
+     * @return array<string, string> i.e. ['{merge_field}' => 'value']
+     */
+    public function get_merge_fields(object $contract): array
+    {
+        $this->load->library('merge_fields/client_merge_fields');
+        $this->load->library('merge_fields/contract_merge_fields');
+        $this->load->library('merge_fields/other_merge_fields');
+
+        $merge_fields = [];
+        $merge_fields = array_merge($merge_fields, $this->contract_merge_fields->format($contract->id));
+        $merge_fields = array_merge($merge_fields, $this->client_merge_fields->format($contract->client));
+        $merge_fields = array_merge($merge_fields, $this->other_merge_fields->format());
+
+        return $merge_fields;
     }
 }

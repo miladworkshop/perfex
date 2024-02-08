@@ -53,7 +53,7 @@ class Templates extends AdminController
 
         $where = [];
 
-        if (!staff_can('view_all_templates', $data['rel_type'])) {
+        if (staff_cant('view_all_templates', $data['rel_type'])) {
             $where['addedfrom'] = get_staff_user_id();
         }
 

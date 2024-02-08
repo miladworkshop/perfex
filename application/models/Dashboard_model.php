@@ -52,7 +52,7 @@ class Dashboard_model extends App_Model
     public function get_weekly_payments_statistics($currency)
     {
         $all_payments                 = [];
-        $has_permission_payments_view = has_permission('payments', '', 'view');
+        $has_permission_payments_view = staff_can('view',  'payments');
         $this->db->select(db_prefix() . 'invoicepaymentrecords.id, amount,' . db_prefix() . 'invoicepaymentrecords.date');
         $this->db->from(db_prefix() . 'invoicepaymentrecords');
         $this->db->join(db_prefix() . 'invoices', '' . db_prefix() . 'invoices.id = ' . db_prefix() . 'invoicepaymentrecords.invoiceid');
@@ -150,7 +150,7 @@ class Dashboard_model extends App_Model
     public function get_monthly_payments_statistics($currency)
     {
         $all_payments                 = [];
-        $has_permission_payments_view = has_permission('payments', '', 'view');
+        $has_permission_payments_view = staff_can('view',  'payments');
         $this->db->select('SUM(amount) as total, MONTH(' . db_prefix() . 'invoicepaymentrecords.date) as month');
         $this->db->from(db_prefix() . 'invoicepaymentrecords');
         $this->db->join(db_prefix() . 'invoices', '' . db_prefix() . 'invoices.id = ' . db_prefix() . 'invoicepaymentrecords.invoiceid');
@@ -213,7 +213,7 @@ class Dashboard_model extends App_Model
         $_data['statusLink']           = [];
 
 
-        $has_permission = has_permission('projects', '', 'view');
+        $has_permission = staff_can('view',  'projects');
         $sql            = '';
         foreach ($statuses as $status) {
             $sql .= ' SELECT COUNT(*) as total';

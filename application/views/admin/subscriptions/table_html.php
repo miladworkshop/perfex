@@ -39,7 +39,7 @@ render_datatable(
     'subscriptions',
     ['number-index-1'],
     [
-    'id'                         => 'table-subscriptions',
+    'id'                         => 'subscriptions',
     'data-url'                   => $url,
     'data-last-order-identifier' => 'subscriptions',
     'data-default-order'         => get_table_last_order('subscriptions'),
@@ -50,12 +50,8 @@ hooks()->add_action('app_admin_footer', function () {
     ?>
 <script>
 $(function() {
-    var SubscriptionsServerParams = {};
-    $.each($('._hidden_inputs._filters input'), function() {
-        SubscriptionsServerParams[$(this).attr('name')] = '[name="' + $(this).attr('name') + '"]';
-    });
-    var url = $('#table-subscriptions').data('url');
-    initDataTable('.table-subscriptions', url, undefined, undefined, SubscriptionsServerParams,
+    var url = $('table#subscriptions').data('url');
+    initDataTable('.table-subscriptions', url, undefined, undefined, {},
         <?php echo hooks()->apply_filters('subscriptions_table_default_order', json_encode([6, 'desc'])); ?>
     );
 });

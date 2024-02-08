@@ -510,6 +510,7 @@ class Proposals_model extends App_Model
                     // Send email/sms to admin that client commented
                     $this->app_sms->trigger(SMS_TRIGGER_PROPOSAL_NEW_COMMENT_TO_STAFF, $member['phonenumber'], $merge_fields);
                 }
+                hooks()->do_action('after_proposal_client_add_comment', $proposal->id);
                 pusher_trigger_notification($notifiedUsers);
             } else {
                 // Send email/sms to client that admin commented
@@ -517,6 +518,7 @@ class Proposals_model extends App_Model
                 $merge_fields = $template->get_merge_fields();
                 $template->send();
                 $this->app_sms->trigger(SMS_TRIGGER_PROPOSAL_NEW_COMMENT_TO_CUSTOMER, $proposal->phone, $merge_fields);
+                hooks()->do_action('after_proposal_staff_add_comment', $proposal->id);
             }
 
             return true;
@@ -956,6 +958,8 @@ class Proposals_model extends App_Model
         if (can_send_sms_based_on_creation_date($proposal->datecreated)) {
             $sms_sent = $this->app_sms->trigger(SMS_TRIGGER_PROPOSAL_EXP_REMINDER, $proposal->phone, $merge_fields);
         }
+
+        hooks()->do_action('after_proposal_expiry_reminder_sent', $id);
 
         return true;
     }

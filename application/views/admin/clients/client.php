@@ -20,7 +20,7 @@
             </a>
         </div>
         <?php } ?>
-        <?php if (isset($client) && (!has_permission('customers', '', 'view') && is_customer_admin($client->userid))) {?>
+        <?php if (isset($client) && (staff_cant('view', 'customers') && is_customer_admin($client->userid))) {?>
         <div class="alert alert-info">
             <?php echo _l('customer_admin_login_as_client_message', get_staff_full_name(get_staff_user_id())); ?>
         </div>
@@ -33,7 +33,7 @@
                         <span class="tw-truncate">
                             #<?php echo $client->userid . ' ' . $title; ?>
                         </span>
-                        <?php if (has_permission('customers', '', 'delete') || is_admin()) { ?>
+                        <?php if (staff_can('delete',  'customers') || is_admin()) { ?>
                         <div class="btn-group">
                             <a href="#" class="dropdown-toggle btn-link" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
@@ -49,7 +49,7 @@
                                     </a>
                                 </li>
                                 <?php } ?>
-                                <?php if (has_permission('customers', '', 'delete')) { ?>
+                                <?php if (staff_can('delete',  'customers')) { ?>
                                 <li>
                                     <a href="<?php echo admin_url('clients/delete/' . $client->userid); ?>"
                                         class="text-danger delete-text _delete"><i class="fa fa-remove"></i>

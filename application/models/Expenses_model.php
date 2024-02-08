@@ -208,7 +208,7 @@ class Expenses_model extends App_Model
 
         $currency = get_currency($currencyid);
 
-        $has_permission_view = has_permission('expenses', '', 'view');
+        $has_permission_view = staff_can('view',  'expenses');
         $_result             = [];
 
         for ($i = 1; $i <= 5; $i++) {
@@ -465,6 +465,8 @@ class Expenses_model extends App_Model
             $this->db->delete(db_prefix() . 'related_items');
 
             log_activity('Expense Deleted [' . $id . ']');
+
+            hooks()->do_action('after_expense_deleted', $id);
 
             return true;
         }

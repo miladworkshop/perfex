@@ -9,8 +9,8 @@ class Estimate_request extends AdminController
     {
         parent::__construct();
         $this->load->model('estimate_request_model');
-        if (!staff_can('view', 'estimate_request')
-            && !staff_can('view_own', 'estimate_request')
+        if (staff_cant('view', 'estimate_request')
+            && staff_cant('view_own', 'estimate_request')
         ) {
             access_denied('Estimate Request');
         }
@@ -25,19 +25,19 @@ class Estimate_request extends AdminController
 
             if ($this->input->post('rel_id') != '' && $this->input->post('rel_type') != '') {
                 if ($convert_to == 'estimate') {
-                    if (!staff_can('create', 'estimates')) {
+                    if (staff_cant('create', 'estimates')) {
                         access_denied();
                     }
                     redirect(admin_url("{$convert_to}s/{$convert_to}?customer_id={$rel_id}&estimate_request_id={$estimate_request_id}"));
                 } else {
-                    if (!staff_can('create', 'proposals')) {
+                    if (staff_cant('create', 'proposals')) {
                         access_denied();
                     }
                     redirect(admin_url("{$convert_to}s/{$convert_to}?rel_id={$rel_id}&rel_type={$rel_type}&estimate_request_id={$estimate_request_id}"));
                 }
             }
 
-            if (!staff_can('create', 'customers')) {
+            if (staff_cant('create', 'customers')) {
                 access_denied();
             }
 
@@ -62,7 +62,7 @@ class Estimate_request extends AdminController
             $id = $this->clients_model->add($data, true);
 
             if ($id) {
-                if (!staff_can('view', 'customers')) {
+                if (staff_cant('view', 'customers')) {
                     $this->db->insert(db_prefix() . 'customer_admins', [
                         'date_assigned' => date('Y-m-d H:i:s'),
                         'customer_id'   => $id,
@@ -86,7 +86,7 @@ class Estimate_request extends AdminController
     public function update_assigned_staff()
     {
         if ($this->input->post() && $this->input->is_ajax_request()) {
-            if (!staff_can('edit', 'estimate_request')) {
+            if (staff_cant('edit', 'estimate_request')) {
                 ajax_access_denied();
             }
 
@@ -105,7 +105,7 @@ class Estimate_request extends AdminController
     public function update_tags($estimate_request_id)
     {
         if ($this->input->post() && $this->input->is_ajax_request()) {
-            if (!staff_can('edit', 'estimate_request')) {
+            if (staff_cant('edit', 'estimate_request')) {
                 ajax_access_denied();
             }
 
@@ -129,7 +129,7 @@ class Estimate_request extends AdminController
     public function update_request_status()
     {
         if ($this->input->post() && $this->input->is_ajax_request()) {
-            if (!staff_can('edit', 'estimate_request')) {
+            if (staff_cant('edit', 'estimate_request')) {
                 ajax_access_denied();
             }
 
@@ -150,8 +150,8 @@ class Estimate_request extends AdminController
 
     public function view($id)
     {
-        if (!staff_can('view', 'estimate_request')
-            && !staff_can('view_own', 'estimate_request')) {
+        if (staff_cant('view', 'estimate_request')
+            && staff_cant('view_own', 'estimate_request')) {
             access_denied('Estimate Request');
         }
         $this->load->model('leads_model');
@@ -178,7 +178,7 @@ class Estimate_request extends AdminController
             redirect(admin_url('estimate_request'));
         }
 
-        if (!staff_can('delete', 'estimate_request')) {
+        if (staff_cant('delete', 'estimate_request')) {
             access_denied('Delete Lead');
         }
 
@@ -196,8 +196,8 @@ class Estimate_request extends AdminController
 
     public function table()
     {
-        if (!staff_can('view', 'estimate_request')
-            && !staff_can('view_own', 'estimate_request')) {
+        if (staff_cant('view', 'estimate_request')
+            && staff_cant('view_own', 'estimate_request')) {
             ajax_access_denied();
         }
         $this->app->get_table_data('estimate_request');
@@ -273,8 +273,8 @@ class Estimate_request extends AdminController
     public function index()
     {
         close_setup_menu();
-        if (!staff_can('view', 'estimate_request')
-            && !staff_can('view_own', 'estimate_request')) {
+        if (staff_cant('view', 'estimate_request')
+            && staff_cant('view_own', 'estimate_request')) {
             access_denied('Estimate Request');
         }
 

@@ -77,7 +77,7 @@
                             <?php
                              echo _l('templates');
                             $conditions = ['type' => 'proposals'];
-                            if (!staff_can('view_all_templates', 'proposals')) {
+                            if (staff_cant('view_all_templates', 'proposals')) {
                                 $conditions['addedfrom'] = get_staff_user_id();
                                 $conditions['type']      = 'proposals';
                             }
@@ -112,6 +112,7 @@
                         <a href="#" onclick="small_table_full_view(); return false;">
                             <i class="fa fa-expand"></i></a>
                     </li>
+                    <?php hooks()->do_action('after_admin_proposal_preview_template_tab_menu_last_item', $proposal); ?>
                     <?php } ?>
                 </ul>
             </div>
@@ -121,7 +122,7 @@
                 <?php echo format_proposal_status($proposal->status, 'mtop5 inline-block'); ?>
             </div>
             <div class="col-md-9 text-right _buttons proposal_buttons">
-                <?php if (has_permission('proposals', '', 'edit')) { ?>
+                <?php if (staff_can('edit',  'proposals')) { ?>
                 <a href="<?php echo admin_url('proposals/proposal/' . $proposal->id); ?>" data-placement="left"
                     data-toggle="tooltip" title="<?php echo _l('proposal_edit'); ?>"
                     class="btn btn-default btn-with-tooltip" data-placement="bottom"><i
@@ -175,7 +176,7 @@
                             <a href="#" data-toggle="modal"
                                 data-target="#sales_attach_file"><?php echo _l('invoice_attach_file'); ?></a>
                         </li>
-                        <?php if (has_permission('proposals', '', 'create')) { ?>
+                        <?php if (staff_can('create',  'proposals')) { ?>
                         <li>
                             <a
                                 href="<?php echo admin_url() . 'proposals/copy/' . $proposal->id; ?>"><?php echo _l('proposal_copy'); ?></a>
@@ -183,7 +184,7 @@
                         <?php } ?>
                         <?php if ($proposal->estimate_id == null && $proposal->invoice_id == null) { ?>
                         <?php foreach ($proposal_statuses as $status) {
-                                if (has_permission('proposals', '', 'edit')) {
+                                if (staff_can('edit',  'proposals')) {
                                     if ($proposal->status != $status) { ?>
                         <li>
                             <a
@@ -194,7 +195,7 @@
                                 }
                             } ?>
                         <?php } ?>
-                        <?php if (!empty($proposal->signature) && has_permission('proposals', '', 'delete')) { ?>
+                        <?php if (!empty($proposal->signature) && staff_can('delete',  'proposals')) { ?>
                         <li>
                             <a href="<?php echo admin_url('proposals/clear_signature/' . $proposal->id); ?>"
                                 class="_delete">
@@ -202,7 +203,7 @@
                             </a>
                         </li>
                         <?php } ?>
-                        <?php if (has_permission('proposals', '', 'delete')) { ?>
+                        <?php if (staff_can('delete',  'proposals')) { ?>
                         <li>
                             <a href="<?php echo admin_url() . 'proposals/delete/' . $proposal->id; ?>"
                                 class="text-danger delete-text _delete"><?php echo _l('proposal_delete'); ?></a>
@@ -211,7 +212,7 @@
                     </ul>
                 </div>
                 <?php if ($proposal->estimate_id == null && $proposal->invoice_id == null) { ?>
-                <?php if (has_permission('estimates', '', 'create') || has_permission('invoices', '', 'create')) { ?>
+                <?php if (staff_can('create',  'estimates') || staff_can('create',  'invoices')) { ?>
                 <div class="btn-group">
                     <button type="button" class="btn btn-success dropdown-toggle<?php if ($proposal->rel_type == 'customer' && total_rows(db_prefix() . 'clients', ['active' => 0, 'userid' => $proposal->rel_id]) > 0) {
                                 echo ' disabled';
@@ -233,7 +234,7 @@
                          $help_text       = 'proposal_convert_not_related_help';
                      }
                      ?>
-                        <?php if (has_permission('estimates', '', 'create')) { ?>
+                        <?php if (staff_can('create',  'estimates')) { ?>
                         <li <?php if ($disable_convert) {
                          echo 'data-toggle="tooltip" title="' . _l($help_text, _l('proposal_convert_estimate')) . '"';
                      } ?>><a href="#" <?php if ($disable_convert) {
@@ -242,7 +243,7 @@
                          echo 'data-template="estimate" onclick="proposal_convert_template(this); return false;"';
                      } ?>><?php echo _l('proposal_convert_estimate'); ?></a></li>
                         <?php } ?>
-                        <?php if (has_permission('invoices', '', 'create')) { ?>
+                        <?php if (staff_can('create',  'invoices')) { ?>
                         <li <?php if ($disable_convert) {
                          echo 'data-toggle="tooltip" title="' . _l($help_text, _l('proposal_convert_invoice')) . '"';
                      } ?>><a href="#" <?php if ($disable_convert) {
@@ -405,7 +406,7 @@
                                         <?php echo _l('proposal_signed_ip') . ": {$proposal->acceptance_ip}"?></p>
                                 </div>
                                 <p class="bold"><?php echo _l('document_customer_signature_text'); ?>
-                                    <?php if (has_permission('proposals', '', 'delete')) { ?>
+                                    <?php if (staff_can('delete',  'proposals')) { ?>
                                     <a href="<?php echo admin_url('proposals/clear_signature/' . $proposal->id); ?>"
                                         data-toggle="tooltip" title="<?php echo _l('clear_signature'); ?>"
                                         class="_delete text-danger">
@@ -468,7 +469,7 @@
                      ?>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="tab_tasks">
-                        <?php init_relation_tasks_table([ 'data-new-rel-id' => $proposal->id, 'data-new-rel-type' => 'proposal']); ?>
+                        <?php init_relation_tasks_table([ 'data-new-rel-id' => $proposal->id, 'data-new-rel-type' => 'proposal'], 'tasksFilters'); ?>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="tab_reminders">
                         <a href="#" data-toggle="modal" class="btn btn-primary"
@@ -494,6 +495,7 @@
                         <hr />
                         <?php } ?>
                     </div>
+                    <?php hooks()->do_action('after_admin_invoice_proposal_template_tab_content_last_item', $proposal); ?>
                 </div>
             </div>
         </div>

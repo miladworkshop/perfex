@@ -4,7 +4,9 @@
     <div class="content">
         <div class="row">
             <div class="panel-table-full">
-                <?php $this->load->view('admin/estimates/list_template'); ?>
+                <div id="vueApp">
+                    <?php $this->load->view('admin/estimates/list_template'); ?>
+                </div>
             </div>
         </div>
     </div>

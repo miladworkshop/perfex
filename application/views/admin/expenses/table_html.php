@@ -2,8 +2,10 @@
 <?php
 $hasPermission = staff_can('edit', 'expenses') || staff_can('edit', 'expenses');
 if ($withBulkActions === true && $hasPermission) { ?>
-<a href="#" data-toggle="modal" data-target="#expenses_bulk_actions" class="hide bulk-actions-btn table-btn"
-    data-table=".table-expenses"><?php echo _l('bulk_actions'); ?></a>
+  <a href="#" data-toggle="modal" data-target="#expenses_bulk_actions" class="hide bulk-actions-btn table-btn"
+      data-table=".table-expenses">
+      <?php echo _l('bulk_actions'); ?>
+  </a>
 <?php } ?>
 <?php
 $table_data = [
@@ -48,6 +50,7 @@ $table_data = hooks()->apply_filters('expenses_table_columns', $table_data);
 render_datatable($table_data, (isset($class) ? $class : 'expenses'), [], [
   'data-last-order-identifier' => 'expenses',
   'data-default-order'         => get_table_last_order('expenses'),
+  'id'=>$table_id ?? 'expenses',
 ]);
 
 echo $this->view('admin/expenses/_bulk_actions_modal');

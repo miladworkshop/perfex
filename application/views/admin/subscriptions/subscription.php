@@ -36,7 +36,7 @@
                         <?php } ?>
                         <?php
             if (!empty($subscription->stripe_subscription_id) && $subscription->status != 'canceled' && $subscription->status != 'incomplete_expired' && empty($subscription->ends_at)) { ?>
-                        <?php if (has_permission('subscriptions', '', 'edit')) { ?>
+                        <?php if (staff_can('edit',  'subscriptions')) { ?>
                         <div class="btn-group">
                             <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
@@ -102,7 +102,7 @@
                                     <a href="https://stripe.com/docs/subscriptions/canceling-pausing#canceling"
                                         target="_blank"><i class="fa fa-link"></i></a>
                                     <?php echo _l('subscription_will_be_canceled_at_end_of_billing_period'); ?>
-                                    <?php if (has_permission('subscriptions', '', 'edit')) { ?>
+                                    <?php if (staff_can('edit',  'subscriptions')) { ?>
                                     <br />
                                     <a href="<?php echo admin_url('subscriptions/resume/' . $subscription->id); ?>">
                                         <?php echo _l('resume_now'); ?>

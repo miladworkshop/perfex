@@ -15,7 +15,7 @@ class Contracts extends AdminController
     {
         close_setup_menu();
 
-        if (!has_permission('contracts', '', 'view') && !has_permission('contracts', '', 'view_own')) {
+        if (staff_cant('view', 'contracts') && staff_cant('view_own', 'contracts')) {
             access_denied('contracts');
         }
 
@@ -31,18 +31,19 @@ class Contracts extends AdminController
         $this->load->model('currencies_model');
         $data['base_currency'] = $this->currencies_model->get_base_currency();
         $data['title']         = _l('contracts');
+        $data['table'] = App_table::find('contracts');
         $this->load->view('admin/contracts/manage', $data);
     }
 
     public function table($clientid = '')
     {
-        if (!has_permission('contracts', '', 'view') && !has_permission('contracts', '', 'view_own')) {
+        if (staff_cant('view', 'contracts') && staff_cant('view_own', 'contracts')) {
             ajax_access_denied();
         }
 
-        $this->app->get_table_data('contracts', [
+       App_table::find('contracts')->output([
             'clientid' => $clientid,
-        ]);
+       ]);
     }
 
     /* Edit contract or add new contract */
@@ -50,7 +51,7 @@ class Contracts extends AdminController
     {
         if ($this->input->post()) {
             if ($id == '') {
-                if (!has_permission('contracts', '', 'create')) {
+                if (staff_cant('create', 'contracts')) {
                     access_denied('contracts');
                 }
                 $id = $this->contracts_model->add($this->input->post());
@@ -59,7 +60,7 @@ class Contracts extends AdminController
                     redirect(admin_url('contracts/contract/' . $id));
                 }
             } else {
-                if (!has_permission('contracts', '', 'edit')) {
+                if (staff_cant('edit', 'contracts')) {
                     access_denied('contracts');
                 }
                 $contract = $this->contracts_model->get($id);
@@ -82,7 +83,7 @@ class Contracts extends AdminController
             $data['contract']                 = $this->contracts_model->get($id, [], true);
             $data['contract_renewal_history'] = $this->contracts_model->get_contract_renewal_history($id);
             $data['totalNotes']               = total_rows(db_prefix() . 'notes', ['rel_id' => $id, 'rel_type' => 'contract']);
-            if (!$data['contract'] || (!has_permission('contracts', '', 'view') && $data['contract']->addedfrom != get_staff_user_id())) {
+            if (!$data['contract'] || (staff_cant('view', 'contracts') && $data['contract']->addedfrom != get_staff_user_id())) {
                 blank_page(_l('contract_not_found'));
             }
 
@@ -113,7 +114,7 @@ class Contracts extends AdminController
 
     public function mark_as_signed($id)
     {
-        if (!staff_can('edit', 'contracts')) {
+        if (staff_cant('edit', 'contracts')) {
             access_denied('mark contract as signed');
         }
 
@@ -124,7 +125,7 @@ class Contracts extends AdminController
 
     public function unmark_as_signed($id)
     {
-        if (!staff_can('edit', 'contracts')) {
+        if (staff_cant('edit', 'contracts')) {
             access_denied('mark contract as signed');
         }
 
@@ -135,7 +136,7 @@ class Contracts extends AdminController
 
     public function pdf($id)
     {
-        if (!has_permission('contracts', '', 'view') && !has_permission('contracts', '', 'view_own')) {
+        if (staff_cant('view', 'contracts') && staff_cant('view_own', 'contracts')) {
             access_denied('contracts');
         }
 
@@ -167,7 +168,7 @@ class Contracts extends AdminController
 
     public function send_to_email($id)
     {
-        if (!has_permission('contracts', '', 'view') && !has_permission('contracts', '', 'view_own')) {
+        if (staff_cant('view', 'contracts') && staff_cant('view_own', 'contracts')) {
             access_denied('contracts');
         }
         $success = $this->contracts_model->send_contract_to_client($id, $this->input->post('attach_pdf'), $this->input->post('cc'));
@@ -181,7 +182,7 @@ class Contracts extends AdminController
 
     public function add_note($rel_id)
     {
-        if ($this->input->post() && (has_permission('contracts', '', 'view') || has_permission('contracts', '', 'view_own'))) {
+        if ($this->input->post() && (staff_can('view',  'contracts') || staff_can('view_own',  'contracts'))) {
             $this->misc_model->add_note($this->input->post(), 'contract', $rel_id);
             echo $rel_id;
         }
@@ -189,7 +190,7 @@ class Contracts extends AdminController
 
     public function get_notes($id)
     {
-        if ((has_permission('contracts', '', 'view') || has_permission('contracts', '', 'view_own'))) {
+        if ((staff_can('view',  'contracts') || staff_can('view_own',  'contracts'))) {
             $data['notes'] = $this->misc_model->get_notes($id, 'contract');
             $this->load->view('admin/includes/sales_notes_template', $data);
         }
@@ -197,7 +198,7 @@ class Contracts extends AdminController
 
     public function clear_signature($id)
     {
-        if (has_permission('contracts', '', 'delete')) {
+        if (staff_can('delete',  'contracts')) {
             $this->contracts_model->clear_signature($id);
         }
 
@@ -206,7 +207,7 @@ class Contracts extends AdminController
 
     public function save_contract_data()
     {
-        if (!has_permission('contracts', '', 'edit')) {
+        if (staff_cant('edit', 'contracts')) {
             header('HTTP/1.0 400 Bad error');
             echo json_encode([
                 'success' => false,
@@ -280,7 +281,7 @@ class Contracts extends AdminController
 
     public function renew()
     {
-        if (!has_permission('contracts', '', 'edit')) {
+        if (staff_cant('edit', 'contracts')) {
             access_denied('contracts');
         }
         if ($this->input->post()) {
@@ -308,7 +309,7 @@ class Contracts extends AdminController
 
     public function copy($id)
     {
-        if (!has_permission('contracts', '', 'create')) {
+        if (staff_cant('create', 'contracts')) {
             access_denied('contracts');
         }
         if (!$id) {
@@ -326,7 +327,7 @@ class Contracts extends AdminController
     /* Delete contract from database */
     public function delete($id)
     {
-        if (!has_permission('contracts', '', 'delete')) {
+        if (staff_cant('delete', 'contracts')) {
             access_denied('contracts');
         }
         if (!$id) {

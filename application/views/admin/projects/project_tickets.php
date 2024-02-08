@@ -1,7 +1,4 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
-<div class="tw-mb-4">
-    <?php $this->load->view('admin/tickets/summary', ['project_id' => $project->id]); ?>
-</div>
 <?php
     echo form_hidden('project_id', $project->id);
     echo '<div class="clearfix"></div>';

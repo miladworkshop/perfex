@@ -10,7 +10,7 @@
             <div class="row">
                <div class="col-md-6 border-right project_file_area">
                   <?php
-                     if ($file->staffid == get_staff_user_id() || has_permission('projects', '', 'create')) {
+                     if ($file->staffid == get_staff_user_id() || staff_can('create',  'projects')) {
                          ?>
                   <?php echo render_input('file_subject', 'project_discussion_subject', $file->subject, 'text', ['onblur' => 'update_file_data(' . $file->id . ')']); ?>
                   <?php echo render_textarea('file_description', 'project_discussion_description', $file->description, ['onblur' => 'update_file_data(' . $file->id . ')']); ?>
@@ -45,10 +45,18 @@
                   <?php
                      } ?>
                   <?php
-                     $path = PROJECT_ATTACHMENTS_FOLDER . $file->project_id . '/' . $file->file_name;
-                     if (is_image($path)) {
-                         ?>
-                  <img src="<?php echo base_url('uploads/projects/' . $file->project_id . '/' . $file->file_name); ?>" class="img img-responsive">
+                  $path = PROJECT_ATTACHMENTS_FOLDER . $file->project_id . '/' . $file->file_name;
+                  $fileUrl = base_url('uploads/projects/' . $file->project_id . '/' . $file->file_name);
+                  ?>
+                   <a href="<?php echo $fileUrl; ?>" target="_blank" class="btn btn-primary mbot20" download="<?php echo $file->original_file_name; ?>">
+                       <i class="fa fa-file-download" aria-hidden="true"></i>
+                       <?php echo _l('download'); ?>
+                   </a>
+                   <br />
+                  <?php
+                  if (is_image($path)) {
+                  ?>
+                  <img src="<?php echo $fileUrl; ?>" class="img img-responsive">
                   <?php
                      } elseif (!empty($file->external) && !empty($file->thumbnail_link) && $file->external == 'dropbox') {
                          ?>
@@ -56,7 +64,7 @@
                   <?php
                      } elseif (strpos($file->filetype, 'pdf') !== false && empty($file->external)) {
                          ?>
-                  <iframe src="<?php echo base_url('uploads/projects/' . $file->project_id . '/' . $file->file_name); ?>" height="100%" width="100%" frameborder="0"></iframe>
+                  <iframe src="<?php echo $fileUrl; ?>" height="100%" width="100%" frameborder="0"></iframe>
                   <?php
                      } elseif (is_html5_video($path)) {
                          ?>
@@ -68,9 +76,9 @@
                          echo $previewMarkdown;
                      } else {
                          if (empty($file->external)) {
-                             echo '<a href="' . site_url('uploads/projects/' . $file->project_id . '/' . $file->file_name) . '" download="' . $file->original_file_name . '">' . $file->file_name . '</a>';
+                             echo '<a href="' . site_url('uploads/projects/' . $file->project_id . '/' . $file->file_name) . '" download="' . $file->original_file_name . '">' . $file->original_file_name . '</a>';
                          } else {
-                             echo '<a href="' . $file->external_link . '" target="_blank">' . $file->file_name . '</a>';
+                             echo '<a href="' . $file->external_link . '" target="_blank">' . $file->original_file_name . '</a>';
                          }
                          echo '<p class="text-muted">' . _l('no_preview_available_for_file') . '</p>';
                      } ?>

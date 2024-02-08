@@ -154,7 +154,7 @@
                             </a>
                             <?php
     } ?>
-                            <?php if ($file['staffid'] == get_staff_user_id() || has_permission('projects', '', 'delete')) { ?>
+                            <?php if ($file['staffid'] == get_staff_user_id() || staff_can('delete',  'projects')) { ?>
                             <a href="<?php echo admin_url('projects/remove_file/' . $project->id . '/' . $file['id']); ?>"
                                 class="tw-mt-px tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700 _delete">
                                 <i class="fa-regular fa-trash-can fa-lg"></i>

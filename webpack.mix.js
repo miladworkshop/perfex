@@ -7,6 +7,8 @@ mix
     // Don't perform any css url rewriting by default
     processCssUrls: false,
   })
+  .vue()
+  .js('resources/js/app.js', 'assets/builds')
   .sourceMaps(false)
   .disableNotifications();
 

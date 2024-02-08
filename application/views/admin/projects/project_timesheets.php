@@ -5,7 +5,7 @@
 </a>
 <div class="panel_s">
     <div class="panel-body panel-table-full">
-        <?php if (has_permission('projects', '', 'create')) { ?>
+        <?php if (staff_can('create',  'projects')) { ?>
         <div class="_filters _hidden_inputs timesheets_filters hidden">
             <?php
             foreach ($timesheets_staff_ids as $t_staff_id) {

@@ -5,14 +5,21 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="_buttons">
-                    <?php if (has_permission('contracts', '', 'create')) { ?>
+                    <?php if (staff_can('create',  'contracts')) { ?>
                     <a href="<?php echo admin_url('contracts/contract'); ?>"
                         class="btn btn-primary pull-left display-block tw-mb-2 sm:tw-mb-4">
                         <i class="fa-regular fa-plus tw-mr-1"></i>
                         <?php echo _l('new_contract'); ?>
                     </a>
                     <?php } ?>
-                    <?php $this->load->view('admin/contracts/filters'); ?>
+                    <div id="vueApp" class="tw-inline pull-right tw-ml-0 sm:tw-ml-1.5">
+                        <app-filters 
+                            id="<?php echo $table->id(); ?>" 
+                            view="<?php echo $table->viewName(); ?>"
+                            :saved-filters="<?php echo $table->filtersJs(); ?>"
+                            :available-rules="<?php echo $table->rulesJs(); ?>">
+                        </app-filters>
+                    </div>
                     <div class="clearfix"></div>
                     <div id="contract_summary">
                         <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-flex tw-items-center">
@@ -97,14 +104,8 @@
 <?php init_tail(); ?>
 <script>
 $(function() {
-
-    var ContractsServerParams = {};
-    $.each($('._hidden_inputs._filters input'), function() {
-        ContractsServerParams[$(this).attr('name')] = '[name="' + $(this).attr('name') + '"]';
-    });
-
     initDataTable('.table-contracts', admin_url + 'contracts/table', undefined, undefined,
-        ContractsServerParams,
+        {},
         <?php echo hooks()->apply_filters('contracts_table_default_order', json_encode([6, 'asc'])); ?>);
 
     new Chart($('#contracts-by-type-chart'), {

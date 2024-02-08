@@ -112,7 +112,7 @@ class Import_customers extends App_import
                             $this->insertCustomerGroups($this->ci->input->post('groups_in[]'), $id);
                         }
 
-                        if (!has_permission('customers', '', 'view')) {
+                        if (staff_cant('view', 'customers')) {
                             $assign['customer_admins']   = [];
                             $assign['customer_admins'][] = get_staff_user_id();
                             $this->ci->clients_model->assign_admins($assign, $id);

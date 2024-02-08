@@ -12,7 +12,7 @@
                         onclick="estimate_pipeline_open(<?php echo $estimate['id']; ?>); return false;">
                         <?php echo format_estimate_number($estimate['id']); ?>
                     </a>
-                    <?php if (has_permission('estimates', '', 'edit')) { ?>
+                    <?php if (staff_can('edit',  'estimates')) { ?>
                     <a href="<?php echo admin_url('estimates/estimate/' . $estimate['id']); ?>" target="_blank"
                         class="pull-right">
                         <small>

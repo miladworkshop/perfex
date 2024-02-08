@@ -32,7 +32,7 @@
                         <div class="pull-right mbot10 task-single-menu task-menu-options">
                             <div class="content-menu hide">
                                 <ul>
-                                    <?php if (has_permission('tasks', '', 'create')) { ?>
+                                    <?php if (staff_can('create',  'tasks')) { ?>
                                     <?php
                            $copy_template = '';
                            if (total_rows(db_prefix() . 'task_assigned', ['taskid' => $task->id]) > 0) {
@@ -64,7 +64,7 @@
                                             data-html="true"><?php echo _l('task_copy'); ?></span></a>
                                     </li>
                                     <?php } ?>
-                                    <?php if (has_permission('tasks', '', 'delete')) { ?>
+                                    <?php if (staff_can('delete',  'tasks')) { ?>
                                     <li>
                                         <a href="<?php echo admin_url('tasks/delete_task/' . $task->id); ?>"
                                             class="_delete task-delete">
@@ -74,7 +74,7 @@
                                     <?php } ?>
                                 </ul>
                             </div>
-                            <?php if (has_permission('tasks', '', 'delete') || has_permission('tasks', '', 'create')) { ?>
+                            <?php if (staff_can('delete',  'tasks') || staff_can('create',  'tasks')) { ?>
                             <a href="#" onclick="return false;" class="trigger manual-popover mright5">
                                 <i class="fa-regular fa-circle fa-sm"></i>
                                 <i class="fa-regular fa-circle fa-sm"></i>

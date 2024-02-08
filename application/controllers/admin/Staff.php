@@ -7,7 +7,7 @@ class Staff extends AdminController
     /* List all staff members */
     public function index()
     {
-        if (!has_permission('staff', '', 'view')) {
+        if (staff_cant('view', 'staff')) {
             access_denied('staff');
         }
         if ($this->input->is_ajax_request()) {
@@ -21,7 +21,7 @@ class Staff extends AdminController
     /* Add new staff member or edit existing */
     public function member($id = '')
     {
-        if (!has_permission('staff', '', 'view')) {
+        if (staff_cant('view', 'staff')) {
             access_denied('staff');
         }
         hooks()->do_action('staff_member_edit_view_profile', $id);
@@ -41,7 +41,7 @@ class Staff extends AdminController
             $data['password'] = $this->input->post('password', false);
 
             if ($id == '') {
-                if (!has_permission('staff', '', 'create')) {
+                if (staff_cant('create', 'staff')) {
                     access_denied('staff');
                 }
                 $id = $this->staff_model->add($data);
@@ -51,7 +51,7 @@ class Staff extends AdminController
                     redirect(admin_url('staff/member/' . $id));
                 }
             } else {
-                if (!has_permission('staff', '', 'edit')) {
+                if (staff_cant('edit', 'staff')) {
                     access_denied('staff');
                 }
                 handle_staff_profile_image_upload($id);
@@ -107,7 +107,7 @@ class Staff extends AdminController
     /* Get role permission for specific role id */
     public function role_changed($id)
     {
-        if (!has_permission('staff', '', 'view')) {
+        if (staff_cant('view', 'staff')) {
             ajax_access_denied('staff');
         }
 
@@ -192,7 +192,7 @@ class Staff extends AdminController
             die('Busted, you can\'t delete administrators');
         }
 
-        if (has_permission('staff', '', 'delete')) {
+        if (staff_can('delete',  'staff')) {
             $success = $this->staff_model->delete($this->input->post('id'), $this->input->post('transfer_data_to'));
             if ($success) {
                 set_alert('success', _l('deleted', _l('staff_member')));
@@ -240,7 +240,7 @@ class Staff extends AdminController
     public function remove_staff_profile_image($id = '')
     {
         $staff_id = get_staff_user_id();
-        if (is_numeric($id) && (has_permission('staff', '', 'create') || has_permission('staff', '', 'edit'))) {
+        if (is_numeric($id) && (staff_can('create',  'staff') || staff_can('edit',  'staff'))) {
             $staff_id = $id;
         }
         hooks()->do_action('before_remove_staff_profile_image');
@@ -309,7 +309,7 @@ class Staff extends AdminController
     /* Change status to staff active or inactive / ajax */
     public function change_staff_status($id, $status)
     {
-        if (has_permission('staff', '', 'edit')) {
+        if (staff_can('edit',  'staff')) {
             if ($this->input->is_ajax_request()) {
                 $this->staff_model->change_staff_status($id, $status);
             }

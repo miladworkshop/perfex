@@ -3,7 +3,7 @@
     <?php
     $tasks_filter_assignees = $this->misc_model->get_tasks_distinct_assignees();
     hooks()->do_action('tasks_filters_hidden_html');
-    echo form_hidden('my_tasks', (!has_permission('tasks', '', 'view') ? 'true' : ''));
+    echo form_hidden('my_tasks', (staff_cant('view', 'tasks') ? 'true' : ''));
     echo form_hidden('my_following_tasks');
     echo form_hidden('billable');
     echo form_hidden('billed');
@@ -17,7 +17,7 @@
     /* Related task filter - used in customer profile */
     echo form_hidden('tasks_related_to');
 
-    if (has_permission('tasks', '', 'view')) {
+    if (staff_can('view',  'tasks')) {
         foreach ($tasks_filter_assignees as $tf_assignee) {
             echo form_hidden('task_assigned_' . $tf_assignee['assigneeid']);
         }
@@ -77,7 +77,7 @@
             </a>
         </li>
         <li class="divider"></li>
-        <li class="filter-group <?php echo(!has_permission('tasks', '', 'view') ? ' active' : ''); ?>"
+        <li class="filter-group <?php echo(staff_cant('view', 'tasks') ? ' active' : ''); ?>"
             data-filter-group="assigned-follower-not-assigned">
             <a href="#" data-cview="my_tasks"
                 onclick="dt_custom_view('my_tasks','<?php echo $view_table_name; ?>','my_tasks'); return false;">
@@ -90,7 +90,7 @@
                 <?php echo _l('tasks_view_follower_by_user'); ?>
             </a>
         </li>
-        <?php if (has_permission('tasks', '', 'view')) { ?>
+        <?php if (staff_can('view',  'tasks')) { ?>
         <li class="filter-group" data-filter-group="assigned-follower-not-assigned">
             <a href="#" data-cview="not_assigned"
                 onclick="dt_custom_view('not_assigned','<?php echo $view_table_name; ?>','not_assigned'); return false;">
@@ -98,7 +98,7 @@
             </a>
         </li>
         <?php } ?>
-        <?php if (has_permission('tasks', '', 'create') || has_permission('tasks', '', 'edit')) { ?>
+        <?php if (staff_can('create',  'tasks') || staff_can('edit',  'tasks')) { ?>
         <li>
             <a href="#" data-cview="recurring_tasks"
                 onclick="dt_custom_view('recurring_tasks','<?php echo $view_table_name; ?>','recurring_tasks'); return false;">
@@ -106,7 +106,7 @@
             </a>
         </li>
         <?php } ?>
-        <?php if (has_permission('invoices', '', 'create')) { ?>
+        <?php if (staff_can('create',  'invoices')) { ?>
         <li class="divider"></li>
         <li class="filter-group" data-filter-group="group-billable">
             <a href="#" data-cview="billable"
@@ -127,7 +127,7 @@
             </a>
         </li>
         <?php } ?>
-        <?php if (has_permission('tasks', '', 'view')) { ?>
+        <?php if (staff_can('view',  'tasks')) { ?>
         <?php if (count($tasks_filter_assignees)) { ?>
         <div class="clearfix"></div>
         <li class="divider"></li>

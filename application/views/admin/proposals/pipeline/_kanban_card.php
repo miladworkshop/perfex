@@ -13,7 +13,7 @@
                         onclick="proposal_pipeline_open(<?php echo $proposal['id']; ?>); return false;">
                         <?php echo format_proposal_number($proposal['id']); ?>
                     </a>
-                    <?php if (has_permission('estimates', '', 'edit')) { ?>
+                    <?php if (staff_can('edit',  'estimates')) { ?>
                     <a href="<?php echo admin_url('proposals/proposal/' . $proposal['id']); ?>" target="_blank"
                         class="pull-right">
                         <small>

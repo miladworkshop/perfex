@@ -21,7 +21,7 @@ class HoursOverviewChart
         $this->id        = $id;
         $this->type      = $type;
         $this->ci        = &get_instance();
-        $this->canCreate = has_permission('projects', '', 'create');
+        $this->canCreate = staff_can('create',  'projects');
         // If don't have permission for projects create show only bileld time
         $this->timesheetsType = $this->determineTimesheetsType($id);
     }

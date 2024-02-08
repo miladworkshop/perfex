@@ -9,13 +9,14 @@
                         <?php echo _l('expenses_detailed_report'); ?>
                     </a>
                 </div>
+                <div class="tw-flex tw-space-x-2">
                 <?php if ($export_not_supported) { ?>
                 <p class="text-danger">Exporting not support in IE. To export this data please try another browser</p>
                 <?php } ?>
-                <a href="#" onclick="make_expense_pdf_export(); return false;" class="btn btn-default mright10<?php if ($export_not_supported) {
+                <a href="#" onclick="make_expense_pdf_export(); return false;" class="btn btn-default<?php if ($export_not_supported) {
     echo ' disabled';
 } ?>"><i class="fa-regular fa-file-pdf"></i></a>
-                <a download="expenses-report-<?php echo $current_year; ?>.xls" class="btn btn-default mright10<?php if ($export_not_supported) {
+                <a download="expenses-report-<?php echo $current_year; ?>.xls" class="btn btn-default<?php if ($export_not_supported) {
     echo ' disabled';
 } ?>" href="#" onclick="return ExcellentExport.excel(this, 'expenses-report-table', 'Expenses Report <?php echo $current_year; ?>');"><i
                         class="fa-regular fa-file-excel"></i></a>
@@ -59,6 +60,7 @@
                     </select>
                 </div>
                 <?php } ?>
+                </div>
                 <div class="panel_s tw-mt-5 sm:tw-mt-6">
                     <div class="panel-body">
                         <div class="checkbox checkbox-primary">

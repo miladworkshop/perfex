@@ -277,7 +277,7 @@ function get_estimate_item_taxes($itemid)
  */
 function get_estimates_percent_by_status($status, $project_id = null)
 {
-    $has_permission_view = has_permission('estimates', '', 'view');
+    $has_permission_view = staff_can('view',  'estimates');
     $where               = '';
 
     if (isset($project_id)) {
@@ -321,7 +321,7 @@ function get_estimates_percent_by_status($status, $project_id = null)
 function get_estimates_where_sql_for_staff($staff_id)
 {
     $CI                                  = &get_instance();
-    $has_permission_view_own             = has_permission('estimates', '', 'view_own');
+    $has_permission_view_own             = staff_can('view_own',  'estimates');
     $allow_staff_view_estimates_assigned = get_option('allow_staff_view_estimates_assigned');
     $whereUser                           = '';
     if ($has_permission_view_own) {

@@ -104,7 +104,7 @@ class Gdpr extends AdminController
             $contact_id = $data['contact_id'];
             $client_id  = get_user_id_by_contact_id($contact_id);
 
-            if (!has_permission('customers', '', 'view')) {
+            if (staff_cant('view', 'customers')) {
                 if (!is_customer_admin($client_id)) {
                     access_denied('Contact Consents Action');
                 }

@@ -36,9 +36,9 @@
                                     <div class="tw-flex -tw-space-x-1">
                                         <?php foreach ($members as $member) { ?>
                                         <span class="tw-group tw-relative"
-                                            data-title="<?php echo get_staff_full_name($member['staff_id']) . (has_permission('projects', '', 'create') || $member['staff_id'] == get_staff_user_id() ? ' - ' . _l('total_logged_hours_by_staff') . ': ' . seconds_to_time_format($member['total_logged_time']) : ''); ?>"
+                                            data-title="<?php echo get_staff_full_name($member['staff_id']) . (staff_can('create',  'projects') || $member['staff_id'] == get_staff_user_id() ? ' - ' . _l('total_logged_hours_by_staff') . ': ' . seconds_to_time_format($member['total_logged_time']) : ''); ?>"
                                             data-toggle="tooltip">
-                                            <?php if (has_permission('projects', '', 'edit')) { ?>
+                                            <?php if (staff_can('edit',  'projects')) { ?>
                                             <a href="<?php echo admin_url('projects/remove_team_member/' . $project->id . '/' . $member['staff_id']); ?>"
                                                 class="_delete group-hover:tw-inline-flex tw-hidden tw-rounded-full tw-absolute tw-items-center tw-justify-center tw-bg-neutral-300/50 tw-h-7 tw-w-7 tw-cursor-pointer">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -67,7 +67,7 @@
                             </div>
                         </div>
                         <div class="col-md-5 text-right">
-                            <?php if (has_permission('tasks', '', 'create')) { ?>
+                            <?php if (staff_can('create',  'tasks')) { ?>
                             <a href="#"
                                 onclick="new_task_from_relation(undefined,'project',<?php echo $project->id; ?>); return false;"
                                 class="btn btn-primary">
@@ -78,7 +78,7 @@
                             <?php
                            $invoice_func = 'pre_invoice_project';
                            ?>
-                            <?php if (has_permission('invoices', '', 'create')) { ?>
+                            <?php if (staff_can('create',  'invoices')) { ?>
                             <a href="#"
                                 onclick="<?php echo $invoice_func; ?>(<?php echo $project->id; ?>); return false;"
                                 class="invoice-project btn btn-primary<?php if ($project->client_data->active == 0) {
@@ -105,21 +105,21 @@
                                             <?php echo $project_pin_tooltip; ?>
                                         </a>
                                     </li>
-                                    <?php if (has_permission('projects', '', 'edit')) { ?>
+                                    <?php if (staff_can('edit',  'projects')) { ?>
                                     <li>
                                         <a href="<?php echo admin_url('projects/project/' . $project->id); ?>">
                                             <?php echo _l('edit_project'); ?>
                                         </a>
                                     </li>
                                     <?php } ?>
-                                    <?php if (has_permission('projects', '', 'create')) { ?>
+                                    <?php if (staff_can('create',  'projects')) { ?>
                                     <li>
                                         <a href="#" onclick="copy_project(); return false;">
                                             <?php echo _l('copy_project'); ?>
                                         </a>
                                     </li>
                                     <?php } ?>
-                                    <?php if (has_permission('projects', '', 'create') || has_permission('projects', '', 'edit')) { ?>
+                                    <?php if (staff_can('create',  'projects') || staff_can('edit',  'projects')) { ?>
                                     <li class="divider"></li>
                                     <?php foreach ($statuses as $status) {
                                if ($status['id'] == $project->status) {
@@ -133,7 +133,7 @@
                            } ?>
                                     <?php } ?>
                                     <li class="divider"></li>
-                                    <?php if (has_permission('projects', '', 'create')) { ?>
+                                    <?php if (staff_can('create',  'projects')) { ?>
                                     <li>
                                         <a href="<?php echo admin_url('projects/export_project_data/' . $project->id); ?>"
                                             target="_blank"><?php echo _l('export_project_data'); ?></a>
@@ -145,7 +145,7 @@
                                             target="_blank"><?php echo _l('project_view_as_client'); ?></a>
                                     </li>
                                     <?php } ?>
-                                    <?php if (has_permission('projects', '', 'delete')) { ?>
+                                    <?php if (staff_can('delete',  'projects')) { ?>
                                     <li>
                                         <a href="<?php echo admin_url('projects/delete/' . $project->id); ?>"
                                             class="_delete">
@@ -163,7 +163,7 @@
                     <?php $this->load->view('admin/projects/project_tabs'); ?>
                 </div>
                 <?php
-               if ((has_permission('projects', '', 'create') || has_permission('projects', '', 'edit'))
+               if ((staff_can('create',  'projects') || staff_can('edit',  'projects'))
                  && $project->status == 1
                  && $this->projects_model->timers_started_for_project($project->id)
                  && $tab['slug'] != 'project_milestones') {

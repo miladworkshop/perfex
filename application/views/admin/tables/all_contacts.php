@@ -34,7 +34,7 @@ foreach ($custom_fields as $key => $field) {
 
 $where = [];
 
-if (!has_permission('customers', '', 'view')) {
+if (staff_cant('view', 'customers')) {
     array_push($where, 'AND ' . db_prefix() . 'contacts.userid IN (SELECT customer_id FROM ' . db_prefix() . 'customer_admins WHERE staff_id=' . get_staff_user_id() . ')');
 }
 
@@ -70,7 +70,7 @@ foreach ($rResult as $aRow) {
           </a>';
     }
 
-    if (has_permission('customers', '', 'delete') || is_customer_admin($aRow['userid'])) {
+    if (staff_can('delete',  'customers') || is_customer_admin($aRow['userid'])) {
         if ($aRow['is_primary'] == 0 || ($aRow['is_primary'] == 1 && $aRow['total_contacts'] == 1)) {
             $rowName .= ' | <a href="' . admin_url('clients/delete_contact/' . $aRow['userid'] . '/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
         }

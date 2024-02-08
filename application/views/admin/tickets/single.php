@@ -101,7 +101,8 @@
                                                 <?php echo _l('ticket_single_settings'); ?>
                                             </a>
                                         </li>
-                                        <?php hooks()->do_action('add_single_ticket_tab_menu_item', $ticket); ?>
+                                        <?php do_action_deprecated('add_single_ticket_tab_menu_item', $ticket, '3.0.7', 'after_admin_single_ticket_tab_menu_last_item'); ?>
+                                        <?php hooks()->do_action('after_admin_single_ticket_tab_menu_last_item', $ticket); ?>
                                     </ul>
                                 </div>
                             </div>
@@ -387,9 +388,9 @@
                             <div role="tabpanel" class="tab-pane" id="othertickets">
                                 <hr class="no-mtop" />
                                 <div class="_filters _hidden_inputs hidden tickets_filters">
-                                    <?php echo form_hidden('filters_ticket_id', $ticket->ticketid); ?>
-                                    <?php echo form_hidden('filters_email', $ticket->email); ?>
-                                    <?php echo form_hidden('filters_userid', $ticket->userid); ?>
+                                    <?php echo form_hidden('via_ticket', $ticket->ticketid); ?>
+                                    <?php echo form_hidden('via_ticket_email', $ticket->email); ?>
+                                    <?php echo form_hidden('via_ticket_userid', $ticket->userid); ?>
                                 </div>
                                 <?php echo AdminTicketsTableStructure(); ?>
                             </div>
@@ -522,7 +523,7 @@
                                         <?php echo render_custom_fields('tickets', $ticket->ticketid); ?>
                                     </div>
                                 </div>
-                                <?php hooks()->do_action('add_single_ticket_tab_menu_content', $ticket); ?>
+                                <?php do_action_deprecated('add_single_ticket_tab_menu_content', $ticket, '3.0.7', 'after_admin_single_ticket_tab_menu_last_content'); ?>
 
                                 <div
                                     class="tw-bg-neutral-50 text-right tw-px-6 tw-py-3 -tw-mx-6 -tw-mb-6 tw-border-t tw-border-solid tw-border-neutral-200 tw-rounded-b-md">
@@ -531,6 +532,8 @@
                                     </a>
                                 </div>
                             </div>
+                            <?php hooks()->do_action('after_admin_single_ticket_tab_menu_last_content', $ticket); ?>
+
                         </div>
                     </div>
                 </div>
@@ -577,7 +580,7 @@
               }
            ?>
                                 </p>
-                                <?php if (has_permission('tasks', '', 'create')) { ?>
+                                <?php if (staff_can('create',  'tasks')) { ?>
                                 <a href="#" class="btn btn-default btn-sm"
                                     onclick="convert_ticket_to_task(<?php echo $ticket->ticketid; ?>,'ticket'); return false;"><?php echo _l('convert_to_task'); ?></a>
                                 <?php } ?>
@@ -673,7 +676,7 @@
                                 <a href="<?php echo admin_url('tickets/delete_ticket_reply/' . $ticket->ticketid . '/' . $reply['id']); ?>"
                                     class="btn btn-danger pull-left _delete mright5 btn-sm"><?php echo _l('delete_ticket_reply'); ?></a>
                                 <div class="clearfix"></div>
-                                <?php if (has_permission('tasks', '', 'create')) { ?>
+                                <?php if (staff_can('create',  'tasks')) { ?>
                                 <a href="#" class="pull-left btn btn-default mtop5 btn-sm"
                                     onclick="convert_ticket_to_task(<?php echo $reply['id']; ?>,'reply'); return false;"><?php echo _l('convert_to_task'); ?>
                                 </a>
@@ -868,7 +871,7 @@ function init_ticket_edit_editor() {
     }
     Ticket_message_editor = init_editor('.tinymce-ticket-edit');
 }
-<?php if (has_permission('tasks', '', 'create')) { ?>
+<?php if (staff_can('create',  'tasks')) { ?>
 
 function convert_ticket_to_task(id, type) {
     if (type == 'ticket') {

@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <h4 class="customer-profile-group-heading"><?php echo _l('projects'); ?></h4>
 <?php if (isset($client)) { ?>
-<?php if (has_permission('projects', '', 'create')) { ?>
+<?php if (staff_can('create',  'projects')) { ?>
 <a href="<?php echo admin_url('projects/project?customer_id=' . $client->userid); ?>"
     class="btn btn-primary mbot15<?php echo $client->active == 0 ? ' disabled' : ''; ?>">
     <i class="fa-regular fa-plus tw-mr-1"></i>
@@ -10,7 +10,7 @@
 <?php } ?>
 <?php
       $_where = '';
-      if (!has_permission('projects', '', 'view')) {
+      if (staff_cant('view', 'projects')) {
           $_where = 'id IN (SELECT project_id FROM ' . db_prefix() . 'project_members WHERE staff_id=' . get_staff_user_id() . ')';
       }
       ?>

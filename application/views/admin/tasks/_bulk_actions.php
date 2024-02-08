@@ -8,7 +8,7 @@
          </div>
          <div class="modal-body">
 
-            <?php if (has_permission('tasks', '', 'delete')) { ?>
+            <?php if (staff_can('delete',  'tasks')) { ?>
                <div class="checkbox checkbox-danger">
                   <input type="checkbox" name="mass_delete" id="mass_delete">
                   <label for="mass_delete"><?php echo _l('mass_delete'); ?></label>
@@ -25,7 +25,7 @@
                      <?php } ?>
                   </select>
                </div>
-               <?php if (has_permission('tasks', '', 'edit')) { ?>
+               <?php if (staff_can('edit',  'tasks')) { ?>
 
                   <div class="form-group">
                      <label for="task_bulk_priority" class="control-label"><?php echo _l('task_add_edit_priority'); ?></label>

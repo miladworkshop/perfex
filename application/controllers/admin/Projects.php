@@ -21,13 +21,14 @@ class Projects extends AdminController
         close_setup_menu();
         $data['statuses'] = $this->projects_model->get_project_statuses();
         $data['title']    = _l('projects');
+        $data['table'] = App_table::find('projects');
         $this->load->view('admin/projects/manage', $data);
     }
 
     public function table($clientid = '')
     {
-        $this->app->get_table_data('projects', [
-            'clientid' => $clientid,
+        App_table::find('projects')->output([
+            'clientid'=>$clientid
         ]);
     }
 
@@ -41,7 +42,8 @@ class Projects extends AdminController
         $this->load->model('expenses_model');
         $this->load->model('payment_modes_model');
         $data['payment_modes'] = $this->payment_modes_model->get('', [], true);
-        $this->app->get_table_data('project_expenses', [
+
+        App_table::find('project_expenses')->output([
             'project_id' => $id,
             'data'       => $data,
         ]);
@@ -69,7 +71,7 @@ class Projects extends AdminController
 
     public function project($id = '')
     {
-        if (!staff_can('edit', 'projects') && !staff_can('create', 'projects')) {
+        if (staff_cant('edit', 'projects') && staff_cant('create', 'projects')) {
             access_denied('Projects');
         }
 
@@ -77,7 +79,7 @@ class Projects extends AdminController
             $data                = $this->input->post();
             $data['description'] = html_purify($this->input->post('description', false));
             if ($id == '') {
-                if (!staff_can('create', 'projects')) {
+                if (staff_cant('create', 'projects')) {
                     access_denied('Projects');
                 }
                 $id = $this->projects_model->add($data);
@@ -86,7 +88,7 @@ class Projects extends AdminController
                     redirect(admin_url('projects/view/' . $id));
                 }
             } else {
-                if (!staff_can('edit', 'projects')) {
+                if (staff_cant('edit', 'projects')) {
                     access_denied('Projects');
                 }
                 $success = $this->projects_model->update($data, $id);
@@ -253,7 +255,7 @@ class Projects extends AdminController
                 }
 
                 $__total_where_tasks = 'rel_type = "project" AND rel_id=' . $this->db->escape_str($id);
-                if (!staff_can('view', 'tasks')) {
+                if (staff_cant('view', 'tasks')) {
                     $__total_where_tasks .= ' AND ' . db_prefix() . 'tasks.id IN (SELECT taskid FROM ' . db_prefix() . 'task_assigned WHERE staffid = ' . get_staff_user_id() . ')';
 
                     if (get_option('show_all_tasks_for_project_member') == 1) {
@@ -293,6 +295,7 @@ class Projects extends AdminController
                 $data['invoices_years']       = $this->invoices_model->get_invoices_years();
                 $data['invoices_sale_agents'] = $this->invoices_model->get_sale_agents();
                 $data['invoices_statuses']    = $this->invoices_model->get_statuses();
+                $data['invoices_table'] = App_table::find('project_invoices');
             } elseif ($group == 'project_gantt') {
                 $gantt_type         = (!$this->input->get('gantt_type') ? 'milestones' : $this->input->get('gantt_type'));
                 $taskStatus         = (!$this->input->get('gantt_task_status') ? null : $this->input->get('gantt_task_status'));
@@ -311,6 +314,7 @@ class Projects extends AdminController
                 $data['taxes']              = $this->taxes_model->get();
                 $data['expense_categories'] = $this->expenses_model->get_category();
                 $data['currencies']         = $this->currencies_model->get();
+                $data['expenses_table'] = App_table::find('project_expenses');
             } elseif ($group == 'project_activity') {
                 $data['activity'] = $this->projects_model->get_activity($id);
             } elseif ($group == 'project_notes') {
@@ -319,11 +323,13 @@ class Projects extends AdminController
                 $this->load->model('contracts_model');
                 $data['contract_types'] = $this->contracts_model->get_contract_types();
                 $data['years']          = $this->contracts_model->get_contracts_years();
+                $data['contracts_table'] = App_table::find('project_contracts');
             } elseif ($group == 'project_estimates') {
                 $this->load->model('estimates_model');
                 $data['estimates_years']       = $this->estimates_model->get_estimates_years();
                 $data['estimates_sale_agents'] = $this->estimates_model->get_sale_agents();
                 $data['estimate_statuses']     = $this->estimates_model->get_statuses();
+                $data['estimates_table'] = App_table::find('project_estimates');
                 $data['estimateid']            = '';
                 $data['switch_pipeline']       = '';
             } elseif ($group == 'project_proposals') {
@@ -331,6 +337,7 @@ class Projects extends AdminController
                 $data['proposal_statuses']     = $this->proposals_model->get_statuses();
                 $data['proposals_sale_agents'] = $this->proposals_model->get_sale_agents();
                 $data['years']                 = $this->proposals_model->get_proposals_years();
+                $data['proposals_table'] = App_table::find('project_proposals');
                 $data['proposal_id']           = '';
                 $data['switch_pipeline']       = '';
             } elseif ($group == 'project_tickets') {
@@ -375,7 +382,7 @@ class Projects extends AdminController
 
             $other_projects_where .= ')';
 
-            if (!staff_can('view', 'projects')) {
+            if (staff_cant('view', 'projects')) {
                 $other_projects_where .= ' AND ' . db_prefix() . 'projects.id IN (SELECT project_id FROM ' . db_prefix() . 'project_members WHERE staff_id=' . get_staff_user_id() . ')';
             }
 
@@ -680,7 +687,7 @@ class Projects extends AdminController
             $message = '';
             $success = false;
             if (!$this->input->post('id')) {
-                if (!staff_can('create_milestones', 'projects')) {
+                if (staff_cant('create_milestones', 'projects')) {
                     access_denied();
                 }
 
@@ -689,7 +696,7 @@ class Projects extends AdminController
                     set_alert('success', _l('added_successfully', _l('project_milestone')));
                 }
             } else {
-                if (!staff_can('edit_milestones', 'projects')) {
+                if (staff_cant('edit_milestones', 'projects')) {
                     access_denied();
                 }
 

@@ -25,5 +25,5 @@ foreach($custom_fields as $field){
  ]);
 }
 $table_data = hooks()->apply_filters('invoices_table_columns', $table_data);
-render_datatable($table_data, (isset($class) ? $class : 'invoices'));
+render_datatable($table_data, (isset($class) ? $class : 'invoices'), [], ['id'=>$table_id ?? 'invoices']);
 ?>

@@ -63,7 +63,7 @@ class ProposalsPipeline extends AbstractKanban
 
     protected function initiateQuery(): self
     {
-        $has_permission_view = has_permission('proposals', '', 'view');
+        $has_permission_view = staff_can('view',  'proposals');
         $noPermissionQuery   = get_proposals_sql_where_staff(get_staff_user_id());
 
         $this->ci->db->select('id,invoice_id,estimate_id,subject,rel_type,rel_id,total,date,open_till,currency,proposal_to,status');

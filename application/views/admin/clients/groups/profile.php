@@ -194,7 +194,7 @@
             </div>
             <?php if (isset($client)) { ?>
             <div role="tabpanel" class="tab-pane" id="customer_admins">
-                <?php if (has_permission('customers', '', 'create') || has_permission('customers', '', 'edit')) { ?>
+                <?php if (staff_can('create',  'customers') || staff_can('edit',  'customers')) { ?>
                 <a href="#" data-toggle="modal" data-target="#customer_admins_assign"
                     class="btn btn-primary mbot30"><?php echo _l('assign_admin'); ?></a>
                 <?php } ?>
@@ -203,7 +203,7 @@
                         <tr>
                             <th><?php echo _l('staff_member'); ?></th>
                             <th><?php echo _l('customer_admin_date_assigned'); ?></th>
-                            <?php if (has_permission('customers', '', 'create') || has_permission('customers', '', 'edit')) { ?>
+                            <?php if (staff_can('create',  'customers') || staff_can('edit',  'customers')) { ?>
                             <th><?php echo _l('options'); ?></th>
                             <?php } ?>
                         </tr>
@@ -220,7 +220,7 @@
                             </td>
                             <td data-order="<?php echo $c_admin['date_assigned']; ?>">
                                 <?php echo _dt($c_admin['date_assigned']); ?></td>
-                            <?php if (has_permission('customers', '', 'create') || has_permission('customers', '', 'edit')) { ?>
+                            <?php if (staff_can('create',  'customers') || staff_can('edit',  'customers')) { ?>
                             <td>
                                 <a href="<?php echo admin_url('clients/delete_customer_admin/' . $client->userid . '/' . $c_admin['staff_id']); ?>"
                                     class="tw-mt-px tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700 _delete">
@@ -317,7 +317,7 @@
     <?php echo form_close(); ?>
 </div>
 <?php if (isset($client)) { ?>
-<?php if (has_permission('customers', '', 'create') || has_permission('customers', '', 'edit')) { ?>
+<?php if (staff_can('create',  'customers') || staff_can('edit',  'customers')) { ?>
 <div class="modal fade" id="customer_admins_assign" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <?php echo form_open(admin_url('clients/assign_admins/' . $client->userid)); ?>

@@ -44,8 +44,8 @@ class Import_leads extends App_import
 
         parent::__construct();
 
-        $this->sources  = $this->ci->db->get('tblleads_sources')->result_array();
-        $this->statuses = $this->ci->db->get('tblleads_status')->result_array();
+        $this->sources  = $this->ci->db->get('leads_sources')->result_array();
+        $this->statuses = $this->ci->db->get('leads_status')->result_array();
     }
 
     public function perform()

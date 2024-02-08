@@ -73,7 +73,7 @@ class CustomerProfileBadges
             $this->CI->load->model('invoices_model');
         }
 
-        if (!staff_can('view', 'invoices')) {
+        if (staff_cant('view', 'invoices')) {
             $where = get_invoices_where_sql_for_staff($this->staffId);
             $this->CI->db->where($where);
         }
@@ -85,7 +85,7 @@ class CustomerProfileBadges
 
     public function proposals()
     {
-        if (!staff_can('view', 'proposals')) {
+        if (staff_cant('view', 'proposals')) {
             $where = get_proposals_sql_where_staff($this->staffId);
             $this->CI->db->where($where);
         }
@@ -98,7 +98,7 @@ class CustomerProfileBadges
 
     public function subscriptions()
     {
-        if (!staff_can('view', 'subscriptions')) {
+        if (staff_cant('view', 'subscriptions')) {
             $this->CI->db->where('(' . db_prefix() . 'subscriptions.created_from=' . $this->staffId . ' AND ' . db_prefix() . 'subscriptions.created_from IN (SELECT staff_id FROM ' . db_prefix() . 'staff_permissions WHERE feature = "subscriptions" AND capability="view_own"))');
         }
 
@@ -114,7 +114,7 @@ class CustomerProfileBadges
 
     public function estimates()
     {
-        if (!staff_can('view', 'estimates')) {
+        if (staff_cant('view', 'estimates')) {
             $where = get_estimates_where_sql_for_staff($this->staffId);
             $this->CI->db->where($where);
         }
@@ -130,7 +130,7 @@ class CustomerProfileBadges
 
     public function credit_notes()
     {
-        if (!staff_can('view', 'credit_notes')) {
+        if (staff_cant('view', 'credit_notes')) {
             $this->CI->db->where('(' . db_prefix() . 'creditnotes.addedfrom=' . $this->staffId . ' AND ' . db_prefix() . 'creditnotes.addedfrom IN (SELECT staff_id FROM ' . db_prefix() . 'staff_permissions WHERE feature = "credit_notes" AND capability="view_own"))');
         }
 
@@ -142,7 +142,7 @@ class CustomerProfileBadges
 
     public function contracts()
     {
-        if (!staff_can('view', 'contracts')) {
+        if (staff_cant('view', 'contracts')) {
             $this->CI->db->where('(' . db_prefix() . 'contracts.addedfrom=' . $this->staffId . ' AND ' . db_prefix() . 'contracts.addedfrom IN (SELECT staff_id FROM ' . db_prefix() . 'staff_permissions WHERE feature = "contracts" AND capability="view_own"))');
         }
 
@@ -154,7 +154,7 @@ class CustomerProfileBadges
 
     public function projects()
     {
-        if (!staff_can('view', 'projects')) {
+        if (staff_cant('view', 'projects')) {
             $this->CI->db->where(db_prefix() . 'projects.id IN (SELECT project_id FROM ' . db_prefix() . 'project_members WHERE staff_id=' . $this->staffId . ')');
         }
 
@@ -244,7 +244,7 @@ class CustomerProfileBadges
         $this->CI->db->where($where);
         $this->CI->db->where('datefinished is NULL');
 
-        if (!staff_can('view', 'tasks')) {
+        if (staff_cant('view', 'tasks')) {
             $this->CI->db->where(get_tasks_where_string(false));
         }
 

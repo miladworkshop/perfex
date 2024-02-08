@@ -202,6 +202,26 @@ class App
         return hooks()->apply_filters('before_get_languages', $this->available_languages);
     }
 
+    public function get_table_path($table, $my_prefixed = true) 
+    {
+        $path = VIEWPATH . 'admin/tables/' . $table . EXT;
+
+        if (!file_exists($path)) {
+            $path = $table;
+            if (!endsWith($path, EXT)) {
+                $path .= EXT;
+            }
+        } else if($my_prefixed) {
+            $myPrefixedPath = VIEWPATH . 'admin/tables/my_' . $table . EXT;
+            
+            if (file_exists($myPrefixedPath)) {
+                $path = $myPrefixedPath;
+            }
+        }
+
+        return $path;
+    }
+    
     /**
      * Function that will parse table data from the tables folder for amin area
      * @param  string $table  table filename
@@ -212,27 +232,13 @@ class App
     {
         $params = hooks()->apply_filters('table_params', $params, $table);
 
+        $customFieldsColumns = [];
+
         foreach ($params as $key => $val) {
             $$key = $val;
         }
 
-        $customFieldsColumns = [];
-
-        $path = VIEWPATH . 'admin/tables/' . $table . EXT;
-
-        if (!file_exists($path)) {
-            $path = $table;
-            if (!endsWith($path, EXT)) {
-                $path .= EXT;
-            }
-        } else {
-            $myPrefixedPath = VIEWPATH . 'admin/tables/my_' . $table . EXT;
-            if (file_exists($myPrefixedPath)) {
-                $path = $myPrefixedPath;
-            }
-        }
-
-        include_once($path);
+        include_once($this->get_table_path($table));
 
         echo json_encode($output);
         die;

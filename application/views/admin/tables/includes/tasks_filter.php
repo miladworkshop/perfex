@@ -57,7 +57,7 @@ if (count($_assignees) > 0) {
     array_push($filter, 'AND (' . db_prefix() . 'tasks.id IN (SELECT taskid FROM ' . db_prefix() . 'task_assigned WHERE staffid IN (' . implode(', ', $_assignees) . ')))');
 }
 
-if (!has_permission('tasks', '', 'view')) {
+if (staff_cant('view', 'tasks')) {
     array_push($where, get_tasks_where_string());
 }
 

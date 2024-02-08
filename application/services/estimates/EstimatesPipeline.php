@@ -64,7 +64,7 @@ class EstimatesPipeline extends AbstractKanban
 
     protected function initiateQuery(): self
     {
-        $has_permission_view = has_permission('estimates', '', 'view');
+        $has_permission_view = staff_can('view',  'estimates');
         $noPermissionQuery   = get_estimates_where_sql_for_staff(get_staff_user_id());
 
         $this->ci->db->select(db_prefix() . 'estimates.id,status,invoiceid,' . get_sql_select_client_company() . ',total,currency,symbol,' . db_prefix() . 'currencies.name as currency_name,date,expirydate,clientid');

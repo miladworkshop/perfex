@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 if (isset($client)) { ?>
-<?php if (has_permission('customers', '', 'edit')) { ?>
+<?php if (staff_can('edit',  'customers')) { ?>
 <div class="row" data-address="<?php echo htmlentities($client->address); ?>" data-city="<?php echo htmlentities($client->city); ?>" data-country="<?php echo htmlentities(get_country_name($client->country)); ?>" id="long_lat_wrapper">
     <div class="col-md-4">
       <div class="form-group">

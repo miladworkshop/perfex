@@ -168,12 +168,11 @@ class Cron_model extends App_Model
 
         $older_than_hours = intval($older_than_hours);
         $time_ago         = strtotime(" - {$older_than_hours} hours");
+        $this->db->set('end_time', "UNIX_TIMESTAMP(DATE_ADD(from_unixtime(start_time), INTERVAL $older_than_hours HOUR))", false);
         $this->db->where('end_time IS NULL');
         $this->db->where('task_id !=', '0');
         $this->db->where('start_time <=', $time_ago);
-        $this->db->update(db_prefix() . 'taskstimers', [
-            'end_time' => time(),
-        ]);
+        $this->db->update(db_prefix() . 'taskstimers');
     }
 
     private function delete_twocheckout_logs()

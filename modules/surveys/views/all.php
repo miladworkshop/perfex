@@ -4,16 +4,16 @@
     <div class="content">
         <div class="row">
             <div class="col-md-12">
-                <?php if (has_permission('surveys', '', 'create') || has_permission('surveys', '', 'view')) { ?>
+                <?php if (staff_can('create',  'surveys') || staff_can('view',  'surveys')) { ?>
                 <div class="_buttons tw-mb-2 sm:tw-mb-4">
-                    <?php if (has_permission('surveys', '', 'create')) { ?>
+                    <?php if (staff_can('create',  'surveys')) { ?>
                     <a href="<?php echo admin_url('surveys/survey'); ?>"
                         class="btn btn-primary pull-left display-block">
                         <i class="fa-regular fa-plus tw-mr-1"></i>
                         <?php echo _l('new_survey'); ?>
                     </a>
                     <?php } ?>
-                    <?php if (has_permission('surveys', '', 'view')) { ?>
+                    <?php if (staff_can('view',  'surveys')) { ?>
                     <a href="<?php echo admin_url('surveys/mail_lists'); ?>"
                         class="btn btn-default pull-left mleft5 display-block">
                         <i class="fa-solid fa-envelopes-bulk tw-mr-1"></i>

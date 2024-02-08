@@ -31,13 +31,13 @@ foreach ($rResult as $aRow) {
         <i class="fa fa-eye fa-lg"></i>
     </a>';
 
-    if (has_permission('surveys', '', 'edit')) {
+    if (staff_can('edit',  'surveys')) {
         $options .= '<a href="' . admin_url('surveys/mail_list/' . $aRow['listid']) . '" class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700">
             <i class="fa-regular fa-pen-to-square fa-lg"></i>
         </a>';
     }
 
-    if (has_permission('surveys', '', 'delete')) {
+    if (staff_can('delete',  'surveys')) {
         $options .= '<a href="' . admin_url('surveys/delete_mail_list/' . $aRow['listid']) . '" class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700 _delete">
             <i class="fa-regular fa-trash-can fa-lg"></i>
         </a>';

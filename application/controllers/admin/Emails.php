@@ -13,7 +13,7 @@ class Emails extends AdminController
     /* List all email templates */
     public function index()
     {
-        if (!has_permission('email_templates', '', 'view')) {
+        if (staff_cant('view', 'email_templates')) {
             access_denied('email_templates');
         }
         $langCheckings = get_option('email_templates_language_checks');
@@ -132,7 +132,7 @@ class Emails extends AdminController
 
         $data['title'] = _l('email_templates');
 
-        $data['hasPermissionEdit'] = has_permission('email_templates', '', 'edit');
+        $data['hasPermissionEdit'] = staff_can('edit',  'email_templates');
 
         $this->load->view('admin/emails/email_templates', $data);
     }
@@ -140,7 +140,7 @@ class Emails extends AdminController
     /* Edit email template */
     public function email_template($id)
     {
-        if (!has_permission('email_templates', '', 'view')) {
+        if (staff_cant('view', 'email_templates')) {
             access_denied('email_templates');
         }
         if (!$id) {
@@ -148,7 +148,7 @@ class Emails extends AdminController
         }
 
         if ($this->input->post()) {
-            if (!has_permission('email_templates', '', 'edit')) {
+            if (staff_cant('edit', 'email_templates')) {
                 access_denied('email_templates');
             }
 
@@ -191,7 +191,7 @@ class Emails extends AdminController
 
     public function enable_by_type($type)
     {
-        if (has_permission('email_templates', '', 'edit')) {
+        if (staff_can('edit',  'email_templates')) {
             $this->emails_model->mark_as_by_type($type, 1);
         }
         redirect(admin_url('emails'));
@@ -199,7 +199,7 @@ class Emails extends AdminController
 
     public function disable_by_type($type)
     {
-        if (has_permission('email_templates', '', 'edit')) {
+        if (staff_can('edit',  'email_templates')) {
             $this->emails_model->mark_as_by_type($type, 0);
         }
         redirect(admin_url('emails'));
@@ -207,7 +207,7 @@ class Emails extends AdminController
 
     public function enable($id)
     {
-        if (has_permission('email_templates', '', 'edit')) {
+        if (staff_can('edit',  'email_templates')) {
             $template = $this->emails_model->get_email_template_by_id($id);
             $this->emails_model->mark_as($template->slug, 1);
         }
@@ -216,7 +216,7 @@ class Emails extends AdminController
 
     public function disable($id)
     {
-        if (has_permission('email_templates', '', 'edit')) {
+        if (staff_can('edit',  'email_templates')) {
             $template = $this->emails_model->get_email_template_by_id($id);
             $this->emails_model->mark_as($template->slug, 0);
         }

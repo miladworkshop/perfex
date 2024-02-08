@@ -4,6 +4,14 @@
     <div class="content">
         <div class="row">
             <div class="col-md-12">
+               <?php if (staff_can('create', 'estimate_request')) { ?>
+                    <div class="tw-mb-2 sm:tw-mb-4">
+                        <a href="<?php echo admin_url('estimate_request/form'); ?>" class="btn btn-primary">
+                            <i class="fa-regular fa-plus tw-mr-1"></i>
+                            <?php echo _l('new_form'); ?>
+                        </a>
+                    </div>
+                <?php } ?>
                 <div class="panel_s">
                     <div class="panel-body">
                         <div>

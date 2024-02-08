@@ -4,38 +4,8 @@
     <div class="content">
         <div class="row">
             <div class="col-md-12">
-                <div class="_filters _hidden_inputs hidden">
-                    <?php
-                  echo form_hidden('my_customers');
-                  echo form_hidden('requires_registration_confirmation');
-                  foreach ($groups as $group) {
-                      echo form_hidden('customer_group_' . $group['id']);
-                  }
-                  foreach ($contract_types as $type) {
-                      echo form_hidden('contract_type_' . $type['id']);
-                  }
-                  foreach ($invoice_statuses as $status) {
-                      echo form_hidden('invoices_' . $status);
-                  }
-                  foreach ($estimate_statuses as $status) {
-                      echo form_hidden('estimates_' . $status);
-                  }
-                  foreach ($project_statuses as $status) {
-                      echo form_hidden('projects_' . $status['id']);
-                  }
-                  foreach ($proposal_statuses as $status) {
-                      echo form_hidden('proposals_' . $status);
-                  }
-                  foreach ($customer_admins as $cadmin) {
-                      echo form_hidden('responsible_admin_' . $cadmin['staff_id']);
-                  }
-                  foreach ($countries as $country) {
-                      echo form_hidden('country_' . $country['country_id']);
-                  }
-                  ?>
-                </div>
                 <div class="_buttons">
-                    <?php if (has_permission('customers', '', 'create')) { ?>
+                    <?php if (staff_can('create',  'customers')) { ?>
                     <a href="<?php echo admin_url('clients/client'); ?>"
                         class="btn btn-primary mright5 test pull-left display-block">
                         <i class="fa-regular fa-plus tw-mr-1"></i>
@@ -53,162 +23,22 @@
                     <div class="visible-xs">
                         <div class="clearfix"></div>
                     </div>
-                    <div class="btn-group pull-right mleft4 btn-with-tooltip-group _filter_data" data-toggle="tooltip"
-                        data-title="<?php echo _l('filter_by'); ?>">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-filter" aria-hidden="true"></i>
-                        </button>
-
-                        <ul class="dropdown-menu dropdown-menu-left" style="width:300px;">
-                            <li class="active"><a href="#" data-cview="all"
-                                    onclick="dt_custom_view('','.table-clients',''); return false;"><?php echo _l('customers_sort_all'); ?></a>
-                            </li>
-                            <?php if (get_option('customer_requires_registration_confirmation') == '1' || total_rows(db_prefix() . 'clients', 'registration_confirmed=0') > 0) { ?>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="#" data-cview="requires_registration_confirmation"
-                                    onclick="dt_custom_view('requires_registration_confirmation','.table-clients','requires_registration_confirmation'); return false;">
-                                    <?php echo _l('customer_requires_registration_confirmation'); ?>
-                                </a>
-                            </li>
-                            <?php } ?>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="#" data-cview="my_customers"
-                                    onclick="dt_custom_view('my_customers','.table-clients','my_customers'); return false;">
-                                    <?php echo _l('customers_assigned_to_me'); ?>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <?php if (count($groups) > 0) { ?>
-                            <li class="dropdown-submenu pull-left groups">
-                                <a href="#" tabindex="-1"><?php echo _l('customer_groups'); ?></a>
-                                <ul class="dropdown-menu dropdown-menu-left">
-                                    <?php foreach ($groups as $group) { ?>
-                                    <li><a href="#" data-cview="customer_group_<?php echo $group['id']; ?>"
-                                            onclick="dt_custom_view('customer_group_<?php echo $group['id']; ?>','.table-clients','customer_group_<?php echo $group['id']; ?>'); return false;"><?php echo $group['name']; ?></a>
-                                    </li>
-                                    <?php } ?>
-                                </ul>
-                            </li>
-                            <div class="clearfix"></div>
-                            <li class="divider"></li>
-                            <?php } ?>
-                            <?php if (count($countries) > 1) { ?>
-                            <li class="dropdown-submenu pull-left countries">
-                                <a href="#" tabindex="-1"><?php echo _l('clients_country'); ?></a>
-                                <ul class="dropdown-menu dropdown-menu-left">
-                                    <?php foreach ($countries as $country) { ?>
-                                    <li><a href="#" data-cview="country_<?php echo $country['country_id']; ?>"
-                                            onclick="dt_custom_view('country_<?php echo $country['country_id']; ?>','.table-clients','country_<?php echo $country['country_id']; ?>'); return false;"><?php echo $country['short_name']; ?></a>
-                                    </li>
-                                    <?php } ?>
-                                </ul>
-                            </li>
-                            <div class="clearfix"></div>
-                            <li class="divider"></li>
-                            <?php } ?>
-                            <li class="dropdown-submenu pull-left invoice">
-                                <a href="#" tabindex="-1"><?php echo _l('invoices'); ?></a>
-                                <ul class="dropdown-menu dropdown-menu-left">
-                                    <?php foreach ($invoice_statuses as $status) { ?>
-                                    <li>
-                                        <a href="#" data-cview="invoices_<?php echo $status; ?>"
-                                            onclick="dt_custom_view('invoices_<?php echo $status; ?>','.table-clients','invoices_<?php echo $status; ?>'); return false;"><?php echo _l('customer_have_invoices_by', format_invoice_status($status, '', false)); ?></a>
-                                    </li>
-                                    <?php } ?>
-                                </ul>
-                            </li>
-                            <div class="clearfix"></div>
-                            <li class="divider"></li>
-                            <li class="dropdown-submenu pull-left estimate">
-                                <a href="#" tabindex="-1"><?php echo _l('estimates'); ?></a>
-                                <ul class="dropdown-menu dropdown-menu-left">
-                                    <?php foreach ($estimate_statuses as $status) { ?>
-                                    <li>
-                                        <a href="#" data-cview="estimates_<?php echo $status; ?>"
-                                            onclick="dt_custom_view('estimates_<?php echo $status; ?>','.table-clients','estimates_<?php echo $status; ?>'); return false;">
-                                            <?php echo _l('customer_have_estimates_by', format_estimate_status($status, '', false)); ?>
-                                        </a>
-                                    </li>
-                                    <?php } ?>
-                                </ul>
-                            </li>
-                            <div class="clearfix"></div>
-                            <li class="divider"></li>
-                            <li class="dropdown-submenu pull-left project">
-                                <a href="#" tabindex="-1"><?php echo _l('projects'); ?></a>
-                                <ul class="dropdown-menu dropdown-menu-left">
-                                    <?php foreach ($project_statuses as $status) { ?>
-                                    <li>
-                                        <a href="#" data-cview="projects_<?php echo $status['id']; ?>"
-                                            onclick="dt_custom_view('projects_<?php echo $status['id']; ?>','.table-clients','projects_<?php echo $status['id']; ?>'); return false;">
-                                            <?php echo _l('customer_have_projects_by', $status['name']); ?>
-                                        </a>
-                                    </li>
-                                    <?php } ?>
-                                </ul>
-                            </li>
-                            <div class="clearfix"></div>
-                            <li class="divider"></li>
-                            <li class="dropdown-submenu pull-left proposal">
-                                <a href="#" tabindex="-1"><?php echo _l('proposals'); ?></a>
-                                <ul class="dropdown-menu dropdown-menu-left">
-                                    <?php foreach ($proposal_statuses as $status) { ?>
-                                    <li>
-                                        <a href="#" data-cview="proposals_<?php echo $status; ?>"
-                                            onclick="dt_custom_view('proposals_<?php echo $status; ?>','.table-clients','proposals_<?php echo $status; ?>'); return false;">
-                                            <?php echo _l('customer_have_proposals_by', format_proposal_status($status, '', false)); ?>
-                                        </a>
-                                    </li>
-                                    <?php } ?>
-                                </ul>
-                            </li>
-                            <div class="clearfix"></div>
-                            <?php if (count($contract_types) > 0) { ?>
-                            <li class="divider"></li>
-                            <li class="dropdown-submenu pull-left contract_types">
-                                <a href="#" tabindex="-1"><?php echo _l('contract_types'); ?></a>
-                                <ul class="dropdown-menu dropdown-menu-left">
-                                    <?php foreach ($contract_types as $type) { ?>
-                                    <li>
-                                        <a href="#" data-cview="contract_type_<?php echo $type['id']; ?>"
-                                            onclick="dt_custom_view('contract_type_<?php echo $type['id']; ?>','.table-clients','contract_type_<?php echo $type['id']; ?>'); return false;">
-                                            <?php echo _l('customer_have_contracts_by_type', $type['name']); ?>
-                                        </a>
-                                    </li>
-                                    <?php } ?>
-                                </ul>
-                            </li>
-                            <?php } ?>
-                            <?php if (count($customer_admins) > 0 && (has_permission('customers', '', 'create') || has_permission('customers', '', 'edit'))) { ?>
-                            <div class="clearfix"></div>
-                            <li class="divider"></li>
-                            <li class="dropdown-submenu pull-left responsible_admin">
-                                <a href="#" tabindex="-1"><?php echo _l('responsible_admin'); ?></a>
-                                <ul class="dropdown-menu dropdown-menu-left">
-                                    <?php foreach ($customer_admins as $cadmin) { ?>
-                                    <li>
-                                        <a href="#" data-cview="responsible_admin_<?php echo $cadmin['staff_id']; ?>"
-                                            onclick="dt_custom_view('responsible_admin_<?php echo $cadmin['staff_id']; ?>','.table-clients','responsible_admin_<?php echo $cadmin['staff_id']; ?>'); return false;">
-                                            <?php echo get_staff_full_name($cadmin['staff_id']); ?>
-                                        </a>
-                                    </li>
-                                    <?php } ?>
-                                </ul>
-                            </li>
-                            <?php } ?>
-                        </ul>
-                    </div>
+                    <div id="vueApp" class="tw-inline pull-right tw-ml-0 sm:tw-ml-1.5">
+                            <app-filters 
+                                id="<?php echo $table->id(); ?>" 
+                                view="<?php echo $table->viewName(); ?>"
+                                :saved-filters="<?php echo $table->filtersJs(); ?>"
+                                :available-rules="<?php echo $table->rulesJs(); ?>">
+                        </app-filters>
+                </div>
                 </div>
                 <div class="clearfix"></div>
                 <div class="panel_s tw-mt-2 sm:tw-mt-4">
                     <div class="panel-body">
 
-                        <?php if (has_permission('customers', '', 'view') || have_assigned_customers()) {
+                        <?php if (staff_can('view',  'customers') || have_assigned_customers()) {
                       $where_summary = '';
-                      if (!has_permission('customers', '', 'view')) {
+                      if (staff_cant('view', 'customers')) {
                           $where_summary = ' AND userid IN (SELECT customer_id FROM ' . db_prefix() . 'customer_admins WHERE staff_id=' . get_staff_user_id() . ')';
                       } ?>
                         <div class="mbot15">
@@ -308,7 +138,7 @@
                                         <h4 class="modal-title"><?php echo _l('bulk_actions'); ?></h4>
                                     </div>
                                     <div class="modal-body">
-                                        <?php if (has_permission('customers', '', 'delete')) { ?>
+                                        <?php if (staff_can('delete',  'customers')) { ?>
                                         <div class="checkbox checkbox-danger">
                                             <input type="checkbox" name="mass_delete" id="mass_delete">
                                             <label for="mass_delete"><?php echo _l('mass_delete'); ?></label>
@@ -328,17 +158,8 @@
                                             onclick="customers_bulk_action(this); return false;"><?php echo _l('confirm'); ?></a>
                                     </div>
                                 </div>
-                                <!-- /.modal-content -->
                             </div>
-                            <!-- /.modal-dialog -->
                         </div>
-                        <!-- /.modal -->
-                        <div class="checkbox">
-                            <input type="checkbox" checked id="exclude_inactive" name="exclude_inactive">
-                            <label for="exclude_inactive"><?php echo _l('exclude_inactive'); ?>
-                                <?php echo _l('clients'); ?></label>
-                        </div>
-                        <div class="clearfix mtop20"></div>
                         <?php
                      $table_data  = [];
                      $_table_data = [
@@ -388,18 +209,16 @@
                            'th_attrs' => ['data-type' => $field['type'], 'data-custom-field' => 1],
                          ]);
                      }
-
                      $table_data = hooks()->apply_filters('customers_table_columns', $table_data);
-
-
                      ?>
                         <div class="panel-table-full">
                             <?php
-                         render_datatable($table_data, 'clients', ['number-index-2'], [
-                           'data-last-order-identifier' => 'customers',
-                           'data-default-order'         => get_table_last_order('customers'),
-                     ]);
-                     ?>
+                                render_datatable($table_data, 'clients', ['number-index-2'], [
+                                    'data-last-order-identifier' => 'customers',
+                                    'data-default-order'         => get_table_last_order('customers'),
+                                    'id'=>'clients'
+                                ]);
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -410,17 +229,8 @@
 <?php init_tail(); ?>
 <script>
 $(function() {
-    var CustomersServerParams = {};
-    $.each($('._hidden_inputs._filters input'), function() {
-        CustomersServerParams[$(this).attr('name')] = '[name="' + $(this).attr('name') + '"]';
-    });
-    CustomersServerParams['exclude_inactive'] = '[name="exclude_inactive"]:checked';
-
-    var tAPI = initDataTable('.table-clients', admin_url + 'clients/table', [0], [0], CustomersServerParams,
+    var tAPI = initDataTable('.table-clients', admin_url + 'clients/table', [0], [0], {},
         <?php echo hooks()->apply_filters('customers_table_default_order', json_encode([2, 'asc'])); ?>);
-    $('input[name="exclude_inactive"]').on('change', function() {
-        tAPI.ajax.reload();
-    });
 });
 
 function customers_bulk_action(event) {

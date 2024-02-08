@@ -39,7 +39,7 @@
                         <p class="text-muted"><?php echo _l('project_activity_visible_to_customer'); ?></p>
                         <div class="pull-right">
                             <div class="onoffswitch">
-                                <input type="checkbox" <?php if (!has_permission('projects', '', 'create')) {
+                                <input type="checkbox" <?php if (staff_cant('create', 'projects')) {
         echo 'disabled';
     } ?> id="<?php echo $activity['id']; ?>" data-id="<?php echo $activity['id']; ?>" class="onoffswitch-checkbox"
                                     data-switch-url="<?php echo admin_url(); ?>projects/change_activity_visibility"

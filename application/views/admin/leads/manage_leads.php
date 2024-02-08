@@ -39,6 +39,16 @@
                                 data-title="<?php echo _l('search_by_tags'); ?>">
                                 <?php echo render_input('search', '', '', 'search', ['data-name' => 'search', 'onkeyup' => 'leads_kanban();', 'placeholder' => _l('leads_search')], [], 'no-margin') ?>
                             </div>
+                            <?php } else { ?>
+                            <div id="vueApp" class="tw-inline pull-right">
+                                <app-filters
+                                    id="<?php echo $table->id(); ?>"
+                                    view="<?php echo $table->viewName(); ?>"
+                                    :rules="<?php echo app\services\utilities\Js::from($this->input->get('status') ? $table->findRule('status')->setValue([$this->input->get('status')]) : []); ?>"
+                                    :saved-filters="<?php echo $table->filtersJs(); ?>"
+                                    :available-rules="<?php echo $table->rulesJs(); ?>">
+                                </app-filters>
+                            </div>
                             <?php } ?>
                             <?php echo form_hidden('sort_type'); ?>
                             <?php echo form_hidden('sort', (get_option('default_leads_kanban_sort') != '' ? get_option('default_leads_kanban_sort_type') : '')); ?>
@@ -112,74 +122,6 @@
                             <?php } else { ?>
                             <div class="row" id="leads-table">
                                 <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <p class="bold"><?php echo _l('filter_by'); ?></p>
-                                        </div>
-                                        <?php if (has_permission('leads', '', 'view')) { ?>
-                                        <div class="col-md-3 leads-filter-column">
-                                            <?php echo render_select('view_assigned', $staff, ['staffid', ['firstname', 'lastname']], '', '', ['data-width' => '100%', 'data-none-selected-text' => _l('leads_dt_assigned')], [], 'no-mbot'); ?>
-                                        </div>
-                                        <?php } ?>
-                                        <div class="col-md-3 leads-filter-column">
-                                            <?php
-                                    $selected = [];
-                                    if ($this->input->get('status')) {
-                                        $selected[] = $this->input->get('status');
-                                    } else {
-                                        foreach ($statuses as $key => $status) {
-                                            if ($status['isdefault'] == 0) {
-                                                $selected[] = $status['id'];
-                                            } else {
-                                                $statuses[$key]['option_attributes'] = ['data-subtext' => _l('leads_converted_to_client')];
-                                            }
-                                        }
-                                    }
-                                    echo '<div id="leads-filter-status">';
-                                    echo render_select('view_status[]', $statuses, ['id', 'name'], '', $selected, ['data-width' => '100%', 'data-none-selected-text' => _l('leads_all'), 'multiple' => true, 'data-actions-box' => true], [], 'no-mbot', '', false);
-                                    echo '</div>';
-                                    ?>
-                                        </div>
-                                        <div class="col-md-3 leads-filter-column">
-                                            <?php
-                                    echo render_select('view_source', $sources, ['id', 'name'], '', '', ['data-width' => '100%', 'data-none-selected-text' => _l('leads_source')], [], 'no-mbot');
-                                    ?>
-                                        </div>
-                                        <div class="col-md-3 leads-filter-column">
-                                            <div class="select-placeholder">
-                                                <select name="custom_view"
-                                                    title="<?php echo _l('additional_filters'); ?>" id="custom_view"
-                                                    class="selectpicker" data-width="100%">
-                                                    <option value=""></option>
-                                                    <option value="lost"><?php echo _l('lead_lost'); ?></option>
-                                                    <option value="junk"><?php echo _l('lead_junk'); ?></option>
-                                                    <option value="public"><?php echo _l('lead_public'); ?></option>
-                                                    <option value="contacted_today">
-                                                        <?php echo _l('lead_add_edit_contacted_today'); ?></option>
-                                                    <option value="created_today"><?php echo _l('created_today'); ?>
-                                                    </option>
-                                                    <?php if (has_permission('leads', '', 'edit')) { ?>
-                                                    <option value="not_assigned"><?php echo _l('leads_not_assigned'); ?>
-                                                    </option>
-                                                    <?php } ?>
-                                                    <?php if (isset($consent_purposes)) { ?>
-                                                    <optgroup label="<?php echo _l('gdpr_consent'); ?>">
-                                                        <?php foreach ($consent_purposes as $purpose) { ?>
-                                                        <option value="consent_<?php echo $purpose['id']; ?>">
-                                                            <?php echo $purpose['name']; ?>
-                                                        </option>
-                                                        <?php } ?>
-                                                    </optgroup>
-                                                    <?php } ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <hr class="hr-panel-separator" />
-                                </div>
-                                <div class="clearfix"></div>
-
-                                <div class="col-md-12">
                                     <a href="#" data-toggle="modal" data-table=".table-leads"
                                         data-target="#leads_bulk_actions"
                                         class="hide bulk-actions-btn table-btn"><?php echo _l('bulk_actions'); ?></a>
@@ -194,7 +136,7 @@
                                                     <h4 class="modal-title"><?php echo _l('bulk_actions'); ?></h4>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <?php if (has_permission('leads', '', 'delete')) { ?>
+                                                    <?php if (staff_can('delete',  'leads')) { ?>
                                                     <div class="checkbox checkbox-danger">
                                                         <input type="checkbox" name="mass_delete" id="mass_delete">
                                                         <label
@@ -263,7 +205,7 @@
                                  'name'     => _l('the_number_sign'),
                                  'th_attrs' => ['class' => 'toggleable', 'id' => 'th-number'],
                                ],
-                                [
+                               [
                                  'name'     => _l('leads_dt_name'),
                                  'th_attrs' => ['class' => 'toggleable', 'id' => 'th-name'],
                                ],
@@ -333,7 +275,7 @@
                                    'leads',
                                    ['customizable-table number-index-2'],
                                    [
-                                    'id'                         => 'table-leads',
+                                    'id'                         => 'leads',
                                     'data-last-order-identifier' => 'leads',
                                     'data-default-order'         => get_table_last_order('leads'),
                                  ]

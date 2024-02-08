@@ -9,7 +9,7 @@
     proposals linked to this contact.
 </div>
 <?php } ?>
-<?php if ((has_permission('customers', '', 'create') || is_customer_admin($client->userid)) && $client->registration_confirmed == '1') {
+<?php if ((staff_can('create',  'customers') || is_customer_admin($client->userid)) && $client->registration_confirmed == '1') {
     $disable_new_contacts = false;
     if (is_empty_customer_company($client->userid) && total_rows(db_prefix() . 'contacts', ['userid' => $client->userid]) == 1) {
         $disable_new_contacts = true;

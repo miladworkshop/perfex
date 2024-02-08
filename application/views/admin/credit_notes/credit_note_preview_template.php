@@ -81,7 +81,7 @@
                         <div class="mtop10"></div>
                     </div>
                     <div class="pull-right _buttons">
-                        <?php if (has_permission('credit_notes', '', 'edit') && $credit_note->status != 3) { ?>
+                        <?php if (staff_can('edit',  'credit_notes') && $credit_note->status != 3) { ?>
                         <a href="<?php echo admin_url('credit_notes/credit_note/' . $credit_note->id); ?>"
                             class="btn btn-default btn-with-tooltip" data-toggle="tooltip"
                             title="<?php echo _l('edit', _l('credit_note_lowercase')); ?>" data-placement="bottom">
@@ -130,7 +130,7 @@
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <?php hooks()->do_action('credit_note_menu_links_start', $credit_note); ?>
                                 <?php
-                           if ($credit_note->status == 1 && has_permission('credit_notes', '', 'edit')) { ?>
+                           if ($credit_note->status == 1 && staff_can('edit',  'credit_notes')) { ?>
                                 <li>
                                     <a href="#" onclick="refund_credit_note(); return false;" id="credit_note_refund">
                                         <?php echo _l('refund'); ?>
@@ -138,13 +138,13 @@
                                 </li>
                                 <?php }
                            // You can only mark as void, if it's not closed, not void, no credits applied, no refunds applied
-                           if ($credit_note->status != 2 && $credit_note->status != 3 && !$credit_note->credits_used && !$credit_note->total_refunds && has_permission('credit_notes', '', 'edit')) { ?>
+                           if ($credit_note->status != 2 && $credit_note->status != 3 && !$credit_note->credits_used && !$credit_note->total_refunds && staff_can('edit',  'credit_notes')) { ?>
                                 <li>
                                     <a href="<?php echo admin_url('credit_notes/mark_void/' . $credit_note->id); ?>">
                                         <?php echo _l('credit_note_status_void'); ?>
                                     </a>
                                 </li>
-                                <?php } elseif ($credit_note->status == 3 && has_permission('credit_notes', '', 'edit')) { ?>
+                                <?php } elseif ($credit_note->status == 3 && staff_can('edit',  'credit_notes')) { ?>
                                 <li>
                                     <a href="<?php echo admin_url('credit_notes/mark_open/' . $credit_note->id); ?>">
                                         <?php echo _l('credit_note_mark_as_open'); ?>
@@ -157,7 +157,7 @@
                                     </a>
                                 </li>
                                 <?php
-                           if (has_permission('credit_notes', '', 'delete')) {
+                           if (staff_can('delete',  'credit_notes')) {
                                $delete_tooltip = '';
                                $allow_delete   = true;
                                if ($credit_note->status == 2) {
@@ -423,7 +423,7 @@
                                 </td>
                                 <td>
                                     <?php echo _d($credit['date']); ?>
-                                    <?php if (has_permission('credit_notes', '', 'delete')) { ?>
+                                    <?php if (staff_can('delete',  'credit_notes')) { ?>
                                     <a href="<?php echo admin_url('credit_notes/delete_credit_note_applied_credit/' . $credit['id'] . '/' . $credit['credit_id'] . '/' . $credit['invoice_id']); ?>"
                                         class="pull-right text-danger _delete"><i class="fa fa-trash"></i></a>
                                     <?php } ?>
@@ -471,13 +471,13 @@
                                     <?php echo $refund['payment_mode_name']; ?>
                                 </td>
                                 <td>
-                                    <?php if (has_permission('credit_notes', '', 'delete')) { ?>
+                                    <?php if (staff_can('delete',  'credit_notes')) { ?>
                                     <a href="<?php echo admin_url('credit_notes/delete_refund/' . $refund['id'] . '/' . $refund['credit_note_id']); ?>"
                                         class="pull-right text-danger _delete">
                                         <i class="fa fa-trash"></i>
                                     </a>
                                     <?php } ?>
-                                    <?php if (has_permission('credit_notes', '', 'edit')) { ?>
+                                    <?php if (staff_can('edit',  'credit_notes')) { ?>
                                     <a href="#" onclick="edit_refund(<?php echo $refund['id']; ?>); return false;"
                                         class="pull-right mright5">
                                         <i class="fa-regular fa-pen-to-square"></i>

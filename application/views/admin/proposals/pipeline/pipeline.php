@@ -22,7 +22,7 @@ foreach ($statuses as $status) {
             </div>
             <div class="kan-ban-content-wrapper">
                 <div class="kan-ban-content">
-                    <ul class="sortable<?php if (has_permission('proposals', '', 'edit')) {
+                    <ul class="sortable<?php if (staff_can('edit',  'proposals')) {
         echo ' status pipeline-status';
     } ?>" data-status-id="<?php echo $status; ?>">
                         <?php

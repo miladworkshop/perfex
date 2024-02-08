@@ -25,7 +25,7 @@
     <?php if ($task->is_public == 0) { ?>
     <p class="tw-mb-0 tw-mt-1">
         <?php echo _l('task_is_private'); ?>
-        <?php if (has_permission('tasks', '', 'edit')) { ?> -
+        <?php if (staff_can('edit',  'tasks')) { ?> -
         <a href="#" class="text-has-action" onclick="make_task_public(<?php echo $task->id; ?>); return false;">
             <?php echo _l('task_view_make_public'); ?>
         </a>
@@ -62,7 +62,7 @@
           if ($task->rel_type == 'project' && $task->milestone != 0) {
               echo '<div class="mtop5 mbot20 font-normal">' . _l('task_milestone') . ': ';
               $milestones = get_project_milestones($task->rel_id);
-              if (has_permission('tasks', '', 'edit') && count($milestones) > 1) { ?>
+              if (staff_can('edit',  'tasks') && count($milestones) > 1) { ?>
             <span class="task-single-menu task-menu-milestones">
                 <span class="trigger pointer manual-popover text-has-action">
                     <?php echo $task->milestone_name; ?>
@@ -92,7 +92,7 @@
           echo '</div>';
       } ?>
             <div class="clearfix"></div>
-            <?php if ($task->status != Tasks_model::STATUS_COMPLETE && ($task->current_user_is_assigned || has_permission('tasks', '', 'edit') || $task->current_user_is_creator)) { ?>
+            <?php if ($task->status != Tasks_model::STATUS_COMPLETE && ($task->current_user_is_assigned || staff_can('edit',  'tasks') || $task->current_user_is_creator)) { ?>
             <p class="no-margin pull-left"
                 style="<?php echo 'margin-' . (is_rtl() ? 'left' : 'right') . ':5px !important'; ?>">
                 <a href="#" class="btn btn-primary" id="task-single-mark-complete-btn" autocomplete="off"
@@ -102,7 +102,7 @@
                     <i class="fa fa-check"></i>
                 </a>
             </p>
-            <?php } elseif ($task->status == Tasks_model::STATUS_COMPLETE && ($task->current_user_is_assigned || has_permission('tasks', '', 'edit') || $task->current_user_is_creator)) { ?>
+            <?php } elseif ($task->status == Tasks_model::STATUS_COMPLETE && ($task->current_user_is_assigned || staff_can('edit',  'tasks') || $task->current_user_is_creator)) { ?>
             <p class="no-margin pull-left"
                 style="<?php echo 'margin-' . (is_rtl() ? 'left' : 'right') . ':5px !important'; ?>">
                 <a href="#" class="btn btn-default" id="task-single-unmark-complete-btn" autocomplete="off"
@@ -113,7 +113,7 @@
                 </a>
             </p>
             <?php } ?>
-            <?php if (has_permission('tasks', '', 'create') && count($task->timesheets) > 0) { ?>
+            <?php if (staff_can('create',  'tasks') && count($task->timesheets) > 0) { ?>
             <p class="no-margin pull-left mright5">
                 <a href="#" class="btn btn-default mright5" data-toggle="tooltip"
                     data-title="<?php echo _l('task_statistics'); ?>"
@@ -175,7 +175,7 @@
                             <?php
                         $timers_found = false;
                         foreach ($task->timesheets as $timesheet) { ?>
-                            <?php if (has_permission('tasks', '', 'edit') || has_permission('tasks', '', 'create') || has_permission('tasks', '', 'delete') || $timesheet['staff_id'] == get_staff_user_id()) {
+                            <?php if (staff_can('edit',  'tasks') || staff_can('create',  'tasks') || staff_can('delete',  'tasks') || $timesheet['staff_id'] == get_staff_user_id()) {
                             $timers_found = true; ?>
                             <tr>
                                 <td class="tw-text-sm">
@@ -261,7 +261,7 @@
                                     <br />
                                     <select name="staff_id" class="selectpicker" data-width="100%">
                                         <?php foreach ($task->assignees as $assignee) {
-                                      if ((!staff_can('create', 'task') && !staff_can('edit', 'task') && $assignee['assigneeid'] != get_staff_user_id()) || ($task->rel_type == 'project' && !has_permission('projects', '', 'edit') && $assignee['assigneeid'] != get_staff_user_id())) {
+                                      if ((staff_cant('create', 'task') && staff_cant('edit', 'task') && $assignee['assigneeid'] != get_staff_user_id()) || ($task->rel_type == 'project' && staff_cant('edit', 'projects') && $assignee['assigneeid'] != get_staff_user_id())) {
                                           continue;
                                       }
                                       $selected = '';
@@ -340,7 +340,7 @@
                                 <br />
                                 <select name="single_timesheet_staff_id" class="selectpicker" data-width="100%">
                                     <?php foreach ($task->assignees as $assignee) {
-                                if ((!has_permission('tasks', '', 'create') && !has_permission('tasks', '', 'edit') && $assignee['assigneeid'] != get_staff_user_id()) || ($task->rel_type == 'project' && !has_permission('projects', '', 'edit') && $assignee['assigneeid'] != get_staff_user_id())) {
+                                if ((staff_cant('create', 'tasks') && staff_cant('edit', 'tasks') && $assignee['assigneeid'] != get_staff_user_id()) || ($task->rel_type == 'project' && staff_cant('edit', 'projects') && $assignee['assigneeid'] != get_staff_user_id())) {
                                     continue;
                                 }
                                 $selected = '';
@@ -380,7 +380,7 @@
         <?php hooks()->do_action('before_task_description_section', $task); ?>
         <h4 class="th tw-font-semibold tw-text-base mbot15 pull-left"><?php echo _l('task_view_description'); ?>
         </h4>
-        <?php if (has_permission('tasks', '', 'edit')) { ?><a href="#"
+        <?php if (staff_can('edit',  'tasks')) { ?><a href="#"
             onclick="edit_task_inline_description(this,<?php echo $task->id; ?>); return false;"
             class="pull-left tw-mt-2.5 mleft5 font-medium-xs"><i class="fa-regular fa-pen-to-square"></i></a>
         <?php } ?>
@@ -660,14 +660,14 @@
         <div class="pull-right mbot10 task-single-menu task-menu-options">
             <div class="content-menu hide">
                 <ul>
-                    <?php if (has_permission('tasks', '', 'edit')) { ?>
+                    <?php if (staff_can('edit',  'tasks')) { ?>
                     <li>
                         <a href="#" onclick="edit_task(<?php echo $task->id; ?>); return false;">
                             <?php echo _l('task_single_edit'); ?>
                         </a>
                     </li>
                     <?php } ?>
-                    <?php if (has_permission('tasks', '', 'create')) { ?>
+                    <?php if (staff_can('create',  'tasks')) { ?>
                     <?php
                      $copy_template = '';
                      if (count($task->assignees) > 0) {
@@ -697,7 +697,7 @@
                             data-content="<?php echo htmlspecialchars($copy_template); ?>"
                             data-html="true"><?php echo _l('task_copy'); ?></span></a></li>
                     <?php } ?>
-                    <?php if (has_permission('tasks', '', 'delete')) { ?>
+                    <?php if (staff_can('delete',  'tasks')) { ?>
                     <li>
                         <a href="<?php echo admin_url('tasks/delete_task/' . $task->id); ?>"
                             class="_delete task-delete">
@@ -707,7 +707,7 @@
                     <?php } ?>
                 </ul>
             </div>
-            <?php if (has_permission('tasks', '', 'delete') || has_permission('tasks', '', 'edit') || has_permission('tasks', '', 'create')) { ?>
+            <?php if (staff_can('delete',  'tasks') || staff_can('edit',  'tasks') || staff_can('create',  'tasks')) { ?>
             <a href="#" onclick="return false;" class="trigger manual-popover mright5">
                 <i class="fa-regular fa-circle"></i>
                 <i class="fa-regular fa-circle"></i>
@@ -735,7 +735,7 @@
         <div class="task-info task-status task-info-status">
             <h5 class="tw-inline-flex tw-items-center tw-space-x-1.5">
                 <i class="fa-regular fa-star fa-fw fa-lg pull-left task-info-icon"></i><?php echo _l('task_status'); ?>:
-                <?php if ($task->current_user_is_assigned || $task->current_user_is_creator || has_permission('tasks', '', 'edit')) { ?>
+                <?php if ($task->current_user_is_assigned || $task->current_user_is_creator || staff_can('edit',  'tasks')) { ?>
                 <span class="task-single-menu task-menu-status">
                     <span class="trigger pointer manual-popover text-has-action tw-text-neutral-800">
                         <?php echo format_task_status($task->status, true, true); ?>
@@ -779,7 +779,7 @@
                     <i class="fa-regular fa-calendar fa-fw fa-lg fa-margin task-info-icon pull-left tw-mt-2"></i>
                     <?php echo _l('task_single_start_date'); ?>:
                 </div>
-                <?php if (has_permission('tasks', '', 'edit') && $task->status != 5) { ?>
+                <?php if (staff_can('edit',  'tasks') && $task->status != 5) { ?>
                 <input name="startdate" tabindex="-1" value="<?php echo _d($task->startdate); ?>"
                     id="task-single-startdate"
                     class="task-info-inline-input-edit datepicker pointer task-single-inline-field tw-text-neutral-800">
@@ -788,7 +788,7 @@
                 <?php } ?>
             </h5>
         </div>
-        <div class="task-info task-info-due-date task-single-inline-wrap<?php if (!$task->duedate && !has_permission('edit', '', 'tasks')) {
+        <div class="task-info task-info-due-date task-single-inline-wrap<?php if (!$task->duedate && staff_cant('tasks', 'edit')) {
                                echo ' hide';
                            } ?>" <?php if (!$task->duedate) {
                                echo ' style="opacity:0.5;"';
@@ -798,7 +798,7 @@
                     <i class="fa-regular fa-calendar-check fa-fw fa-lg task-info-icon pull-left tw-mt-2"></i>
                     <?php echo _l('task_single_due_date'); ?>:
                 </div>
-                <?php if (has_permission('tasks', '', 'edit') && $task->status != 5) { ?>
+                <?php if (staff_can('edit',  'tasks') && $task->status != 5) { ?>
                 <input name="duedate" tabindex="-1" value="<?php echo _d($task->duedate); ?>" id="task-single-duedate"
                     class="task-info-inline-input-edit datepicker pointer task-single-inline-field tw-text-neutral-800"
                     autocomplete="off" <?php if ($project_deadline) {
@@ -813,7 +813,7 @@
             <h5 class="tw-inline-flex tw-items-center tw-space-x-1.5">
                 <i class="fa fa-bolt fa-fw fa-lg task-info-icon pull-left"></i>
                 <?php echo _l('task_single_priority'); ?>:
-                <?php if (has_permission('tasks', '', 'edit') && $task->status != Tasks_model::STATUS_COMPLETE) { ?>
+                <?php if (staff_can('edit',  'tasks') && $task->status != Tasks_model::STATUS_COMPLETE) { ?>
                 <span class="task-single-menu task-menu-priority">
                     <span class="trigger pointer manual-popover text-has-action"
                         style="color:<?php echo task_priority_color($task->priority); ?>;">
@@ -843,7 +843,7 @@
                 <?php } ?>
             </h5>
         </div>
-        <?php if ($task->current_user_is_creator || has_permission('tasks', '', 'edit')) { ?>
+        <?php if ($task->current_user_is_creator || staff_can('edit',  'tasks')) { ?>
         <div class="task-info task-info-hourly-rate">
             <h5 class="tw-inline-flex tw-items-center tw-space-x-1.5">
                 <i class="fa-regular fa-clock fa-fw fa-lg task-info-icon pull-left"></i>
@@ -888,7 +888,7 @@
         <?php } ?>
         <?php if ($task->current_user_is_assigned || total_rows(db_prefix() . 'taskstimers', ['task_id' => $task->id, 'staff_id' => get_staff_user_id()]) > 0) { ?>
         <div class="task-info task-info-user-logged-time">
-            <h5 class="tw-inline-flex tw-items-center tw-space-x-1.5">
+            <h5 class="tw-inline-flex tw-items-center">
                 <i class="fa fa-asterisk task-info-icon fa-fw fa-lg" aria-hidden="true"></i>
                 <span class="tw-text-neutral-800">
                     <?php echo _l('task_user_logged_time'); ?>
@@ -897,7 +897,7 @@
             </h5>
         </div>
         <?php } ?>
-        <?php if (has_permission('tasks', '', 'create')) { ?>
+        <?php if (staff_can('create',  'tasks')) { ?>
         <div class="task-info task-info-total-logged-time">
             <h5 class="tw-inline-flex tw-items-center tw-space-x-1.5">
                 <i
@@ -922,7 +922,7 @@
             </h5>
         </div>
         <?php } ?>
-        <?php if (has_permission('tasks', '', 'create') || has_permission('tasks', '', 'edit')) { ?>
+        <?php if (staff_can('create',  'tasks') || staff_can('edit',  'tasks')) { ?>
         <div class="mtop10 clearfix"></div>
         <div id="inputTagsWrapper" class="taskSingleTasks task-info-tags-edit">
             <input type="text" class="tagsinput" id="taskTags" data-taskid="<?php echo $task->id; ?>"

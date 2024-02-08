@@ -184,8 +184,8 @@ function get_proposal_item_taxes($itemid)
  */
 function get_proposals_percent_by_status($status, $total_proposals = '')
 {
-    $has_permission_view                 = has_permission('proposals', '', 'view');
-    $has_permission_view_own             = has_permission('proposals', '', 'view_own');
+    $has_permission_view                 = staff_can('view',  'proposals');
+    $has_permission_view_own             = staff_can('view_own',  'proposals');
     $allow_staff_view_proposals_assigned = get_option('allow_staff_view_proposals_assigned');
     $staffId                             = get_staff_user_id();
 
@@ -323,7 +323,7 @@ function staff_has_assigned_proposals($staff_id = '')
 
 function get_proposals_sql_where_staff($staff_id)
 {
-    $has_permission_view_own            = has_permission('proposals', '', 'view_own');
+    $has_permission_view_own            = staff_can('view_own',  'proposals');
     $allow_staff_view_invoices_assigned = get_option('allow_staff_view_proposals_assigned');
     $CI                                 = &get_instance();
 

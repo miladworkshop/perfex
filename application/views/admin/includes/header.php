@@ -25,7 +25,7 @@
                 <ul class="nav navbar-nav visible-md visible-lg">
                     <?php
                     $quickActions = collect($this->app->get_quick_actions_links())->reject(function ($action) {
-                        return isset($action['permission']) && !has_permission($action['permission'], '', 'create');
+                        return isset($action['permission']) && staff_cant('create', $action['permission']);
                     });
                 ?>
                     <?php if ($quickActions->isNotEmpty()) { ?>
@@ -44,7 +44,7 @@
                             <?php foreach ($quickActions as $key => $item) {
                     $url = '';
                     if (isset($item['permission'])) {
-                        if (!has_permission($item['permission'], '', 'create')) {
+                        if (staff_cant('create', $item['permission'])) {
                             continue;
                         }
                     }

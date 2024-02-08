@@ -20,7 +20,9 @@ foreach ($rResult as $aRow) {
             $_data .= '<div class="row-options">';
             $_data .= '<a href="' . site_url('forms/quote/' . $aRow['form_key']) . '" target="_blank">' . _l('view') . '</a>';
             $_data .= ' | <a href="' . admin_url('estimate_request/form/' . $aRow['id']) . '">' . _l('edit') . '</a>';
-            $_data .= ' | <a href="' . admin_url('estimate_request/delete_form/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+            if (staff_can('delete', 'estimate_request')) {
+                $_data .= ' | <a href="' . admin_url('estimate_request/delete_form/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+            }
             $_data .= '</div>';
         } elseif ($aColumns[$i] == 'dateadded') {
             $_data = '<span class="text-has-action is-date" data-toggle="tooltip" data-title="' . _dt($_data) . '">' . time_ago($_data) . '</span>';

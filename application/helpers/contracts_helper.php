@@ -158,7 +158,7 @@ function count_recently_created_contracts($days = 7, $staffId = null)
     $staffId   = is_null($staffId) ? get_staff_user_id() : $staffId;
     $where_own = [];
 
-    if (!staff_can('view', 'contracts')) {
+    if (staff_cant('view', 'contracts')) {
         $where_own = ['addedfrom' => $staffId];
     }
 
@@ -177,7 +177,7 @@ function count_active_contracts($staffId = null)
     $where_own = [];
     $staffId   = is_null($staffId) ? get_staff_user_id() : $staffId;
 
-    if (!has_permission('contracts', '', 'view')) {
+    if (staff_cant('view', 'contracts')) {
         $where_own = ['addedfrom' => $staffId];
     }
 
@@ -196,7 +196,7 @@ function count_expired_contracts($staffId = null)
     $where_own = [];
     $staffId   = is_null($staffId) ? get_staff_user_id() : $staffId;
 
-    if (!has_permission('contracts', '', 'view')) {
+    if (staff_cant('view', 'contracts')) {
         $where_own = ['addedfrom' => $staffId];
     }
 
@@ -215,7 +215,7 @@ function count_trash_contracts($staffId = null)
     $where_own = [];
     $staffId   = is_null($staffId) ? get_staff_user_id() : $staffId;
 
-    if (!has_permission('contracts', '', 'view')) {
+    if (staff_cant('view', 'contracts')) {
         $where_own = ['addedfrom' => $staffId];
     }
 

@@ -1,18 +1,10 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <div class="row">
-    <?php
- $statuses = $this->tickets_model->get_ticket_status();
- ?>
-    <div class="_filters _hidden_inputs hidden tickets_filters">
-        <?php
-  echo form_hidden('my_tickets');
-  echo form_hidden('merged_tickets');
-  if (is_admin()) {
-      $ticket_assignees = $this->tickets_model->get_tickets_assignes_disctinct();
-      foreach ($ticket_assignees as $assignee) {
-          echo form_hidden('ticket_assignee_' . $assignee['assigned']);
-      }
-  }
+<?php
+    $statuses = $this->tickets_model->get_ticket_status();
+?>
+<div class="_filters _hidden_inputs hidden tickets_filters">
+<?php
   foreach ($statuses as $status) {
       $val = '';
       if ($chosen_ticket_status != '') {
@@ -72,7 +64,7 @@ foreach ($statuses as $status) {
     <div class="col-md-2 col-xs-6 md:tw-border-r md:tw-border-solid md:tw-border-neutral-300 last:tw-border-r-0">
         <a href="#" data-cview="ticket_status_<?php echo $status['ticketstatusid']; ?>"
             class="tw-text-neutral-600 hover:tw-opacity-70 tw-inline-flex tw-items-center"
-            onclick="dt_custom_view('ticket_status_<?php echo $status['ticketstatusid']; ?>','.tickets-table','ticket_status_<?php echo $status['ticketstatusid']; ?>',true); return false;">
+            <?php echo ($hrefAttrs ?? null instanceof Closure) ? $hrefAttrs($status) : ''; ?>>
             <span class="tw-font-semibold tw-mr-3 rtl:tw-ml-3 tw-text-lg">
                 <?php echo total_rows(db_prefix() . 'tickets', $_where); ?>
             </span>

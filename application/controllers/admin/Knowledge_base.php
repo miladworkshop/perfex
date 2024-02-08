@@ -13,7 +13,7 @@ class Knowledge_base extends AdminController
     /* List all knowledgebase articles */
     public function index()
     {
-        if (!has_permission('knowledge_base', '', 'view')) {
+        if (staff_cant('view', 'knowledge_base')) {
             access_denied('knowledge_base');
         }
         if ($this->input->is_ajax_request()) {
@@ -28,7 +28,7 @@ class Knowledge_base extends AdminController
     /* Add new article or edit existing*/
     public function article($id = '')
     {
-        if (!has_permission('knowledge_base', '', 'view')) {
+        if (staff_cant('view', 'knowledge_base')) {
             access_denied('knowledge_base');
         }
         if ($this->input->post()) {
@@ -36,7 +36,7 @@ class Knowledge_base extends AdminController
             $data['description'] = html_purify($this->input->post('description', false));
 
             if ($id == '') {
-                if (!has_permission('knowledge_base', '', 'create')) {
+                if (staff_cant('create', 'knowledge_base')) {
                     access_denied('knowledge_base');
                 }
                 $id = $this->knowledge_base_model->add_article($data);
@@ -45,7 +45,7 @@ class Knowledge_base extends AdminController
                     redirect(admin_url('knowledge_base/article/' . $id));
                 }
             } else {
-                if (!has_permission('knowledge_base', '', 'edit')) {
+                if (staff_cant('edit', 'knowledge_base')) {
                     access_denied('knowledge_base');
                 }
                 $success = $this->knowledge_base_model->update_article($data, $id);
@@ -72,7 +72,7 @@ class Knowledge_base extends AdminController
 
     public function view($slug)
     {
-        if (!has_permission('knowledge_base', '', 'view')) {
+        if (staff_cant('view', 'knowledge_base')) {
             access_denied('View Knowledge Base Article');
         }
 
@@ -101,7 +101,7 @@ class Knowledge_base extends AdminController
     /* Change article active or inactive */
     public function change_article_status($id, $status)
     {
-        if (has_permission('knowledge_base', '', 'edit')) {
+        if (staff_can('edit',  'knowledge_base')) {
             if ($this->input->is_ajax_request()) {
                 $this->knowledge_base_model->change_article_status($id, $status);
             }
@@ -110,7 +110,7 @@ class Knowledge_base extends AdminController
 
     public function update_kan_ban()
     {
-        if (has_permission('knowledge_base', '', 'edit')) {
+        if (staff_can('edit',  'knowledge_base')) {
             if ($this->input->post()) {
                 $success = $this->knowledge_base_model->update_kan_ban($this->input->post());
                 $message = '';
@@ -128,7 +128,7 @@ class Knowledge_base extends AdminController
 
     public function change_group_color()
     {
-        if (has_permission('knowledge_base', '', 'edit')) {
+        if (staff_can('edit',  'knowledge_base')) {
             if ($this->input->post()) {
                 $this->knowledge_base_model->change_group_color($this->input->post());
             }
@@ -138,7 +138,7 @@ class Knowledge_base extends AdminController
     /* Delete article from database */
     public function delete_article($id)
     {
-        if (!has_permission('knowledge_base', '', 'delete')) {
+        if (staff_cant('delete', 'knowledge_base')) {
             access_denied('knowledge_base');
         }
         if (!$id) {
@@ -156,7 +156,7 @@ class Knowledge_base extends AdminController
     /* View all article groups */
     public function manage_groups()
     {
-        if (!has_permission('knowledge_base', '', 'view')) {
+        if (staff_cant('view', 'knowledge_base')) {
             access_denied('knowledge_base');
         }
         $data['groups'] = $this->knowledge_base_model->get_kbg();
@@ -167,7 +167,7 @@ class Knowledge_base extends AdminController
     /* Add or edit existing article group */
     public function group($id = '')
     {
-        if (!has_permission('knowledge_base', '', 'view')) {
+        if (staff_cant('view', 'knowledge_base')) {
             access_denied('knowledge_base');
         }
         if ($this->input->post()) {
@@ -177,7 +177,7 @@ class Knowledge_base extends AdminController
                 unset($post_data['article_add_edit']);
             }
             if (!$this->input->post('id')) {
-                if (!has_permission('knowledge_base', '', 'create')) {
+                if (staff_cant('create', 'knowledge_base')) {
                     access_denied('knowledge_base');
                 }
                 $id = $this->knowledge_base_model->add_group($post_data);
@@ -191,7 +191,7 @@ class Knowledge_base extends AdminController
                     ]);
                 }
             } else {
-                if (!has_permission('knowledge_base', '', 'edit')) {
+                if (staff_cant('edit', 'knowledge_base')) {
                     access_denied('knowledge_base');
                 }
 
@@ -209,7 +209,7 @@ class Knowledge_base extends AdminController
     /* Change group active or inactive */
     public function change_group_status($id, $status)
     {
-        if (has_permission('knowledge_base', '', 'edit')) {
+        if (staff_can('edit',  'knowledge_base')) {
             if ($this->input->is_ajax_request()) {
                 $this->knowledge_base_model->change_group_status($id, $status);
             }
@@ -218,7 +218,7 @@ class Knowledge_base extends AdminController
 
     public function update_groups_order()
     {
-        if (has_permission('knowledge_base', '', 'edit')) {
+        if (staff_can('edit',  'knowledge_base')) {
             if ($this->input->post()) {
                 $this->knowledge_base_model->update_groups_order();
             }
@@ -228,7 +228,7 @@ class Knowledge_base extends AdminController
     /* Delete article group */
     public function delete_group($id)
     {
-        if (!has_permission('knowledge_base', '', 'delete')) {
+        if (staff_cant('delete', 'knowledge_base')) {
             access_denied('knowledge_base');
         }
         if (!$id) {

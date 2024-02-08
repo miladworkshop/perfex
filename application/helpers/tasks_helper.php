@@ -270,7 +270,7 @@ function tasks_rel_name_select_query()
  * @param  array  $table_attributes
  * @return string
  */
-function init_relation_tasks_table($table_attributes = [])
+function init_relation_tasks_table($table_attributes = [], $filtersWrapperId = 'vueApp')
 {
     $table_data = [
         _l('the_number_sign'),
@@ -327,13 +327,18 @@ function init_relation_tasks_table($table_attributes = [])
         $name = 'rel-tasks-leads';
     }
 
+    $tasks_table = App_table::find('related_tasks');
+
     $table      = '';
     $CI         = &get_instance();
     $table_name = '.table-' . $name;
-    $CI->load->view('admin/tasks/tasks_filter_by', [
-        'view_table_name' => $table_name,
+
+    $CI->load->view('admin/tasks/filters', [
+        'tasks_table'=>$tasks_table,
+        'filters_wrapper_id'=>$filtersWrapperId,
     ]);
-    if (has_permission('tasks', '', 'create')) {
+
+    if (staff_can('create',  'tasks')) {
         $disabled   = '';
         $table_name = addslashes($table_name);
         if ($table_attributes['data-new-rel-type'] == 'customer' && is_numeric($table_attributes['data-new-rel-id'])) {
@@ -413,6 +418,8 @@ function init_relation_tasks_table($table_attributes = [])
     if ($table_attributes['data-new-rel-type'] != 'project') {
         echo '<hr />';
     }
+    $table_attributes['id'] = 'related_tasks';
+
     $table .= render_datatable($table_data, $name, ['number-index-1'], $table_attributes);
 
     return $table;
@@ -430,7 +437,7 @@ function tasks_summary_data($rel_id = null, $rel_type = null)
     $statuses      = $CI->tasks_model->get_statuses();
     foreach ($statuses as $status) {
         $tasks_where = 'status = ' . $CI->db->escape_str($status['id']);
-        if (!has_permission('tasks', '', 'view')) {
+        if (staff_cant('view', 'tasks')) {
             $tasks_where .= ' ' . get_tasks_where_string();
         }
         $tasks_my_where = 'id IN(SELECT taskid FROM ' . db_prefix() . 'task_assigned WHERE staffid=' . get_staff_user_id() . ') AND status=' . $CI->db->escape_str($status['id']);

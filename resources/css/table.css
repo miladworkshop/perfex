@@ -147,6 +147,29 @@
   background-color: theme("colors.danger.100");
 }
 
+.table > thead > tr > td.secondary,
+.table > tbody > tr > td.secondary,
+.table > tfoot > tr > td.secondary,
+.table > thead > tr > th.secondary,
+.table > tbody > tr > th.secondary,
+.table > tfoot > tr > th.secondary,
+.table > thead > tr.secondary > td,
+.table > tbody > tr.secondary > td,
+.table > tfoot > tr.secondary > td,
+.table > thead > tr.secondary > th,
+.table > tbody > tr.secondary > th,
+.table > tfoot > tr.secondary > th {
+  background-color: theme("colors.neutral.50");
+  color: theme("colors.neutral.600");
+}
+.table-hover > tbody > tr > td.secondary:hover,
+.table-hover > tbody > tr > th.secondary:hover,
+.table-hover > tbody > tr.secondary:hover > td,
+.table-hover > tbody > tr:hover > .secondary,
+.table-hover > tbody > tr.secondary:hover > th {
+  background-color: theme("colors.neutral.100");
+}
+
 .table > tbody > tr > td,
 .table > tbody > tr > th,
 .table > tfoot > tr > td,

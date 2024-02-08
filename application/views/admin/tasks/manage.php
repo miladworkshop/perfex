@@ -4,7 +4,7 @@
     <div class="content">
         <div class="row _buttons tw-mb-2 sm:tw-mb-4">
             <div class="col-md-8">
-                <?php if (has_permission('tasks', '', 'create')) { ?>
+                <?php if (staff_can('create',  'tasks')) { ?>
                 <a href="#" onclick="new_task(<?php if ($this->input->get('project_id')) {
     echo "'" . admin_url('tasks/task?rel_id=' . $this->input->get('project_id') . '&rel_type=project') . "'";
 } ?>); return false;" class="btn btn-primary pull-left new">
@@ -12,12 +12,11 @@
                     <?php echo _l('new_task'); ?>
                 </a>
                 <?php } ?>
-                <a href="<?php if (!$this->input->get('project_id')) {
-    echo admin_url('tasks/switch_kanban/' . $switch_kanban);
-} else {
-    echo admin_url('projects/view/' . $this->input->get('project_id') . '?group=project_tasks');
-}; ?>" class="btn btn-default mleft10 pull-left hidden-xs" data-toggle="tooltip" data-placement="top"
-                    data-title="<?php echo $switch_kanban == 1 ? _l('switch_to_list_view') : _l('leads_switch_to_kanban'); ?>">
+                <a 
+                    href="<?php echo admin_url(!$this->input->get('project_id') ? ('tasks/switch_kanban/' . $switch_kanban) : ('projects/view/' . $this->input->get('project_id') . '?group=project_tasks')); ?>" class="btn btn-default mleft10 pull-left hidden-xs" data-toggle="tooltip" 
+                    data-placement="top"
+                    data-title="<?php echo $switch_kanban == 1 ? _l('switch_to_list_view') : _l('leads_switch_to_kanban'); ?>"
+                >
                     <?php if ($switch_kanban == 1) { ?>
                     <i class="fa-solid fa-table-list"></i>
                     <?php } else { ?>
@@ -31,7 +30,7 @@
                     <?php echo render_input('search', '', '', 'search', ['data-name' => 'search', 'onkeyup' => 'tasks_kanban();', 'placeholder' => _l('search_tasks')], [], 'no-margin') ?>
                 </div>
                 <?php } else { ?>
-                <?php $this->load->view('admin/tasks/tasks_filter_by', ['view_table_name' => '.table-tasks']); ?>
+                <?php $this->load->view('admin/tasks/filters',['filters_wrapper_id'=>'vueApp']); ?>
                 <a href="<?php echo admin_url('tasks/detailed_overview'); ?>"
                     class="btn btn-success pull-right mright5"><?php echo _l('detailed_overview'); ?></a>
                 <?php } ?>
@@ -65,7 +64,6 @@
                     </div>
                 </div>
                 <?php } ?>
-
             </div>
         </div>
     </div>

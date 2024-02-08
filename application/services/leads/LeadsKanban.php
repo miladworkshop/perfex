@@ -50,7 +50,7 @@ class LeadsKanban extends AbstractKanban
         $this->ci->db->join(db_prefix() . 'staff', db_prefix() . 'staff.staffid=' . db_prefix() . 'leads.assigned', 'left');
         $this->ci->db->where('status', $this->status);
 
-        if (!has_permission('leads', '', 'view')) {
+        if (staff_cant('view', 'leads')) {
             $this->ci->db->where('(assigned = ' . get_staff_user_id() . ' OR addedfrom=' . get_staff_user_id() . ' OR is_public=1)');
         }
 

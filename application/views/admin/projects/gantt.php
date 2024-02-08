@@ -24,7 +24,7 @@
         * Only show this filter if user has permission for projects view otherwise
         * wont need this becuase by default this filter will be applied
         */
-        if (has_permission('projects', '', 'view')) { ?>
+        if (staff_can('view',  'projects')) { ?>
                 <div class="tw-flex-1">
                     <select class="selectpicker" data-live-search="true"
                         data-title="<?php echo _l('project_member'); ?>" name="member" data-width="100%">

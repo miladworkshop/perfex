@@ -9,7 +9,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  */
 function AdminTicketsTableStructure($name = '', $bulk_action = false)
 {
-    $table = '<table class="table customizable-table number-index-' . ($bulk_action ? '2' : '1') . ' dt-table-loading ' . ($name == '' ? 'tickets-table' : $name) . ' table-tickets" id="table-tickets" data-last-order-identifier="tickets" data-default-order="' . get_table_last_order('tickets') . '">';
+    $table = '<table class="table customizable-table number-index-' . ($bulk_action ? '2' : '1') . ' dt-table-loading ' . ($name == '' ? 'tickets-table' : $name) . ' table-tickets" id="tickets" data-last-order-identifier="tickets" data-default-order="' . get_table_last_order('tickets') . '">';
     $table .= '<thead>';
     $table .= '<tr>';
 

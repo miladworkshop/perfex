@@ -806,6 +806,7 @@
                         <td class="total">
                         </td>
                     </tr>
+                    <?php hooks()->do_action('after_admin_invoice_form_total_field', $invoice ?? null); ?>
                 </tbody>
             </table>
 

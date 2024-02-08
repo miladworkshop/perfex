@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <div class="widget" id="widget-<?php echo create_widget_id(); ?>" data-name="<?php echo _l('home_payment_records'); ?>">
-    <?php if (has_permission('payments', '', 'view') || has_permission('invoices', '', 'view_own')) { ?>
+    <?php if (staff_can('view',  'payments') || staff_can('view_own',  'invoices')) { ?>
     <div class="row" id="payments">
         <div class="col-md-12">
             <div class="panel_s">
@@ -37,7 +37,7 @@
 } ?>
                             </select>
                             <?php } ?>
-                            <?php if (has_permission('reports', '', 'view')) { ?>
+                            <?php if (staff_can('view',  'reports')) { ?>
                             <a href="<?php echo admin_url('reports/sales'); ?>" class="tw-pl-2">
                                 <?php echo _l('home_stats_full_report'); ?>
                             </a>

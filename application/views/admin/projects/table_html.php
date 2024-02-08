@@ -29,4 +29,5 @@ $table_data = hooks()->apply_filters('projects_table_columns', $table_data);
 render_datatable($table_data, isset($class) ?  $class : 'projects', ['number-index-1'], [
   'data-last-order-identifier' => 'projects',
   'data-default-order'         => get_table_last_order('projects'),
+  'id'=>$table_id ?? 'projects',
 ]);

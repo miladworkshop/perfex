@@ -65,6 +65,8 @@ $autoload['libraries'] = [
     'image_lib',
     'encryption',
     'app',
+    'app_table',
+    'app_table_filter',
     'gateways/app_gateway',
     'email', // As last because it's using get_option via $this->app library
 ];
@@ -131,6 +133,7 @@ $autoload['helper'] = [
         'func',
         'gdpr',
         'datatables',
+        'table',
         'custom_fields',
         'menu',
         'template',

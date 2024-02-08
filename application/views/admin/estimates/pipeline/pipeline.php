@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 $i                   = 0;
-$has_permission_edit = has_permission('estimates', '', 'edit');
+$has_permission_edit = staff_can('edit',  'estimates');
 foreach ($estimate_statuses as $status) {
     $kanBan = new \app\services\estimates\EstimatesPipeline($status);
     $kanBan->search($this->input->get('search'))

@@ -31,11 +31,11 @@
                         <?php if (isset($article)) { ?>
                         <p>
 
-                            <?php if (has_permission('knowledge_base', '', 'create')) { ?>
+                            <?php if (staff_can('create',  'knowledge_base')) { ?>
                             <a href="<?php echo admin_url('knowledge_base/article'); ?>"
                                 class="btn btn-success pull-right"><?php echo _l('kb_article_new_article'); ?></a>
                             <?php } ?>
-                            <?php if (has_permission('knowledge_base', '', 'delete')) { ?>
+                            <?php if (staff_can('delete',  'knowledge_base')) { ?>
                             <a href="<?php echo admin_url('knowledge_base/delete_article/' . $article->articleid); ?>"
                                 class="btn btn-danger _delete pull-right mright5"><?php echo _l('delete'); ?></a>
                             <?php } ?>
@@ -54,7 +54,7 @@
                                 echo render_input('slug', 'kb_article_slug', $article->slug, 'text');
                             } ?>
                         <?php $value = (isset($article) ? $article->articlegroup : ''); ?>
-                        <?php if (has_permission('knowledge_base', '', 'create')) {
+                        <?php if (staff_can('create',  'knowledge_base')) {
                                 echo render_select_with_input_group('articlegroup', get_kb_groups(), ['groupid', 'name'], 'kb_article_add_edit_group', $value, '<div class="input-group-btn"><a href="#" class="btn btn-default" onclick="new_kb_group();return false;"><i class="fa fa-plus"></i></a></div>');
                             } else {
                                 echo render_select('articlegroup', get_kb_groups(), ['groupid', 'name'], 'kb_article_add_edit_group', $value);
@@ -78,7 +78,7 @@
                      } ?>
                         <?php echo render_textarea('description', '', $contents, [], [], '', 'tinymce tinymce-manual'); ?>
                     </div>
-                    <?php if ((has_permission('knowledge_base', '', 'create') && !isset($article)) || has_permission('knowledge_base', '', 'edit') && isset($article)) { ?>
+                    <?php if ((staff_can('create',  'knowledge_base') && !isset($article)) || staff_can('edit',  'knowledge_base') && isset($article)) { ?>
                     <div class="panel-footer text-right">
                         <button type="submit" class="btn btn-primary">
                             <?php echo _l('submit'); ?>

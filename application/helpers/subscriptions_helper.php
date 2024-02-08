@@ -212,11 +212,11 @@ function get_subscriptions_statuses()
 function subscriptions_summary()
 {
     $statuses            = get_subscriptions_statuses();
-    $has_permission_view = has_permission('subscriptions', '', 'view');
+    $has_permission_view = staff_can('view',  'subscriptions');
     $summary             = [];
     foreach ($statuses as $status) {
         $where = ['status' => $status['id']];
-        if (!has_permission('subscriptions', '', 'view')) {
+        if (staff_cant('view', 'subscriptions')) {
             $where['created_from'] = get_staff_user_id();
         }
         $summary[] = [

@@ -92,7 +92,7 @@ function get_leads_summary()
     $statuses = $CI->leads_model->get_status();
 
     $totalStatuses         = count($statuses);
-    $has_permission_view   = has_permission('leads', '', 'view');
+    $has_permission_view   = staff_can('view',  'leads');
     $sql                   = '';
     $whereNoViewPermission = '(addedfrom = ' . get_staff_user_id() . ' OR assigned=' . get_staff_user_id() . ' OR is_public = 1)';
 

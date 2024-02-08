@@ -317,7 +317,7 @@ class Tasks_model extends App_Model
 
     public function get_billable_tasks($customer_id = false, $project_id = '')
     {
-        $has_permission_view = has_permission('tasks', '', 'view');
+        $has_permission_view = staff_can('view',  'tasks');
         $noPermissionsQuery  = get_tasks_where_string(false);
 
         $this->db->where('billable', 1);
@@ -1382,7 +1382,7 @@ class Tasks_model extends App_Model
         // Check if user really creator
         $this->db->where('id', $data['id']);
         $comment = $this->db->get(db_prefix() . 'task_comments')->row();
-        if ($comment->staffid == get_staff_user_id() || has_permission('tasks', '', 'edit') || $comment->contact_id == get_contact_user_id()) {
+        if ($comment->staffid == get_staff_user_id() || staff_can('edit',  'tasks') || $comment->contact_id == get_contact_user_id()) {
             $comment_added = strtotime($comment->dateadded);
             $minus_1_hour  = strtotime('-1 hours');
             if (get_option('client_staff_add_edit_delete_task_comments_first_hour') == 0 || (get_option('client_staff_add_edit_delete_task_comments_first_hour') == 1 && $comment_added >= $minus_1_hour) || is_admin()) {
@@ -1425,7 +1425,7 @@ class Tasks_model extends App_Model
             return true;
         }
 
-        if ($comment->staffid == get_staff_user_id() || has_permission('tasks', '', 'delete') || $comment->contact_id == get_contact_user_id() || $force === true) {
+        if ($comment->staffid == get_staff_user_id() || staff_can('delete',  'tasks') || $comment->contact_id == get_contact_user_id() || $force === true) {
             $comment_added = strtotime($comment->dateadded);
             $minus_1_hour  = strtotime('-1 hours');
             if (

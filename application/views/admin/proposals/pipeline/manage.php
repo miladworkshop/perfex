@@ -7,7 +7,7 @@
                 <div class="_buttons tw-mb-3 sm:tw-mb-5">
                     <div class="row">
                         <div class="col-md-8">
-                            <?php if (has_permission('proposals', '', 'create')) { ?>
+                            <?php if (staff_can('create',  'proposals')) { ?>
                             <a href="<?php echo admin_url('proposals/proposal'); ?>"
                                 class="btn btn-primary pull-left new">
                                 <i class="fa-regular fa-plus tw-mr-1"></i>

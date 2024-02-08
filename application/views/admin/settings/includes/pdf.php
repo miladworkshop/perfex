@@ -77,7 +77,7 @@
                 <div class="col-md-9">
                     <img src="<?php echo base_url('uploads/company/' . $signature); ?>" class="img img-responsive">
                 </div>
-                <?php if (has_permission('settings', '', 'delete')) { ?>
+                <?php if (staff_can('delete',  'settings')) { ?>
                 <div class="col-md-3 text-right">
                     <a href="<?php echo admin_url('settings/remove_signature_image'); ?>" class="_delete text-danger"><i
                             class="fa fa-remove"></i></a>

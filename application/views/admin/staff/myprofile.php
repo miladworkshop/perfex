@@ -91,7 +91,7 @@
                                     <i class="fa-brands fa-skype"></i>
                                 </a>
                                 <?php } ?>
-                                <?php if (has_permission('staff', '', 'edit') && has_permission('staff', '', 'view')) { ?>
+                                <?php if (staff_can('edit',  'staff') && staff_can('view',  'staff')) { ?>
                                 <a href="<?php echo admin_url('staff/member/' . $staff_p->staffid); ?>"
                                     class="btn btn-default btn-icon">
                                     <i class="fa fa-pencil-square"></i>

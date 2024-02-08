@@ -370,7 +370,7 @@
                                             <?php echo _dt($note['dateadded']); ?></td>
                                         <td>
                                             <div class="tw-flex tw-items-center tw-space-x-3">
-                                                <?php if ($note['addedfrom'] == get_staff_user_id() || has_permission('staff', '', 'delete')) { ?>
+                                                <?php if ($note['addedfrom'] == get_staff_user_id() || staff_can('delete',  'staff')) { ?>
                                                 <a href="#"
                                                     onclick="toggle_edit_note(<?php echo $note['id']; ?>);return false;"
                                                     class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700">
@@ -506,8 +506,8 @@
                                     <td>
                                         <?php
                                  if (!$t['billed']) {
-                                     if (has_permission('tasks', '', 'delete')
-                                       || (has_permission('projects', '', 'delete') && $t['rel_type'] == 'project')
+                                     if (staff_can('delete',  'tasks')
+                                       || (staff_can('delete',  'projects') && $t['rel_type'] == 'project')
                                        || $t['staff_id'] == get_staff_user_id()) {
                                          echo '<a href="' . admin_url('tasks/delete_timesheet/' . $t['id']) . '" class="pull-right text-danger mtop5"><i class="fa fa-remove"></i></a>';
                                      }

@@ -15,9 +15,9 @@ function app_init_admin_sidebar_menu_items()
     ]);
 
     if (
-        has_permission('customers', '', 'view')
+        staff_can('view',  'customers')
         || (have_assigned_customers()
-            || (!have_assigned_customers() && has_permission('customers', '', 'create')))
+            || (!have_assigned_customers() && staff_can('create',  'customers')))
     ) {
         $CI->app_menu->add_sidebar_menu_item('customers', [
             'name'     => _l('als_clients'),
@@ -36,7 +36,7 @@ function app_init_admin_sidebar_menu_items()
         'badge'    => [],
     ]);
 
-    if ((has_permission('proposals', '', 'view') || has_permission('proposals', '', 'view_own'))
+    if ((staff_can('view',  'proposals') || staff_can('view_own',  'proposals'))
         || (staff_has_assigned_proposals() && get_option('allow_staff_view_proposals_assigned') == 1)
     ) {
         $CI->app_menu->add_sidebar_children_item('sales', [
@@ -48,7 +48,7 @@ function app_init_admin_sidebar_menu_items()
         ]);
     }
 
-    if ((has_permission('estimates', '', 'view') || has_permission('estimates', '', 'view_own'))
+    if ((staff_can('view',  'estimates') || staff_can('view_own',  'estimates'))
         || (staff_has_assigned_estimates() && get_option('allow_staff_view_estimates_assigned') == 1)
     ) {
         $CI->app_menu->add_sidebar_children_item('sales', [
@@ -60,7 +60,7 @@ function app_init_admin_sidebar_menu_items()
         ]);
     }
 
-    if ((has_permission('invoices', '', 'view') || has_permission('invoices', '', 'view_own'))
+    if ((staff_can('view',  'invoices') || staff_can('view_own',  'invoices'))
         || (staff_has_assigned_invoices() && get_option('allow_staff_view_invoices_assigned') == 1)
     ) {
         $CI->app_menu->add_sidebar_children_item('sales', [
@@ -73,7 +73,7 @@ function app_init_admin_sidebar_menu_items()
     }
 
     if (
-        has_permission('payments', '', 'view') || has_permission('invoices', '', 'view_own')
+        staff_can('view',  'payments') || staff_can('view_own',  'invoices')
         || (get_option('allow_staff_view_invoices_assigned') == 1 && staff_has_assigned_invoices())
     ) {
         $CI->app_menu->add_sidebar_children_item('sales', [
@@ -85,7 +85,7 @@ function app_init_admin_sidebar_menu_items()
         ]);
     }
 
-    if (has_permission('credit_notes', '', 'view') || has_permission('credit_notes', '', 'view_own')) {
+    if (staff_can('view',  'credit_notes') || staff_can('view_own',  'credit_notes')) {
         $CI->app_menu->add_sidebar_children_item('sales', [
             'slug'     => 'credit_notes',
             'name'     => _l('credit_notes'),
@@ -95,7 +95,7 @@ function app_init_admin_sidebar_menu_items()
         ]);
     }
 
-    if (has_permission('items', '', 'view')) {
+    if (staff_can('view',  'items')) {
         $CI->app_menu->add_sidebar_children_item('sales', [
             'slug'     => 'items',
             'name'     => _l('items'),
@@ -105,7 +105,7 @@ function app_init_admin_sidebar_menu_items()
         ]);
     }
 
-    if (has_permission('subscriptions', '', 'view') || has_permission('subscriptions', '', 'view_own')) {
+    if (staff_can('view',  'subscriptions') || staff_can('view_own',  'subscriptions')) {
         $CI->app_menu->add_sidebar_menu_item('subscriptions', [
             'name'     => _l('subscriptions'),
             'href'     => admin_url('subscriptions'),
@@ -115,7 +115,7 @@ function app_init_admin_sidebar_menu_items()
         ]);
     }
 
-    if (has_permission('expenses', '', 'view') || has_permission('expenses', '', 'view_own')) {
+    if (staff_can('view',  'expenses') || staff_can('view_own',  'expenses')) {
         $CI->app_menu->add_sidebar_menu_item('expenses', [
             'name'     => _l('expenses'),
             'href'     => admin_url('expenses'),
@@ -125,7 +125,7 @@ function app_init_admin_sidebar_menu_items()
         ]);
     }
 
-    if (has_permission('contracts', '', 'view') || has_permission('contracts', '', 'view_own')) {
+    if (staff_can('view',  'contracts') || staff_can('view_own',  'contracts')) {
         $CI->app_menu->add_sidebar_menu_item('contracts', [
             'name'     => _l('contracts'),
             'href'     => admin_url('contracts'),
@@ -191,7 +191,7 @@ function app_init_admin_sidebar_menu_items()
         ]);
     }
 
-    if ((has_permission('estimate_request', '', 'view') || has_permission('estimate_request', '', 'view_own'))) {
+    if ((staff_can('view',  'estimate_request') || staff_can('view_own',  'estimate_request'))) {
         $CI->app_menu->add_sidebar_menu_item('estimate_request', [
             'name'     => _l('estimate_request'),
             'href'     => admin_url('estimate_request'),
@@ -201,7 +201,7 @@ function app_init_admin_sidebar_menu_items()
         ]);
     }
 
-    if (has_permission('knowledge_base', '', 'view')) {
+    if (staff_can('view',  'knowledge_base')) {
         $CI->app_menu->add_sidebar_menu_item('knowledge-base', [
             'name'     => _l('als_kb'),
             'href'     => admin_url('knowledge_base'),
@@ -228,7 +228,7 @@ function app_init_admin_sidebar_menu_items()
         'badge'    => [],
     ]);
 
-    if (has_permission('bulk_pdf_exporter', '', 'view')) {
+    if (staff_can('view',  'bulk_pdf_exporter')) {
         $CI->app_menu->add_sidebar_children_item('utilities', [
             'slug'     => 'bulk-pdf-exporter',
             'name'     => _l('bulk_pdf_exporter'),
@@ -294,7 +294,7 @@ function app_init_admin_sidebar_menu_items()
         ]);
     }
 
-    if (has_permission('reports', '', 'view')) {
+    if (staff_can('view',  'reports')) {
         $CI->app_menu->add_sidebar_children_item('reports', [
             'slug'     => 'sales-reports',
             'name'     => _l('als_reports_sales_submenu'),
@@ -333,7 +333,7 @@ function app_init_admin_sidebar_menu_items()
     }
 
     // Setup menu
-    if (has_permission('staff', '', 'view')) {
+    if (staff_can('view',  'staff')) {
         $CI->app_menu->add_setup_menu_item('staff', [
             'name'     => _l('als_staff'),
             'href'     => admin_url('staff'),
@@ -533,7 +533,7 @@ function app_init_admin_sidebar_menu_items()
                   ]);*/
     }
 
-    if (has_permission('settings', '', 'view')) {
+    if (staff_can('view',  'settings')) {
         $CI->app_menu->add_setup_menu_item('settings', [
             'href'     => admin_url('settings'),
             'name'     => _l('acs_settings'),
@@ -542,7 +542,7 @@ function app_init_admin_sidebar_menu_items()
         ]);
     }
 
-    if (has_permission('email_templates', '', 'view')) {
+    if (staff_can('view',  'email_templates')) {
         $CI->app_menu->add_setup_menu_item('email-templates', [
             'href'     => admin_url('emails'),
             'name'     => _l('acs_email_templates'),
@@ -551,7 +551,7 @@ function app_init_admin_sidebar_menu_items()
         ]);
     }
 
-    if (has_permission('settings', '', 'view')) {
+    if (staff_can('view',  'settings')) {
         $CI->app_menu->add_setup_menu_item('estimate_request', [
             'collapse' => true,
             'name'     => _l('acs_estimate_request'),

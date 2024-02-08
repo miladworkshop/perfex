@@ -41,7 +41,7 @@ class Credit_notes_model extends App_Model
 
     public function get_available_creditable_invoices($credit_note_id)
     {
-        $has_permission_view = has_permission('invoices', '', 'view');
+        $has_permission_view = staff_can('view',  'invoices');
 
         $invoices_statuses_available_for_credits = invoices_statuses_available_for_credits();
         $this->db->select('clientid');
@@ -477,7 +477,7 @@ class Credit_notes_model extends App_Model
 
     public function total_remaining_credits_by_customer($customer_id)
     {
-        $has_permission_view = has_permission('credit_notes', '', 'view');
+        $has_permission_view = staff_can('view',  'credit_notes');
         $this->db->select('total,id');
         $this->db->where('clientid', $customer_id);
         $this->db->where('status', 1);
@@ -848,7 +848,7 @@ class Credit_notes_model extends App_Model
 
     public function get_open_credits($customer_id)
     {
-        $has_permission_view = has_permission('credit_notes', '', 'view');
+        $has_permission_view = staff_can('view',  'credit_notes');
         $this->db->where('status', 1);
         $this->db->where('clientid', $customer_id);
         if (!$has_permission_view) {

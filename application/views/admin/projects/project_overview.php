@@ -103,7 +103,7 @@
                                 </dd>
                             </div>
 
-                            <?php if (has_permission('projects', '', 'edit')) { ?>
+                            <?php if (staff_can('edit',  'projects')) { ?>
                             <div class="sm:tw-col-span-1 project-overview-billing">
                                 <dt class="tw-text-sm tw-font-medium tw-text-neutral-500">
                                     <?php echo _l('project_billing_type'); ?>
@@ -260,6 +260,7 @@
             </div>
         </div>
     </div>
+    <?php hooks()->do_action('admin_project_overview_end_of_project_overview_left', $project) ?>
     <div class="col-md-6 project-overview-right">
         <div class="row">
             <div class="col-md-<?php echo($project->deadline ? 6 : 12); ?> project-progress-bars">
@@ -330,7 +331,7 @@
             <?php } ?>
         </div>
 
-        <?php if (has_permission('projects', '', 'create')) { ?>
+        <?php if (staff_can('create',  'projects')) { ?>
         <div class="row">
             <?php if ($project->billing_type == 3 || $project->billing_type == 2) { ?>
             <div class="col-md-12 project-overview-logged-hours-finance">
@@ -452,6 +453,7 @@
                 </div>
             </div>
         </div>
+        <?php hooks()->do_action('admin_project_overview_end_of_project_overview_right', $project) ?>
     </div>
 </div>
 <?php if (isset($project_overview_chart)) { ?>

@@ -47,7 +47,7 @@
                         </div>
                         <div class="form-group">
                             <label for="email" class="control-label"><?php echo _l('staff_add_edit_email'); ?></label>
-                            <input type="email" <?php if (has_permission('staff', '', 'edit')) { ?> name="email"
+                            <input type="email" <?php if (staff_can('edit',  'staff')) { ?> name="email"
                                 <?php } else { ?> disabled="true" <?php } ?> class="form-control"
                                 value="<?php echo $member->email; ?>" id="email">
                         </div>

@@ -69,6 +69,8 @@ function _init_admin_assets()
         ['vendor-js', 'datatables-js', 'bootstrap-select-js', 'tinymce-js', 'jquery-migrate-js', 'jquery-validation-js', 'moment-js', 'common-js']
     );
 
+    $CI->app_scripts->add('app-v3', 'assets/builds/app.js');
+
     // CSS
     add_favicon_link_asset();
 

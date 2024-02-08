@@ -14,7 +14,7 @@ class Participate extends ClientsController
             || ($survey->hash != $hash)
             || (!$hash || !$id)
             // Users with permission manage surveys to preview the survey even if is not active
-            || ($survey->active == 0 && !has_permission('surveys', '', 'view'))
+            || ($survey->active == 0 && staff_cant('view', 'surveys'))
         ) {
             show_404();
         }

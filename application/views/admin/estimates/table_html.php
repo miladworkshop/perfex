@@ -24,10 +24,10 @@ $custom_fields = get_custom_fields('estimate',array('show_on_table'=>1));
 foreach($custom_fields as $field){
    array_push($table_data, [
      'name' => $field['name'],
-     'th_attrs' => array('data-type'=>$field['type'], 'data-custom-field'=>1)
+     'th_attrs' => array('data-type'=>$field['type'], 'data-custom-field'=>1),
   ]);
 }
 
 $table_data = hooks()->apply_filters('estimates_table_columns', $table_data);
 
-render_datatable($table_data, isset($class) ? $class : 'estimates');
+render_datatable($table_data, isset($class) ? $class : 'estimates', [],['id'=>$table_id ?? 'estimates']);

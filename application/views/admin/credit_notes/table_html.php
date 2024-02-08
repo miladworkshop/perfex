@@ -24,5 +24,5 @@ foreach($custom_fields as $field){
    'th_attrs' => array('data-type'=>$field['type'], 'data-custom-field'=>1)
  ]);
 }
-render_datatable($table_data,'credit-notes');
+render_datatable($table_data,'credit-notes', [], ['id'=>$table_id ?? 'credit_notes']);
 ?>

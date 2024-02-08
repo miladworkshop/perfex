@@ -1,5 +1,6 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <?php init_head(); ?>
+<?php $isSignedOrMarkedSigned = isset($contract) && ($contract->signed == 1 || $contract->marked_as_signed == 1); ?>
 <div id="wrapper">
     <div class="content">
         <div class="row">
@@ -45,7 +46,7 @@
                             <select id="clientid" name="client" data-live-search="true" data-width="100%"
                                 class="ajax-search"
                                 data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>"
-                                <?php echo isset($contract) && $contract->signed == 1 ? ' disabled' : ''; ?>>
+                                <?php echo isset($contract) && $isSignedOrMarkedSigned ? ' disabled' : ''; ?>>
                                 <?php $selected = (isset($contract) ? $contract->client : '');
                         if ($selected == '') {
                             $selected = (isset($customer_id) ? $customer_id: '');
@@ -65,7 +66,7 @@
                                 <select name="project_id" id="project_id" class="projects ajax-search ays-ignore"
                                     data-live-search="true" data-width="100%"
                                     data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>"
-                                    <?php echo isset($contract) && $contract->signed == 1 ? ' disabled' : ''; ?>>
+                                    <?php echo isset($contract) && $isSignedOrMarkedSigned == 1 ? ' disabled' : ''; ?>>
                                     <?php
                       if (isset($contract) && $contract->project_id) {
                           echo '<option value="' . $contract->project_id . '" selected>' . get_project_name_by_id($contract->project_id) . '</option>';
@@ -82,10 +83,10 @@
                         <div class="form-group">
                             <label for="contract_value"><?php echo _l('contract_value'); ?></label>
                             <div class="input-group" data-toggle="tooltip"
-                                title="<?php echo isset($contract) && $contract->signed == 1 ? '' : _l('contract_value_tooltip'); ?>">
+                                title="<?php echo isset($contract) && $isSignedOrMarkedSigned == 1 ? '' : _l('contract_value_tooltip'); ?>">
                                 <input type="number" class="form-control" name="contract_value"
                                     value="<?php echo $contract->contract_value ?? ''; ?>"
-                                    <?php echo isset($contract) && $contract->signed == 1 ? ' disabled' : ''; ?>>
+                                    <?php echo isset($contract) && $isSignedOrMarkedSigned == 1 ? ' disabled' : ''; ?>>
                                 <div class="input-group-addon">
                                     <?php echo $base_currency->symbol; ?>
                                 </div>
@@ -106,7 +107,7 @@
              'datestart',
              'contract_start_date',
              $value,
-             isset($contract) && $contract->signed == 1 ? ['disabled' => true] : []
+             isset($contract) && $isSignedOrMarkedSigned ? ['disabled' => true] : []
          ); ?>
                             </div>
                             <div class="col-md-6">
@@ -115,7 +116,7 @@
              'dateend',
              'contract_end_date',
              $value,
-             isset($contract) && $contract->signed == 1 ? ['disabled' => true] : []
+             isset($contract) && $isSignedOrMarkedSigned ? ['disabled' => true] : []
          ); ?>
                             </div>
                         </div>
@@ -137,11 +138,11 @@
             <?php if (isset($contract)) { ?>
             <div class="col-md-7 right-column">
                 <div class="sm:tw-flex sm:tw-justify-between sm:tw-items-center tw-mb-1 -tw-mt-px">
-                    <h4 class="tw-my-0 tw-font-semibold tw-text-lg tw-text-neutral-700">
+                    <h4 class="tw-my-0 tw-font-semibold tw-text-lg tw-text-neutral-700 tw-truncate tw-max-w-lg">
                         <?php echo $contract->subject; ?>
                     </h4>
                     <div>
-                        <div class="_buttons tw-space-x-1">
+                        <div class="_buttons tw-space-x-2 tw-flex tw-items-center">
                             <a href="<?php echo site_url('contract/' . $contract->id . '/' . $contract->hash); ?>"
                                 target="_blank">
                                 <?php echo _l('view_contract'); ?>
@@ -191,7 +192,7 @@
                                         </a>
                                     </li>
                                     <?php
-                              if ($contract->signed == 0 && $contract->marked_as_signed == 0 && staff_can('edit', 'contracts')) { ?>
+                              if (!$isSignedOrMarkedSigned && staff_can('edit', 'contracts')) { ?>
                                     <li>
                                         <a href="<?php echo admin_url('contracts/mark_as_signed/' . $contract->id); ?>">
                                             <?php echo _l('mark_as_signed'); ?>
@@ -206,14 +207,14 @@
                                     </li>
                                     <?php } ?>
                                     <?php hooks()->do_action('after_contract_view_as_client_link', $contract); ?>
-                                    <?php if (has_permission('contracts', '', 'create')) { ?>
+                                    <?php if (staff_can('create',  'contracts')) { ?>
                                     <li>
                                         <a href="<?php echo admin_url('contracts/copy/' . $contract->id); ?>">
                                             <?php echo _l('contract_copy'); ?>
                                         </a>
                                     </li>
                                     <?php } ?>
-                                    <?php if ($contract->signed == 1 && has_permission('contracts', '', 'delete')) { ?>
+                                    <?php if ($contract->signed == 1 && staff_can('delete',  'contracts')) { ?>
                                     <li>
                                         <a href="<?php echo admin_url('contracts/clear_signature/' . $contract->id); ?>"
                                             class="_delete">
@@ -221,7 +222,7 @@
                                         </a>
                                     </li>
                                     <?php } ?>
-                                    <?php if (has_permission('contracts', '', 'delete')) { ?>
+                                    <?php if (staff_can('delete',  'contracts')) { ?>
                                     <li>
                                         <a href="<?php echo admin_url('contracts/delete/' . $contract->id); ?>"
                                             class="_delete">
@@ -306,7 +307,7 @@
                                             aria-controls="tab_templates" role="tab" data-toggle="tab">
                                             <?php echo _l('templates');
                                             $conditions = ['type' => 'contracts'];
-                                            if (!staff_can('view_all_templates', 'contracts')) {
+                                            if (staff_cant('view_all_templates', 'contracts')) {
                                                 $conditions['addedfrom'] = get_staff_user_id();
                                                 $conditions['type']      = 'contracts';
                                             }
@@ -380,13 +381,13 @@
                                     </div>
                                 </div>
                                 <hr class="hr-panel-separator" />
-                                <?php if (!staff_can('edit', 'contracts')) { ?>
+                                <?php if (staff_cant('edit', 'contracts')) { ?>
                                 <div class="alert alert-warning contract-edit-permissions">
                                     <?php echo _l('contract_content_permission_edit_warning'); ?>
                                 </div>
                                 <?php } ?>
-                                <div class="tc-content<?php if (staff_can('edit', 'contracts') &&
-                  !($contract->signed == 1)) {
+                                <div class="tc-content<?php
+                                if (staff_can('edit', 'contracts') && !$isSignedOrMarkedSigned) {
                                    echo ' editable';
                                } ?>" style="border:1px solid #d2d2d2;min-height:70px; border-radius:4px;">
                                     <?php
@@ -412,7 +413,7 @@
                                             </p>
                                         </div>
                                         <p class="bold"><?php echo _l('document_customer_signature_text'); ?>
-                                            <?php if ($contract->signed == 1 && has_permission('contracts', '', 'delete')) { ?>
+                                            <?php if ($contract->signed == 1 && staff_can('delete',  'contracts')) { ?>
                                             <a href="<?php echo admin_url('contracts/clear_signature/' . $contract->id); ?>"
                                                 data-toggle="tooltip" title="<?php echo _l('clear_signature'); ?>"
                                                 class="_delete text-danger">
@@ -496,7 +497,7 @@
              echo ' active';
          } ?>" id="renewals">
                                 <div class="mtop20">
-                                    <?php if (has_permission('contracts', '', 'edit')) { ?>
+                                    <?php if (staff_can('edit',  'contracts')) { ?>
                                     <div class="_buttons">
                                         <a href="#" class="btn btn-default" data-toggle="modal"
                                             data-target="#renew_contract_modal">
@@ -678,6 +679,7 @@ $(function() {
         },
         fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
         pagebreak_separator: '<p pagebreak="true"></p>',
+        pagebreak_split_block: true,
         plugins: [
             'advlist pagebreak autolink autoresize lists link image charmap hr',
             'searchreplace visualblocks visualchars code',

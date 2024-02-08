@@ -20,13 +20,13 @@ foreach ($rResult as $aRow) {
     $row = [];
 
     $subject = '<a href="' . admin_url('projects/view/' . $project_id . '?group=project_discussions&discussion_id=' . $aRow['id']) . '">' . $aRow['subject'] . '</a>';
-    if (has_permission('projects', '', 'edit') || has_permission('projects', '', 'delete')) {
+    if (staff_can('edit',  'projects') || staff_can('delete',  'projects')) {
         $subject .= '<div class="row-options">';
-        if (has_permission('projects', '', 'edit')) {
+        if (staff_can('edit',  'projects')) {
             $subject .= '<a href="#" onclick="edit_discussion(this,' . $aRow['id'] . '); return false;" data-subject="' . $aRow['subject'] . '" data-description="' . htmlentities(clear_textarea_breaks($aRow['description'])) . '" data-show-to-customer="' . $aRow['show_to_customer'] . '">' . _l('edit') . '</a>';
         }
-        if (has_permission('projects', '', 'delete')) {
-            $subject .= (has_permission('projects', '', 'edit') ? ' | ' : '') . '<a href="#" onclick="delete_project_discussion(' . $aRow['id'] . '); return false;" class="text-danger">' . _l('delete') . '</a>';
+        if (staff_can('delete',  'projects')) {
+            $subject .= (staff_can('edit',  'projects') ? ' | ' : '') . '<a href="#" onclick="delete_project_discussion(' . $aRow['id'] . '); return false;" class="text-danger">' . _l('delete') . '</a>';
         }
         $subject .= '</div>';
     }

@@ -80,12 +80,15 @@
                 </div>
             </div>
             <?php
+            hooks()->do_action('after_admin_last_record_payment_form_field', $invoice);
             if ($payments) { ?>
             <div class="mtop25 inline-block full-width">
                 <h5 class="bold"><?php echo _l('invoice_payments_received'); ?></h5>
                 <?php include_once(APPPATH . 'views/admin/invoices/invoice_payments_table.php'); ?>
             </div>
             <?php } ?>
+
+            <?php hooks()->do_action('before_admin_add_payment_form_submit', $invoice); ?>
         </div>
 
         <div class="panel-footer text-right">

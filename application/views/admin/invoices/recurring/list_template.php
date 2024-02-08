@@ -2,7 +2,7 @@
 <div class="col-md-12">
     <div class="tw-mb-2 sm:tw-mb-4">
         <div class="_buttons">
-            <?php if (has_permission('invoices', '', 'create')) { ?>
+            <?php if (staff_can('create',  'invoices')) { ?>
             <a href="<?php echo admin_url('invoices/invoice'); ?>"
                 class="btn btn-primary pull-left new new-invoice-list">
                 <i class="fa-regular fa-plus tw-mr-1"></i>

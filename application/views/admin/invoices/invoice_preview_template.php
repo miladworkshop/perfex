@@ -141,6 +141,7 @@
                             <a href="#" onclick="small_table_full_view(); return false;">
                                 <i class="fa fa-expand"></i></a>
                         </li>
+                        <?php hooks()->do_action('after_admin_invoice_preview_template_tab_menu_last_item', $invoice); ?>
                     </ul>
                 </div>
             </div>
@@ -160,7 +161,7 @@
                          $_tooltip_already_send = _l('invoice_already_send_to_client_tooltip', time_ago($invoice->datesend));
                      }
                      ?>
-                        <?php if (has_permission('invoices', '', 'edit')) { ?>
+                        <?php if (staff_can('edit',  'invoices')) { ?>
                         <a href="<?php echo admin_url('invoices/invoice/' . $invoice->id); ?>" data-toggle="tooltip"
                             title="<?php echo _l('edit_invoice_tooltip'); ?>" class="btn btn-default btn-with-tooltip"
                             data-placement="bottom"><i class="fa-regular fa-pen-to-square"></i></a>
@@ -218,7 +219,7 @@
                                         <?php } ?>
                                     </li>
                                     <?php if ($invoice->status != Invoices_model::STATUS_CANCELLED
-                           && has_permission('credit_notes', '', 'create')
+                           && staff_can('create',  'credit_notes')
                            && !empty($invoice->clientid)) {?>
                                     <li>
                                         <a href="<?php echo admin_url('credit_notes/credit_note_from_invoice/' . $invoice->id); ?>"
@@ -230,7 +231,7 @@
                                         <a href="#" data-toggle="modal"
                                             data-target="#sales_attach_file"><?php echo _l('invoice_attach_file'); ?></a>
                                     </li>
-                                    <?php if (has_permission('invoices', '', 'create')) { ?>
+                                    <?php if (staff_can('create',  'invoices')) { ?>
                                     <li>
                                         <a
                                             href="<?php echo admin_url('invoices/copy/' . $invoice->id); ?>"><?php echo _l('invoice_copy'); ?></a>
@@ -242,7 +243,7 @@
                                             href="<?php echo admin_url('invoices/mark_as_sent/' . $invoice->id); ?>"><?php echo _l('invoice_mark_as_sent'); ?></a>
                                     </li>
                                     <?php } ?>
-                                    <?php if (has_permission('invoices', '', 'edit') || has_permission('invoices', '', 'create')) { ?>
+                                    <?php if (staff_can('edit',  'invoices') || staff_can('create',  'invoices')) { ?>
                                     <li>
                                         <?php if ($invoice->status != Invoices_model::STATUS_CANCELLED
                               && $invoice->status != Invoices_model::STATUS_PAID
@@ -256,7 +257,7 @@
                                     </li>
                                     <?php } ?>
                                     <?php if (!in_array($invoice->status, [Invoices_model::STATUS_PAID, Invoices_model::STATUS_CANCELLED, Invoices_model::STATUS_DRAFT])
-                           && has_permission('invoices', '', 'edit')
+                           && staff_can('edit',  'invoices')
                            && $invoice->duedate
                            && is_invoices_overdue_reminders_enabled()) { ?>
                                     <li>
@@ -271,7 +272,7 @@
                                     <?php } ?>
                                     <?php
                            if ((get_option('delete_only_on_last_invoice') == 1 && is_last_invoice($invoice->id)) || (get_option('delete_only_on_last_invoice') == 0)) { ?>
-                                    <?php if (has_permission('invoices', '', 'delete')) { ?>
+                                    <?php if (staff_can('delete',  'invoices')) { ?>
                                     <li data-toggle="tooltip" data-title="<?php echo _l('delete_invoice_tooltip'); ?>">
                                         <a href="<?php echo admin_url('invoices/delete/' . $invoice->id); ?>"
                                             class="text-danger delete-text _delete"><?php echo _l('delete_invoice'); ?></a>
@@ -281,7 +282,7 @@
                                     <?php hooks()->do_action('after_invoice_preview_more_menu'); ?>
                                 </ul>
                             </div>
-                            <?php if (has_permission('payments', '', 'create') && abs($invoice->total) > 0) { ?>
+                            <?php if (staff_can('create',  'payments') && abs($invoice->total) > 0) { ?>
                             <a href="#" onclick="record_payment(<?php echo $invoice->id; ?>); return false;" class="mleft10 pull-right btn btn-success<?php if ($invoice->status == Invoices_model::STATUS_PAID || $invoice->status == Invoices_model::STATUS_CANCELLED) {
                                echo ' disabled';
                            } ?>">
@@ -333,7 +334,7 @@
                                     </td>
                                     <td><?php echo _d($credit['date']); ?></td>
                                     <td><?php echo app_format_money($credit['amount'], $invoice->currency_name) ?>
-                                        <?php if (has_permission('credit_notes', '', 'delete')) { ?>
+                                        <?php if (staff_can('delete',  'credit_notes')) { ?>
                                         <a href="<?php echo admin_url('credit_notes/delete_invoice_applied_credit/' . $credit['id'] . '/' . $credit['credit_id'] . '/' . $invoice->id); ?>"
                                             class="pull-right text-danger _delete"><i class="fa fa-trash"></i></a>
                                         <?php } ?>
@@ -346,7 +347,7 @@
                 </div>
                 <?php } ?>
                 <div role="tabpanel" class="tab-pane" id="tab_tasks">
-                    <?php init_relation_tasks_table(['data-new-rel-id' => $invoice->id, 'data-new-rel-type' => 'invoice']); ?>
+                    <?php init_relation_tasks_table(['data-new-rel-id' => $invoice->id, 'data-new-rel-type' => 'invoice'], 'tasksFilters'); ?>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="tab_reminders">
                     <a href="#" class="btn btn-default" data-toggle="modal"
@@ -427,8 +428,7 @@
                                         <?php } ?>
                                         <?php
                                  $additional_data = '';
-                      if (!empty($activity['additional_data'])) {
-                          $additional_data = unserialize($activity['additional_data']);
+                      if (!empty($activity['additional_data']) && $additional_data = unserialize($activity['additional_data'])) {
                           $i               = 0;
                           foreach ($additional_data as $data) {
                               if (strpos($data, '<original_status>') !== false) {
@@ -479,6 +479,8 @@
                     <hr />
                     <?php } ?>
                 </div>
+
+                <?php hooks()->do_action('after_admin_invoice_preview_template_tab_content_last_item', $invoice); ?>
             </div>
         </div>
     </div>

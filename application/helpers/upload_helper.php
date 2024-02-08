@@ -4,12 +4,24 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 
 /**
- * Handle lead attachments if any
- * @param  mixed $leadid
+ * Handle Estimate request attachments if any
+ * @param  mixed $estimateRequestId
  * @return boolean
  */
 function handle_estimate_request_attachments($estimateRequestId, $index_name = 'file')
 {
+    $hookData = hooks()->apply_filters('before_handle_estimate_request_attachment', [
+        'estimate_request_id' => $estimateRequestId,
+        'index_name' => $index_name,
+        'handled_externally' => false, // e.g. module upload to s3
+        'handled_externally_successfully' => false,
+        'files' => $_FILES
+    ]);
+
+    if ($hookData['handled_externally']) {
+        return $hookData['handled_externally_successfully'];
+    }
+
     $totalUploaded = 0;
     if (
         (isset($_FILES[$index_name]['name']) && !empty($_FILES[$index_name]['name'])) ||
@@ -102,10 +114,26 @@ function _perfex_upload_error($error)
 /**
  * Newsfeed post attachments
  * @param  mixed $postid Post ID to add attachments
- * @return array  - Result values
+ * @return void  - Result values
  */
 function handle_newsfeed_post_attachments($postid)
 {
+    $hookData = hooks()->apply_filters('before_handle_newsfeed_post_attachments', [
+        'newsfeed_post_id' => $postid,
+        'index_name' => 'file',
+        'handled_externally' => false, // e.g. module upload to s3
+        'handled_externally_successfully' => false,
+        'files' => $_FILES
+    ]);
+
+    if ($hookData['handled_externally']) {
+        echo json_encode([
+            'success' => $hookData['handled_externally_successfully'],
+            'postid'  => $postid,
+        ]);
+        return;
+    }
+
     if (isset($_FILES['file']) && _perfex_upload_error($_FILES['file']['error'])) {
         header('HTTP/1.0 400 Bad error');
         echo _perfex_upload_error($_FILES['file']['error']);
@@ -157,6 +185,18 @@ function handle_newsfeed_post_attachments($postid)
  */
 function handle_project_file_uploads($project_id)
 {
+    $hookData = hooks()->apply_filters('before_handle_project_file_uploads', [
+        'project_id' => $project_id,
+        'index_name' => 'file',
+        'handled_externally' => false, // e.g. module upload to s3
+        'handled_externally_successfully' => false,
+        'files' => $_FILES
+    ]);
+
+    if ($hookData['handled_externally']) {
+        return $hookData['handled_externally_successfully'];
+    }
+
     $filesIDS = [];
     $errors   = [];
 
@@ -268,6 +308,18 @@ function handle_project_file_uploads($project_id)
  */
 function handle_contract_attachment($id)
 {
+    $hookData = hooks()->apply_filters('before_handle_contract_attachment', [
+        'contract_id' => $id,
+        'index_name' => 'file',
+        'handled_externally' => false, // e.g. module upload to s3
+        'handled_externally_successfully' => false,
+        'files' => $_FILES
+    ]);
+
+    if ($hookData['handled_externally']) {
+        return $hookData['handled_externally_successfully'];
+    }
+
     if (isset($_FILES['file']) && _perfex_upload_error($_FILES['file']['error'])) {
         header('HTTP/1.0 400 Bad error');
         echo _perfex_upload_error($_FILES['file']['error']);
@@ -307,7 +359,19 @@ function handle_contract_attachment($id)
  */
 function handle_lead_attachments($leadid, $index_name = 'file', $form_activity = false)
 {
-    $uploaded_files = [];
+    $hookData = hooks()->apply_filters('before_handle_lead_attachment', [
+        'lead_id' => $leadid,
+        'index_name' => $index_name,
+        'handled_externally' => false, // e.g. module upload to s3
+        'form_activity' => $form_activity,
+        'handled_externally_successfully' => false,
+        'files' => $_FILES
+    ]);
+
+    if ($hookData['handled_externally']) {
+        return $hookData['handled_externally_successfully'];
+    }
+
     $path           = get_upload_path_by_type('lead') . $leadid . '/';
     $CI             = &get_instance();
     $CI->load->model('leads_model');
@@ -359,13 +423,24 @@ function handle_lead_attachments($leadid, $index_name = 'file', $form_activity =
  * Multiple task attachments can be upload if input type is array or dropzone plugin is used
  * @param  mixed $taskid     task id
  * @param  string $index_name attachments index, in different forms different index name is used
- * @return mixed
+ * @return array|false
  */
 function handle_task_attachments_array($taskid, $index_name = 'attachments')
 {
+    $hookData = hooks()->apply_filters('before_handle_task_attachments_array', [
+        'task_id' => $taskid,
+        'index_name' => $index_name,
+        'uploaded_files' => [],
+        'handled_externally' => false, // e.g. module upload to s3
+        'files' => $_FILES
+    ]);
+
+    if ($hookData['handled_externally']) {
+        return count($hookData['uploaded_files']) > 0 ? $hookData['uploaded_files'] : false;
+    }
+
     $uploaded_files = [];
     $path           = get_upload_path_by_type('task') . $taskid . '/';
-    $CI             = &get_instance();
 
     if (isset($_FILES[$index_name]['name'])
         && ($_FILES[$index_name]['name'] != '' || is_array($_FILES[$index_name]['name']) && count($_FILES[$index_name]['name']) > 0)) {
@@ -418,10 +493,24 @@ function handle_task_attachments_array($taskid, $index_name = 'attachments')
 /**
  * Invoice attachments
  * @param  mixed $invoiceid invoice ID to add attachments
- * @return array  - Result values
+ * @return void  - Result values
  */
 function handle_sales_attachments($rel_id, $rel_type)
 {
+    $hookData = hooks()->apply_filters('before_handle_sales_attachments', [
+        'rel_id' => $rel_id,
+        'rel_type' => $rel_type,
+        'index_name' => 'file',
+        'handled_externally' => false, // e.g. module upload to s3
+        'handled_externally_successfully' => false,
+        'files' => $_FILES
+    ]);
+
+    if ($hookData['handled_externally']) {
+        echo $hookData['handled_externally_successfully'];
+        return;
+    }
+
     if (isset($_FILES['file']) && _perfex_upload_error($_FILES['file']['error'])) {
         header('HTTP/1.0 400 Bad error');
         echo _perfex_upload_error($_FILES['file']['error']);
@@ -492,6 +581,20 @@ function handle_sales_attachments($rel_id, $rel_type)
  */
 function handle_client_attachments_upload($id, $customer_upload = false)
 {
+    $hookData = hooks()->apply_filters('before_handle_client_attachment', [
+        'customer_id' => $id,
+        'index_name' => 'file',
+        'customer_upload' => $customer_upload,
+        'total_uploaded' => 0,
+        'handled_externally' => false, // e.g. module upload to s3
+        'handled_externally_successfully' => false,
+        'files' => $_FILES
+    ]);
+
+    if ($hookData['handled_externally']) {
+        return $hookData['total_uploaded'];
+    }
+
     $path          = get_upload_path_by_type('customer') . $id . '/';
     $CI            = & get_instance();
     $totalUploaded = 0;
@@ -560,6 +663,20 @@ function handle_expense_attachments($id)
         echo _perfex_upload_error($_FILES['file']['error']);
         die;
     }
+
+    $hookData = hooks()->apply_filters('before_handle_expense_attachment', [
+        'expense_id' => $id,
+        'index_name' => 'file',
+        'handled_externally' => false, // e.g. module upload to s3
+        'handled_externally_successfully' => false,
+        'files' => $_FILES
+    ]);
+
+    if ($hookData['handled_externally']) {
+        return $hookData['handled_externally_successfully'];
+    }
+
+
     $path = get_upload_path_by_type('expense') . $id . '/';
     $CI   = & get_instance();
 
@@ -592,6 +709,19 @@ function handle_expense_attachments($id)
  */
 function handle_ticket_attachments($ticketid, $index_name = 'attachments')
 {
+
+    $hookData = hooks()->apply_filters('before_handle_ticket_attachment', [
+        'ticket_id' => $ticketid,
+        'index_name' => $index_name,
+        'uploaded_files' => [],
+        'handled_externally' => false, // e.g. module upload to s3
+        'files' => $_FILES
+    ]);
+
+    if ($hookData['handled_externally']) {
+        return count($hookData['uploaded_files']) > 0 ? $hookData['uploaded_files'] : false;
+    }
+
     $path           = get_upload_path_by_type('ticket') . $ticketid . '/';
     $uploaded_files = [];
 
@@ -600,6 +730,7 @@ function handle_ticket_attachments($ticketid, $index_name = 'attachments')
 
         for ($i = 0; $i < count($_FILES[$index_name]['name']); $i++) {
             hooks()->do_action('before_upload_ticket_attachment', $ticketid);
+
             if ($i <= get_option('maximum_allowed_ticket_attachments')) {
                 // Get the temp file path
                 $tmpFilePath = $_FILES[$index_name]['tmp_name'][$i];
@@ -628,12 +759,14 @@ function handle_ticket_attachments($ticketid, $index_name = 'attachments')
             }
         }
     }
+
     if (count($uploaded_files) > 0) {
         return $uploaded_files;
     }
 
     return false;
 }
+
 /**
  * Check for company logo upload
  * @return boolean
@@ -651,46 +784,58 @@ function handle_company_logo_upload()
 
             return false;
         }
-        if (isset($_FILES[$index]['name']) && $_FILES[$index]['name'] != '') {
-            hooks()->do_action('before_upload_company_logo_attachment');
-            $path = get_upload_path_by_type('company');
-            // Get the temp file path
-            $tmpFilePath = $_FILES[$index]['tmp_name'];
-            // Make sure we have a filepath
-            if (!empty($tmpFilePath) && $tmpFilePath != '') {
-                // Getting file extension
-                $extension          = strtolower(pathinfo($_FILES[$index]['name'], PATHINFO_EXTENSION));
-                $allowed_extensions = [
-                    'jpg',
-                    'jpeg',
-                    'png',
-                    'gif',
-                    'svg',
-                ];
 
-                $allowed_extensions = array_unique(
-                    hooks()->apply_filters('company_logo_upload_allowed_extensions', $allowed_extensions)
-                );
+        $hookData = hooks()->apply_filters('before_handle_company_logo_upload', [
+            'index_name' => $index,
+            'handled_externally' => false, // e.g. module upload to s3
+            'handled_externally_successfully' => false,
+            'files' => $_FILES
+        ]);
 
-                if (!in_array($extension, $allowed_extensions)) {
-                    set_alert('warning', 'Image extension not allowed.');
+        if (!$hookData['handled_externally']) {
+            if (isset($_FILES[$index]['name']) && $_FILES[$index]['name'] != '') {
+                hooks()->do_action('before_upload_company_logo_attachment');
+                $path = get_upload_path_by_type('company');
+                // Get the temp file path
+                $tmpFilePath = $_FILES[$index]['tmp_name'];
+                // Make sure we have a filepath
+                if (!empty($tmpFilePath) && $tmpFilePath != '') {
+                    // Getting file extension
+                    $extension          = strtolower(pathinfo($_FILES[$index]['name'], PATHINFO_EXTENSION));
 
-                    continue;
-                }
-
-                // Setup our new file path
-                $filename    = md5($logo . time()) . '.' . $extension;
-                $newFilePath = $path . $filename;
-                _maybe_create_upload_path($path);
-                // Upload the file into the company uploads dir
-                if (move_uploaded_file($tmpFilePath, $newFilePath)) {
-                    update_option($index, $filename);
-                    $success = true;
+                    $allowed_extensions = [
+                        'jpg',
+                        'jpeg',
+                        'png',
+                        'gif',
+                        'svg',
+                    ];
+                    
+                    $allowed_extensions = array_unique(
+                        hooks()->apply_filters('company_logo_upload_allowed_extensions', $allowed_extensions)
+                    );
+                    
+                    if (!in_array($extension, $allowed_extensions)) {
+                        set_alert('warning', 'Image extension not allowed.');
+                        
+                        continue;
+                    }
+                    
+                    // Setup our new file path
+                    $filename    = md5($logo . time()) . '.' . $extension;
+                    $newFilePath = $path . $filename;
+                    _maybe_create_upload_path($path);
+                    // Upload the file into the company uploads dir
+                    if (move_uploaded_file($tmpFilePath, $newFilePath)) {
+                        update_option($index, $filename);
+                        $success = true;
+                    }
                 }
             }
+        } else {
+            $success = $hookData['handled_externally_successfully'];
         }
     }
-
 
     return $success;
 }
@@ -705,6 +850,18 @@ function handle_company_signature_upload()
 
         return false;
     }
+
+    $hookData = hooks()->apply_filters('before_handle_company_signature_upload', [
+        'index_name' => 'signature_image',
+        'handled_externally' => false, // e.g. module upload to s3
+        'handled_externally_successfully' => false,
+        'files' => $_FILES
+    ]);
+
+    if ($hookData['handled_externally']) {
+        return $hookData['handled_externally_successfully'];
+    }
+
     if (isset($_FILES['signature_image']['name']) && $_FILES['signature_image']['name'] != '') {
         hooks()->do_action('before_upload_signature_image_attachment');
         $path = get_upload_path_by_type('company');
@@ -748,6 +905,17 @@ function handle_company_signature_upload()
  */
 function handle_favicon_upload()
 {
+    $hookData = hooks()->apply_filters('before_handle_favicon_upload', [
+        'index_name' => 'favicon',
+        'handled_externally' => false, // e.g. module upload to s3
+        'handled_externally_successfully' => false,
+        'files' => $_FILES
+    ]);
+
+    if ($hookData['handled_externally']) {
+        return $hookData['handled_externally_successfully'];
+    }
+
     if (isset($_FILES['favicon']['name']) && $_FILES['favicon']['name'] != '') {
         hooks()->do_action('before_upload_favicon_attachment');
         $path = get_upload_path_by_type('company');
@@ -785,6 +953,19 @@ function handle_staff_profile_image_upload($staff_id = '')
     if (!is_numeric($staff_id)) {
         $staff_id = get_staff_user_id();
     }
+
+    $hookData = hooks()->apply_filters('before_handle_staff_profile_image_upload', [
+        'staff_id' => $staff_id,
+        'index_name' => 'profile_image',
+        'handled_externally' => false, // e.g. module upload to s3
+        'handled_externally_successfully' => false,
+        'files' => $_FILES
+    ]);
+
+    if ($hookData['handled_externally']) {
+        return $hookData['handled_externally_successfully'];
+    }
+
     if (isset($_FILES['profile_image']['name']) && $_FILES['profile_image']['name'] != '') {
         hooks()->do_action('before_upload_staff_profile_image');
         $path = get_upload_path_by_type('staff') . $staff_id . '/';
@@ -853,6 +1034,18 @@ function handle_staff_profile_image_upload($staff_id = '')
  */
 function handle_contact_profile_image_upload($contact_id = '')
 {
+    $hookData = hooks()->apply_filters('before_handle_contact_profile_image_upload', [
+        'contact_id' => $contact_id,
+        'index_name' => 'profile_image',
+        'handled_externally' => false, // e.g. module upload to s3
+        'handled_externally_successfully' => false,
+        'files' => $_FILES
+    ]);
+
+    if ($hookData['handled_externally']) {
+        return $hookData['handled_externally_successfully'];
+    }
+
     if (isset($_FILES['profile_image']['name']) && $_FILES['profile_image']['name'] != '') {
         hooks()->do_action('before_upload_contact_profile_image');
         if ($contact_id == '') {
@@ -924,7 +1117,7 @@ function handle_contact_profile_image_upload($contact_id = '')
  * @param  mixed $discussion_id discussion id
  * @param  mixed $post_data     additional post data from the comment
  * @param  array $insert_data   insert data to be parsed if needed
- * @return arrray
+ * @return array
  */
 function handle_project_discussion_comment_attachments($discussion_id, $post_data, $insert_data)
 {
@@ -932,6 +1125,20 @@ function handle_project_discussion_comment_attachments($discussion_id, $post_dat
         header('HTTP/1.0 400 Bad error');
         echo json_encode(['message' => _perfex_upload_error($_FILES['file']['error'])]);
         die;
+    }
+
+    $hookData = hooks()->apply_filters('before_handle_project_discussion_comment_attachment', [
+        'discussion_id' => $discussion_id,
+        'post_data' => $post_data,
+        'insert_data' => $insert_data,
+        'index_name' => 'file',
+        'handled_externally' => false, // e.g. module upload to s3
+        'handled_externally_successfully' => false,
+        'files' => $_FILES
+    ]);
+
+    if ($hookData['handled_externally']) {
+        return $insert_data;
     }
 
     if (isset($_FILES['file']['name'])) {

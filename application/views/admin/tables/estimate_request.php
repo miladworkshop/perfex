@@ -2,10 +2,10 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-$has_permission_view_own = has_permission('estimate_request', '', 'view_own');
-$has_permission_view     = has_permission('estimate_request', '', 'view');
-$has_permission_edit     = has_permission('estimate_request', '', 'edit');
-$has_permission_delete   = has_permission('estimate_request', '', 'delete');
+$has_permission_view_own = staff_can('view_own',  'estimate_request');
+$has_permission_view     = staff_can('view',  'estimate_request');
+$has_permission_edit     = staff_can('edit',  'estimate_request');
+$has_permission_delete   = staff_can('delete',  'estimate_request');
 $statuses                = $this->ci->estimate_request_model->get_status();
 
 $aColumns = [
@@ -35,7 +35,7 @@ if (!$has_permission_view) {
     array_push($where, 'AND assigned =' . get_staff_user_id());
 }
 
-if (has_permission('estimate_request', '', 'view') && $this->ci->input->post('assigned')) {
+if (staff_can('view',  'estimate_request') && $this->ci->input->post('assigned')) {
     array_push($where, 'AND assigned =' . $this->ci->db->escape_str($this->ci->input->post('assigned')));
 }
 

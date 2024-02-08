@@ -593,7 +593,7 @@ function found_invoice_mode($modes, $invoiceid, $offline = true, $show_on_pdf = 
  */
 function get_invoices_percent_by_status($status)
 {
-    $has_permission_view = has_permission('invoices', '', 'view');
+    $has_permission_view = staff_can('view',  'invoices');
     $total_invoices      = total_rows(db_prefix() . 'invoices', 'status NOT IN(5)' . (!$has_permission_view ? ' AND (' . get_invoices_where_sql_for_staff(get_staff_user_id()) . ')' : ''));
 
     $data            = [];
@@ -677,7 +677,7 @@ function load_invoices_total_template()
 function get_invoices_where_sql_for_staff($staff_id)
 {
     $CI                                 = &get_instance();
-    $has_permission_view_own            = has_permission('invoices', '', 'view_own');
+    $has_permission_view_own            = staff_can('view_own',  'invoices');
     $allow_staff_view_invoices_assigned = get_option('allow_staff_view_invoices_assigned');
     $whereUser                          = '';
     if ($has_permission_view_own) {

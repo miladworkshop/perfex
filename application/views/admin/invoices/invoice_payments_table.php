@@ -33,7 +33,7 @@
                             class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700">
                             <i class="fa-regular fa-pen-to-square fa-lg"></i>
                         </a>
-                        <?php if (has_permission('payments', '', 'delete')) { ?>
+                        <?php if (staff_can('delete',  'payments')) { ?>
                         <a href="<?php echo admin_url('invoices/delete_payment/' . $payment['paymentid'] . '/' . $payment['invoiceid']); ?>"
                             class="tw-mt-px tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700 _delete">
                             <i class="fa-regular fa-trash-can fa-lg"></i>

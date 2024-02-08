@@ -773,6 +773,8 @@ function current_full_url()
  */
 function pusher_trigger_notification($users = [])
 {
+    hooks()->do_action('before_pusher_trigger_notification', $users);
+
     if (get_option('pusher_realtime_notifications') == 0) {
         return false;
     }
@@ -792,7 +794,11 @@ function pusher_trigger_notification($users = [])
 
     $CI->load->library('app_pusher');
 
-    $CI->app_pusher->trigger($channels, 'notification', []);
+    try {
+        $CI->app_pusher->trigger($channels, 'notification', []);
+    } catch(\Exception $e) {
+        update_option('pusher_realtime_notifications', '0');
+    }
 }
 
 

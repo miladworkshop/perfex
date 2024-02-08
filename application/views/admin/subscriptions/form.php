@@ -214,7 +214,7 @@
         <?php echo render_textarea('terms', 'terms_and_conditions', $value, [ 'placeholder' => _l('subscriptions_terms_info') ], [], '', 'ays-ignore'); ?>
     </div>
 </div>
-<?php if ((isset($subscription) && has_permission('subscriptions', '', 'edit')) || !isset($subscription)) { ?>
+<?php if ((isset($subscription) && staff_can('edit',  'subscriptions')) || !isset($subscription)) { ?>
 <div class="btn-bottom-toolbar text-right">
     <button type="submit" class="btn btn-primary" data-loading-text="<?php echo _l('wait_text'); ?>"
         data-form="#subscriptionForm">

@@ -52,7 +52,7 @@ function goals_global_search_result_output($output, $data)
 function goals_global_search_result_query($result, $q, $limit)
 {
     $CI = &get_instance();
-    if (has_permission('goals', '', 'view')) {
+    if (staff_can('view',  'goals')) {
         // Goals
         $CI->db->select()->from(db_prefix() . 'goals')->like('description', $q)->or_like('subject', $q)->limit($limit);
 
@@ -153,7 +153,7 @@ function goals_module_init_menu_items()
         'icon'       => 'fa-solid fa-bars-progress',
     ]);
 
-    if (has_permission('goals', '', 'view')) {
+    if (staff_can('view',  'goals')) {
         $CI->app_menu->add_sidebar_children_item('utilities', [
             'slug'     => 'goals-tracking',
             'name'     => _l('goals'),

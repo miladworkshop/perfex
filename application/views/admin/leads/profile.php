@@ -50,7 +50,7 @@
             <?php } ?>
             <?php
     } ?>
-            <?php if ((has_permission('leads', '', 'delete') && $lead_locked == false) || is_admin()) { ?>
+            <?php if ((staff_can('delete',  'leads') && $lead_locked == false) || is_admin()) { ?>
             <li>
                 <a href="<?php echo admin_url('leads/delete/' . $lead->id); ?>" class="text-danger delete-text _delete"
                     data-toggle="tooltip" title="">
@@ -102,7 +102,7 @@
         </button>
     </div>
     <?php } ?>
-    <?php if ($client && (has_permission('customers', '', 'view') || is_customer_admin(get_client_id_by_lead_id($lead->id)))) { ?>
+    <?php if ($client && (staff_can('view',  'customers') || is_customer_admin(get_client_id_by_lead_id($lead->id)))) { ?>
     <a data-toggle="tooltip" class="btn btn-success pull-right lead-top-btn lead-view" data-placement="top"
         title="<?php echo _l('lead_converted_edit_client_profile'); ?>"
         href="<?php echo admin_url('clients/client/' . get_client_id_by_lead_id($lead->id)); ?>">
@@ -349,7 +349,7 @@
                   && $lead->assigned == get_staff_user_id()
                   && $lead->addedfrom != get_staff_user_id()
                   && !is_admin($lead->assigned)
-                  && !has_permission('leads', '', 'view')
+                  && staff_cant('view', 'leads')
                ) {
                    $assigned_attrs['disabled'] = true;
                }
@@ -464,7 +464,7 @@
                         <?php } ?>
                         <div class="checkbox-inline checkbox checkbox-primary<?php if (isset($lead)) {
                    echo ' hide';
-               } ?><?php if (isset($lead) && (is_lead_creator($lead->id) || has_permission('leads', '', 'edit'))) {
+               } ?><?php if (isset($lead) && (is_lead_creator($lead->id) || staff_can('edit',  'leads'))) {
                    echo ' lead-edit';
                } ?>">
                             <input type="checkbox" name="is_public" <?php if (isset($lead)) {

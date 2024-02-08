@@ -78,7 +78,7 @@
                         <div class="mtop10"></div>
                     </div>
                     <?php if ($expense->billable == 1 && $expense->invoiceid == null) { ?>
-                    <?php if (has_permission('invoices', '', 'create')) { ?>
+                    <?php if (staff_can('create',  'invoices')) { ?>
                     <button type="button" class="btn btn-success pull-right mleft5 expense_convert_btn"
                         data-id="<?php echo $expense->expenseid; ?>" data-toggle="modal"
                         data-target="#expense_convert_helper_modal">
@@ -90,7 +90,7 @@
                         class="btn btn-primary mleft10 pull-right"><?php echo format_invoice_number($invoice->id); ?></a>
                     <?php } ?>
                     <div class="pull-right">
-                        <?php if (has_permission('expenses', '', 'edit')) { ?>
+                        <?php if (staff_can('edit',  'expenses')) { ?>
                         <a class="btn btn-default btn-with-tooltip"
                             href="<?php echo admin_url('expenses/expense/' . $expense->expenseid); ?>"
                             data-toggle="tooltip" data-placement="bottom" title="<?php echo _l('expense_edit'); ?>"><i
@@ -101,13 +101,13 @@
                             data-placement="bottom" title="<?php echo _l('print'); ?>">
                             <i class="fa fa-print"></i>
                         </a>
-                        <?php if (has_permission('expenses', '', 'create')) { ?>
+                        <?php if (staff_can('create',  'expenses')) { ?>
                         <a class="btn btn-default btn-with-tooltip"
                             href="<?php echo admin_url('expenses/copy/' . $expense->expenseid); ?>"
                             data-toggle="tooltip" data-placement="bottom" title="<?php echo _l('expense_copy'); ?>"><i
                                 class="fa-regular fa-copy"></i></a>
                         <?php } ?>
-                        <?php if (has_permission('expenses', '', 'delete')) { ?>
+                        <?php if (staff_can('delete',  'expenses')) { ?>
                         <a class="btn btn-danger btn-with-tooltip _delete"
                             href="<?php echo admin_url('expenses/delete/' . $expense->expenseid); ?>"
                             data-toggle="tooltip" data-placement="bottom" title="<?php echo _l('expense_delete'); ?>"><i
@@ -329,7 +329,7 @@
             </div>
             <?php } ?>
             <div role="tabpanel" class="tab-pane" id="tab_tasks">
-                <?php init_relation_tasks_table(['data-new-rel-id' => $expense->expenseid, 'data-new-rel-type' => 'expense']); ?>
+                <?php init_relation_tasks_table(['data-new-rel-id' => $expense->expenseid, 'data-new-rel-type' => 'expense'], 'tasksFilters'); ?>
             </div>
             <div role="tabpanel" class="tab-pane" id="tab_reminders">
                 <a href="#" data-toggle="modal" class="btn btn-default"

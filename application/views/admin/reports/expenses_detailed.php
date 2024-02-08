@@ -45,40 +45,20 @@
                             <?php echo _l('go_back'); ?>
                         </a>
 
-                        <?php $this->load->view('admin/expenses/filter_by_template'); ?>
+                        <div id="vueApp" class="tw-inline pull-right tw-ml-0 sm:tw-ml-1.5">
+                            <app-filters 
+                                id="<?php echo $table->id(); ?>" 
+                                view="<?php echo $table->viewName(); ?>"
+                                :saved-filters="<?php echo $table->filtersJs(); ?>"
+                                :available-rules="<?php echo $table->rulesJs(); ?>">
+                            </app-filters>
+                        </div>
                     </div>
                 </div>
                 <div class="panel_s">
                     <div class="panel-body">
-
-                        <div id="date-range" class="mbot15">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="report-from"
-                                        class="control-label"><?php echo _l('report_sales_from_date'); ?></label>
-                                    <div class="input-group date">
-                                        <input type="text" class="form-control datepicker" id="report-from"
-                                            name="report-from">
-                                        <div class="input-group-addon">
-                                            <i class="fa-regular fa-calendar calendar-icon"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="report-to"
-                                        class="control-label"><?php echo _l('report_sales_to_date'); ?></label>
-                                    <div class="input-group date">
-                                        <input type="text" class="form-control datepicker" disabled="disabled"
-                                            id="report-to" name="report-to">
-                                        <div class="input-group-addon">
-                                            <i class="fa-regular fa-calendar calendar-icon"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="panel-table-full">
-                            <table class="table dt-table-loading table-expenses">
+                            <table class="table dt-table-loading table-expenses" id="expenses_detailed_report">
                                 <thead>
                                     <tr>
                                         <th><?php echo _l('expense_dt_table_heading_category'); ?></th>
@@ -126,53 +106,12 @@
 
 <script>
 $(function() {
-
-    var report_from = $('input[name="report-from"]');
-    var report_to = $('input[name="report-to"]');
-    var filter_selector_helper =
-        '.expenses-filter-year,.expenses-filter-month-wrapper,.expenses-filter-month,.months-divider,.years-divider';
-
     var Expenses_ServerParams = {};
-    $.each($('._hidden_inputs._filters input'), function() {
-        Expenses_ServerParams[$(this).attr('name')] = '[name="' + $(this).attr('name') + '"]';
-    });
-
     Expenses_ServerParams['currency'] = '[name="currencies"]';
-    Expenses_ServerParams['report_from'] = '[name="report-from"]';
-    Expenses_ServerParams['report_to'] = '[name="report-to"]';
-
+ 
     initDataTable('.table-expenses', window.location.href, 'undefined', 'undefined', Expenses_ServerParams, [8,
         'desc'
     ]);
-
-    report_from.on('change', function() {
-        var val = $(this).val();
-        var report_to_val = report_to.val();
-        if (val != '') {
-            report_to.attr('disabled', false);
-            $(filter_selector_helper).removeClass('active').addClass('hide');
-            $('input[name^="year_"]').val('');
-            $('input[name^="expenses_by_month_"]').val('');
-        } else {
-            report_to.attr('disabled', true);
-        }
-
-        if ((report_to_val != '' && val != '') || (val == '' && report_to_val == '') || (val == '' &&
-                report_to_val != '')) {
-            $('.table-expenses').DataTable().ajax.reload();
-        }
-
-        if (val == '' && report_to_val == '' || report_to.is(':disabled') && val == '') {
-            $(filter_selector_helper).removeClass('hide');
-        }
-    });
-
-    report_to.on('change', function() {
-        var val = $(this).val();
-        if (val != '') {
-            $('.table-expenses').DataTable().ajax.reload();
-        }
-    });
 
     $('.table-expenses').on('draw.dt', function() {
         var expenseReportsTable = $(this).DataTable();

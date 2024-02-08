@@ -26,7 +26,7 @@ $join = hooks()->apply_filters('projects_timesheets_table_sql_join', $join);
 
 $where = ['AND task_id IN (SELECT id FROM ' . db_prefix() . 'tasks WHERE rel_id="' . $this->ci->db->escape_str($project_id) . '" AND rel_type="project")'];
 
-if (!has_permission('projects', '', 'create')) {
+if (staff_cant('create', 'projects')) {
     array_push($where, 'AND ' . db_prefix() . 'taskstimers.staff_id=' . get_staff_user_id());
 }
 
@@ -71,7 +71,7 @@ foreach ($rResult as $aRow) {
             $_data .= '<a href="' . admin_url('staff/profile/' . $aRow['staff_id']) . '"> ' . staff_profile_image($aRow['staff_id'], [
                 'staff-profile-image-xs mright5',
                 ]) . '</a>';
-            if (has_permission('staff', '', 'edit')) {
+            if (staff_can('edit',  'staff')) {
                 $_data .= ' <a href="' . admin_url('staff/member/' . $aRow['staff_id']) . '"> ' . $aRow['staff'] . '</a>';
             } else {
                 $_data .= $aRow['staff'];

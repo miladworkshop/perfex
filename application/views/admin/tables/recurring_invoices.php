@@ -61,7 +61,7 @@ if (count($filter) > 0) {
     array_push($where, 'AND (' . prepare_dt_filter($filter) . ')');
 }
 
-if (!has_permission('invoices', '', 'view')) {
+if (staff_cant('view', 'invoices')) {
     $userWhere = 'AND ' . get_invoices_where_sql_for_staff(get_staff_user_id());
     array_push($where, $userWhere);
 }
@@ -94,7 +94,7 @@ foreach ($rResult as $aRow) {
 
     $numberOutput .= '<a href="' . site_url('invoice/' . $aRow['id'] . '/' . $aRow['hash']) . '" target="_blank">' . _l('view') . '</a>';
 
-    if (has_permission('invoices', '', 'edit')) {
+    if (staff_can('edit',  'invoices')) {
         $numberOutput .= ' | <a href="' . admin_url('invoices/invoice/' . $aRow['id']) . '">' . _l('edit') . '</a>';
     }
 

@@ -69,6 +69,18 @@ function admin_url($url = '')
 }
 
 /**
+ * @since 3.1.0
+ * @param string $capability 
+ * @param string $feature 
+ * @param string $staff_id 
+ * @return bool 
+ */
+function staff_cant($capability, $feature = null, $staff_id = '') 
+{
+    return !staff_can($capability, $feature, $staff_id);
+}
+
+/**
  * @since  2.3.3
  * Helper function for checking staff capabilities, this function should be used instead of has_permission
  * Can be used e.q. staff_can('view', 'invoices');
@@ -171,9 +183,10 @@ function has_role_permission($role_id, $capability, $feature)
 
 /**
  * @since 1.0.0
- * NOTE: This function will be deprecated in future updates, use staff_can($do, $feature = null, $staff_id = '') instead
+ * @deprecated 3.1.0
  *
  * Check if staff user has permission
+ * 
  * @param  string  $permission permission shortname
  * @param  mixed  $staffid if you want to check for particular staff
  * @return boolean
@@ -182,6 +195,7 @@ function has_permission($permission, $staffid = '', $can = '')
 {
     return staff_can($can, $permission, $staffid);
 }
+
 /**
  * @since  1.0.0
  * Load language in admin area
@@ -339,7 +353,7 @@ function render_admin_js_variables()
         'allowed_files'                               => get_option('allowed_files'),
         'desktop_notifications'                       => get_option('desktop_notifications'),
         'show_table_export_button'                    => get_option('show_table_export_button'),
-        'has_permission_tasks_checklist_items_delete' => has_permission('checklist_templates', '', 'delete'),
+        'has_permission_tasks_checklist_items_delete' => staff_can('delete',  'checklist_templates'),
         'show_setup_menu_item_only_on_hover'          => get_option('show_setup_menu_item_only_on_hover'),
         'newsfeed_maximum_files_upload'               => get_option('newsfeed_maximum_files_upload'),
         'dismiss_desktop_not_after'                   => get_option('auto_dismiss_desktop_notifications_after'),
@@ -405,6 +419,47 @@ function render_admin_js_variables()
         'ticket'                                                  => _l('ticket'),
         'lead'                                                    => _l('lead'),
         'create_reminder'                                         => _l('create_reminder'),
+
+        'filter_boolean_yes' => _l('filter_boolean_yes'),
+        'filter_boolean_no' => _l('filter_boolean_no'),
+        'filter_matchtype_and' => _l('filter_matchtype_and'),
+        'filter_matchtype_or' => _l('filter_matchtype_or'),
+        'filter_share' => _l('filter_share'),
+        'filter_mark_as_default' => _l('filter_mark_as_default'),
+        'filter_unmark_as_default' => _l('filter_unmark_as_default'),
+        'filter_save' => _l('filter_save'),
+        'filter_name' => _l('filter_name'),
+        'filter_apply' => _l('filter_apply'),
+        'filter_apply_and_save' => _l('filter_apply_and_save'),
+        'filter_new' => _l('filter_new'),
+        'filter_clear_active' => _l('filter_clear_active'),
+        'filter_edit' => _l('filter_edit'),
+        'filter_create' => _l('filter_create'),
+        'filter_update' => _l('filter_update'),
+        'filter_delete' => _l('filter_delete'),
+        'filter_cannot_be_shared' => _l('filter_cannot_be_shared'),
+        'filter_add_rule' => _l('filter_add_rule'),
+        'filter_operator_is_empty' => _l('filter_operator_is_empty'),
+        'filter_operator_is_not_empty' => _l('filter_operator_is_not_empty'),
+        'filter_operator_equal' => _l('filter_operator_equal'),
+        'filter_operator_not_equal' => _l('filter_operator_not_equal'),
+        'filter_operator_begins_with' => _l('filter_operator_begins_with'),
+        'filter_operator_not_begins_with' => _l('filter_operator_not_begins_with'),
+        'filter_operator_contains' => _l('filter_operator_contains'),
+        'filter_operator_not_contains' => _l('filter_operator_not_contains'),
+        'filter_operator_ends_with' => _l('filter_operator_ends_with'),
+        'filter_operator_not_ends_with' => _l('filter_operator_not_ends_with'),
+        'filter_operator_in' => _l('filter_operator_in'),
+        'filter_operator_not_in' => _l('filter_operator_not_in'),
+        'filter_operator_between' => _l('filter_operator_between'),
+        'filter_operator_not_between' => _l('filter_operator_not_between'),
+        'filter_operator_dynamic' => _l('filter_operator_dynamic'),
+        'filter_operator_greater' => _l('filter_operator_greater'),
+        'filter_operator_greater_or_equal' => _l('filter_operator_greater_or_equal'),
+        'filter_operator_less' => _l('filter_operator_less'),
+        'filter_operator_less_or_equal' => _l('filter_operator_less_or_equal'),
+        'filter_use_dynamic_dates' => _l('filter_use_dynamic_dates'),
+        'no_filters_found' => _l('no_filters_found'),
     ];
 
     echo '<script>';
@@ -412,7 +467,6 @@ function render_admin_js_variables()
     echo 'var site_url = "' . site_url() . '";';
     echo 'var admin_url = "' . admin_url() . '";';
 
-    echo 'var app = {};';
     echo 'var app = {};';
 
     echo 'app.available_tags = ' . json_encode(get_tags_clean()) . ';';
@@ -422,12 +476,14 @@ function render_admin_js_variables()
     echo 'app.tinymce_lang = "' . get_tinymce_language($GLOBALS['locale']) . '";';
     echo 'app.locale = "' . $GLOBALS['locale'] . '";';
     echo 'app.browser = "' . strtolower($CI->agent->browser()) . '";';
+    echo 'app.user_id = "' . get_staff_user_id() . '";';
     echo 'app.user_language = "' . get_staff_default_language() . '";';
     echo 'app.is_mobile = "' . is_mobile() . '";';
     echo 'app.user_is_staff_member = "' . is_staff_member() . '";';
     echo 'app.user_is_admin = "' . is_admin() . '";';
     echo 'app.max_php_ini_upload_size_bytes = "' . $maxUploadSize . '";';
     echo 'app.calendarIDs = "";';
+    echo 'app.dtFilters = {};';
 
     echo 'app.options = {};';
     echo 'app.lang = {};';
@@ -468,7 +524,7 @@ function render_admin_js_variables()
         'calendarIDs'                                 => '', // done, dont do nothing
         'is_admin'                                    => is_admin(), // done, dont do nothing
         'is_staff_member'                             => is_staff_member(), // done, dont do nothing
-        'has_permission_tasks_checklist_items_delete' => has_permission('checklist_templates', '', 'delete'), // done, dont do nothing
+        'has_permission_tasks_checklist_items_delete' => staff_can('delete',  'checklist_templates'), // done, dont do nothing
         'app_show_setup_menu_item_only_on_hover'      => get_option('show_setup_menu_item_only_on_hover'), // done, dont to nothing
         'app_newsfeed_maximum_files_upload'           => get_option('newsfeed_maximum_files_upload'), // done, dont to nothing
         'app_dismiss_desktop_not_after'               => get_option('auto_dismiss_desktop_notifications_after'), // done, dont to nothing

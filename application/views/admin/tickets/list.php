@@ -2,6 +2,7 @@
 <?php init_head(); ?>
 <div id="wrapper">
     <div class="content">
+        <div id="vueApp">
         <div class="row">
             <div class="col-md-12">
                 <div class="_buttons tw-mb-2 sm:tw-mb-4">
@@ -10,58 +11,21 @@
                         <i class="fa-regular fa-plus tw-mr-1"></i>
                         <?php echo _l('new_ticket'); ?>
                     </a>
+             
                     <a href="#" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" data-placement="bottom"
                         data-title="<?php echo _l('tickets_chart_weekly_opening_stats'); ?>"
-                        onclick="slideToggle('.weekly-ticket-opening',init_tickets_weekly_chart); return false;"><i
-                            class="fa fa-bar-chart"></i></a>
-                    <div class="btn-group pull-right mleft4 btn-with-tooltip-group _filter_data" data-toggle="tooltip"
-                        data-title="<?php echo _l('filter_by'); ?>">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-filter" aria-hidden="true"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-right width300">
-                            <li>
-                                <a href="#" data-cview="all"
-                                    onclick="dt_custom_view('','.tickets-table',''); return false;">
-                                    <?php echo _l('task_list_all'); ?>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="" data-cview="my_tickets"
-                                    onclick="dt_custom_view('my_tickets','.tickets-table','my_tickets'); return false;"><?php echo _l('my_tickets_assigned'); ?></a>
-                            </li>
-                            <li>
-                                <a href="" data-cview="merged_tickets"
-                                    onclick="dt_custom_view('merged_tickets','.tickets-table','merged_tickets'); return false;"><?php echo _l('merged'); ?></a>
-                            </li>
-                            <li class="divider"></li>
-                            <?php foreach ($statuses as $status) { ?>
-                            <li class="<?php if ($status['ticketstatusid'] == $chosen_ticket_status || $chosen_ticket_status == '' && in_array($status['ticketstatusid'], $default_tickets_list_statuses)) {
-    echo 'active';
-} ?>">
-                                <a href="#" data-cview="ticket_status_<?php echo $status['ticketstatusid']; ?>"
-                                    onclick="dt_custom_view('ticket_status_<?php echo $status['ticketstatusid']; ?>','.tickets-table','ticket_status_<?php echo $status['ticketstatusid']; ?>'); return false;">
-                                    <?php echo ticket_status_translate($status['ticketstatusid']); ?>
-                                </a>
-                            </li>
-                            <?php } ?>
-                            <?php if (count($ticket_assignees) > 0 && is_admin()) { ?>
-                            <div class="clearfix"></div>
-                            <li class="divider"></li>
-                            <li class="dropdown-submenu pull-left">
-                                <a href="#" tabindex="-1"><?php echo _l('filter_by_assigned'); ?></a>
-                                <ul class="dropdown-menu dropdown-menu-left">
-                                    <?php foreach ($ticket_assignees as $as) { ?>
-                                    <li>
-                                        <a href="#" data-cview="ticket_assignee_<?php echo $as['assigned']; ?>"
-                                            onclick="dt_custom_view(<?php echo $as['assigned']; ?>,'.tickets-table','ticket_assignee_<?php echo $as['assigned']; ?>'); return false;"><?php echo get_staff_full_name($as['assigned']); ?></a>
-                                    </li>
-                                    <?php } ?>
-                                </ul>
-                            </li>
-                            <?php } ?>
-                        </ul>
+                        onclick="slideToggle('.weekly-ticket-opening', init_tickets_weekly_chart); return false;">
+                        <i class="fa fa-bar-chart"></i>
+                    </a>
+
+                    <div class="tw-inline pull-right">
+                            <app-filters
+                                id="<?php echo $table->id(); ?>"
+                                view="<?php echo $table->viewName(); ?>"
+                                :rules="extra.ticketsRules || <?php echo app\services\utilities\Js::from($chosen_ticket_status ? $table->findRule('status')->setValue([(int) $chosen_ticket_status]) : []); ?>"
+                                :saved-filters="<?php echo $table->filtersJs(); ?>"
+                                :available-rules="<?php echo $table->rulesJs(); ?>">
+                            </app-filters>
                     </div>
                 </div>
                 <div class="panel_s">
@@ -83,7 +47,11 @@
                         </div>
 
                         <?php hooks()->do_action('before_render_tickets_list_table'); ?>
-                        <?php $this->load->view('admin/tickets/summary'); ?>
+                        <?php $this->load->view('admin/tickets/summary', [
+                            'hrefAttrs'=> function($status) use ($table) {
+                                return '@click.prevent="extra.ticketsRules = '.app\services\utilities\Js::from($table->findRule('status')->setValue([(int) $status['ticketstatusid']])).'"';
+                            }
+                        ]); ?>
                         <hr class="hr-panel-separator" />
                         <a href="#" data-toggle="modal" data-target="#tickets_bulk_actions"
                             class="bulk-actions-btn table-btn hide"
@@ -95,6 +63,7 @@
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </div>
 </div>

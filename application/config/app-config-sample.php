@@ -39,14 +39,17 @@ define('APP_ENC_KEY', '[encryption_key]');
  * The hostname of your database server
  */
 define('APP_DB_HOSTNAME', '[db_hostname]');
+
 /**
  * The username used to connect to the database
  */
 define('APP_DB_USERNAME', '[db_username]');
+
 /**
  * The password used to connect to the database
  */
 define('APP_DB_PASSWORD', '[db_password]');
+
 /**
  * The name of the database you want to connect to
  */
@@ -56,12 +59,13 @@ define('APP_DB_NAME', '[db_name]');
  * @since  2.3.0
  * Database charset
  */
-define('APP_DB_CHARSET', 'utf8');
+define('APP_DB_CHARSET', 'utf8mb4');
+
 /**
  * @since  2.3.0
  * Database collation
  */
-define('APP_DB_COLLATION', 'utf8_general_ci');
+define('APP_DB_COLLATION', 'utf8mb4_unicode_ci');
 
 /**
  *

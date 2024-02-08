@@ -3172,7 +3172,7 @@ function mainWrapperHeightFix() {
 function set_body_small() {
   var isIpad = navigator.userAgent.match(/iPad/i) != null;
 
-  if ($(this).width() < 769 || isIpad) {
+  if ($(this).width() < 769 || isIpad || is_mobile()) {
     $("body").addClass("page-small");
   } else {
     $("body").removeClass("page-small show-sidebar");
@@ -3410,6 +3410,7 @@ function initDataTable(
       type: "POST",
       data: function (d) {
         if (Array.isArray(d.order)) {
+
           d.order = d.order.map(function (order) {
             var tHead = table.find("thead th:eq(" + order.column + ")");
             if (tHead.length > 0) {
@@ -3424,11 +3425,19 @@ function initDataTable(
         if (typeof csrfData !== "undefined") {
           d[csrfData["token_name"]] = csrfData["hash"];
         }
+
         for (var key in fnserverparams) {
           d[key] = $(fnserverparams[key]).val();
         }
+
         if (table.attr("data-last-order-identifier")) {
           d["last_order_identifier"] = table.attr("data-last-order-identifier");
+        }
+
+        var tId = table[0].getAttribute('id');
+
+        if(tId && Object.hasOwn(app.dtFilters, tId)) {
+          d['filters'] = app.dtFilters[tId]
         }
       },
     },
@@ -5500,6 +5509,7 @@ function init_proposal_editor() {
     },
     fontsize_formats: "8pt 10pt 12pt 14pt 18pt 24pt 36pt",
     pagebreak_separator: '<p pagebreak="true"></p>',
+    pagebreak_split_block: true,
     plugins: [
       "advlist pagebreak autolink autoresize lists link image charmap hr",
       "searchreplace visualblocks visualchars code",
@@ -6865,7 +6875,7 @@ function load_small_table_item(id, selector, input_name, url, table) {
   }
   $('input[name="' + input_name + '"]').val(id);
   do_hash_helper(id);
-  $(selector).load(admin_url + url + "/" + id);
+  $(selector).load(admin_url + url + "/" + id)
 
   $("html, body").animate(
     {
@@ -9062,6 +9072,7 @@ function add_template(rel_type, rel_id) {
         },
         fontsize_formats: "8pt 10pt 12pt 14pt 18pt 24pt 36pt",
         pagebreak_separator: '<p pagebreak="true"></p>',
+        pagebreak_split_block: true,
         contextmenu:
           "link image inserttable | cell row column deletetable | paste copy | pagebreak",
         append_plugins: "pagebreak",
@@ -9099,6 +9110,7 @@ function edit_template(rel_type, id, rel_id) {
         },
         fontsize_formats: "8pt 10pt 12pt 14pt 18pt 24pt 36pt",
         pagebreak_separator: '<p pagebreak="true"></p>',
+        pagebreak_split_block: true,
         contextmenu:
           "link image inserttable | cell row column deletetable | paste copy | pagebreak",
         append_plugins: "pagebreak",

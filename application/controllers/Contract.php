@@ -28,13 +28,7 @@ class Contract extends ClientsController
                     break;
             case 'sign_contract':
                     process_digital_signature_image($this->input->post('signature', false), CONTRACTS_UPLOADS_FOLDER . $id);
-                    $this->db->where('id', $id);
-                    $this->db->update(db_prefix().'contracts', array_merge(get_acceptance_info_array(), [
-                        'signed' => 1,
-                    ]));
-
-                    // Notify contract creator that customer signed the contract
-                    send_contract_signed_notification_to_staff($id);
+                    $this->contracts_model->add_signature($id);
 
                     set_alert('success', _l('document_signed_successfully'));
                     redirect($_SERVER['HTTP_REFERER']);

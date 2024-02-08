@@ -39,7 +39,7 @@ abstract class AbstractGantt
             $data['dependencies'] = $dep_id;
         }
 
-        if (!staff_can('edit', 'tasks') || is_client_logged_in()) {
+        if (staff_cant('edit', 'tasks') || is_client_logged_in()) {
             if (isset($data['custom_class'])) {
                 $data['custom_class'] .= ' noDrag';
             } else {

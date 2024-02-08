@@ -29,11 +29,15 @@ $(function() {
         $('body').find('.nav-tabs [href="#' + tab_active + '"]').click();
     }
 
+    if(tab_active === 'customer_admins') {
+        $('#profile-save-section').addClass('hide');
+    }
+
     $('a[href="#customer_admins"]').on('click', function() {
         $('#profile-save-section').addClass('hide');
     });
 
-    $('.profile-tabs a').not('a[href="#customer_admins"]').on('click', function() {
+    $('.customer-profile-tabs  a').not('a[href="#customer_admins"]').on('click', function() {
         $('#profile-save-section').removeClass('hide');
     });
 

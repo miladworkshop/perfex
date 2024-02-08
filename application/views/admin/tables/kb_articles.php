@@ -37,7 +37,7 @@ if (count($filter) > 0) {
     array_push($where, 'AND (' . prepare_dt_filter($filter) . ')');
 }
 
-if (!has_permission('knowledge_base', '', 'create') && !has_permission('knowledge_base', '', 'edit')) {
+if (staff_cant('create', 'knowledge_base') && staff_cant('edit', 'knowledge_base')) {
     array_push($where, ' AND ' . db_prefix() . 'knowledge_base.active=1');
 }
 
@@ -57,7 +57,7 @@ foreach ($rResult as $aRow) {
                 $link = site_url('knowledge-base/article/' . $aRow['slug']);
             }
 
-            if (has_permission('knowledge_base', '', 'edit')) {
+            if (staff_can('edit',  'knowledge_base')) {
                 $_data = '<a href="' . admin_url('knowledge_base/article/' . $aRow['articleid']) . '">' . $_data . '</a>';
             } else {
                 $_data = '<a href="' . $link . '" target="_blank">' . $_data . '</a>';
@@ -71,11 +71,11 @@ foreach ($rResult as $aRow) {
 
             $_data .= '<a href="' . $link . '" target="_blank">' . _l('view') . '</a>';
 
-            if (has_permission('knowledge_base', '', 'edit')) {
+            if (staff_can('edit',  'knowledge_base')) {
                 $_data .= ' | <a href="' . admin_url('knowledge_base/article/' . $aRow['articleid']) . '">' . _l('edit') . '</a>';
             }
 
-            if (has_permission('knowledge_base', '', 'delete')) {
+            if (staff_can('delete',  'knowledge_base')) {
                 $_data .= ' | <a href="' . admin_url('knowledge_base/delete_article/' . $aRow['articleid']) . '" class="_delete text-danger">' . _l('delete') . '</a>';
             }
 

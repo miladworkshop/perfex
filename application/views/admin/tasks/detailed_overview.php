@@ -16,7 +16,7 @@
                         <?php } ?>
                     </div>
                     <?php echo form_hidden('project_id', $this->input->get('project_id')); ?>
-                    <?php if (has_permission('tasks', '', 'view')) { ?>
+                    <?php if (staff_can('view',  'tasks')) { ?>
                     <div class="col-md-2 border-right">
                         <?php
                            echo render_select('member', $members, ['staffid', ['firstname', 'lastname']], '', $staff_id, ['data-none-selected-text' => _l('all_staff_members')], [], 'no-margin'); ?>
@@ -78,7 +78,7 @@
                             <?php if ($this->input->get('project_id')) {
                                    echo ' - ' . get_project_name_by_id($this->input->get('project_id'));
                                } ?>
-                            <?php if (is_numeric($staff_id) && has_permission('tasks', '', 'view')) {
+                            <?php if (is_numeric($staff_id) && staff_can('view',  'tasks')) {
                                    echo ' (' . get_staff_full_name($staff_id) . ')';
                                } ?>
                         </h4>

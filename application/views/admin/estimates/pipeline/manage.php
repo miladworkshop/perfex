@@ -5,12 +5,12 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="_buttons tw-mb-3 sm:tw-mb-5">
-                    <?php if (has_permission('estimates', '', 'create')) {
+                    <?php if (staff_can('create',  'estimates')) {
     $this->load->view('admin/estimates/estimates_top_stats');
 } ?>
                     <div class="row">
                         <div class="col-md-8">
-                            <?php if (has_permission('estimates', '', 'create')) { ?>
+                            <?php if (staff_can('create',  'estimates')) { ?>
                             <a href="<?php echo admin_url('estimates/estimate'); ?>"
                                 class="btn btn-primary pull-left new">
                                 <i class="fa-regular fa-plus tw-mr-1"></i>

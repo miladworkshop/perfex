@@ -58,7 +58,7 @@ foreach ($rResult as $aRow) {
           </a>';
     }
 
-    if (has_permission('customers', '', 'delete') || is_customer_admin($aRow['userid'])) {
+    if (staff_can('delete',  'customers') || is_customer_admin($aRow['userid'])) {
         if ($aRow['is_primary'] == 0 || ($aRow['is_primary'] == 1 && $total_client_contacts == 1)) {
             $rowName .= ' | <a href="' . admin_url('clients/delete_contact/' . $aRow['userid'] . '/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
         }
@@ -100,5 +100,8 @@ foreach ($rResult as $aRow) {
     }
 
     $row['DT_RowClass'] = 'has-row-options';
+
+
+    $row = hooks()->apply_filters('admin_customer_contacts_table_row', $row, $aRow);
     $output['aaData'][] = $row;
 }

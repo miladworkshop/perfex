@@ -33,7 +33,7 @@ foreach ($rResult as $aRow) {
 
             $_data .= ' | <a href="' . admin_url('surveys/survey/' . $aRow['surveyid']) . '">' . _l('edit') . '</a>';
 
-            if (has_permission('surveys', '', 'delete')) {
+            if (staff_can('delete',  'surveys')) {
                 $_data .= ' | <a href="' . admin_url('surveys/delete/' . $aRow['surveyid']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
             }
 

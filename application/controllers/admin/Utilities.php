@@ -276,7 +276,7 @@ class Utilities extends AdminController
 
     public function bulk_pdf_exporter()
     {
-        if (!has_permission('bulk_pdf_exporter', '', 'view')) {
+        if (staff_cant('view', 'bulk_pdf_exporter')) {
             access_denied('bulk_pdf_exporter');
         }
 
@@ -313,8 +313,8 @@ class Utilities extends AdminController
 
         $features = [];
 
-        if (has_permission('invoices', '', 'view')
-        || has_permission('invoices', '', 'view_own')
+        if (staff_can('view',  'invoices')
+        || staff_can('view_own',  'invoices')
         || get_option('allow_staff_view_invoices_assigned') == '1') {
             $features[] = [
                 'feature' => 'invoices',
@@ -322,8 +322,8 @@ class Utilities extends AdminController
             ];
         }
 
-        if (has_permission('estimates', '', 'view')
-            || has_permission('estimates', '', 'view_own')
+        if (staff_can('view',  'estimates')
+            || staff_can('view_own',  'estimates')
             || get_option('allow_staff_view_estimates_assigned') == '1') {
             $features[] = [
                 'feature' => 'estimates',
@@ -331,22 +331,22 @@ class Utilities extends AdminController
             ];
         }
 
-        if (has_permission('payments', '', 'view') || has_permission('invoices', '', 'view_own')) {
+        if (staff_can('view',  'payments') || staff_can('view_own',  'invoices')) {
             $features[] = [
                 'feature' => 'payments',
                 'name'    => _l('bulk_export_pdf_payments'),
             ];
         }
 
-        if (has_permission('credit_notes', '', 'view') || has_permission('credit_notes', '', 'view_own')) {
+        if (staff_can('view',  'credit_notes') || staff_can('view_own',  'credit_notes')) {
             $features[] = [
                 'feature' => 'credit_notes',
                 'name'    => _l('credit_notes'),
             ];
         }
 
-        if (has_permission('proposals', '', 'view')
-            || has_permission('proposals', '', 'view_own')
+        if (staff_can('view',  'proposals')
+            || staff_can('view_own',  'proposals')
             || get_option('allow_staff_view_proposals_assigned') == '1') {
             $features[] = [
                 'feature' => 'proposals',
@@ -354,8 +354,8 @@ class Utilities extends AdminController
             ];
         }
 
-        if (has_permission('expenses', '', 'view')
-            || has_permission('expenses', '', 'view_own')) {
+        if (staff_can('view',  'expenses')
+            || staff_can('view_own',  'expenses')) {
             $features[] = [
                 'feature' => 'expenses',
                 'name'    => _l('expenses'),

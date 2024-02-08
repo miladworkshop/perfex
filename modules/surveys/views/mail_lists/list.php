@@ -10,7 +10,7 @@
                     </h4>
                     <?php if (isset($list)) { ?>
                     <div>
-                        <?php if (has_permission('surveys', '', 'create')) { ?>
+                        <?php if (staff_can('create',  'surveys')) { ?>
                         <a href="<?php echo admin_url('surveys/mail_list'); ?>"
                             class="btn btn-success btn-sm pull-left display-block">
                             <i class="fa-regular fa-plus tw-mr-1"></i>

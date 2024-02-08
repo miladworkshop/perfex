@@ -30,7 +30,7 @@ foreach ($rResult as $aRow) {
             $_data .= '<div class="row-options">';
             $_data .= '<a href="' . admin_url('goals/goal/' . $aRow['id']) . '">' . _l('view') . '</a>';
 
-            if (has_permission('goals', '', 'delete')) {
+            if (staff_can('delete',  'goals')) {
                 $_data .= ' | <a href="' . admin_url('goals/delete/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
             }
             $_data .= '</div>';

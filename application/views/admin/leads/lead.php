@@ -243,11 +243,11 @@ if (isset($lead)) {
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="tab_proposals_leads">
-                    <?php if (has_permission('proposals', '', 'create')) { ?>
+                    <?php if (staff_can('create',  'proposals')) { ?>
                     <a href="<?php echo admin_url('proposals/proposal?rel_type=lead&rel_id=' . $lead->id); ?>"
                         class="btn btn-primary mbot25"><?php echo _l('new_proposal'); ?></a>
                     <?php } ?>
-                    <?php if (total_rows(db_prefix() . 'proposals', ['rel_type' => 'lead', 'rel_id' => $lead->id]) > 0 && (has_permission('proposals', '', 'create') || has_permission('proposals', '', 'edit'))) { ?>
+                    <?php if (total_rows(db_prefix() . 'proposals', ['rel_type' => 'lead', 'rel_id' => $lead->id]) > 0 && (staff_can('create',  'proposals') || staff_can('edit',  'proposals'))) { ?>
                     <a href="#" class="btn btn-primary mbot25" data-toggle="modal"
                         data-target="#sync_data_proposal_data"><?php echo _l('sync_data'); ?></a>
                     <?php $this->load->view('admin/proposals/sync_data', ['related' => $lead, 'rel_id' => $lead->id, 'rel_type' => 'lead']); ?>
@@ -277,7 +277,7 @@ if (isset($lead)) {
                   ?>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="tab_tasks_leads">
-                    <?php init_relation_tasks_table(['data-new-rel-id' => $lead->id, 'data-new-rel-type' => 'lead']); ?>
+                    <?php init_relation_tasks_table(['data-new-rel-id' => $lead->id, 'data-new-rel-type' => 'lead'], 'tasksFilters'); ?>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="lead_reminders">
                     <a href="#" data-toggle="modal" class="btn btn-default"

@@ -1,6 +1,7 @@
 <?php
 
 defined('BASEPATH') or exit('No direct script access allowed');
+$this->ci->load->model('expenses_model');
 
 if ($this->ci->input->post('invoiced')) {
     array_push($filter, 'OR invoiceid IS NOT NULL');

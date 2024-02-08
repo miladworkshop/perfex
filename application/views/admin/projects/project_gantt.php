@@ -22,7 +22,7 @@
                                             echo ' selected';
                                         } ?>>
                     <?php
-                    if (has_permission('tasks', '', 'view') || (!has_permission('tasks', '', 'view') && get_option('show_all_tasks_for_project_member') == 1)) {
+                    if (staff_can('view',  'tasks') || (staff_cant('view', 'tasks') && get_option('show_all_tasks_for_project_member') == 1)) {
                         echo _l('project_members');
                     } else {
                         echo _l('home_my_tasks');

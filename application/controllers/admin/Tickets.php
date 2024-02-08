@@ -24,8 +24,10 @@ class Tickets extends AdminController
             $status = '';
         }
 
+        $data['table'] = App_table::find('tickets');
+
         if ($this->input->is_ajax_request()) {
-            if (!$this->input->post('filters_ticket_id')) {
+            if (!$this->input->post('via_ticket')) {
                 $tableParams = [
                     'status' => $status,
                     'userid' => $userid,
@@ -33,16 +35,16 @@ class Tickets extends AdminController
             } else {
                 // request for othes tickets when single ticket is opened
                 $tableParams = [
-                'userid'              => $this->input->post('filters_userid'),
-                'where_not_ticket_id' => $this->input->post('filters_ticket_id'),
-            ];
+                    'userid'        => $this->input->post('via_ticket_userid'),
+                    'via_ticket' => $this->input->post('via_ticket'),
+                ];
+
                 if ($tableParams['userid'] == 0) {
                     unset($tableParams['userid']);
-                    $tableParams['by_email'] = $this->input->post('filters_email');
+                    $tableParams['by_email'] = $this->input->post('via_ticket_email');
                 }
             }
-
-            $this->app->get_table_data('tickets', $tableParams);
+            $data['table']->output($tableParams);
         }
 
         $data['chosen_ticket_status']              = $status;

@@ -397,7 +397,7 @@ class Estimates_model extends App_Model
     public function get_estimates_total($data)
     {
         $statuses            = $this->get_statuses();
-        $has_permission_view = has_permission('estimates', '', 'view');
+        $has_permission_view = staff_can('view',  'estimates');
         $this->load->model('currencies_model');
         if (isset($data['currency'])) {
             $currencyid = $data['currency'];

@@ -108,7 +108,7 @@ class Contract_types_model extends App_Model
                 $total_rows_where['client']                = get_client_user_id();
                 $total_rows_where['not_visible_to_client'] = 0;
             } else {
-                if (!has_permission('contracts', '', 'view')) {
+                if (staff_cant('view', 'contracts')) {
                     $total_rows_where['addedfrom'] = get_staff_user_id();
                 }
             }
@@ -155,7 +155,7 @@ class Contract_types_model extends App_Model
                 'field' => 'contract_value',
             ];
 
-            if (!has_permission('contracts', '', 'view')) {
+            if (staff_cant('view', 'contracts')) {
                 $where['where']['addedfrom'] = get_staff_user_id();
             }
 

@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-12">
                 <?php if ($fixedlist == false) { ?>
-                <?php if (has_permission('surveys', '', 'create')) { ?>
+                <?php if (staff_can('create',  'surveys')) { ?>
                 <div class="_buttons tw-mb-2 sm:tw-mb-4">
                     <a href="#" class="btn btn-default mright5" data-toggle="modal"
                         data-target="#import_emails"><?php echo _l('btn_import_emails'); ?></a>

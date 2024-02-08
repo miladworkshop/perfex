@@ -56,7 +56,7 @@ class TasksKanban extends AbstractKanban
     {
         $where = '';
 
-        if (!has_permission('tasks', '', 'view')) {
+        if (staff_cant('view', 'tasks')) {
             $where = get_tasks_where_string(false);
         }
 

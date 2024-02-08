@@ -13,7 +13,7 @@ class Email_schedule_estimate extends AdminController
 
     public function create($id)
     {
-        if (!staff_can('create', 'estimates')) {
+        if (staff_cant('create', 'estimates')) {
             ajax_access_denied();
         }
 

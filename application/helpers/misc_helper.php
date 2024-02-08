@@ -550,3 +550,10 @@ function show_pdf_unable_to_get_image_size_error()
 </div>
 <?php
 }
+
+if(!function_exists('dd')) {
+    function dd() {
+        var_dump(...func_get_args());
+        die;
+    }
+}

@@ -22,7 +22,7 @@ class Proposals extends AdminController
     {
         close_setup_menu();
 
-        if (!has_permission('proposals', '', 'view') && !has_permission('proposals', '', 'view_own') && get_option('allow_staff_view_estimates_assigned') == 0) {
+        if (staff_cant('view', 'proposals') && staff_cant('view_own', 'proposals') && get_option('allow_staff_view_estimates_assigned') == 0) {
             access_denied('proposals');
         }
 
@@ -53,6 +53,7 @@ class Proposals extends AdminController
             $data['proposal_statuses']     = $this->proposals_model->get_statuses();
             $data['proposals_sale_agents'] = $this->proposals_model->get_sale_agents();
             $data['years']                 = $this->proposals_model->get_proposals_years();
+            $data['table'] = App_table::find('proposals');
             $this->load->view('admin/proposals/manage', $data);
         }
     }
@@ -60,14 +61,14 @@ class Proposals extends AdminController
     public function table()
     {
         if (
-            !has_permission('proposals', '', 'view')
-            && !has_permission('proposals', '', 'view_own')
+            staff_cant('view', 'proposals')
+            && staff_cant('view_own', 'proposals')
             && get_option('allow_staff_view_proposals_assigned') == 0
         ) {
             ajax_access_denied();
         }
 
-        $this->app->get_table_data('proposals');
+        App_table::find('proposals')->output();
     }
 
     public function proposal_relations($rel_id, $rel_type)
@@ -90,7 +91,7 @@ class Proposals extends AdminController
 
     public function clear_signature($id)
     {
-        if (has_permission('proposals', '', 'delete')) {
+        if (staff_can('delete',  'proposals')) {
             $this->proposals_model->clear_signature($id);
         }
 
@@ -99,8 +100,8 @@ class Proposals extends AdminController
 
     public function sync_data()
     {
-        if (has_permission('proposals', '', 'create') || has_permission('proposals', '', 'edit')) {
-            $has_permission_view = has_permission('proposals', '', 'view');
+        if (staff_can('create',  'proposals') || staff_can('edit',  'proposals')) {
+            $has_permission_view = staff_can('view',  'proposals');
 
             $this->db->where('rel_id', $this->input->post('rel_id'));
             $this->db->where('rel_type', $this->input->post('rel_type'));
@@ -137,7 +138,7 @@ class Proposals extends AdminController
         if ($this->input->post()) {
             $proposal_data = $this->input->post();
             if ($id == '') {
-                if (!has_permission('proposals', '', 'create')) {
+                if (staff_cant('create', 'proposals')) {
                     access_denied('proposals');
                 }
                 $id = $this->proposals_model->add($proposal_data);
@@ -150,7 +151,7 @@ class Proposals extends AdminController
                     }
                 }
             } else {
-                if (!has_permission('proposals', '', 'edit')) {
+                if (staff_cant('edit', 'proposals')) {
                     access_denied('proposals');
                 }
                 $success = $this->proposals_model->update($proposal_data, $id);
@@ -211,7 +212,7 @@ class Proposals extends AdminController
         if (!$canView) {
             access_denied('proposals');
         } else {
-            if (!has_permission('proposals', '', 'view') && !has_permission('proposals', '', 'view_own') && $canView == false) {
+            if (staff_cant('view', 'proposals') && staff_cant('view_own', 'proposals') && $canView == false) {
                 access_denied('proposals');
             }
         }
@@ -249,7 +250,7 @@ class Proposals extends AdminController
         if (!$canView) {
             access_denied('proposals');
         } else {
-            if (!has_permission('proposals', '', 'view') && !has_permission('proposals', '', 'view_own') && $canView == false) {
+            if (staff_cant('view', 'proposals') && staff_cant('view_own', 'proposals') && $canView == false) {
                 access_denied('proposals');
             }
         }
@@ -283,7 +284,7 @@ class Proposals extends AdminController
 
     public function get_proposal_data_ajax($id, $to_return = false)
     {
-        if (!has_permission('proposals', '', 'view') && !has_permission('proposals', '', 'view_own') && get_option('allow_staff_view_proposals_assigned') == 0) {
+        if (staff_cant('view', 'proposals') && staff_cant('view_own', 'proposals') && get_option('allow_staff_view_proposals_assigned') == 0) {
             echo _l('access_denied');
             die;
         }
@@ -339,7 +340,7 @@ class Proposals extends AdminController
 
     public function convert_to_estimate($id)
     {
-        if (!has_permission('estimates', '', 'create')) {
+        if (staff_cant('create', 'estimates')) {
             access_denied('estimates');
         }
         if ($this->input->post()) {
@@ -370,7 +371,7 @@ class Proposals extends AdminController
 
     public function convert_to_invoice($id)
     {
-        if (!has_permission('invoices', '', 'create')) {
+        if (staff_cant('create', 'invoices')) {
             access_denied('invoices');
         }
         if ($this->input->post()) {
@@ -499,7 +500,7 @@ class Proposals extends AdminController
         if (!$canView) {
             access_denied('proposals');
         } else {
-            if (!has_permission('proposals', '', 'view') && !has_permission('proposals', '', 'view_own') && $canView == false) {
+            if (staff_cant('view', 'proposals') && staff_cant('view_own', 'proposals') && $canView == false) {
                 access_denied('proposals');
             }
         }
@@ -536,7 +537,7 @@ class Proposals extends AdminController
 
     public function copy($id)
     {
-        if (!has_permission('proposals', '', 'create')) {
+        if (staff_cant('create', 'proposals')) {
             access_denied('proposals');
         }
         $new_id = $this->proposals_model->copy($id);
@@ -556,7 +557,7 @@ class Proposals extends AdminController
 
     public function mark_action_status($status, $id)
     {
-        if (!has_permission('proposals', '', 'edit')) {
+        if (staff_cant('edit', 'proposals')) {
             access_denied('proposals');
         }
         $success = $this->proposals_model->mark_action_status($status, $id);
@@ -574,7 +575,7 @@ class Proposals extends AdminController
 
     public function delete($id)
     {
-        if (!has_permission('proposals', '', 'delete')) {
+        if (staff_cant('delete', 'proposals')) {
             access_denied('proposals');
         }
         $response = $this->proposals_model->delete($id);
@@ -639,7 +640,7 @@ class Proposals extends AdminController
 
     public function save_proposal_data()
     {
-        if (!has_permission('proposals', '', 'edit') && !has_permission('proposals', '', 'create')) {
+        if (staff_cant('edit', 'proposals') && staff_cant('create', 'proposals')) {
             header('HTTP/1.0 400 Bad error');
             echo json_encode([
                 'success' => false,
@@ -682,7 +683,7 @@ class Proposals extends AdminController
 
     public function pipeline_open($id)
     {
-        if (has_permission('proposals', '', 'view') || has_permission('proposals', '', 'view_own') || get_option('allow_staff_view_proposals_assigned') == 1) {
+        if (staff_can('view',  'proposals') || staff_can('view_own',  'proposals') || get_option('allow_staff_view_proposals_assigned') == 1) {
             $data['proposal']      = $this->get_proposal_data_ajax($id, true);
             $data['proposal_data'] = $this->proposals_model->get($id);
             $this->load->view('admin/proposals/pipeline/proposal', $data);
@@ -691,14 +692,14 @@ class Proposals extends AdminController
 
     public function update_pipeline()
     {
-        if (has_permission('proposals', '', 'edit')) {
+        if (staff_can('edit',  'proposals')) {
             $this->proposals_model->update_pipeline($this->input->post());
         }
     }
 
     public function get_pipeline()
     {
-        if (has_permission('proposals', '', 'view') || has_permission('proposals', '', 'view_own') || get_option('allow_staff_view_proposals_assigned') == 1) {
+        if (staff_can('view',  'proposals') || staff_can('view_own',  'proposals') || get_option('allow_staff_view_proposals_assigned') == 1) {
             $data['statuses'] = $this->proposals_model->get_statuses();
             $this->load->view('admin/proposals/pipeline/pipeline', $data);
         }

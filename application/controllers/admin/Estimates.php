@@ -21,13 +21,15 @@ class Estimates extends AdminController
     /* List all estimates datatables */
     public function list_estimates($id = '')
     {
-        if (!has_permission('estimates', '', 'view') && !has_permission('estimates', '', 'view_own') && get_option('allow_staff_view_estimates_assigned') == '0') {
+        if (staff_cant('view', 'estimates') && staff_cant('view_own', 'estimates') && get_option('allow_staff_view_estimates_assigned') == '0') {
             access_denied('estimates');
         }
 
         $isPipeline = $this->session->userdata('estimate_pipeline') == 'true';
 
         $data['estimate_statuses'] = $this->estimates_model->get_statuses();
+        $data['estimates_table'] = App_table::find('estimates');
+        
         if ($isPipeline && !$this->input->get('status') && !$this->input->get('filter')) {
             $data['title']           = _l('estimates_pipeline');
             $data['bodyclass']       = 'estimates-pipeline estimates-total-manual';
@@ -53,17 +55,18 @@ class Estimates extends AdminController
             $data['bodyclass']             = 'estimates-total-manual';
             $data['estimates_years']       = $this->estimates_model->get_estimates_years();
             $data['estimates_sale_agents'] = $this->estimates_model->get_sale_agents();
+        
             $this->load->view('admin/estimates/manage', $data);
         }
     }
 
     public function table($clientid = '')
     {
-        if (!has_permission('estimates', '', 'view') && !has_permission('estimates', '', 'view_own') && get_option('allow_staff_view_estimates_assigned') == '0') {
+        if (staff_cant('view', 'estimates') && staff_cant('view_own', 'estimates') && get_option('allow_staff_view_estimates_assigned') == '0') {
             ajax_access_denied();
         }
 
-        $this->app->get_table_data('estimates', [
+        App_table::find('estimates')->output([
             'clientid' => $clientid,
         ]);
     }
@@ -81,7 +84,7 @@ class Estimates extends AdminController
             }
 
             if ($id == '') {
-                if (!has_permission('estimates', '', 'create')) {
+                if (staff_cant('create', 'estimates')) {
                     access_denied('estimates');
                 }
                 $id = $this->estimates_model->add($estimate_data);
@@ -101,7 +104,7 @@ class Estimates extends AdminController
                     );
                 }
             } else {
-                if (!has_permission('estimates', '', 'edit')) {
+                if (staff_cant('edit', 'estimates')) {
                     access_denied('estimates');
                 }
                 $success = $this->estimates_model->update($estimate_data, $id);
@@ -163,7 +166,7 @@ class Estimates extends AdminController
 
     public function clear_signature($id)
     {
-        if (has_permission('estimates', '', 'delete')) {
+        if (staff_can('delete',  'estimates')) {
             $this->estimates_model->clear_signature($id);
         }
 
@@ -176,7 +179,7 @@ class Estimates extends AdminController
             'success' => false,
             'message' => '',
         ];
-        if (has_permission('estimates', '', 'edit')) {
+        if (staff_can('edit',  'estimates')) {
             $this->db->where('id', $id);
             $this->db->update(db_prefix() . 'estimates', [
                 'prefix' => $this->input->post('prefix'),
@@ -232,7 +235,7 @@ class Estimates extends AdminController
     /* Get all estimate data used when user click on estimate number in a datatable left side*/
     public function get_estimate_data_ajax($id, $to_return = false)
     {
-        if (!has_permission('estimates', '', 'view') && !has_permission('estimates', '', 'view_own') && get_option('allow_staff_view_estimates_assigned') == '0') {
+        if (staff_cant('view', 'estimates') && staff_cant('view_own', 'estimates') && get_option('allow_staff_view_estimates_assigned') == '0') {
             echo _l('access_denied');
             die;
         }
@@ -332,7 +335,7 @@ class Estimates extends AdminController
 
     public function mark_action_status($status, $id)
     {
-        if (!has_permission('estimates', '', 'edit')) {
+        if (staff_cant('edit', 'estimates')) {
             access_denied('estimates');
         }
         $success = $this->estimates_model->mark_action_status($status, $id);
@@ -354,7 +357,7 @@ class Estimates extends AdminController
         if (!$canView) {
             access_denied('Estimates');
         } else {
-            if (!has_permission('estimates', '', 'view') && !has_permission('estimates', '', 'view_own') && $canView == false) {
+            if (staff_cant('view', 'estimates') && staff_cant('view_own', 'estimates') && $canView == false) {
                 access_denied('Estimates');
             }
         }
@@ -379,7 +382,7 @@ class Estimates extends AdminController
         if (!$canView) {
             access_denied('estimates');
         } else {
-            if (!has_permission('estimates', '', 'view') && !has_permission('estimates', '', 'view_own') && $canView == false) {
+            if (staff_cant('view', 'estimates') && staff_cant('view_own', 'estimates') && $canView == false) {
                 access_denied('estimates');
             }
         }
@@ -412,7 +415,7 @@ class Estimates extends AdminController
     /* Convert estimate to invoice */
     public function convert_to_invoice($id)
     {
-        if (!has_permission('invoices', '', 'create')) {
+        if (staff_cant('create', 'invoices')) {
             access_denied('invoices');
         }
         if (!$id) {
@@ -440,7 +443,7 @@ class Estimates extends AdminController
 
     public function copy($id)
     {
-        if (!has_permission('estimates', '', 'create')) {
+        if (staff_cant('create', 'estimates')) {
             access_denied('estimates');
         }
         if (!$id) {
@@ -466,7 +469,7 @@ class Estimates extends AdminController
     /* Delete estimate */
     public function delete($id)
     {
-        if (!has_permission('estimates', '', 'delete')) {
+        if (staff_cant('delete', 'estimates')) {
             access_denied('estimates');
         }
         if (!$id) {
@@ -500,7 +503,7 @@ class Estimates extends AdminController
         if (!$canView) {
             access_denied('Estimates');
         } else {
-            if (!has_permission('estimates', '', 'view') && !has_permission('estimates', '', 'view_own') && $canView == false) {
+            if (staff_cant('view', 'estimates') && staff_cant('view_own', 'estimates') && $canView == false) {
                 access_denied('Estimates');
             }
         }
@@ -542,7 +545,7 @@ class Estimates extends AdminController
     // Pipeline
     public function get_pipeline()
     {
-        if (has_permission('estimates', '', 'view') || has_permission('estimates', '', 'view_own') || get_option('allow_staff_view_estimates_assigned') == '1') {
+        if (staff_can('view',  'estimates') || staff_can('view_own',  'estimates') || get_option('allow_staff_view_estimates_assigned') == '1') {
             $data['estimate_statuses'] = $this->estimates_model->get_statuses();
             $this->load->view('admin/estimates/pipeline/pipeline', $data);
         }
@@ -554,7 +557,7 @@ class Estimates extends AdminController
         if (!$canView) {
             access_denied('Estimates');
         } else {
-            if (!has_permission('estimates', '', 'view') && !has_permission('estimates', '', 'view_own') && $canView == false) {
+            if (staff_cant('view', 'estimates') && staff_cant('view_own', 'estimates') && $canView == false) {
                 access_denied('Estimates');
             }
         }
@@ -566,7 +569,7 @@ class Estimates extends AdminController
 
     public function update_pipeline()
     {
-        if (has_permission('estimates', '', 'edit')) {
+        if (staff_can('edit',  'estimates')) {
             $this->estimates_model->update_pipeline($this->input->post());
         }
     }

@@ -82,6 +82,11 @@ class Staff_model extends App_Model
             'staff_id' => $transfer_data_to,
         ]);
 
+        $this->db->where('staff_id', $id);
+        $this->db->update('filters', [
+            'staff_id' => $transfer_data_to,
+        ]);
+        
         $this->db->where('staffid', $id);
         $this->db->update(db_prefix() . 'project_files', [
             'staffid' => $transfer_data_to,
@@ -761,6 +766,7 @@ class Staff_model extends App_Model
         ]);
 
         log_activity('Staff Status Changed [StaffID: ' . $id . ' - Status(Active/Inactive): ' . $status . ']');
+        hooks()->do_action('after_staff_status_change', $id);
     }
 
     public function get_logged_time_data($id = '', $filter_data = [])

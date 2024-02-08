@@ -109,16 +109,16 @@ class Utilities_model extends App_Model
         $contact_id = $this->db->escape_str($contact_id);
 
         $is_admin                     = is_admin();
-        $has_permission_tasks_view    = has_permission('tasks', '', 'view');
-        $has_permission_projects_view = has_permission('projects', '', 'view');
-        $has_permission_invoices      = has_permission('invoices', '', 'view');
-        $has_permission_invoices_own  = has_permission('invoices', '', 'view_own');
-        $has_permission_estimates     = has_permission('estimates', '', 'view');
-        $has_permission_estimates_own = has_permission('estimates', '', 'view_own');
-        $has_permission_contracts     = has_permission('contracts', '', 'view');
-        $has_permission_contracts_own = has_permission('contracts', '', 'view_own');
-        $has_permission_proposals     = has_permission('proposals', '', 'view');
-        $has_permission_proposals_own = has_permission('proposals', '', 'view_own');
+        $has_permission_tasks_view    = staff_can('view',  'tasks');
+        $has_permission_projects_view = staff_can('view',  'projects');
+        $has_permission_invoices      = staff_can('view',  'invoices');
+        $has_permission_invoices_own  = staff_can('view_own',  'invoices');
+        $has_permission_estimates     = staff_can('view',  'estimates');
+        $has_permission_estimates_own = staff_can('view_own',  'estimates');
+        $has_permission_contracts     = staff_can('view',  'contracts');
+        $has_permission_contracts_own = staff_can('view_own',  'contracts');
+        $has_permission_proposals     = staff_can('view',  'proposals');
+        $has_permission_proposals_own = staff_can('view_own',  'proposals');
         $data                         = [];
 
         $client_data = false;

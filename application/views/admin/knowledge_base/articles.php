@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <?php init_head();
-   $has_permission_edit   = has_permission('knowledge_base', '', 'edit');
-   $has_permission_create = has_permission('knowledge_base', '', 'create');
+   $has_permission_edit   = staff_can('edit',  'knowledge_base');
+   $has_permission_create = staff_can('create',  'knowledge_base');
    ?>
 <div id="wrapper">
     <div class="content">

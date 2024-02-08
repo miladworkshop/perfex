@@ -33,4 +33,5 @@ $table_data = hooks()->apply_filters('contracts_table_columns', $table_data);
 render_datatable($table_data, (isset($class) ? $class : 'contracts'), ['number-index-1'], [
   'data-last-order-identifier' => 'contracts',
   'data-default-order'         => get_table_last_order('contracts'),
+  'id'=> $table_id ?? 'contracts',
 ]);

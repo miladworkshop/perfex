@@ -1,157 +1,108 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: localhost
--- Generation Time: May 23, 2023 at 11:47 AM
--- Server version: 8.0.31-0ubuntu0.20.04.2
--- PHP Version: 8.1.18
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `perfexcrm`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblactivity_log`
---
 
 CREATE TABLE `tblactivity_log` (
   `id` int NOT NULL,
-  `description` mediumtext NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` datetime NOT NULL,
-  `staffid` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblannouncements`
---
+  `staffid` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblannouncements` (
   `announcementid` int NOT NULL,
-  `name` varchar(191) NOT NULL,
-  `message` text,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message` mediumtext COLLATE utf8mb4_unicode_ci,
   `showtousers` int NOT NULL,
   `showtostaff` int NOT NULL,
   `showname` int NOT NULL,
   `dateadded` datetime NOT NULL,
-  `userid` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblclients`
---
+  `userid` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblclients` (
   `userid` int NOT NULL,
-  `company` varchar(191) DEFAULT NULL,
-  `vat` varchar(50) DEFAULT NULL,
-  `phonenumber` varchar(30) DEFAULT NULL,
+  `company` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `vat` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phonenumber` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `country` int NOT NULL DEFAULT '0',
-  `city` varchar(100) DEFAULT NULL,
-  `zip` varchar(15) DEFAULT NULL,
-  `state` varchar(50) DEFAULT NULL,
-  `address` varchar(191) DEFAULT NULL,
-  `website` varchar(150) DEFAULT NULL,
+  `city` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `zip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `state` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `website` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `datecreated` datetime NOT NULL,
   `active` int NOT NULL DEFAULT '1',
   `leadid` int DEFAULT NULL,
-  `billing_street` varchar(200) DEFAULT NULL,
-  `billing_city` varchar(100) DEFAULT NULL,
-  `billing_state` varchar(100) DEFAULT NULL,
-  `billing_zip` varchar(100) DEFAULT NULL,
+  `billing_street` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `billing_city` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `billing_state` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `billing_zip` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `billing_country` int DEFAULT '0',
-  `shipping_street` varchar(200) DEFAULT NULL,
-  `shipping_city` varchar(100) DEFAULT NULL,
-  `shipping_state` varchar(100) DEFAULT NULL,
-  `shipping_zip` varchar(100) DEFAULT NULL,
+  `shipping_street` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_city` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_state` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_zip` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `shipping_country` int DEFAULT '0',
-  `longitude` varchar(191) DEFAULT NULL,
-  `latitude` varchar(191) DEFAULT NULL,
-  `default_language` varchar(40) DEFAULT NULL,
+  `longitude` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `latitude` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `default_language` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `default_currency` int NOT NULL DEFAULT '0',
   `show_primary_contact` int NOT NULL DEFAULT '0',
-  `stripe_id` varchar(40) DEFAULT NULL,
+  `stripe_id` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `registration_confirmed` int NOT NULL DEFAULT '1',
   `addedfrom` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblconsents`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblconsents` (
   `id` int NOT NULL,
-  `action` varchar(10) NOT NULL,
+  `action` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` datetime NOT NULL,
-  `ip` varchar(40) NOT NULL,
+  `ip` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   `contact_id` int NOT NULL DEFAULT '0',
   `lead_id` int NOT NULL DEFAULT '0',
-  `description` text,
-  `opt_in_purpose_description` text,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci,
+  `opt_in_purpose_description` mediumtext COLLATE utf8mb4_unicode_ci,
   `purpose_id` int NOT NULL,
-  `staff_name` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblconsent_purposes`
---
+  `staff_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblconsent_purposes` (
   `id` int NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `description` text,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci,
   `date_created` datetime NOT NULL,
   `last_updated` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblcontacts`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblcontacts` (
   `id` int NOT NULL,
   `userid` int NOT NULL,
   `is_primary` int NOT NULL DEFAULT '1',
-  `firstname` varchar(191) NOT NULL,
-  `lastname` varchar(191) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `phonenumber` varchar(100) NOT NULL,
-  `title` varchar(100) DEFAULT NULL,
+  `firstname` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lastname` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phonenumber` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `datecreated` datetime NOT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `new_pass_key` varchar(32) DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `new_pass_key` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `new_pass_key_requested` datetime DEFAULT NULL,
   `email_verified_at` datetime DEFAULT NULL,
-  `email_verification_key` varchar(32) DEFAULT NULL,
+  `email_verification_key` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email_verification_sent_at` datetime DEFAULT NULL,
-  `last_ip` varchar(40) DEFAULT NULL,
+  `last_ip` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `last_login` datetime DEFAULT NULL,
   `last_password_change` datetime DEFAULT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '1',
-  `profile_image` varchar(191) DEFAULT NULL,
-  `direction` varchar(3) DEFAULT NULL,
+  `profile_image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `direction` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `invoice_emails` tinyint(1) NOT NULL DEFAULT '1',
   `estimate_emails` tinyint(1) NOT NULL DEFAULT '1',
   `credit_note_emails` tinyint(1) NOT NULL DEFAULT '1',
@@ -159,31 +110,19 @@ CREATE TABLE `tblcontacts` (
   `task_emails` tinyint(1) NOT NULL DEFAULT '1',
   `project_emails` tinyint(1) NOT NULL DEFAULT '1',
   `ticket_emails` tinyint(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblcontact_permissions`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblcontact_permissions` (
   `id` int NOT NULL,
   `permission_id` int NOT NULL,
   `userid` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblcontracts`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblcontracts` (
   `id` int NOT NULL,
-  `content` longtext,
-  `description` text,
-  `subject` varchar(191) DEFAULT NULL,
+  `content` longtext COLLATE utf8mb4_unicode_ci,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci,
+  `subject` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `client` int NOT NULL,
   `datestart` date DEFAULT NULL,
   `dateend` date DEFAULT NULL,
@@ -195,51 +134,33 @@ CREATE TABLE `tblcontracts` (
   `contract_value` decimal(15,2) DEFAULT NULL,
   `trash` tinyint(1) DEFAULT '0',
   `not_visible_to_client` tinyint(1) NOT NULL DEFAULT '0',
-  `hash` varchar(32) DEFAULT NULL,
+  `hash` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signed` tinyint(1) NOT NULL DEFAULT '0',
-  `signature` varchar(40) DEFAULT NULL,
+  `signature` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `marked_as_signed` tinyint(1) NOT NULL DEFAULT '0',
-  `acceptance_firstname` varchar(50) DEFAULT NULL,
-  `acceptance_lastname` varchar(50) DEFAULT NULL,
-  `acceptance_email` varchar(100) DEFAULT NULL,
+  `acceptance_firstname` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `acceptance_lastname` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `acceptance_email` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `acceptance_date` datetime DEFAULT NULL,
-  `acceptance_ip` varchar(40) DEFAULT NULL,
-  `short_link` varchar(100) DEFAULT NULL,
+  `acceptance_ip` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `short_link` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `last_sent_at` datetime DEFAULT NULL,
-  `contacts_sent_to` text,
+  `contacts_sent_to` mediumtext COLLATE utf8mb4_unicode_ci,
   `last_sign_reminder_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblcontracts_types`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblcontracts_types` (
   `id` int NOT NULL,
-  `name` mediumtext NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblcontract_comments`
---
+  `name` longtext COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblcontract_comments` (
   `id` int NOT NULL,
-  `content` mediumtext,
+  `content` longtext COLLATE utf8mb4_unicode_ci,
   `contract_id` int NOT NULL,
   `staffid` int NOT NULL,
   `dateadded` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblcontract_renewals`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblcontract_renewals` (
   `id` int NOT NULL,
@@ -251,32 +172,22 @@ CREATE TABLE `tblcontract_renewals` (
   `old_value` decimal(15,2) DEFAULT NULL,
   `new_value` decimal(15,2) DEFAULT NULL,
   `date_renewed` datetime NOT NULL,
-  `renewed_by` varchar(100) NOT NULL,
+  `renewed_by` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `renewed_by_staff_id` int NOT NULL DEFAULT '0',
   `is_on_old_expiry_notified` int DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblcountries`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblcountries` (
   `country_id` int NOT NULL,
-  `iso2` char(2) DEFAULT NULL,
-  `short_name` varchar(80) NOT NULL DEFAULT '',
-  `long_name` varchar(80) NOT NULL DEFAULT '',
-  `iso3` char(3) DEFAULT NULL,
-  `numcode` varchar(6) DEFAULT NULL,
-  `un_member` varchar(12) DEFAULT NULL,
-  `calling_code` varchar(8) DEFAULT NULL,
-  `cctld` varchar(5) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `tblcountries`
---
+  `iso2` char(2) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `short_name` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `long_name` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `iso3` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `numcode` varchar(6) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `un_member` varchar(12) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `calling_code` varchar(8) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cctld` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `tblcountries` (`country_id`, `iso2`, `short_name`, `long_name`, `iso3`, `numcode`, `un_member`, `calling_code`, `cctld`) VALUES
 (1, 'AF', 'Afghanistan', 'Islamic Republic of Afghanistan', 'AFG', '004', 'yes', '93', '.af'),
@@ -530,24 +441,18 @@ INSERT INTO `tblcountries` (`country_id`, `iso2`, `short_name`, `long_name`, `is
 (249, 'ZM', 'Zambia', 'Republic of Zambia', 'ZMB', '894', 'yes', '260', '.zm'),
 (250, 'ZW', 'Zimbabwe', 'Republic of Zimbabwe', 'ZWE', '716', 'yes', '263', '.zw');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `tblcreditnotes`
---
-
 CREATE TABLE `tblcreditnotes` (
   `id` int NOT NULL,
   `clientid` int NOT NULL,
-  `deleted_customer_name` varchar(100) DEFAULT NULL,
+  `deleted_customer_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `number` int NOT NULL,
-  `prefix` varchar(50) DEFAULT NULL,
+  `prefix` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `number_format` int NOT NULL DEFAULT '1',
   `datecreated` datetime NOT NULL,
   `date` date NOT NULL,
-  `adminnote` text,
-  `terms` text,
-  `clientnote` text,
+  `adminnote` mediumtext COLLATE utf8mb4_unicode_ci,
+  `terms` mediumtext COLLATE utf8mb4_unicode_ci,
+  `clientnote` mediumtext COLLATE utf8mb4_unicode_ci,
   `currency` int NOT NULL,
   `subtotal` decimal(15,2) NOT NULL,
   `total_tax` decimal(15,2) NOT NULL DEFAULT '0.00',
@@ -558,45 +463,33 @@ CREATE TABLE `tblcreditnotes` (
   `project_id` int NOT NULL DEFAULT '0',
   `discount_percent` decimal(15,2) DEFAULT '0.00',
   `discount_total` decimal(15,2) DEFAULT '0.00',
-  `discount_type` varchar(30) NOT NULL,
-  `billing_street` varchar(200) DEFAULT NULL,
-  `billing_city` varchar(100) DEFAULT NULL,
-  `billing_state` varchar(100) DEFAULT NULL,
-  `billing_zip` varchar(100) DEFAULT NULL,
+  `discount_type` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `billing_street` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `billing_city` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `billing_state` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `billing_zip` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `billing_country` int DEFAULT NULL,
-  `shipping_street` varchar(200) DEFAULT NULL,
-  `shipping_city` varchar(100) DEFAULT NULL,
-  `shipping_state` varchar(100) DEFAULT NULL,
-  `shipping_zip` varchar(100) DEFAULT NULL,
+  `shipping_street` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_city` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_state` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_zip` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `shipping_country` int DEFAULT NULL,
   `include_shipping` tinyint(1) NOT NULL,
   `show_shipping_on_credit_note` tinyint(1) NOT NULL DEFAULT '1',
   `show_quantity_as` int NOT NULL DEFAULT '1',
-  `reference_no` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblcreditnote_refunds`
---
+  `reference_no` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblcreditnote_refunds` (
   `id` int NOT NULL,
   `credit_note_id` int NOT NULL,
   `staff_id` int NOT NULL,
   `refunded_on` date NOT NULL,
-  `payment_mode` varchar(40) NOT NULL,
-  `note` text,
+  `payment_mode` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `note` mediumtext COLLATE utf8mb4_unicode_ci,
   `amount` decimal(15,2) NOT NULL,
   `created_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblcredits`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblcredits` (
   `id` int NOT NULL,
@@ -606,81 +499,47 @@ CREATE TABLE `tblcredits` (
   `date` date NOT NULL,
   `date_applied` datetime NOT NULL,
   `amount` decimal(15,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblcurrencies`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblcurrencies` (
   `id` int NOT NULL,
-  `symbol` varchar(10) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `decimal_separator` varchar(5) DEFAULT NULL,
-  `thousand_separator` varchar(5) DEFAULT NULL,
-  `placement` varchar(10) DEFAULT NULL,
+  `symbol` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `decimal_separator` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `thousand_separator` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `placement` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `isdefault` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `tblcurrencies`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `tblcurrencies` (`id`, `symbol`, `name`, `decimal_separator`, `thousand_separator`, `placement`, `isdefault`) VALUES
 (1, '$', 'USD', '.', ',', 'before', 1),
 (2, '€', 'EUR', ',', '.', 'before', 0);
 
--- --------------------------------------------------------
-
---
--- Table structure for table `tblcustomers_groups`
---
-
 CREATE TABLE `tblcustomers_groups` (
   `id` int NOT NULL,
-  `name` varchar(191) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblcustomer_admins`
---
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblcustomer_admins` (
   `staff_id` int NOT NULL,
   `customer_id` int NOT NULL,
-  `date_assigned` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblcustomer_groups`
---
+  `date_assigned` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblcustomer_groups` (
   `id` int NOT NULL,
   `groupid` int NOT NULL,
   `customer_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblcustomfields`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblcustomfields` (
   `id` int NOT NULL,
-  `fieldto` varchar(30) DEFAULT NULL,
-  `name` varchar(150) NOT NULL,
-  `slug` varchar(150) NOT NULL,
+  `fieldto` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
   `required` tinyint(1) NOT NULL DEFAULT '0',
-  `type` varchar(20) NOT NULL,
-  `options` mediumtext,
+  `type` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `options` longtext COLLATE utf8mb4_unicode_ci,
   `display_inline` tinyint(1) NOT NULL DEFAULT '0',
   `field_order` int DEFAULT '0',
   `active` int NOT NULL DEFAULT '1',
@@ -691,81 +550,53 @@ CREATE TABLE `tblcustomfields` (
   `show_on_client_portal` int NOT NULL DEFAULT '0',
   `disalow_client_to_edit` int NOT NULL DEFAULT '0',
   `bs_column` int NOT NULL DEFAULT '12',
-  `default_value` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblcustomfieldsvalues`
---
+  `default_value` mediumtext COLLATE utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblcustomfieldsvalues` (
   `id` int NOT NULL,
   `relid` int NOT NULL,
   `fieldid` int NOT NULL,
-  `fieldto` varchar(15) NOT NULL,
-  `value` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbldepartments`
---
+  `fieldto` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbldepartments` (
   `departmentid` int NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `imap_username` varchar(191) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `imap_username` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email_from_header` tinyint(1) NOT NULL DEFAULT '0',
-  `host` varchar(150) DEFAULT NULL,
-  `password` mediumtext,
-  `encryption` varchar(3) DEFAULT NULL,
-  `folder` varchar(191) NOT NULL DEFAULT 'INBOX',
+  `host` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` longtext COLLATE utf8mb4_unicode_ci,
+  `encryption` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `folder` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'INBOX',
   `delete_after_import` int NOT NULL DEFAULT '0',
-  `calendar_id` mediumtext,
+  `calendar_id` longtext COLLATE utf8mb4_unicode_ci,
   `hidefromclient` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbldismissed_announcements`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbldismissed_announcements` (
   `dismissedannouncementid` int NOT NULL,
   `announcementid` int NOT NULL,
   `staff` int NOT NULL,
   `userid` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblemailtemplates`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblemailtemplates` (
   `emailtemplateid` int NOT NULL,
-  `type` mediumtext NOT NULL,
-  `slug` varchar(100) NOT NULL,
-  `language` varchar(40) DEFAULT NULL,
-  `name` mediumtext NOT NULL,
-  `subject` mediumtext NOT NULL,
-  `message` mediumtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `fromname` mediumtext NOT NULL,
-  `fromemail` varchar(100) DEFAULT NULL,
+  `type` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `language` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subject` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fromname` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fromemail` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `plaintext` int NOT NULL DEFAULT '0',
   `active` tinyint NOT NULL DEFAULT '0',
   `order` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `tblemailtemplates`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `tblemailtemplates` (`emailtemplateid`, `type`, `slug`, `language`, `name`, `subject`, `message`, `fromname`, `fromemail`, `plaintext`, `active`, `order`) VALUES
 (1, 'client', 'new-client-created', 'english', 'New Contact Added/Registered (Welcome Email)', 'Welcome aboard', 'Dear {contact_firstname} {contact_lastname}<br /><br />Thank you for registering on the <strong>{companyname}</strong> CRM System.<br /><br />We just wanted to say welcome.<br /><br />Please contact us if you need any help.<br /><br />Click here to view your profile: <a href=\"{crm_url}\">{crm_url}</a><br /><br />Kind Regards, <br />{email_signature}<br /><br />(This is an automated email, so please don\'t reply to this email address)', '{companyname} | CRM', '', 0, 1, 0),
@@ -852,23 +683,17 @@ INSERT INTO `tblemailtemplates` (`emailtemplateid`, `type`, `slug`, `language`, 
 (81, 'invoice', 'invoices-batch-payments', 'english', 'Invoices Payments Recorded in Batch (Sent to Customer)', 'We have received your payments', 'Hello {contact_firstname} {contact_lastname}<br><br>Thank you for the payments. Please find the payments details below:<br><br>{batch_payments_list}<br><br>We are looking forward working with you.<br><br>Kind Regards,<br><br>{email_signature}', '{companyname} | CRM', '', 0, 1, 0),
 (82, 'contract', 'contract-sign-reminder', 'english', 'Contract Sign Reminder (Sent to Customer)', 'Contract Sign Reminder', '<p>Hello {contact_firstname} {contact_lastname}<br /><br />This is a reminder to review and sign the contract:<a href=\"{contract_link}\">{contract_subject}</a></p><p>You can view and sign by visiting: <a href=\"{contract_link}\">{contract_subject}</a></p><p><br />We are looking forward working with you.<br /><br />Kind Regards,<br /><br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
 
--- --------------------------------------------------------
-
---
--- Table structure for table `tblestimates`
---
-
 CREATE TABLE `tblestimates` (
   `id` int NOT NULL,
   `sent` tinyint(1) NOT NULL DEFAULT '0',
   `datesend` datetime DEFAULT NULL,
   `clientid` int NOT NULL,
-  `deleted_customer_name` varchar(100) DEFAULT NULL,
+  `deleted_customer_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `project_id` int NOT NULL DEFAULT '0',
   `number` int NOT NULL,
-  `prefix` varchar(50) DEFAULT NULL,
+  `prefix` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `number_format` int NOT NULL DEFAULT '0',
-  `hash` varchar(32) DEFAULT NULL,
+  `hash` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `datecreated` datetime NOT NULL,
   `date` date NOT NULL,
   `expirydate` date DEFAULT NULL,
@@ -879,50 +704,44 @@ CREATE TABLE `tblestimates` (
   `adjustment` decimal(15,2) DEFAULT NULL,
   `addedfrom` int NOT NULL,
   `status` int NOT NULL DEFAULT '1',
-  `clientnote` text,
-  `adminnote` text,
+  `clientnote` mediumtext COLLATE utf8mb4_unicode_ci,
+  `adminnote` mediumtext COLLATE utf8mb4_unicode_ci,
   `discount_percent` decimal(15,2) DEFAULT '0.00',
   `discount_total` decimal(15,2) DEFAULT '0.00',
-  `discount_type` varchar(30) DEFAULT NULL,
+  `discount_type` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `invoiceid` int DEFAULT NULL,
   `invoiced_date` datetime DEFAULT NULL,
-  `terms` text,
-  `reference_no` varchar(100) DEFAULT NULL,
+  `terms` mediumtext COLLATE utf8mb4_unicode_ci,
+  `reference_no` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `sale_agent` int NOT NULL DEFAULT '0',
-  `billing_street` varchar(200) DEFAULT NULL,
-  `billing_city` varchar(100) DEFAULT NULL,
-  `billing_state` varchar(100) DEFAULT NULL,
-  `billing_zip` varchar(100) DEFAULT NULL,
+  `billing_street` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `billing_city` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `billing_state` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `billing_zip` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `billing_country` int DEFAULT NULL,
-  `shipping_street` varchar(200) DEFAULT NULL,
-  `shipping_city` varchar(100) DEFAULT NULL,
-  `shipping_state` varchar(100) DEFAULT NULL,
-  `shipping_zip` varchar(100) DEFAULT NULL,
+  `shipping_street` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_city` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_state` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_zip` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `shipping_country` int DEFAULT NULL,
   `include_shipping` tinyint(1) NOT NULL,
   `show_shipping_on_estimate` tinyint(1) NOT NULL DEFAULT '1',
   `show_quantity_as` int NOT NULL DEFAULT '1',
   `pipeline_order` int DEFAULT '1',
   `is_expiry_notified` int NOT NULL DEFAULT '0',
-  `acceptance_firstname` varchar(50) DEFAULT NULL,
-  `acceptance_lastname` varchar(50) DEFAULT NULL,
-  `acceptance_email` varchar(100) DEFAULT NULL,
+  `acceptance_firstname` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `acceptance_lastname` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `acceptance_email` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `acceptance_date` datetime DEFAULT NULL,
-  `acceptance_ip` varchar(40) DEFAULT NULL,
-  `signature` varchar(40) DEFAULT NULL,
-  `short_link` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblestimate_requests`
---
+  `acceptance_ip` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `signature` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `short_link` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblestimate_requests` (
   `id` int UNSIGNED NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `submission` longtext NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `submission` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `last_status_change` datetime DEFAULT NULL,
   `date_estimated` datetime DEFAULT NULL,
   `from_form_id` int DEFAULT NULL,
@@ -930,84 +749,56 @@ CREATE TABLE `tblestimate_requests` (
   `status` int DEFAULT NULL,
   `default_language` int NOT NULL,
   `date_added` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblestimate_request_forms`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblestimate_request_forms` (
   `id` int UNSIGNED NOT NULL,
-  `form_key` varchar(32) NOT NULL,
-  `type` varchar(100) NOT NULL,
-  `name` varchar(191) NOT NULL,
-  `form_data` mediumtext,
+  `form_key` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `form_data` longtext COLLATE utf8mb4_unicode_ci,
   `recaptcha` int DEFAULT NULL,
   `status` int NOT NULL,
-  `submit_btn_name` varchar(100) DEFAULT NULL,
-  `submit_btn_bg_color` varchar(10) DEFAULT '#84c529',
-  `submit_btn_text_color` varchar(10) DEFAULT '#ffffff',
-  `success_submit_msg` text,
+  `submit_btn_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `submit_btn_bg_color` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT '#84c529',
+  `submit_btn_text_color` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT '#ffffff',
+  `success_submit_msg` mediumtext COLLATE utf8mb4_unicode_ci,
   `submit_action` int DEFAULT '0',
-  `submit_redirect_url` mediumtext,
-  `language` varchar(100) DEFAULT NULL,
+  `submit_redirect_url` longtext COLLATE utf8mb4_unicode_ci,
+  `language` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `dateadded` datetime DEFAULT NULL,
-  `notify_type` varchar(100) DEFAULT NULL,
-  `notify_ids` mediumtext,
+  `notify_type` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `notify_ids` longtext COLLATE utf8mb4_unicode_ci,
   `responsible` int DEFAULT NULL,
   `notify_request_submitted` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblestimate_request_status`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblestimate_request_status` (
   `id` int UNSIGNED NOT NULL,
-  `name` varchar(50) NOT NULL,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `statusorder` int DEFAULT NULL,
-  `color` varchar(10) DEFAULT NULL,
-  `flag` varchar(30) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `tblestimate_request_status`
---
+  `color` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `flag` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `tblestimate_request_status` (`id`, `name`, `statusorder`, `color`, `flag`) VALUES
 (1, 'Cancelled', 1, '#808080', 'cancelled'),
 (2, 'Processing', 2, '#007bff', 'processing'),
 (3, 'Completed', 3, '#28a745', 'completed');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `tblevents`
---
-
 CREATE TABLE `tblevents` (
   `eventid` int NOT NULL,
-  `title` mediumtext NOT NULL,
-  `description` text,
+  `title` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci,
   `userid` int NOT NULL,
   `start` datetime NOT NULL,
   `end` datetime DEFAULT NULL,
   `public` int NOT NULL DEFAULT '0',
-  `color` varchar(10) DEFAULT NULL,
+  `color` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `isstartnotified` tinyint(1) NOT NULL DEFAULT '0',
   `reminder_before` int NOT NULL DEFAULT '0',
-  `reminder_before_type` varchar(10) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblexpenses`
---
+  `reminder_before_type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblexpenses` (
   `id` int NOT NULL,
@@ -1016,16 +807,16 @@ CREATE TABLE `tblexpenses` (
   `amount` decimal(15,2) NOT NULL,
   `tax` int DEFAULT NULL,
   `tax2` int NOT NULL DEFAULT '0',
-  `reference_no` varchar(100) DEFAULT NULL,
-  `note` text,
-  `expense_name` varchar(191) DEFAULT NULL,
+  `reference_no` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `note` mediumtext COLLATE utf8mb4_unicode_ci,
+  `expense_name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `clientid` int NOT NULL,
   `project_id` int NOT NULL DEFAULT '0',
   `billable` int DEFAULT '0',
   `invoiceid` int DEFAULT NULL,
-  `paymentmode` varchar(50) DEFAULT NULL,
+  `paymentmode` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date` date NOT NULL,
-  `recurring_type` varchar(10) DEFAULT NULL,
+  `recurring_type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `repeat_every` int DEFAULT NULL,
   `recurring` int NOT NULL DEFAULT '0',
   `cycles` int NOT NULL DEFAULT '0',
@@ -1037,150 +828,112 @@ CREATE TABLE `tblexpenses` (
   `recurring_from` int DEFAULT NULL,
   `dateadded` datetime NOT NULL,
   `addedfrom` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblexpenses_categories`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblexpenses_categories` (
   `id` int NOT NULL,
-  `name` varchar(191) NOT NULL,
-  `description` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblfiles`
---
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblfiles` (
   `id` int NOT NULL,
   `rel_id` int NOT NULL,
-  `rel_type` varchar(20) NOT NULL,
-  `file_name` varchar(191) NOT NULL,
-  `filetype` varchar(40) DEFAULT NULL,
+  `rel_type` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `file_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `filetype` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `visible_to_customer` int NOT NULL DEFAULT '0',
-  `attachment_key` varchar(32) DEFAULT NULL,
-  `external` varchar(40) DEFAULT NULL,
-  `external_link` text,
-  `thumbnail_link` text COMMENT 'For external usage',
+  `attachment_key` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `external` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `external_link` mediumtext COLLATE utf8mb4_unicode_ci,
+  `thumbnail_link` mediumtext COLLATE utf8mb4_unicode_ci COMMENT 'For external usage',
   `staffid` int NOT NULL,
   `contact_id` int DEFAULT '0',
   `task_comment_id` int NOT NULL DEFAULT '0',
   `dateadded` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
+CREATE TABLE `tblfilters` (
+  `id` int UNSIGNED NOT NULL,
+  `name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `builder` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `staff_id` int UNSIGNED NOT NULL,
+  `identifier` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_shared` tinyint UNSIGNED NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Table structure for table `tblform_questions`
---
+CREATE TABLE `tblfilter_defaults` (
+  `filter_id` int UNSIGNED NOT NULL,
+  `staff_id` int NOT NULL,
+  `identifier` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `view` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblform_questions` (
   `questionid` int NOT NULL,
   `rel_id` int NOT NULL,
-  `rel_type` varchar(20) DEFAULT NULL,
-  `question` mediumtext NOT NULL,
+  `rel_type` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `question` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `required` tinyint(1) NOT NULL DEFAULT '0',
   `question_order` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblform_question_box`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblform_question_box` (
   `boxid` int NOT NULL,
-  `boxtype` varchar(10) NOT NULL,
+  `boxtype` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   `questionid` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblform_question_box_description`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblform_question_box_description` (
   `questionboxdescriptionid` int NOT NULL,
-  `description` mediumtext NOT NULL,
-  `boxid` mediumtext NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `boxid` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `questionid` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblform_results`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblform_results` (
   `resultid` int NOT NULL,
   `boxid` int NOT NULL,
   `boxdescriptionid` int DEFAULT NULL,
   `rel_id` int NOT NULL,
-  `rel_type` varchar(20) DEFAULT NULL,
+  `rel_type` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `questionid` int NOT NULL,
-  `answer` text,
+  `answer` mediumtext COLLATE utf8mb4_unicode_ci,
   `resultsetid` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblgdpr_requests`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblgdpr_requests` (
   `id` int NOT NULL,
   `clientid` int NOT NULL DEFAULT '0',
   `contact_id` int NOT NULL DEFAULT '0',
   `lead_id` int NOT NULL DEFAULT '0',
-  `request_type` varchar(191) DEFAULT NULL,
-  `status` varchar(40) DEFAULT NULL,
+  `request_type` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `request_date` datetime NOT NULL,
-  `request_from` varchar(150) DEFAULT NULL,
-  `description` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblinvoicepaymentrecords`
---
+  `request_from` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblinvoicepaymentrecords` (
   `id` int NOT NULL,
   `invoiceid` int NOT NULL,
   `amount` decimal(15,2) NOT NULL,
-  `paymentmode` varchar(40) DEFAULT NULL,
-  `paymentmethod` varchar(191) DEFAULT NULL,
+  `paymentmode` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `paymentmethod` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date` date NOT NULL,
   `daterecorded` datetime NOT NULL,
-  `note` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
-  `transactionid` mediumtext
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblinvoices`
---
+  `note` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `transactionid` longtext COLLATE utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblinvoices` (
   `id` int NOT NULL,
   `sent` tinyint(1) NOT NULL DEFAULT '0',
   `datesend` datetime DEFAULT NULL,
   `clientid` int NOT NULL,
-  `deleted_customer_name` varchar(100) DEFAULT NULL,
+  `deleted_customer_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `number` int NOT NULL,
-  `prefix` varchar(50) DEFAULT NULL,
+  `prefix` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `number_format` int NOT NULL DEFAULT '0',
   `datecreated` datetime NOT NULL,
   `date` date NOT NULL,
@@ -1191,172 +944,124 @@ CREATE TABLE `tblinvoices` (
   `total` decimal(15,2) NOT NULL,
   `adjustment` decimal(15,2) DEFAULT NULL,
   `addedfrom` int DEFAULT NULL,
-  `hash` varchar(32) NOT NULL,
+  `hash` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` int DEFAULT '1',
-  `clientnote` text,
-  `adminnote` text,
+  `clientnote` mediumtext COLLATE utf8mb4_unicode_ci,
+  `adminnote` mediumtext COLLATE utf8mb4_unicode_ci,
   `last_overdue_reminder` date DEFAULT NULL,
   `last_due_reminder` date DEFAULT NULL,
   `cancel_overdue_reminders` int NOT NULL DEFAULT '0',
-  `allowed_payment_modes` mediumtext,
-  `token` mediumtext,
+  `allowed_payment_modes` longtext COLLATE utf8mb4_unicode_ci,
+  `token` longtext COLLATE utf8mb4_unicode_ci,
   `discount_percent` decimal(15,2) DEFAULT '0.00',
   `discount_total` decimal(15,2) DEFAULT '0.00',
-  `discount_type` varchar(30) NOT NULL,
+  `discount_type` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `recurring` int NOT NULL DEFAULT '0',
-  `recurring_type` varchar(10) DEFAULT NULL,
+  `recurring_type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `custom_recurring` tinyint(1) NOT NULL DEFAULT '0',
   `cycles` int NOT NULL DEFAULT '0',
   `total_cycles` int NOT NULL DEFAULT '0',
   `is_recurring_from` int DEFAULT NULL,
   `last_recurring_date` date DEFAULT NULL,
-  `terms` text,
+  `terms` mediumtext COLLATE utf8mb4_unicode_ci,
   `sale_agent` int NOT NULL DEFAULT '0',
-  `billing_street` varchar(200) DEFAULT NULL,
-  `billing_city` varchar(100) DEFAULT NULL,
-  `billing_state` varchar(100) DEFAULT NULL,
-  `billing_zip` varchar(100) DEFAULT NULL,
+  `billing_street` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `billing_city` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `billing_state` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `billing_zip` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `billing_country` int DEFAULT NULL,
-  `shipping_street` varchar(200) DEFAULT NULL,
-  `shipping_city` varchar(100) DEFAULT NULL,
-  `shipping_state` varchar(100) DEFAULT NULL,
-  `shipping_zip` varchar(100) DEFAULT NULL,
+  `shipping_street` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_city` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_state` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_zip` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `shipping_country` int DEFAULT NULL,
   `include_shipping` tinyint(1) NOT NULL,
   `show_shipping_on_invoice` tinyint(1) NOT NULL DEFAULT '1',
   `show_quantity_as` int NOT NULL DEFAULT '1',
   `project_id` int DEFAULT '0',
   `subscription_id` int NOT NULL DEFAULT '0',
-  `short_link` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblitemable`
---
+  `short_link` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblitemable` (
   `id` int NOT NULL,
   `rel_id` int NOT NULL,
-  `rel_type` varchar(15) NOT NULL,
-  `description` mediumtext NOT NULL,
-  `long_description` mediumtext,
+  `rel_type` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `long_description` longtext COLLATE utf8mb4_unicode_ci,
   `qty` decimal(15,2) NOT NULL,
   `rate` decimal(15,2) NOT NULL,
-  `unit` varchar(40) DEFAULT NULL,
+  `unit` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `item_order` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblitems`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblitems` (
   `id` int NOT NULL,
-  `description` mediumtext NOT NULL,
-  `long_description` text,
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `long_description` mediumtext COLLATE utf8mb4_unicode_ci,
   `rate` decimal(15,2) NOT NULL,
   `tax` int DEFAULT NULL,
   `tax2` int DEFAULT NULL,
-  `unit` varchar(40) DEFAULT NULL,
+  `unit` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `group_id` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblitems_groups`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblitems_groups` (
   `id` int NOT NULL,
-  `name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblitem_tax`
---
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblitem_tax` (
   `id` int NOT NULL,
   `itemid` int NOT NULL,
   `rel_id` int NOT NULL,
-  `rel_type` varchar(20) NOT NULL,
+  `rel_type` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `taxrate` decimal(15,2) NOT NULL,
-  `taxname` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblknowedge_base_article_feedback`
---
+  `taxname` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblknowedge_base_article_feedback` (
   `articleanswerid` int NOT NULL,
   `articleid` int NOT NULL,
   `answer` int NOT NULL,
-  `ip` varchar(40) NOT NULL,
+  `ip` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblknowledge_base`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblknowledge_base` (
   `articleid` int NOT NULL,
   `articlegroup` int NOT NULL,
-  `subject` mediumtext NOT NULL,
-  `description` text NOT NULL,
-  `slug` mediumtext NOT NULL,
+  `subject` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `active` tinyint NOT NULL,
   `datecreated` datetime NOT NULL,
   `article_order` int NOT NULL DEFAULT '0',
   `staff_article` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblknowledge_base_groups`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblknowledge_base_groups` (
   `groupid` int NOT NULL,
-  `name` varchar(191) NOT NULL,
-  `group_slug` text,
-  `description` mediumtext,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `group_slug` mediumtext COLLATE utf8mb4_unicode_ci,
+  `description` longtext COLLATE utf8mb4_unicode_ci,
   `active` tinyint NOT NULL,
-  `color` varchar(10) DEFAULT '#28B8DA',
+  `color` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT '#28B8DA',
   `group_order` int DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblleads`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblleads` (
   `id` int NOT NULL,
-  `hash` varchar(65) DEFAULT NULL,
-  `name` varchar(191) NOT NULL,
-  `title` varchar(100) DEFAULT NULL,
-  `company` varchar(191) DEFAULT NULL,
-  `description` text,
+  `hash` varchar(65) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `company` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci,
   `country` int NOT NULL DEFAULT '0',
-  `zip` varchar(15) DEFAULT NULL,
-  `city` varchar(100) DEFAULT NULL,
-  `state` varchar(50) DEFAULT NULL,
-  `address` varchar(100) DEFAULT NULL,
+  `zip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `city` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `state` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `assigned` int NOT NULL DEFAULT '0',
   `dateadded` datetime NOT NULL,
   `from_form_id` int NOT NULL DEFAULT '0',
@@ -1366,205 +1071,129 @@ CREATE TABLE `tblleads` (
   `dateassigned` date DEFAULT NULL,
   `last_status_change` datetime DEFAULT NULL,
   `addedfrom` int NOT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `website` varchar(150) DEFAULT NULL,
+  `email` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `website` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `leadorder` int DEFAULT '1',
-  `phonenumber` varchar(50) DEFAULT NULL,
+  `phonenumber` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date_converted` datetime DEFAULT NULL,
   `lost` tinyint(1) NOT NULL DEFAULT '0',
   `junk` int NOT NULL DEFAULT '0',
   `last_lead_status` int NOT NULL DEFAULT '0',
   `is_imported_from_email_integration` tinyint(1) NOT NULL DEFAULT '0',
-  `email_integration_uid` varchar(30) DEFAULT NULL,
+  `email_integration_uid` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `is_public` tinyint(1) NOT NULL DEFAULT '0',
-  `default_language` varchar(40) DEFAULT NULL,
+  `default_language` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `client_id` int NOT NULL DEFAULT '0',
   `lead_value` decimal(15,2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblleads_email_integration`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblleads_email_integration` (
   `id` int NOT NULL COMMENT 'the ID always must be 1',
   `active` int NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `imap_server` varchar(100) NOT NULL,
-  `password` mediumtext NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `imap_server` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `check_every` int NOT NULL DEFAULT '5',
   `responsible` int NOT NULL,
   `lead_source` int NOT NULL,
   `lead_status` int NOT NULL,
-  `encryption` varchar(3) DEFAULT NULL,
-  `folder` varchar(100) NOT NULL,
-  `last_run` varchar(50) DEFAULT NULL,
+  `encryption` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `folder` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_run` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `notify_lead_imported` tinyint(1) NOT NULL DEFAULT '1',
   `notify_lead_contact_more_times` tinyint(1) NOT NULL DEFAULT '1',
-  `notify_type` varchar(20) DEFAULT NULL,
-  `notify_ids` mediumtext,
+  `notify_type` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `notify_ids` longtext COLLATE utf8mb4_unicode_ci,
   `mark_public` int NOT NULL DEFAULT '0',
   `only_loop_on_unseen_emails` tinyint(1) NOT NULL DEFAULT '1',
   `delete_after_import` int NOT NULL DEFAULT '0',
   `create_task_if_customer` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `tblleads_email_integration`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `tblleads_email_integration` (`id`, `active`, `email`, `imap_server`, `password`, `check_every`, `responsible`, `lead_source`, `lead_status`, `encryption`, `folder`, `last_run`, `notify_lead_imported`, `notify_lead_contact_more_times`, `notify_type`, `notify_ids`, `mark_public`, `only_loop_on_unseen_emails`, `delete_after_import`, `create_task_if_customer`) VALUES
 (1, 0, '', '', '', 10, 0, 0, 0, 'tls', 'INBOX', '', 1, 1, 'assigned', '', 0, 1, 0, 1);
 
--- --------------------------------------------------------
-
---
--- Table structure for table `tblleads_sources`
---
-
 CREATE TABLE `tblleads_sources` (
   `id` int NOT NULL,
-  `name` varchar(150) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `tblleads_sources`
---
+  `name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `tblleads_sources` (`id`, `name`) VALUES
 (2, 'Facebook'),
 (1, 'Google');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `tblleads_status`
---
-
 CREATE TABLE `tblleads_status` (
   `id` int NOT NULL,
-  `name` varchar(50) NOT NULL,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `statusorder` int DEFAULT NULL,
-  `color` varchar(10) DEFAULT '#28B8DA',
+  `color` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT '#28B8DA',
   `isdefault` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `tblleads_status`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `tblleads_status` (`id`, `name`, `statusorder`, `color`, `isdefault`) VALUES
 (1, 'Customer', 1000, '#7cb342', 1);
 
--- --------------------------------------------------------
-
---
--- Table structure for table `tbllead_activity_log`
---
-
 CREATE TABLE `tbllead_activity_log` (
   `id` int NOT NULL,
   `leadid` int NOT NULL,
-  `description` mediumtext NOT NULL,
-  `additional_data` text,
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `additional_data` mediumtext COLLATE utf8mb4_unicode_ci,
   `date` datetime NOT NULL,
   `staffid` int NOT NULL,
-  `full_name` varchar(100) DEFAULT NULL,
+  `full_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `custom_activity` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbllead_integration_emails`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbllead_integration_emails` (
   `id` int NOT NULL,
-  `subject` mediumtext,
-  `body` mediumtext,
+  `subject` longtext COLLATE utf8mb4_unicode_ci,
+  `body` longtext COLLATE utf8mb4_unicode_ci,
   `dateadded` datetime NOT NULL,
   `leadid` int NOT NULL,
   `emailid` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblmail_queue`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblmail_queue` (
   `id` int NOT NULL,
-  `engine` varchar(40) DEFAULT NULL,
-  `email` varchar(191) NOT NULL,
-  `cc` text,
-  `bcc` text,
-  `message` mediumtext NOT NULL,
-  `alt_message` mediumtext,
-  `status` enum('pending','sending','sent','failed') DEFAULT NULL,
+  `engine` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cc` mediumtext COLLATE utf8mb4_unicode_ci,
+  `bcc` mediumtext COLLATE utf8mb4_unicode_ci,
+  `message` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `alt_message` longtext COLLATE utf8mb4_unicode_ci,
+  `status` enum('pending','sending','sent','failed') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date` datetime DEFAULT NULL,
-  `headers` text,
-  `attachments` mediumtext
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblmigrations`
---
+  `headers` mediumtext COLLATE utf8mb4_unicode_ci,
+  `attachments` longtext COLLATE utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblmigrations` (
   `version` bigint NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `tblmigrations`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `tblmigrations` (`version`) VALUES
-(306);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblmilestones`
---
+(311);
 
 CREATE TABLE `tblmilestones` (
   `id` int NOT NULL,
-  `name` varchar(191) NOT NULL,
-  `description` text,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci,
   `description_visible_to_customer` tinyint(1) DEFAULT '0',
   `start_date` date DEFAULT NULL,
   `due_date` date NOT NULL,
   `project_id` int NOT NULL,
-  `color` varchar(10) DEFAULT NULL,
+  `color` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `milestone_order` int NOT NULL DEFAULT '0',
   `datecreated` date NOT NULL,
   `hide_from_customer` int DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblmodules`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblmodules` (
   `id` int NOT NULL,
-  `module_name` varchar(55) NOT NULL,
-  `installed_version` varchar(11) NOT NULL,
+  `module_name` varchar(55) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `installed_version` varchar(11) COLLATE utf8mb4_unicode_ci NOT NULL,
   `active` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblnewsfeed_comment_likes`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblnewsfeed_comment_likes` (
   `id` int NOT NULL,
@@ -1572,104 +1201,64 @@ CREATE TABLE `tblnewsfeed_comment_likes` (
   `commentid` int NOT NULL,
   `userid` int NOT NULL,
   `dateliked` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblnewsfeed_posts`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblnewsfeed_posts` (
   `postid` int NOT NULL,
   `creator` int NOT NULL,
   `datecreated` datetime NOT NULL,
-  `visibility` varchar(100) NOT NULL,
-  `content` text NOT NULL,
+  `visibility` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `pinned` int NOT NULL,
   `datepinned` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblnewsfeed_post_comments`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblnewsfeed_post_comments` (
   `id` int NOT NULL,
-  `content` text,
+  `content` mediumtext COLLATE utf8mb4_unicode_ci,
   `userid` int NOT NULL,
   `postid` int NOT NULL,
   `dateadded` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblnewsfeed_post_likes`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblnewsfeed_post_likes` (
   `id` int NOT NULL,
   `postid` int NOT NULL,
   `userid` int NOT NULL,
   `dateliked` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblnotes`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblnotes` (
   `id` int NOT NULL,
   `rel_id` int NOT NULL,
-  `rel_type` varchar(20) NOT NULL,
-  `description` text,
+  `rel_type` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci,
   `date_contacted` datetime DEFAULT NULL,
   `addedfrom` int NOT NULL,
   `dateadded` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblnotifications`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblnotifications` (
   `id` int NOT NULL,
   `isread` int NOT NULL DEFAULT '0',
   `isread_inline` tinyint(1) NOT NULL DEFAULT '0',
   `date` datetime NOT NULL,
-  `description` text NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `fromuserid` int NOT NULL,
   `fromclientid` int NOT NULL DEFAULT '0',
-  `from_fullname` varchar(100) NOT NULL,
+  `from_fullname` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `touserid` int NOT NULL,
   `fromcompany` int DEFAULT NULL,
-  `link` mediumtext,
-  `additional_data` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbloptions`
---
+  `link` longtext COLLATE utf8mb4_unicode_ci,
+  `additional_data` mediumtext COLLATE utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbloptions` (
   `id` int NOT NULL,
-  `name` varchar(191) NOT NULL,
-  `value` longtext NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `autoload` tinyint(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `tbloptions`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `tbloptions` (`id`, `name`, `value`, `autoload`) VALUES
 (1, 'dateformat', 'Y-m-d|%Y-%m-%d', 1),
@@ -2001,110 +1590,71 @@ INSERT INTO `tbloptions` (`id`, `name`, `value`, `autoload`) VALUES
 (327, 'microsoft_mail_refresh_token', '', 1),
 (328, 'automatically_set_logged_in_staff_sales_agent', '1', 1),
 (329, 'contract_sign_reminder_every_days', '0', 1),
-(330, 'upgraded_from_version', '', 0),
-(331, 'last_updated_date', '', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblpayment_attempts`
---
+(330, 'last_updated_date', '', 1),
+(331, 'v310_incompatible_tables', '[]', 1),
+(332, 'upgraded_from_version', '', 0);
 
 CREATE TABLE `tblpayment_attempts` (
   `id` int UNSIGNED NOT NULL,
-  `reference` varchar(100) NOT NULL,
+  `reference` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `invoice_id` int NOT NULL,
   `amount` double NOT NULL,
   `fee` double NOT NULL,
-  `payment_gateway` varchar(100) NOT NULL,
+  `payment_gateway` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblpayment_modes`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblpayment_modes` (
   `id` int NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `description` text,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci,
   `show_on_pdf` int NOT NULL DEFAULT '0',
   `invoices_only` int NOT NULL DEFAULT '0',
   `expenses_only` int NOT NULL DEFAULT '0',
   `selected_by_default` int NOT NULL DEFAULT '1',
   `active` tinyint(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `tblpayment_modes`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `tblpayment_modes` (`id`, `name`, `description`, `show_on_pdf`, `invoices_only`, `expenses_only`, `selected_by_default`, `active`) VALUES
 (1, 'Bank', NULL, 0, 0, 0, 1, 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblpinned_projects`
---
 
 CREATE TABLE `tblpinned_projects` (
   `id` int NOT NULL,
   `project_id` int NOT NULL,
   `staff_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblprojectdiscussioncomments`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblprojectdiscussioncomments` (
   `id` int NOT NULL,
   `discussion_id` int NOT NULL,
-  `discussion_type` varchar(10) NOT NULL,
+  `discussion_type` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   `parent` int DEFAULT NULL,
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
-  `content` text NOT NULL,
+  `content` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `staff_id` int NOT NULL,
   `contact_id` int DEFAULT '0',
-  `fullname` varchar(191) DEFAULT NULL,
-  `file_name` varchar(191) DEFAULT NULL,
-  `file_mime_type` varchar(70) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblprojectdiscussions`
---
+  `fullname` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `file_name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `file_mime_type` varchar(70) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblprojectdiscussions` (
   `id` int NOT NULL,
   `project_id` int NOT NULL,
-  `subject` varchar(191) NOT NULL,
-  `description` text NOT NULL,
+  `subject` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `show_to_customer` tinyint(1) NOT NULL DEFAULT '0',
   `datecreated` datetime NOT NULL,
   `last_activity` datetime DEFAULT NULL,
   `staff_id` int NOT NULL DEFAULT '0',
   `contact_id` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblprojects`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblprojects` (
   `id` int NOT NULL,
-  `name` varchar(191) NOT NULL,
-  `description` text,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci,
   `status` int NOT NULL DEFAULT '0',
   `clientid` int NOT NULL,
   `billing_type` int NOT NULL,
@@ -2119,99 +1669,63 @@ CREATE TABLE `tblprojects` (
   `estimated_hours` decimal(15,2) DEFAULT NULL,
   `addedfrom` int NOT NULL,
   `contact_notification` int DEFAULT '1',
-  `notify_contacts` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblproject_activity`
---
+  `notify_contacts` mediumtext COLLATE utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblproject_activity` (
   `id` int NOT NULL,
   `project_id` int NOT NULL,
   `staff_id` int NOT NULL DEFAULT '0',
   `contact_id` int NOT NULL DEFAULT '0',
-  `fullname` varchar(100) DEFAULT NULL,
+  `fullname` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `visible_to_customer` int NOT NULL DEFAULT '0',
-  `description_key` varchar(191) NOT NULL COMMENT 'Language file key',
-  `additional_data` text,
+  `description_key` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Language file key',
+  `additional_data` mediumtext COLLATE utf8mb4_unicode_ci,
   `dateadded` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblproject_files`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblproject_files` (
   `id` int NOT NULL,
-  `file_name` varchar(191) NOT NULL,
-  `original_file_name` mediumtext,
-  `subject` varchar(191) DEFAULT NULL,
-  `description` text,
-  `filetype` varchar(50) DEFAULT NULL,
+  `file_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `original_file_name` longtext COLLATE utf8mb4_unicode_ci,
+  `subject` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci,
+  `filetype` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `dateadded` datetime NOT NULL,
   `last_activity` datetime DEFAULT NULL,
   `project_id` int NOT NULL,
   `visible_to_customer` tinyint(1) DEFAULT '0',
   `staffid` int NOT NULL,
   `contact_id` int NOT NULL DEFAULT '0',
-  `external` varchar(40) DEFAULT NULL,
-  `external_link` text,
-  `thumbnail_link` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblproject_members`
---
+  `external` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `external_link` mediumtext COLLATE utf8mb4_unicode_ci,
+  `thumbnail_link` mediumtext COLLATE utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblproject_members` (
   `id` int NOT NULL,
   `project_id` int NOT NULL,
   `staff_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblproject_notes`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblproject_notes` (
   `id` int NOT NULL,
   `project_id` int NOT NULL,
-  `content` text NOT NULL,
+  `content` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `staff_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblproject_settings`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblproject_settings` (
   `id` int NOT NULL,
   `project_id` int NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `value` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblproposals`
---
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` mediumtext COLLATE utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblproposals` (
   `id` int NOT NULL,
-  `subject` varchar(191) DEFAULT NULL,
-  `content` longtext,
+  `subject` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `content` longtext COLLATE utf8mb4_unicode_ci,
   `addedfrom` int NOT NULL,
   `datecreated` datetime NOT NULL,
   `total` decimal(15,2) DEFAULT NULL,
@@ -2220,24 +1734,24 @@ CREATE TABLE `tblproposals` (
   `adjustment` decimal(15,2) DEFAULT NULL,
   `discount_percent` decimal(15,2) NOT NULL,
   `discount_total` decimal(15,2) NOT NULL,
-  `discount_type` varchar(30) DEFAULT NULL,
+  `discount_type` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `show_quantity_as` int NOT NULL DEFAULT '1',
   `currency` int NOT NULL,
   `open_till` date DEFAULT NULL,
   `date` date NOT NULL,
   `rel_id` int DEFAULT NULL,
-  `rel_type` varchar(40) DEFAULT NULL,
+  `rel_type` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `assigned` int DEFAULT NULL,
-  `hash` varchar(32) NOT NULL,
-  `proposal_to` varchar(191) DEFAULT NULL,
+  `hash` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `proposal_to` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `project_id` int DEFAULT NULL,
   `country` int NOT NULL DEFAULT '0',
-  `zip` varchar(50) DEFAULT NULL,
-  `state` varchar(100) DEFAULT NULL,
-  `city` varchar(100) DEFAULT NULL,
-  `address` varchar(200) DEFAULT NULL,
-  `email` varchar(150) DEFAULT NULL,
-  `phone` varchar(50) DEFAULT NULL,
+  `zip` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `state` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `city` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `allow_comments` tinyint(1) NOT NULL DEFAULT '1',
   `status` int NOT NULL,
   `estimate_id` int DEFAULT NULL,
@@ -2245,292 +1759,186 @@ CREATE TABLE `tblproposals` (
   `date_converted` datetime DEFAULT NULL,
   `pipeline_order` int DEFAULT '1',
   `is_expiry_notified` int NOT NULL DEFAULT '0',
-  `acceptance_firstname` varchar(50) DEFAULT NULL,
-  `acceptance_lastname` varchar(50) DEFAULT NULL,
-  `acceptance_email` varchar(100) DEFAULT NULL,
+  `acceptance_firstname` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `acceptance_lastname` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `acceptance_email` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `acceptance_date` datetime DEFAULT NULL,
-  `acceptance_ip` varchar(40) DEFAULT NULL,
-  `signature` varchar(40) DEFAULT NULL,
-  `short_link` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblproposal_comments`
---
+  `acceptance_ip` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `signature` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `short_link` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblproposal_comments` (
   `id` int NOT NULL,
-  `content` mediumtext,
+  `content` longtext COLLATE utf8mb4_unicode_ci,
   `proposalid` int NOT NULL,
   `staffid` int NOT NULL,
   `dateadded` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblrelated_items`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblrelated_items` (
   `id` int NOT NULL,
   `rel_id` int NOT NULL,
-  `rel_type` varchar(30) NOT NULL,
+  `rel_type` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `item_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblreminders`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblreminders` (
   `id` int NOT NULL,
-  `description` text,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci,
   `date` datetime NOT NULL,
   `isnotified` int NOT NULL DEFAULT '0',
   `rel_id` int NOT NULL,
   `staff` int NOT NULL,
-  `rel_type` varchar(40) NOT NULL,
+  `rel_type` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   `notify_by_email` int NOT NULL DEFAULT '1',
   `creator` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblroles`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblroles` (
   `roleid` int NOT NULL,
-  `name` varchar(150) NOT NULL,
-  `permissions` longtext
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `tblroles`
---
+  `name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `permissions` longtext COLLATE utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `tblroles` (`roleid`, `name`, `permissions`) VALUES
 (1, 'Employee', NULL);
 
--- --------------------------------------------------------
-
---
--- Table structure for table `tblsales_activity`
---
-
 CREATE TABLE `tblsales_activity` (
   `id` int NOT NULL,
-  `rel_type` varchar(20) DEFAULT NULL,
+  `rel_type` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `rel_id` int NOT NULL,
-  `description` text NOT NULL,
-  `additional_data` text,
-  `staffid` varchar(11) DEFAULT NULL,
-  `full_name` varchar(100) DEFAULT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `additional_data` mediumtext COLLATE utf8mb4_unicode_ci,
+  `staffid` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `full_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblscheduled_emails`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblscheduled_emails` (
   `id` int NOT NULL,
   `rel_id` int NOT NULL,
-  `rel_type` varchar(15) NOT NULL,
+  `rel_type` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `scheduled_at` datetime NOT NULL,
-  `contacts` varchar(197) NOT NULL,
-  `cc` text,
+  `contacts` varchar(197) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cc` mediumtext COLLATE utf8mb4_unicode_ci,
   `attach_pdf` tinyint(1) NOT NULL DEFAULT '1',
-  `template` varchar(197) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblservices`
---
+  `template` varchar(197) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblservices` (
   `serviceid` int NOT NULL,
-  `name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblsessions`
---
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblsessions` (
-  `id` varchar(128) NOT NULL,
-  `ip_address` varchar(45) NOT NULL,
+  `id` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
   `timestamp` int UNSIGNED NOT NULL DEFAULT '0',
   `data` blob NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblshared_customer_files`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblshared_customer_files` (
   `file_id` int NOT NULL,
   `contact_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblspam_filters`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblspam_filters` (
   `id` int NOT NULL,
-  `type` varchar(40) NOT NULL,
-  `rel_type` varchar(10) NOT NULL,
-  `value` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblstaff`
---
+  `type` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `rel_type` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblstaff` (
   `staffid` int NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `firstname` varchar(50) NOT NULL,
-  `lastname` varchar(50) NOT NULL,
-  `facebook` mediumtext,
-  `linkedin` mediumtext,
-  `phonenumber` varchar(30) DEFAULT NULL,
-  `skype` varchar(50) DEFAULT NULL,
-  `password` varchar(250) NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `firstname` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lastname` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `facebook` longtext COLLATE utf8mb4_unicode_ci,
+  `linkedin` longtext COLLATE utf8mb4_unicode_ci,
+  `phonenumber` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `skype` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
   `datecreated` datetime NOT NULL,
-  `profile_image` varchar(191) DEFAULT NULL,
-  `last_ip` varchar(40) DEFAULT NULL,
+  `profile_image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `last_ip` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `last_login` datetime DEFAULT NULL,
   `last_activity` datetime DEFAULT NULL,
   `last_password_change` datetime DEFAULT NULL,
-  `new_pass_key` varchar(32) DEFAULT NULL,
+  `new_pass_key` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `new_pass_key_requested` datetime DEFAULT NULL,
   `admin` int NOT NULL DEFAULT '0',
   `role` int DEFAULT NULL,
   `active` int NOT NULL DEFAULT '1',
-  `default_language` varchar(40) DEFAULT NULL,
-  `direction` varchar(3) DEFAULT NULL,
-  `media_path_slug` varchar(191) DEFAULT NULL,
+  `default_language` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `direction` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `media_path_slug` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `is_not_staff` int NOT NULL DEFAULT '0',
   `hourly_rate` decimal(15,2) NOT NULL DEFAULT '0.00',
   `two_factor_auth_enabled` tinyint(1) DEFAULT '0',
-  `two_factor_auth_code` varchar(100) DEFAULT NULL,
+  `two_factor_auth_code` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `two_factor_auth_code_requested` datetime DEFAULT NULL,
-  `email_signature` text,
-  `google_auth_secret` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblstaff_departments`
---
+  `email_signature` mediumtext COLLATE utf8mb4_unicode_ci,
+  `google_auth_secret` mediumtext COLLATE utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblstaff_departments` (
   `staffdepartmentid` int NOT NULL,
   `staffid` int NOT NULL,
   `departmentid` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblstaff_permissions`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblstaff_permissions` (
   `staff_id` int NOT NULL,
-  `feature` varchar(40) NOT NULL,
-  `capability` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblsubscriptions`
---
+  `feature` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `capability` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblsubscriptions` (
   `id` int NOT NULL,
-  `name` varchar(191) NOT NULL,
-  `description` text,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci,
   `description_in_item` tinyint(1) NOT NULL DEFAULT '0',
   `clientid` int NOT NULL,
   `date` date DEFAULT NULL,
-  `terms` text,
+  `terms` mediumtext COLLATE utf8mb4_unicode_ci,
   `currency` int NOT NULL,
   `tax_id` int NOT NULL DEFAULT '0',
-  `stripe_tax_id` varchar(50) DEFAULT NULL,
+  `stripe_tax_id` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tax_id_2` int NOT NULL DEFAULT '0',
-  `stripe_tax_id_2` varchar(50) DEFAULT NULL,
-  `stripe_plan_id` text,
-  `stripe_subscription_id` text NOT NULL,
+  `stripe_tax_id_2` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stripe_plan_id` mediumtext COLLATE utf8mb4_unicode_ci,
+  `stripe_subscription_id` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `next_billing_cycle` bigint DEFAULT NULL,
   `ends_at` bigint DEFAULT NULL,
-  `status` varchar(50) DEFAULT NULL,
+  `status` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `quantity` int NOT NULL DEFAULT '1',
   `project_id` int NOT NULL DEFAULT '0',
-  `hash` varchar(32) NOT NULL,
+  `hash` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created` datetime NOT NULL,
   `created_from` int NOT NULL,
   `date_subscribed` datetime DEFAULT NULL,
   `in_test_environment` int DEFAULT NULL,
   `last_sent_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbltaggables`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbltaggables` (
   `rel_id` int NOT NULL,
-  `rel_type` varchar(20) NOT NULL,
+  `rel_type` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `tag_id` int NOT NULL,
   `tag_order` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbltags`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbltags` (
   `id` int NOT NULL,
-  `name` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbltasks`
---
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbltasks` (
   `id` int NOT NULL,
-  `name` mediumtext,
-  `description` text,
+  `name` longtext COLLATE utf8mb4_unicode_ci,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci,
   `priority` int DEFAULT NULL,
   `dateadded` datetime NOT NULL,
   `startdate` date NOT NULL,
@@ -2539,7 +1947,7 @@ CREATE TABLE `tbltasks` (
   `addedfrom` int NOT NULL,
   `is_added_from_contact` tinyint(1) NOT NULL DEFAULT '0',
   `status` int NOT NULL DEFAULT '0',
-  `recurring_type` varchar(10) DEFAULT NULL,
+  `recurring_type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `repeat_every` int DEFAULT NULL,
   `recurring` int NOT NULL DEFAULT '0',
   `is_recurring_from` int DEFAULT NULL,
@@ -2548,7 +1956,7 @@ CREATE TABLE `tbltasks` (
   `custom_recurring` tinyint(1) NOT NULL DEFAULT '0',
   `last_recurring_date` date DEFAULT NULL,
   `rel_id` int DEFAULT NULL,
-  `rel_type` varchar(30) DEFAULT NULL,
+  `rel_type` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `is_public` tinyint(1) NOT NULL DEFAULT '0',
   `billable` tinyint(1) NOT NULL DEFAULT '0',
   `billed` tinyint(1) NOT NULL DEFAULT '0',
@@ -2559,40 +1967,22 @@ CREATE TABLE `tbltasks` (
   `milestone_order` int NOT NULL DEFAULT '0',
   `visible_to_client` tinyint(1) NOT NULL DEFAULT '0',
   `deadline_notified` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbltaskstimers`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbltaskstimers` (
   `id` int NOT NULL,
   `task_id` int NOT NULL,
-  `start_time` varchar(64) NOT NULL,
-  `end_time` varchar(64) DEFAULT NULL,
+  `start_time` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `end_time` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `staff_id` int NOT NULL,
   `hourly_rate` decimal(15,2) NOT NULL DEFAULT '0.00',
-  `note` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbltasks_checklist_templates`
---
+  `note` mediumtext COLLATE utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbltasks_checklist_templates` (
   `id` int NOT NULL,
-  `description` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbltask_assigned`
---
+  `description` mediumtext COLLATE utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbltask_assigned` (
   `id` int NOT NULL,
@@ -2600,85 +1990,49 @@ CREATE TABLE `tbltask_assigned` (
   `taskid` int NOT NULL,
   `assigned_from` int NOT NULL DEFAULT '0',
   `is_assigned_from_contact` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbltask_checklist_items`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbltask_checklist_items` (
   `id` int NOT NULL,
   `taskid` int NOT NULL,
-  `description` text NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `finished` int NOT NULL DEFAULT '0',
   `dateadded` datetime NOT NULL,
   `addedfrom` int NOT NULL,
   `finished_from` int DEFAULT '0',
   `list_order` int NOT NULL DEFAULT '0',
   `assigned` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbltask_comments`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbltask_comments` (
   `id` int NOT NULL,
-  `content` text NOT NULL,
+  `content` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `taskid` int NOT NULL,
   `staffid` int NOT NULL,
   `contact_id` int NOT NULL DEFAULT '0',
   `file_id` int NOT NULL DEFAULT '0',
   `dateadded` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbltask_followers`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbltask_followers` (
   `id` int NOT NULL,
   `staffid` int NOT NULL,
   `taskid` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbltaxes`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbltaxes` (
   `id` int NOT NULL,
-  `name` varchar(100) NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `taxrate` decimal(15,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbltemplates`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbltemplates` (
   `id` int UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `type` varchar(100) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `addedfrom` int NOT NULL,
-  `content` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbltickets`
---
+  `content` longtext COLLATE utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbltickets` (
   `ticketid` int NOT NULL,
@@ -2686,15 +2040,15 @@ CREATE TABLE `tbltickets` (
   `userid` int NOT NULL,
   `contactid` int NOT NULL DEFAULT '0',
   `merged_ticket_id` int DEFAULT NULL,
-  `email` text,
-  `name` text,
+  `email` mediumtext COLLATE utf8mb4_unicode_ci,
+  `name` mediumtext COLLATE utf8mb4_unicode_ci,
   `department` int NOT NULL,
   `priority` int NOT NULL,
   `status` int NOT NULL,
   `service` int DEFAULT NULL,
-  `ticketkey` varchar(32) NOT NULL,
-  `subject` varchar(191) NOT NULL,
-  `message` text,
+  `ticketkey` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subject` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message` mediumtext COLLATE utf8mb4_unicode_ci,
   `admin` int DEFAULT NULL,
   `date` datetime NOT NULL,
   `project_id` int NOT NULL DEFAULT '0',
@@ -2703,75 +2057,43 @@ CREATE TABLE `tbltickets` (
   `adminread` int NOT NULL DEFAULT '0',
   `assigned` int NOT NULL DEFAULT '0',
   `staff_id_replying` int DEFAULT NULL,
-  `cc` varchar(191) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbltickets_pipe_log`
---
+  `cc` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbltickets_pipe_log` (
   `id` int NOT NULL,
   `date` datetime NOT NULL,
-  `email_to` varchar(100) NOT NULL,
-  `name` varchar(191) NOT NULL,
-  `subject` varchar(191) NOT NULL,
-  `message` mediumtext NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `status` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbltickets_predefined_replies`
---
+  `email_to` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subject` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbltickets_predefined_replies` (
   `id` int NOT NULL,
-  `name` varchar(191) NOT NULL,
-  `message` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbltickets_priorities`
---
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbltickets_priorities` (
   `priorityid` int NOT NULL,
-  `name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `tbltickets_priorities`
---
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `tbltickets_priorities` (`priorityid`, `name`) VALUES
 (1, 'Low'),
 (2, 'Medium'),
 (3, 'High');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `tbltickets_status`
---
-
 CREATE TABLE `tbltickets_status` (
   `ticketstatusid` int NOT NULL,
-  `name` varchar(50) NOT NULL,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `isdefault` int NOT NULL DEFAULT '0',
-  `statuscolor` varchar(7) DEFAULT NULL,
+  `statuscolor` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `statusorder` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `tbltickets_status`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `tbltickets_status` (`ticketstatusid`, `name`, `isdefault`, `statuscolor`, `statusorder`) VALUES
 (1, 'Open', 1, '#ff2d42', 1),
@@ -2780,210 +2102,138 @@ INSERT INTO `tbltickets_status` (`ticketstatusid`, `name`, `isdefault`, `statusc
 (4, 'On Hold', 1, '#64748b', 4),
 (5, 'Closed', 1, '#03a9f4', 5);
 
--- --------------------------------------------------------
-
---
--- Table structure for table `tblticket_attachments`
---
-
 CREATE TABLE `tblticket_attachments` (
   `id` int NOT NULL,
   `ticketid` int NOT NULL,
   `replyid` int DEFAULT NULL,
-  `file_name` varchar(191) NOT NULL,
-  `filetype` varchar(50) DEFAULT NULL,
+  `file_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `filetype` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `dateadded` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblticket_replies`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblticket_replies` (
   `id` int NOT NULL,
   `ticketid` int NOT NULL,
   `userid` int DEFAULT NULL,
   `contactid` int NOT NULL DEFAULT '0',
-  `name` text,
-  `email` text,
+  `name` mediumtext COLLATE utf8mb4_unicode_ci,
+  `email` mediumtext COLLATE utf8mb4_unicode_ci,
   `date` datetime NOT NULL,
-  `message` text,
+  `message` mediumtext COLLATE utf8mb4_unicode_ci,
   `attachment` int DEFAULT NULL,
   `admin` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbltodos`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbltodos` (
   `todoid` int NOT NULL,
-  `description` text NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `staffid` int NOT NULL,
   `dateadded` datetime NOT NULL,
   `finished` tinyint(1) NOT NULL,
   `datefinished` datetime DEFAULT NULL,
   `item_order` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbltracked_mails`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbltracked_mails` (
   `id` int NOT NULL,
-  `uid` varchar(32) NOT NULL,
+  `uid` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `rel_id` int NOT NULL,
-  `rel_type` varchar(40) NOT NULL,
+  `rel_type` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` datetime NOT NULL,
-  `email` varchar(100) NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `opened` tinyint(1) NOT NULL DEFAULT '0',
   `date_opened` datetime DEFAULT NULL,
-  `subject` mediumtext
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbltwocheckout_log`
---
+  `subject` longtext COLLATE utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbltwocheckout_log` (
   `id` int UNSIGNED NOT NULL,
-  `reference` varchar(64) NOT NULL,
+  `reference` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
   `invoice_id` int NOT NULL,
-  `amount` varchar(25) NOT NULL,
+  `amount` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL,
-  `attempt_reference` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbluser_auto_login`
---
+  `attempt_reference` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbluser_auto_login` (
-  `key_id` char(32) NOT NULL,
+  `key_id` char(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` int NOT NULL,
-  `user_agent` varchar(150) NOT NULL,
-  `last_ip` varchar(40) NOT NULL,
+  `user_agent` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_ip` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   `last_login` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `staff` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbluser_meta`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tbluser_meta` (
   `umeta_id` bigint UNSIGNED NOT NULL,
   `staff_id` bigint UNSIGNED NOT NULL DEFAULT '0',
   `client_id` bigint UNSIGNED NOT NULL DEFAULT '0',
   `contact_id` bigint UNSIGNED NOT NULL DEFAULT '0',
-  `meta_key` varchar(191) DEFAULT NULL,
-  `meta_value` longtext
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblvault`
---
+  `meta_key` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_value` longtext COLLATE utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblvault` (
   `id` int NOT NULL,
   `customer_id` int NOT NULL,
-  `server_address` varchar(191) NOT NULL,
+  `server_address` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `port` int DEFAULT NULL,
-  `username` varchar(191) NOT NULL,
-  `password` text NOT NULL,
-  `description` text,
+  `username` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci,
   `creator` int NOT NULL,
-  `creator_name` varchar(100) DEFAULT NULL,
+  `creator_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `visibility` tinyint(1) NOT NULL DEFAULT '1',
   `share_in_projects` tinyint(1) NOT NULL DEFAULT '0',
   `last_updated` datetime DEFAULT NULL,
-  `last_updated_from` varchar(100) DEFAULT NULL,
+  `last_updated_from` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date_created` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblviews_tracking`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblviews_tracking` (
   `id` int NOT NULL,
   `rel_id` int NOT NULL,
-  `rel_type` varchar(40) NOT NULL,
+  `rel_type` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` datetime NOT NULL,
-  `view_ip` varchar(40) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblweb_to_lead`
---
+  `view_ip` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tblweb_to_lead` (
   `id` int NOT NULL,
-  `form_key` varchar(32) NOT NULL,
+  `form_key` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `lead_source` int NOT NULL,
   `lead_status` int NOT NULL,
   `notify_lead_imported` int NOT NULL DEFAULT '1',
-  `notify_type` varchar(20) DEFAULT NULL,
-  `notify_ids` mediumtext,
+  `notify_type` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `notify_ids` longtext COLLATE utf8mb4_unicode_ci,
   `responsible` int NOT NULL DEFAULT '0',
-  `name` varchar(191) NOT NULL,
-  `form_data` mediumtext,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `form_data` longtext COLLATE utf8mb4_unicode_ci,
   `recaptcha` int NOT NULL DEFAULT '0',
-  `submit_btn_name` varchar(40) DEFAULT NULL,
-  `submit_btn_text_color` varchar(10) DEFAULT '#ffffff',
-  `submit_btn_bg_color` varchar(10) DEFAULT '#84c529',
-  `success_submit_msg` text,
+  `submit_btn_name` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `submit_btn_text_color` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT '#ffffff',
+  `submit_btn_bg_color` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT '#84c529',
+  `success_submit_msg` mediumtext COLLATE utf8mb4_unicode_ci,
   `submit_action` int DEFAULT '0',
-  `lead_name_prefix` varchar(255) DEFAULT NULL,
-  `submit_redirect_url` mediumtext,
-  `language` varchar(40) DEFAULT NULL,
+  `lead_name_prefix` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `submit_redirect_url` longtext COLLATE utf8mb4_unicode_ci,
+  `language` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `allow_duplicate` int NOT NULL DEFAULT '1',
   `mark_public` int NOT NULL DEFAULT '0',
-  `track_duplicate_field` varchar(20) DEFAULT NULL,
-  `track_duplicate_field_and` varchar(20) DEFAULT NULL,
+  `track_duplicate_field` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `track_duplicate_field_and` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `create_task_on_duplicate` int NOT NULL DEFAULT '0',
   `dateadded` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Indexes for dumped tables
---
 
---
--- Indexes for table `tblactivity_log`
---
 ALTER TABLE `tblactivity_log`
   ADD PRIMARY KEY (`id`),
   ADD KEY `staffid` (`staffid`);
 
---
--- Indexes for table `tblannouncements`
---
 ALTER TABLE `tblannouncements`
   ADD PRIMARY KEY (`announcementid`);
 
---
--- Indexes for table `tblclients`
---
 ALTER TABLE `tblclients`
   ADD PRIMARY KEY (`userid`),
   ADD KEY `country` (`country`),
@@ -2991,24 +2241,15 @@ ALTER TABLE `tblclients`
   ADD KEY `company` (`company`),
   ADD KEY `active` (`active`);
 
---
--- Indexes for table `tblconsents`
---
 ALTER TABLE `tblconsents`
   ADD PRIMARY KEY (`id`),
   ADD KEY `purpose_id` (`purpose_id`),
   ADD KEY `contact_id` (`contact_id`),
   ADD KEY `lead_id` (`lead_id`);
 
---
--- Indexes for table `tblconsent_purposes`
---
 ALTER TABLE `tblconsent_purposes`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblcontacts`
---
 ALTER TABLE `tblcontacts`
   ADD PRIMARY KEY (`id`),
   ADD KEY `userid` (`userid`),
@@ -3017,133 +2258,76 @@ ALTER TABLE `tblcontacts`
   ADD KEY `email` (`email`),
   ADD KEY `is_primary` (`is_primary`);
 
---
--- Indexes for table `tblcontact_permissions`
---
 ALTER TABLE `tblcontact_permissions`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblcontracts`
---
 ALTER TABLE `tblcontracts`
   ADD PRIMARY KEY (`id`),
   ADD KEY `client` (`client`),
   ADD KEY `contract_type` (`contract_type`);
 
---
--- Indexes for table `tblcontracts_types`
---
 ALTER TABLE `tblcontracts_types`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblcontract_comments`
---
 ALTER TABLE `tblcontract_comments`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblcontract_renewals`
---
 ALTER TABLE `tblcontract_renewals`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblcountries`
---
 ALTER TABLE `tblcountries`
   ADD PRIMARY KEY (`country_id`);
 
---
--- Indexes for table `tblcreditnotes`
---
 ALTER TABLE `tblcreditnotes`
   ADD PRIMARY KEY (`id`),
   ADD KEY `currency` (`currency`),
   ADD KEY `clientid` (`clientid`),
   ADD KEY `project_id` (`project_id`);
 
---
--- Indexes for table `tblcreditnote_refunds`
---
 ALTER TABLE `tblcreditnote_refunds`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblcredits`
---
 ALTER TABLE `tblcredits`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblcurrencies`
---
 ALTER TABLE `tblcurrencies`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblcustomers_groups`
---
 ALTER TABLE `tblcustomers_groups`
   ADD PRIMARY KEY (`id`),
   ADD KEY `name` (`name`);
 
---
--- Indexes for table `tblcustomer_admins`
---
 ALTER TABLE `tblcustomer_admins`
   ADD KEY `customer_id` (`customer_id`),
   ADD KEY `staff_id` (`staff_id`);
 
---
--- Indexes for table `tblcustomer_groups`
---
 ALTER TABLE `tblcustomer_groups`
   ADD PRIMARY KEY (`id`),
   ADD KEY `groupid` (`groupid`),
   ADD KEY `customer_id` (`customer_id`);
 
---
--- Indexes for table `tblcustomfields`
---
 ALTER TABLE `tblcustomfields`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblcustomfieldsvalues`
---
 ALTER TABLE `tblcustomfieldsvalues`
   ADD PRIMARY KEY (`id`),
   ADD KEY `relid` (`relid`),
   ADD KEY `fieldto` (`fieldto`),
   ADD KEY `fieldid` (`fieldid`);
 
---
--- Indexes for table `tbldepartments`
---
 ALTER TABLE `tbldepartments`
   ADD PRIMARY KEY (`departmentid`),
   ADD KEY `name` (`name`);
 
---
--- Indexes for table `tbldismissed_announcements`
---
 ALTER TABLE `tbldismissed_announcements`
   ADD PRIMARY KEY (`dismissedannouncementid`),
   ADD KEY `announcementid` (`announcementid`),
   ADD KEY `staff` (`staff`),
   ADD KEY `userid` (`userid`);
 
---
--- Indexes for table `tblemailtemplates`
---
 ALTER TABLE `tblemailtemplates`
   ADD PRIMARY KEY (`emailtemplateid`);
 
---
--- Indexes for table `tblestimates`
---
 ALTER TABLE `tblestimates`
   ADD PRIMARY KEY (`id`),
   ADD KEY `clientid` (`clientid`),
@@ -3152,33 +2336,18 @@ ALTER TABLE `tblestimates`
   ADD KEY `sale_agent` (`sale_agent`),
   ADD KEY `status` (`status`);
 
---
--- Indexes for table `tblestimate_requests`
---
 ALTER TABLE `tblestimate_requests`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblestimate_request_forms`
---
 ALTER TABLE `tblestimate_request_forms`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblestimate_request_status`
---
 ALTER TABLE `tblestimate_request_status`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblevents`
---
 ALTER TABLE `tblevents`
   ADD PRIMARY KEY (`eventid`);
 
---
--- Indexes for table `tblexpenses`
---
 ALTER TABLE `tblexpenses`
   ADD PRIMARY KEY (`id`),
   ADD KEY `clientid` (`clientid`),
@@ -3186,61 +2355,41 @@ ALTER TABLE `tblexpenses`
   ADD KEY `category` (`category`),
   ADD KEY `currency` (`currency`);
 
---
--- Indexes for table `tblexpenses_categories`
---
 ALTER TABLE `tblexpenses_categories`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblfiles`
---
 ALTER TABLE `tblfiles`
   ADD PRIMARY KEY (`id`),
   ADD KEY `rel_id` (`rel_id`),
   ADD KEY `rel_type` (`rel_type`);
 
---
--- Indexes for table `tblform_questions`
---
+ALTER TABLE `tblfilters`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `tblfilter_defaults`
+  ADD KEY `filter_id` (`filter_id`),
+  ADD KEY `staff_id` (`staff_id`);
+
 ALTER TABLE `tblform_questions`
   ADD PRIMARY KEY (`questionid`);
 
---
--- Indexes for table `tblform_question_box`
---
 ALTER TABLE `tblform_question_box`
   ADD PRIMARY KEY (`boxid`);
 
---
--- Indexes for table `tblform_question_box_description`
---
 ALTER TABLE `tblform_question_box_description`
   ADD PRIMARY KEY (`questionboxdescriptionid`);
 
---
--- Indexes for table `tblform_results`
---
 ALTER TABLE `tblform_results`
   ADD PRIMARY KEY (`resultid`);
 
---
--- Indexes for table `tblgdpr_requests`
---
 ALTER TABLE `tblgdpr_requests`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblinvoicepaymentrecords`
---
 ALTER TABLE `tblinvoicepaymentrecords`
   ADD PRIMARY KEY (`id`),
   ADD KEY `invoiceid` (`invoiceid`),
   ADD KEY `paymentmethod` (`paymentmethod`);
 
---
--- Indexes for table `tblinvoices`
---
 ALTER TABLE `tblinvoices`
   ADD PRIMARY KEY (`id`),
   ADD KEY `currency` (`currency`),
@@ -3250,9 +2399,6 @@ ALTER TABLE `tblinvoices`
   ADD KEY `total` (`total`),
   ADD KEY `status` (`status`);
 
---
--- Indexes for table `tblitemable`
---
 ALTER TABLE `tblitemable`
   ADD PRIMARY KEY (`id`),
   ADD KEY `rel_id` (`rel_id`),
@@ -3260,50 +2406,29 @@ ALTER TABLE `tblitemable`
   ADD KEY `qty` (`qty`),
   ADD KEY `rate` (`rate`);
 
---
--- Indexes for table `tblitems`
---
 ALTER TABLE `tblitems`
   ADD PRIMARY KEY (`id`),
   ADD KEY `tax` (`tax`),
   ADD KEY `tax2` (`tax2`),
   ADD KEY `group_id` (`group_id`);
 
---
--- Indexes for table `tblitems_groups`
---
 ALTER TABLE `tblitems_groups`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblitem_tax`
---
 ALTER TABLE `tblitem_tax`
   ADD PRIMARY KEY (`id`),
   ADD KEY `itemid` (`itemid`),
   ADD KEY `rel_id` (`rel_id`);
 
---
--- Indexes for table `tblknowedge_base_article_feedback`
---
 ALTER TABLE `tblknowedge_base_article_feedback`
   ADD PRIMARY KEY (`articleanswerid`);
 
---
--- Indexes for table `tblknowledge_base`
---
 ALTER TABLE `tblknowledge_base`
   ADD PRIMARY KEY (`articleid`);
 
---
--- Indexes for table `tblknowledge_base_groups`
---
 ALTER TABLE `tblknowledge_base_groups`
   ADD PRIMARY KEY (`groupid`);
 
---
--- Indexes for table `tblleads`
---
 ALTER TABLE `tblleads`
   ADD PRIMARY KEY (`id`),
   ADD KEY `name` (`name`),
@@ -3317,279 +2442,153 @@ ALTER TABLE `tblleads`
   ADD KEY `leadorder` (`leadorder`),
   ADD KEY `from_form_id` (`from_form_id`);
 
---
--- Indexes for table `tblleads_email_integration`
---
 ALTER TABLE `tblleads_email_integration`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblleads_sources`
---
 ALTER TABLE `tblleads_sources`
   ADD PRIMARY KEY (`id`),
   ADD KEY `name` (`name`);
 
---
--- Indexes for table `tblleads_status`
---
 ALTER TABLE `tblleads_status`
   ADD PRIMARY KEY (`id`),
   ADD KEY `name` (`name`);
 
---
--- Indexes for table `tbllead_activity_log`
---
 ALTER TABLE `tbllead_activity_log`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tbllead_integration_emails`
---
 ALTER TABLE `tbllead_integration_emails`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblmail_queue`
---
 ALTER TABLE `tblmail_queue`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblmilestones`
---
 ALTER TABLE `tblmilestones`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblmodules`
---
 ALTER TABLE `tblmodules`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblnewsfeed_comment_likes`
---
 ALTER TABLE `tblnewsfeed_comment_likes`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblnewsfeed_posts`
---
 ALTER TABLE `tblnewsfeed_posts`
   ADD PRIMARY KEY (`postid`);
 
---
--- Indexes for table `tblnewsfeed_post_comments`
---
 ALTER TABLE `tblnewsfeed_post_comments`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblnewsfeed_post_likes`
---
 ALTER TABLE `tblnewsfeed_post_likes`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblnotes`
---
 ALTER TABLE `tblnotes`
   ADD PRIMARY KEY (`id`),
   ADD KEY `rel_id` (`rel_id`),
   ADD KEY `rel_type` (`rel_type`);
 
---
--- Indexes for table `tblnotifications`
---
 ALTER TABLE `tblnotifications`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tbloptions`
---
 ALTER TABLE `tbloptions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `name` (`name`);
 
---
--- Indexes for table `tblpayment_attempts`
---
 ALTER TABLE `tblpayment_attempts`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblpayment_modes`
---
 ALTER TABLE `tblpayment_modes`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblpinned_projects`
---
 ALTER TABLE `tblpinned_projects`
   ADD PRIMARY KEY (`id`),
   ADD KEY `project_id` (`project_id`);
 
---
--- Indexes for table `tblprojectdiscussioncomments`
---
 ALTER TABLE `tblprojectdiscussioncomments`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblprojectdiscussions`
---
 ALTER TABLE `tblprojectdiscussions`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblprojects`
---
 ALTER TABLE `tblprojects`
   ADD PRIMARY KEY (`id`),
   ADD KEY `clientid` (`clientid`),
   ADD KEY `name` (`name`);
 
---
--- Indexes for table `tblproject_activity`
---
 ALTER TABLE `tblproject_activity`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblproject_files`
---
 ALTER TABLE `tblproject_files`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblproject_members`
---
 ALTER TABLE `tblproject_members`
   ADD PRIMARY KEY (`id`),
   ADD KEY `project_id` (`project_id`),
   ADD KEY `staff_id` (`staff_id`);
 
---
--- Indexes for table `tblproject_notes`
---
 ALTER TABLE `tblproject_notes`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblproject_settings`
---
 ALTER TABLE `tblproject_settings`
   ADD PRIMARY KEY (`id`),
   ADD KEY `project_id` (`project_id`);
 
---
--- Indexes for table `tblproposals`
---
 ALTER TABLE `tblproposals`
   ADD PRIMARY KEY (`id`),
   ADD KEY `status` (`status`);
 
---
--- Indexes for table `tblproposal_comments`
---
 ALTER TABLE `tblproposal_comments`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblrelated_items`
---
 ALTER TABLE `tblrelated_items`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblreminders`
---
 ALTER TABLE `tblreminders`
   ADD PRIMARY KEY (`id`),
   ADD KEY `rel_id` (`rel_id`),
   ADD KEY `rel_type` (`rel_type`),
   ADD KEY `staff` (`staff`);
 
---
--- Indexes for table `tblroles`
---
 ALTER TABLE `tblroles`
   ADD PRIMARY KEY (`roleid`);
 
---
--- Indexes for table `tblsales_activity`
---
 ALTER TABLE `tblsales_activity`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblscheduled_emails`
---
 ALTER TABLE `tblscheduled_emails`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblservices`
---
 ALTER TABLE `tblservices`
   ADD PRIMARY KEY (`serviceid`);
 
---
--- Indexes for table `tblsessions`
---
 ALTER TABLE `tblsessions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `ci_sessions_timestamp` (`timestamp`);
 
---
--- Indexes for table `tblspam_filters`
---
 ALTER TABLE `tblspam_filters`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblstaff`
---
 ALTER TABLE `tblstaff`
   ADD PRIMARY KEY (`staffid`),
   ADD KEY `firstname` (`firstname`),
   ADD KEY `lastname` (`lastname`);
 
---
--- Indexes for table `tblstaff_departments`
---
 ALTER TABLE `tblstaff_departments`
   ADD PRIMARY KEY (`staffdepartmentid`);
 
---
--- Indexes for table `tblsubscriptions`
---
 ALTER TABLE `tblsubscriptions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `clientid` (`clientid`),
   ADD KEY `currency` (`currency`),
   ADD KEY `tax_id` (`tax_id`);
 
---
--- Indexes for table `tbltaggables`
---
 ALTER TABLE `tbltaggables`
   ADD KEY `rel_id` (`rel_id`),
   ADD KEY `rel_type` (`rel_type`),
   ADD KEY `tag_id` (`tag_id`);
 
---
--- Indexes for table `tbltags`
---
 ALTER TABLE `tbltags`
   ADD PRIMARY KEY (`id`),
   ADD KEY `name` (`name`);
 
---
--- Indexes for table `tbltasks`
---
 ALTER TABLE `tbltasks`
   ADD PRIMARY KEY (`id`),
   ADD KEY `rel_id` (`rel_id`),
@@ -3598,64 +2597,37 @@ ALTER TABLE `tbltasks`
   ADD KEY `kanban_order` (`kanban_order`),
   ADD KEY `status` (`status`);
 
---
--- Indexes for table `tbltaskstimers`
---
 ALTER TABLE `tbltaskstimers`
   ADD PRIMARY KEY (`id`),
   ADD KEY `task_id` (`task_id`),
   ADD KEY `staff_id` (`staff_id`);
 
---
--- Indexes for table `tbltasks_checklist_templates`
---
 ALTER TABLE `tbltasks_checklist_templates`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tbltask_assigned`
---
 ALTER TABLE `tbltask_assigned`
   ADD PRIMARY KEY (`id`),
   ADD KEY `taskid` (`taskid`),
   ADD KEY `staffid` (`staffid`);
 
---
--- Indexes for table `tbltask_checklist_items`
---
 ALTER TABLE `tbltask_checklist_items`
   ADD PRIMARY KEY (`id`),
   ADD KEY `taskid` (`taskid`);
 
---
--- Indexes for table `tbltask_comments`
---
 ALTER TABLE `tbltask_comments`
   ADD PRIMARY KEY (`id`),
   ADD KEY `file_id` (`file_id`),
   ADD KEY `taskid` (`taskid`);
 
---
--- Indexes for table `tbltask_followers`
---
 ALTER TABLE `tbltask_followers`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tbltaxes`
---
 ALTER TABLE `tbltaxes`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tbltemplates`
---
 ALTER TABLE `tbltemplates`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tbltickets`
---
 ALTER TABLE `tbltickets`
   ADD PRIMARY KEY (`ticketid`),
   ADD KEY `service` (`service`),
@@ -3666,744 +2638,379 @@ ALTER TABLE `tbltickets`
   ADD KEY `project_id` (`project_id`),
   ADD KEY `contactid` (`contactid`);
 
---
--- Indexes for table `tbltickets_pipe_log`
---
 ALTER TABLE `tbltickets_pipe_log`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tbltickets_predefined_replies`
---
 ALTER TABLE `tbltickets_predefined_replies`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tbltickets_priorities`
---
 ALTER TABLE `tbltickets_priorities`
   ADD PRIMARY KEY (`priorityid`);
 
---
--- Indexes for table `tbltickets_status`
---
 ALTER TABLE `tbltickets_status`
   ADD PRIMARY KEY (`ticketstatusid`);
 
---
--- Indexes for table `tblticket_attachments`
---
 ALTER TABLE `tblticket_attachments`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblticket_replies`
---
 ALTER TABLE `tblticket_replies`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tbltodos`
---
 ALTER TABLE `tbltodos`
   ADD PRIMARY KEY (`todoid`);
 
---
--- Indexes for table `tbltracked_mails`
---
 ALTER TABLE `tbltracked_mails`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tbltwocheckout_log`
---
 ALTER TABLE `tbltwocheckout_log`
   ADD PRIMARY KEY (`id`),
   ADD KEY `invoice_id` (`invoice_id`);
 
---
--- Indexes for table `tbluser_meta`
---
 ALTER TABLE `tbluser_meta`
   ADD PRIMARY KEY (`umeta_id`);
 
---
--- Indexes for table `tblvault`
---
 ALTER TABLE `tblvault`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblviews_tracking`
---
 ALTER TABLE `tblviews_tracking`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tblweb_to_lead`
---
 ALTER TABLE `tblweb_to_lead`
   ADD PRIMARY KEY (`id`);
 
---
--- AUTO_INCREMENT for dumped tables
---
 
---
--- AUTO_INCREMENT for table `tblactivity_log`
---
 ALTER TABLE `tblactivity_log`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblannouncements`
---
 ALTER TABLE `tblannouncements`
   MODIFY `announcementid` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblclients`
---
 ALTER TABLE `tblclients`
   MODIFY `userid` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblconsents`
---
 ALTER TABLE `tblconsents`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblconsent_purposes`
---
 ALTER TABLE `tblconsent_purposes`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblcontacts`
---
 ALTER TABLE `tblcontacts`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblcontact_permissions`
---
 ALTER TABLE `tblcontact_permissions`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblcontracts`
---
 ALTER TABLE `tblcontracts`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblcontracts_types`
---
 ALTER TABLE `tblcontracts_types`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblcontract_comments`
---
 ALTER TABLE `tblcontract_comments`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblcontract_renewals`
---
 ALTER TABLE `tblcontract_renewals`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblcountries`
---
 ALTER TABLE `tblcountries`
   MODIFY `country_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=251;
 
---
--- AUTO_INCREMENT for table `tblcreditnotes`
---
 ALTER TABLE `tblcreditnotes`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblcreditnote_refunds`
---
 ALTER TABLE `tblcreditnote_refunds`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblcredits`
---
 ALTER TABLE `tblcredits`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblcurrencies`
---
 ALTER TABLE `tblcurrencies`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
---
--- AUTO_INCREMENT for table `tblcustomers_groups`
---
 ALTER TABLE `tblcustomers_groups`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblcustomer_groups`
---
 ALTER TABLE `tblcustomer_groups`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblcustomfields`
---
 ALTER TABLE `tblcustomfields`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblcustomfieldsvalues`
---
 ALTER TABLE `tblcustomfieldsvalues`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbldepartments`
---
 ALTER TABLE `tbldepartments`
   MODIFY `departmentid` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbldismissed_announcements`
---
 ALTER TABLE `tbldismissed_announcements`
   MODIFY `dismissedannouncementid` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblemailtemplates`
---
 ALTER TABLE `tblemailtemplates`
   MODIFY `emailtemplateid` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
---
--- AUTO_INCREMENT for table `tblestimates`
---
 ALTER TABLE `tblestimates`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblestimate_requests`
---
 ALTER TABLE `tblestimate_requests`
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblestimate_request_forms`
---
 ALTER TABLE `tblestimate_request_forms`
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblestimate_request_status`
---
 ALTER TABLE `tblestimate_request_status`
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
---
--- AUTO_INCREMENT for table `tblevents`
---
 ALTER TABLE `tblevents`
   MODIFY `eventid` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblexpenses`
---
 ALTER TABLE `tblexpenses`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblexpenses_categories`
---
 ALTER TABLE `tblexpenses_categories`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblfiles`
---
 ALTER TABLE `tblfiles`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblform_questions`
---
+ALTER TABLE `tblfilters`
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+
 ALTER TABLE `tblform_questions`
   MODIFY `questionid` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblform_question_box`
---
 ALTER TABLE `tblform_question_box`
   MODIFY `boxid` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblform_question_box_description`
---
 ALTER TABLE `tblform_question_box_description`
   MODIFY `questionboxdescriptionid` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblform_results`
---
 ALTER TABLE `tblform_results`
   MODIFY `resultid` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblgdpr_requests`
---
 ALTER TABLE `tblgdpr_requests`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblinvoicepaymentrecords`
---
 ALTER TABLE `tblinvoicepaymentrecords`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblinvoices`
---
 ALTER TABLE `tblinvoices`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblitemable`
---
 ALTER TABLE `tblitemable`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblitems`
---
 ALTER TABLE `tblitems`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblitems_groups`
---
 ALTER TABLE `tblitems_groups`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblitem_tax`
---
 ALTER TABLE `tblitem_tax`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblknowedge_base_article_feedback`
---
 ALTER TABLE `tblknowedge_base_article_feedback`
   MODIFY `articleanswerid` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblknowledge_base`
---
 ALTER TABLE `tblknowledge_base`
   MODIFY `articleid` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblknowledge_base_groups`
---
 ALTER TABLE `tblknowledge_base_groups`
   MODIFY `groupid` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblleads`
---
 ALTER TABLE `tblleads`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblleads_email_integration`
---
 ALTER TABLE `tblleads_email_integration`
   MODIFY `id` int NOT NULL AUTO_INCREMENT COMMENT 'the ID always must be 1', AUTO_INCREMENT=2;
 
---
--- AUTO_INCREMENT for table `tblleads_sources`
---
 ALTER TABLE `tblleads_sources`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
---
--- AUTO_INCREMENT for table `tblleads_status`
---
 ALTER TABLE `tblleads_status`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
---
--- AUTO_INCREMENT for table `tbllead_activity_log`
---
 ALTER TABLE `tbllead_activity_log`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbllead_integration_emails`
---
 ALTER TABLE `tbllead_integration_emails`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblmail_queue`
---
 ALTER TABLE `tblmail_queue`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblmilestones`
---
 ALTER TABLE `tblmilestones`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblmodules`
---
 ALTER TABLE `tblmodules`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblnewsfeed_comment_likes`
---
 ALTER TABLE `tblnewsfeed_comment_likes`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblnewsfeed_posts`
---
 ALTER TABLE `tblnewsfeed_posts`
   MODIFY `postid` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblnewsfeed_post_comments`
---
 ALTER TABLE `tblnewsfeed_post_comments`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblnewsfeed_post_likes`
---
 ALTER TABLE `tblnewsfeed_post_likes`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblnotes`
---
 ALTER TABLE `tblnotes`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblnotifications`
---
 ALTER TABLE `tblnotifications`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbloptions`
---
 ALTER TABLE `tbloptions`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=332;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=333;
 
---
--- AUTO_INCREMENT for table `tblpayment_attempts`
---
 ALTER TABLE `tblpayment_attempts`
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblpayment_modes`
---
 ALTER TABLE `tblpayment_modes`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
---
--- AUTO_INCREMENT for table `tblpinned_projects`
---
 ALTER TABLE `tblpinned_projects`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblprojectdiscussioncomments`
---
 ALTER TABLE `tblprojectdiscussioncomments`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblprojectdiscussions`
---
 ALTER TABLE `tblprojectdiscussions`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblprojects`
---
 ALTER TABLE `tblprojects`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblproject_activity`
---
 ALTER TABLE `tblproject_activity`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblproject_files`
---
 ALTER TABLE `tblproject_files`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblproject_members`
---
 ALTER TABLE `tblproject_members`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblproject_notes`
---
 ALTER TABLE `tblproject_notes`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblproject_settings`
---
 ALTER TABLE `tblproject_settings`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblproposals`
---
 ALTER TABLE `tblproposals`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblproposal_comments`
---
 ALTER TABLE `tblproposal_comments`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblrelated_items`
---
 ALTER TABLE `tblrelated_items`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblreminders`
---
 ALTER TABLE `tblreminders`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblroles`
---
 ALTER TABLE `tblroles`
   MODIFY `roleid` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
---
--- AUTO_INCREMENT for table `tblsales_activity`
---
 ALTER TABLE `tblsales_activity`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblscheduled_emails`
---
 ALTER TABLE `tblscheduled_emails`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblservices`
---
 ALTER TABLE `tblservices`
   MODIFY `serviceid` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblspam_filters`
---
 ALTER TABLE `tblspam_filters`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblstaff`
---
 ALTER TABLE `tblstaff`
   MODIFY `staffid` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblstaff_departments`
---
 ALTER TABLE `tblstaff_departments`
   MODIFY `staffdepartmentid` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblsubscriptions`
---
 ALTER TABLE `tblsubscriptions`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbltags`
---
 ALTER TABLE `tbltags`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbltasks`
---
 ALTER TABLE `tbltasks`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbltaskstimers`
---
 ALTER TABLE `tbltaskstimers`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbltasks_checklist_templates`
---
 ALTER TABLE `tbltasks_checklist_templates`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbltask_assigned`
---
 ALTER TABLE `tbltask_assigned`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbltask_checklist_items`
---
 ALTER TABLE `tbltask_checklist_items`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbltask_comments`
---
 ALTER TABLE `tbltask_comments`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbltask_followers`
---
 ALTER TABLE `tbltask_followers`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbltaxes`
---
 ALTER TABLE `tbltaxes`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbltemplates`
---
 ALTER TABLE `tbltemplates`
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbltickets`
---
 ALTER TABLE `tbltickets`
   MODIFY `ticketid` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbltickets_pipe_log`
---
 ALTER TABLE `tbltickets_pipe_log`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbltickets_predefined_replies`
---
 ALTER TABLE `tbltickets_predefined_replies`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbltickets_priorities`
---
 ALTER TABLE `tbltickets_priorities`
   MODIFY `priorityid` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
---
--- AUTO_INCREMENT for table `tbltickets_status`
---
 ALTER TABLE `tbltickets_status`
   MODIFY `ticketstatusid` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
---
--- AUTO_INCREMENT for table `tblticket_attachments`
---
 ALTER TABLE `tblticket_attachments`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblticket_replies`
---
 ALTER TABLE `tblticket_replies`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbltodos`
---
 ALTER TABLE `tbltodos`
   MODIFY `todoid` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbltracked_mails`
---
 ALTER TABLE `tbltracked_mails`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbltwocheckout_log`
---
 ALTER TABLE `tbltwocheckout_log`
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tbluser_meta`
---
 ALTER TABLE `tbluser_meta`
   MODIFY `umeta_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblvault`
---
 ALTER TABLE `tblvault`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblviews_tracking`
---
 ALTER TABLE `tblviews_tracking`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `tblweb_to_lead`
---
 ALTER TABLE `tblweb_to_lead`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- Constraints for dumped tables
---
 
---
--- Constraints for table `tbltwocheckout_log`
---
+ALTER TABLE `tblfilter_defaults`
+  ADD CONSTRAINT `tblfilter_defaults_ibfk_1` FOREIGN KEY (`filter_id`) REFERENCES `tblfilters` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `tblfilter_defaults_ibfk_2` FOREIGN KEY (`staff_id`) REFERENCES `tblstaff` (`staffid`) ON DELETE CASCADE;
+
 ALTER TABLE `tbltwocheckout_log`
   ADD CONSTRAINT `tbltwocheckout_log_ibfk_1` FOREIGN KEY (`invoice_id`) REFERENCES `tblinvoices` (`id`) ON DELETE CASCADE;
 COMMIT;

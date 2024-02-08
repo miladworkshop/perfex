@@ -29,7 +29,7 @@ class Payments extends AdminController
 			show_404();
 		}
 
-		if (!staff_can('create', 'payment')) {
+		if (staff_cant('create', 'payment')) {
 			access_denied('Create Payment');
 		}
 		$totalAdded = $this->payments_model->add_batch_payment($this->input->post());
@@ -48,8 +48,8 @@ class Payments extends AdminController
 
     public function list_payments()
     {
-        if (!has_permission('payments', '', 'view')
-            && !has_permission('invoices', '', 'view_own')
+        if (staff_cant('view', 'payments')
+            && staff_cant('view_own', 'invoices')
             && get_option('allow_staff_view_invoices_assigned') == '0') {
             access_denied('payments');
         }
@@ -60,8 +60,8 @@ class Payments extends AdminController
 
     public function table($clientid = '')
     {
-        if (!has_permission('payments', '', 'view')
-            && !has_permission('invoices', '', 'view_own')
+        if (staff_cant('view', 'payments')
+            && staff_cant('view_own', 'invoices')
             && get_option('allow_staff_view_invoices_assigned') == '0') {
             ajax_access_denied();
         }
@@ -74,8 +74,8 @@ class Payments extends AdminController
     /* Update payment data */
     public function payment($id = '')
     {
-        if (!has_permission('payments', '', 'view')
-            && !has_permission('invoices', '', 'view_own')
+        if (staff_cant('view', 'payments')
+            && staff_cant('view_own', 'invoices')
             && get_option('allow_staff_view_invoices_assigned') == '0') {
             access_denied('payments');
         }
@@ -85,7 +85,7 @@ class Payments extends AdminController
         }
 
         if ($this->input->post()) {
-            if (!has_permission('payments', '', 'edit')) {
+            if (staff_cant('edit', 'payments')) {
                 access_denied('Update Payment');
             }
             $success = $this->payments_model->update($this->input->post(), $id);
@@ -130,16 +130,16 @@ class Payments extends AdminController
      */
     public function pdf($id)
     {
-        if (!has_permission('payments', '', 'view')
-            && !has_permission('invoices', '', 'view_own')
+        if (staff_cant('view', 'payments')
+            && staff_cant('view_own', 'invoices')
             && get_option('allow_staff_view_invoices_assigned') == '0') {
             access_denied('View Payment');
         }
 
         $payment = $this->payments_model->get($id);
 
-        if (!has_permission('payments', '', 'view')
-            && !has_permission('invoices', '', 'view_own')
+        if (staff_cant('view', 'payments')
+            && staff_cant('view_own', 'invoices')
             && !user_can_view_invoice($payment->invoiceid)) {
             access_denied('View Payment');
         }
@@ -179,16 +179,16 @@ class Payments extends AdminController
      */
     public function send_to_email($id)
     {
-        if (!has_permission('payments', '', 'view')
-            && !has_permission('invoices', '', 'view_own')
+        if (staff_cant('view', 'payments')
+            && staff_cant('view_own', 'invoices')
             && get_option('allow_staff_view_invoices_assigned') == '0') {
             access_denied('Send Payment');
         }
 
         $payment = $this->payments_model->get($id);
 
-        if (!has_permission('payments', '', 'view')
-            && !has_permission('invoices', '', 'view_own')
+        if (staff_cant('view', 'payments')
+            && staff_cant('view_own', 'invoices')
             && !user_can_view_invoice($payment->invoiceid)) {
             access_denied('Send Payment');
         }
@@ -249,7 +249,7 @@ class Payments extends AdminController
     /* Delete payment */
     public function delete($id)
     {
-        if (!has_permission('payments', '', 'delete')) {
+        if (staff_cant('delete', 'payments')) {
             access_denied('Delete Payment');
         }
         if (!$id) {

@@ -19,7 +19,7 @@
                 <?php } ?>
             </select>
         </div>
-        <?php if (staff_can('items', '', 'create')) { ?>
+        <?php if (staff_can('create', 'items')) { ?>
         <div class="input-group-btn">
             <a href="#" data-toggle="modal" class="btn btn-default" data-target="#sales_item_modal">
                 <i class="fa fa-plus"></i>

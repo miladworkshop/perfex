@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 $aColumns = [];
 
-if (has_permission('items', '', 'delete')) {
+if (staff_can('delete',  'items')) {
     $aColumns[] = '1';
 }
 
@@ -63,15 +63,15 @@ foreach ($rResult as $aRow) {
     $descriptionOutput = '<a href="#" data-toggle="modal" data-target="#sales_item_modal" data-id="' . $aRow['id'] . '">' . $aRow['description'] . '</a>';
     $descriptionOutput .= '<div class="row-options">';
 
-    if (has_permission('items', '', 'edit')) {
+    if (staff_can('edit',  'items')) {
         $descriptionOutput .= '<a href="#" data-toggle="modal" data-target="#sales_item_modal" data-id="' . $aRow['id'] . '">' . _l('edit') . '</a>';
     }
 
-    if (has_permission('items', '', 'delete')) {
+    if (staff_can('delete',  'items')) {
         $descriptionOutput .= ' | <a href="' . admin_url('invoice_items/delete/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
     }
 
-    if (has_permission('items', '', 'create')) {
+    if (staff_can('create',  'items')) {
         $descriptionOutput .= ' | <a href="' . admin_url('invoice_items/copy/' . $aRow['id']) . '" class=" _edit_item">' . _l('copy') . '</a>';
     }
 

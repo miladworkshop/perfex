@@ -23,6 +23,9 @@
                             <?php echo render_input('paymentmethod', 'payment_method', $payment->paymentmethod); ?>
                             <?php echo render_input('transactionid', 'payment_transaction_id', $payment->transactionid); ?>
                             <?php echo render_textarea('note', 'note', $payment->note, ['rows' => 7]); ?>
+
+                            <?php hooks()->do_action('before_admin_edit_payment_form_submit', $payment); ?>
+
                             <div class="btn-bottom-toolbar text-right">
                                 <button type="submit" class="btn btn-primary"><?php echo _l('submit'); ?></button>
                             </div>
@@ -77,7 +80,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <?php if (has_permission('payments', '', 'delete')) { ?>
+                        <?php if (staff_can('delete',  'payments')) { ?>
                         <a href="<?php echo admin_url('payments/delete/' . $payment->paymentid); ?>"
                             class="btn btn-danger _delete">
                             <i class="fa fa-remove"></i>

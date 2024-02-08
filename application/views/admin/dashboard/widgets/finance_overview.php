@@ -182,9 +182,10 @@ switch (count(array_filter([$canViewInvoices, $canViewEstimates, $canViewProposa
                            // Add not sent
                         array_splice($estimate_statuses, 1, 0, 'not_sent');
                         foreach ($estimate_statuses as $status) {
-                            $url = admin_url('estimates/list_estimates?status=' . $status);
                             if (!is_numeric($status)) {
-                                $url = admin_url('estimates/list_estimates?filter=' . $status);
+                                $url = admin_url('estimates/list_estimates?'.$status.'=1');
+                            } else {
+                                $url = admin_url('estimates/list_estimates?status=' . $status);
                             }
                             $percent_data = get_estimates_percent_by_status($status); ?>
                             <div class="col-md-12 text-stats-wrapper">
@@ -254,7 +255,7 @@ switch (count(array_filter([$canViewInvoices, $canViewEstimates, $canViewProposa
                     </div>
                     <?php } ?>
                 </div>
-                <?php if (has_permission('invoices', '', 'view') || has_permission('invoices', '', 'view_own')) { ?>
+                <?php if (staff_can('view',  'invoices') || staff_can('view_own',  'invoices')) { ?>
                 <hr class="-tw-mx-8" />
                 <a href="#" class="hide invoices-total initialized"></a>
                 <div id="invoices_total" class="invoices-total-inline">

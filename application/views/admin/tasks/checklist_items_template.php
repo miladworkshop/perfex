@@ -39,7 +39,7 @@
                     <label for=""><span class="hide"><?php echo $list['description']; ?></span></label>
                 </div>
                 <div class="tw-grow">
-                    <textarea data-taskid="<?php echo $task_id; ?>" name="checklist-description" rows="1" <?php if ($list['addedfrom'] != get_staff_user_id() && !has_permission('tasks', '', 'edit')) {
+                    <textarea data-taskid="<?php echo $task_id; ?>" name="checklist-description" rows="1" <?php if ($list['addedfrom'] != get_staff_user_id() && staff_cant('edit', 'tasks')) {
             echo ' disabled';
         } ?>><?php echo clear_textarea_breaks($list['description']); ?></textarea>
                 </div>
@@ -70,7 +70,7 @@
                     </span>
                     <?php } ?>
 
-                    <?php if (has_permission('checklist_templates', '', 'create')) { ?>
+                    <?php if (staff_can('create',  'checklist_templates')) { ?>
                     <a href="#" class="tw-text-neutral-500 save-checklist-template<?php if ($list['description'] == '' || total_rows(db_prefix() . 'tasks_checklist_templates', ['description' => $list['description']]) > 0) {
             echo ' hide';
         } ?>" data-toggle="tooltip" data-title="<?php echo _l('save_as_template'); ?>"
@@ -82,7 +82,7 @@
                         </svg>
                     </a>
                     <?php } ?>
-                    <?php if (has_permission('tasks', '', 'delete') || $list['addedfrom'] == get_staff_user_id()) { ?>
+                    <?php if (staff_can('delete',  'tasks') || $list['addedfrom'] == get_staff_user_id()) { ?>
                     <a href="#" class="tw-text-neutral-500 remove-checklist"
                         onclick="delete_checklist_item(<?php echo $list['id']; ?>,this); return false;">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"

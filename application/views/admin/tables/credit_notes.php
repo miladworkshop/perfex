@@ -2,147 +2,162 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-$aColumns = [
-    'number',
-    'date',
-    get_sql_select_client_company(),
-    db_prefix() . 'creditnotes.status as status',
-    db_prefix() . 'projects.name as project_name',
-    'reference_no',
-    'total',
-    '(SELECT ' . db_prefix() . 'creditnotes.total - (
-      (SELECT COALESCE(SUM(amount),0) FROM ' . db_prefix() . 'credits WHERE ' . db_prefix() . 'credits.credit_id=' . db_prefix() . 'creditnotes.id)
-      +
-      (SELECT COALESCE(SUM(amount),0) FROM ' . db_prefix() . 'creditnote_refunds WHERE ' . db_prefix() . 'creditnote_refunds.credit_note_id=' . db_prefix() . 'creditnotes.id)
-      )
-    ) as remaining_amount',
-    ];
+$this->ci->load->model('credit_notes_model');
+$remainingAmountSelect = '(SELECT ' . db_prefix() . 'creditnotes.total - (
+    (SELECT COALESCE(SUM(amount),0) FROM ' . db_prefix() . 'credits WHERE ' . db_prefix() . 'credits.credit_id=' . db_prefix() . 'creditnotes.id)
+    +
+    (SELECT COALESCE(SUM(amount),0) FROM ' . db_prefix() . 'creditnote_refunds WHERE ' . db_prefix() . 'creditnote_refunds.credit_note_id=' . db_prefix() . 'creditnotes.id)
+    )
+  )';
 
-$join = [
-    'LEFT JOIN ' . db_prefix() . 'clients ON ' . db_prefix() . 'clients.userid = ' . db_prefix() . 'creditnotes.clientid',
-    'LEFT JOIN ' . db_prefix() . 'currencies ON ' . db_prefix() . 'currencies.id = ' . db_prefix() . 'creditnotes.currency',
-    'LEFT JOIN ' . db_prefix() . 'projects ON ' . db_prefix() . 'projects.id = ' . db_prefix() . 'creditnotes.project_id',
-];
+return App_table::find('credit_notes')
+    ->outputUsing(function ($params) use($remainingAmountSelect) {
+        extract($params);
 
-$sIndexColumn = 'id';
-$sTable       = db_prefix() . 'creditnotes';
+        $aColumns = [
+            'number',
+            'date',
+            get_sql_select_client_company(),
+            db_prefix() . 'creditnotes.status as status',
+            db_prefix() . 'projects.name as project_name',
+            'reference_no',
+            'total',
+            $remainingAmountSelect.' as remaining_amount',
+        ];
 
-$custom_fields = get_table_custom_fields('credit_note');
+        $join = [
+            'LEFT JOIN ' . db_prefix() . 'clients ON ' . db_prefix() . 'clients.userid = ' . db_prefix() . 'creditnotes.clientid',
+            'LEFT JOIN ' . db_prefix() . 'currencies ON ' . db_prefix() . 'currencies.id = ' . db_prefix() . 'creditnotes.currency',
+            'LEFT JOIN ' . db_prefix() . 'projects ON ' . db_prefix() . 'projects.id = ' . db_prefix() . 'creditnotes.project_id',
+        ];
 
-foreach ($custom_fields as $key => $field) {
-    $selectAs = (is_cf_date($field) ? 'date_picker_cvalue_' . $key : 'cvalue_' . $key);
-    array_push($customFieldsColumns, $selectAs);
-    array_push($aColumns, 'ctable_' . $key . '.value as ' . $selectAs);
-    array_push($join, 'LEFT JOIN ' . db_prefix() . 'customfieldsvalues as ctable_' . $key . ' ON ' . db_prefix() . 'creditnotes.id = ctable_' . $key . '.relid AND ctable_' . $key . '.fieldto="' . $field['fieldto'] . '" AND ctable_' . $key . '.fieldid=' . $field['id']);
-}
+        $sIndexColumn = 'id';
+        $sTable       = db_prefix() . 'creditnotes';
 
-$where  = [];
-$filter = [];
+        $custom_fields = get_table_custom_fields('credit_note');
 
-if ($clientid != '') {
-    array_push($where, 'AND ' . db_prefix() . 'creditnotes.clientid=' . $this->ci->db->escape_str($clientid));
-}
+        foreach ($custom_fields as $key => $field) {
+            $selectAs = (is_cf_date($field) ? 'date_picker_cvalue_' . $key : 'cvalue_' . $key);
+            array_push($customFieldsColumns, $selectAs);
+            array_push($aColumns, 'ctable_' . $key . '.value as ' . $selectAs);
+            array_push($join, 'LEFT JOIN ' . db_prefix() . 'customfieldsvalues as ctable_' . $key . ' ON ' . db_prefix() . 'creditnotes.id = ctable_' . $key . '.relid AND ctable_' . $key . '.fieldto="' . $field['fieldto'] . '" AND ctable_' . $key . '.fieldid=' . $field['id']);
+        }
 
-if (!has_permission('credit_notes', '', 'view')) {
-    array_push($where, 'AND ' . db_prefix() . 'creditnotes.addedfrom=' . get_staff_user_id());
-}
+        $where  = [];
 
-$project_id = $this->ci->input->get('project_id');
-if ($project_id) {
-    array_push($where, 'AND project_id=' . $this->ci->db->escape_str($project_id));
-}
+        if ($filtersWhere = $this->getWhereFromRules()) {
+            $where[] = $filtersWhere;
+        }
 
-$statuses  = $this->ci->credit_notes_model->get_statuses();
-$statusIds = [];
+        if ($clientid != '') {
+            array_push($where, 'AND ' . db_prefix() . 'creditnotes.clientid=' . $this->ci->db->escape_str($clientid));
+        }
 
-foreach ($statuses as $status) {
-    if ($this->ci->input->post('credit_notes_status_' . $status['id'])) {
-        array_push($statusIds, $status['id']);
-    }
-}
+        if (staff_cant('view', 'credit_notes')) {
+            array_push($where, 'AND ' . db_prefix() . 'creditnotes.addedfrom=' . get_staff_user_id());
+        }
 
-if (count($statusIds) > 0) {
-    array_push($filter, 'AND ' . db_prefix() . 'creditnotes.status IN (' . implode(', ', $statusIds) . ')');
-}
+        if ($project_id = $this->ci->input->get('project_id')) {
+            array_push($where, 'AND project_id=' . $this->ci->db->escape_str($project_id));
+        }
 
-$years      = $this->ci->credit_notes_model->get_credits_years();
-$yearsArray = [];
+        // Fix for big queries. Some hosting have max_join_limit
+        if (count($custom_fields) > 4) {
+            @$this->ci->db->query('SET SQL_BIG_SELECTS=1');
+        }
 
-foreach ($years as $year) {
-    if ($this->ci->input->post('year_' . $year['year'])) {
-        array_push($yearsArray, $year['year']);
-    }
-}
+        $result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [
+            db_prefix() . 'creditnotes.id',
+            db_prefix() . 'creditnotes.clientid',
+            db_prefix() . 'currencies.name as currency_name',
+            'project_id',
+            'deleted_customer_name',
+        ]);
 
-if (count($yearsArray) > 0) {
-    array_push($filter, 'AND YEAR(date) IN (' . implode(', ', $yearsArray) . ')');
-}
+        $output  = $result['output'];
+        $rResult = $result['rResult'];
 
-if (count($filter) > 0) {
-    array_push($where, 'AND (' . prepare_dt_filter($filter) . ')');
-}
+        foreach ($rResult as $aRow) {
+            $row = [];
 
-// Fix for big queries. Some hosting have max_join_limit
-if (count($custom_fields) > 4) {
-    @$this->ci->db->query('SET SQL_BIG_SELECTS=1');
-}
+            $numberOutput = '';
+            // If is from client area table
+            if (is_numeric($clientid) || $project_id) {
+                $numberOutput = '<a href="' . admin_url('credit_notes/list_credit_notes/' . $aRow['id']) . '" target="_blank">' . format_credit_note_number($aRow['id']) . '</a>';
+            } else {
+                $numberOutput = '<a href="' . admin_url('credit_notes/list_credit_notes/' . $aRow['id']) . '" onclick="init_credit_note(' . $aRow['id'] . '); return false;">' . format_credit_note_number($aRow['id']) . '</a>';
+            }
 
-$result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [
-    db_prefix() . 'creditnotes.id',
-    db_prefix() . 'creditnotes.clientid',
-    db_prefix(). 'currencies.name as currency_name',
-    'project_id',
-    'deleted_customer_name',
-]);
+            $numberOutput .= '<div class="row-options">';
 
-$output  = $result['output'];
-$rResult = $result['rResult'];
+            if (staff_can('edit',  'credit_notes')) {
+                $numberOutput .= '<a href="' . admin_url('credit_notes/credit_note/' . $aRow['id']) . '">' . _l('edit') . '</a>';
+            }
+            $numberOutput .= '</div>';
 
-foreach ($rResult as $aRow) {
-    $row = [];
+            $row[] = $numberOutput;
 
-    $numberOutput = '';
-    // If is from client area table
-    if (is_numeric($clientid) || $project_id) {
-        $numberOutput = '<a href="' . admin_url('credit_notes/list_credit_notes/' . $aRow['id']) . '" target="_blank">' . format_credit_note_number($aRow['id']) . '</a>';
-    } else {
-        $numberOutput = '<a href="' . admin_url('credit_notes/list_credit_notes/' . $aRow['id']) . '" onclick="init_credit_note(' . $aRow['id'] . '); return false;">' . format_credit_note_number($aRow['id']) . '</a>';
-    }
+            $row[] = _d($aRow['date']);
 
-    $numberOutput .= '<div class="row-options">';
+            if (empty($aRow['deleted_customer_name'])) {
+                $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . $aRow['company'] . '</a>';
+            } else {
+                $row[] = $aRow['deleted_customer_name'];
+            }
 
-    if (has_permission('credit_notes', '', 'edit')) {
-        $numberOutput .= '<a href="' . admin_url('credit_notes/credit_note/' . $aRow['id']) . '">' . _l('edit') . '</a>';
-    }
-    $numberOutput .= '</div>';
+            $row[] = format_credit_note_status($aRow['status']);
 
-    $row[] = $numberOutput;
+            $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '">' . $aRow['project_name'] . '</a>';
 
-    $row[] = _d($aRow['date']);
+            $row[] = $aRow['reference_no'];
 
-    if (empty($aRow['deleted_customer_name'])) {
-        $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . $aRow['company'] . '</a>';
-    } else {
-        $row[] = $aRow['deleted_customer_name'];
-    }
+            $row[] = app_format_money($aRow['total'], $aRow['currency_name']);
 
-    $row[] = format_credit_note_status($aRow['status']);
+            $row[] = app_format_money($aRow['remaining_amount'], $aRow['currency_name']);
 
-    $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '">' . $aRow['project_name'] . '</a>';
+            // Custom fields add values
+            foreach ($customFieldsColumns as $customFieldColumn) {
+                $row[] = (strpos($customFieldColumn, 'date_picker_') !== false ? _d($aRow[$customFieldColumn]) : $aRow[$customFieldColumn]);
+            }
 
-    $row[] = $aRow['reference_no'];
+            $output['aaData'][] = $row;
+        }
 
-    $row[] = app_format_money($aRow['total'], $aRow['currency_name']);
+        return $output;
+    })->setRules([
+        App_table_filter::new('number', 'NumberRule')->label(_l('credit_note_number')),
 
-    $row[] = app_format_money($aRow['remaining_amount'], $aRow['currency_name']);
+        App_table_filter::new('reference_no', 'TextRule')->label(_l('reference_no')),
 
-    // Custom fields add values
-    foreach ($customFieldsColumns as $customFieldColumn) {
-        $row[] = (strpos($customFieldColumn, 'date_picker_') !== false ? _d($aRow[$customFieldColumn]) : $aRow[$customFieldColumn]);
-    }
+        App_table_filter::new('date', 'DateRule')->label(_l('credit_note_date')),
 
-    $output['aaData'][] = $row;
-}
+        App_table_filter::new('total', 'NumberRule')->label(_l('credit_note_amount')),
 
-echo json_encode($output);
-die();
+        App_table_filter::new('remaining_amount', 'NumberRule')->label(_l('credit_note_remaining_credits'))->column($remainingAmountSelect),
+
+        App_table_filter::new('status', 'MultiSelectRule')
+            ->label(_l('credit_note_status'))
+            ->options(function ($ci) {
+                return collect($ci->credit_notes_model->get_statuses())->map(fn ($status) => [
+                    'value' => $status['id'],
+                    'label' => $status['name'],
+                ])->all();
+            }),
+
+        App_table_filter::new('year', 'MultiSelectRule')
+            ->label(_l('year'))
+            ->raw(function ($value, $operator) {
+                if ($operator == 'in') {
+                    return "YEAR(date) IN (" . implode(',', $value) . ")";
+                } else {
+                    return "YEAR(date) NOT IN (" . implode(',', $value) . ")";
+                }
+            })
+
+            ->options(function ($ci) {
+                return collect($ci->credit_notes_model->get_credits_years())->map(fn ($data) => [
+                    'value' => $data['year'],
+                    'label' => $data['year'],
+                ])->all();
+            }),
+    ]);

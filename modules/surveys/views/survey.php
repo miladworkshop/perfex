@@ -126,7 +126,7 @@
                                         data-toggle="tooltip" data-placement="bottom"
                                         data-title="<?php echo _l('survey_list_view_tooltip'); ?>"><i
                                             class="fa fa-eye"></i></a>
-                                    <?php if (has_permission('surveys', '', 'edit')) { ?>
+                                    <?php if (staff_can('edit',  'surveys')) { ?>
                                     <div class="btn-group pull-right">
                                         <button type="button" class="btn btn-primary dropdown-toggle"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -322,7 +322,7 @@
                                     <?php } ?>
                                     <?php foreach ($send_log as $log) { ?>
                                     <p>
-                                        <?php if (has_permission('surveys', '', 'delete')) { ?>
+                                        <?php if (staff_can('delete',  'surveys')) { ?>
                                         <a href="<?php echo admin_url('surveys/remove_survey_send/' . $log['id']); ?>"
                                             class="_delete text-danger"><i class="fa fa-remove"></i></a>
                                         <?php } ?>

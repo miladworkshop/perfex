@@ -23,9 +23,11 @@
     "replace-in-file-webpack-plugin": "^1.0.6",
     "sass": "^1.55.0",
     "sass-loader": "^13.1.0",
-    "tailwindcss": "^3.2.0"
+    "tailwindcss": "^3.2.0",
+    "vue-loader": "^16.2.0"
   },
   "dependencies": {
-    "bootstrap": "^3.4.1"
+    "bootstrap": "^3.4.1",
+    "vue": "^3.3.9"
   }
 }

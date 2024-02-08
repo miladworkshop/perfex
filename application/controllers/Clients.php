@@ -1482,10 +1482,10 @@ class Clients extends ClientsController
                 foreach ($payments as $payment) {
                     $_month = date('F', strtotime($payment['date']));
                     if ($_month == $month) {
-                        $data['temp'][$i][] = $payment['amount'];
+                        $data['temp'][$i][] = round($payment['amount'], get_decimal_places());
                     }
                 }
-                $data['total'][] = array_sum($data['temp'][$i]);
+                $data['total'][] = round(array_sum($data['temp'][$i]), get_decimal_places());
                 $i++;
             }
 

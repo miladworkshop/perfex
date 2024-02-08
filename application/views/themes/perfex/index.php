@@ -55,6 +55,7 @@ get_template_part($navigationEnabled ? 'navigation' : '');
         </div>
     </div>
 </div>
+</div>
 <?php
    echo theme_footer_view();
 ?>

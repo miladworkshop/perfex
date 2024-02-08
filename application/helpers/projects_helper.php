@@ -105,7 +105,7 @@ function app_init_project_tabs()
         'icon'     => 'fa-solid fa-file-contract',
         'view'     => 'admin/projects/project_contracts',
         'position' => 45,
-        'visible'  => has_permission('contracts', '', 'view') || has_permission('contracts', '', 'view_own'),
+        'visible'  => staff_can('view',  'contracts') || staff_can('view_own',  'contracts'),
     ]);
 
     $CI->app_tabs->add_project_tab('sales', [
@@ -113,10 +113,10 @@ function app_init_project_tabs()
         'icon'     => 'fa-solid fa-receipt',
         'position' => 50,
         'collapse' => true,
-        'visible'  => (has_permission('estimates', '', 'view') || has_permission('estimates', '', 'view_own') || (get_option('allow_staff_view_estimates_assigned') == 1 && staff_has_assigned_estimates()))
-            || (has_permission('invoices', '', 'view') || has_permission('invoices', '', 'view_own') || (get_option('allow_staff_view_invoices_assigned') == 1 && staff_has_assigned_invoices()))
-            || (has_permission('expenses', '', 'view') || has_permission('expenses', '', 'view_own'))
-            || (has_permission('proposals', '', 'view_own') || (get_option('allow_staff_view_proposals_assigned') == 1 && staff_has_assigned_proposals())),
+        'visible'  => (staff_can('view',  'estimates') || staff_can('view_own',  'estimates') || (get_option('allow_staff_view_estimates_assigned') == 1 && staff_has_assigned_estimates()))
+            || (staff_can('view',  'invoices') || staff_can('view_own',  'invoices') || (get_option('allow_staff_view_invoices_assigned') == 1 && staff_has_assigned_invoices()))
+            || (staff_can('view',  'expenses') || staff_can('view_own',  'expenses'))
+            || (staff_can('view_own',  'proposals') || (get_option('allow_staff_view_proposals_assigned') == 1 && staff_has_assigned_proposals())),
     ]);
 
     $CI->app_tabs->add_project_tab_children_item('sales', [
@@ -124,7 +124,7 @@ function app_init_project_tabs()
         'name'     => _l('project_invoices'),
         'view'     => 'admin/projects/project_invoices',
         'position' => 15,
-        'visible'  => (has_permission('invoices', '', 'view') || has_permission('invoices', '', 'view_own') || (get_option('allow_staff_view_invoices_assigned') == 1 && staff_has_assigned_invoices())),
+        'visible'  => (staff_can('view',  'invoices') || staff_can('view_own',  'invoices') || (get_option('allow_staff_view_invoices_assigned') == 1 && staff_has_assigned_invoices())),
     ]);
 
     $CI->app_tabs->add_project_tab_children_item('sales', [
@@ -132,7 +132,7 @@ function app_init_project_tabs()
         'name'     => _l('estimates'),
         'view'     => 'admin/projects/project_estimates',
         'position' => 10,
-        'visible'  => (has_permission('estimates', '', 'view') || has_permission('estimates', '', 'view_own') || (get_option('allow_staff_view_estimates_assigned') == 1 && staff_has_assigned_estimates())),
+        'visible'  => (staff_can('view',  'estimates') || staff_can('view_own',  'estimates') || (get_option('allow_staff_view_estimates_assigned') == 1 && staff_has_assigned_estimates())),
     ]);
 
     $CI->app_tabs->add_project_tab_children_item('sales', [
@@ -140,7 +140,7 @@ function app_init_project_tabs()
         'name'     => _l('project_expenses'),
         'view'     => 'admin/projects/project_expenses',
         'position' => 25,
-       'visible'   => has_permission('expenses', '', 'view') || has_permission('expenses', '', 'view_own'),
+       'visible'   => staff_can('view',  'expenses') || staff_can('view_own',  'expenses'),
     ]);
 
     $CI->app_tabs->add_project_tab_children_item('sales', [
@@ -148,7 +148,7 @@ function app_init_project_tabs()
         'name'     => _l('credit_notes'),
         'view'     => 'admin/projects/project_credit_notes',
         'position' => 30,
-        'visible'  => has_permission('credit_notes', '', 'view') || has_permission('credit_notes', '', 'view_own'),
+        'visible'  => staff_can('view',  'credit_notes') || staff_can('view_own',  'credit_notes'),
     ]);
 
     $CI->app_tabs->add_project_tab_children_item('sales', [
@@ -156,7 +156,7 @@ function app_init_project_tabs()
         'name'     => _l('subscriptions'),
         'view'     => 'admin/projects/project_subscriptions',
         'position' => 20,
-        'visible'  => has_permission('subscriptions', '', 'view') || has_permission('subscriptions', '', 'view_own'),
+        'visible'  => staff_can('view',  'subscriptions') || staff_can('view_own',  'subscriptions'),
     ]);
 
     $CI->app_tabs->add_project_tab_children_item('sales', [
@@ -164,7 +164,7 @@ function app_init_project_tabs()
         'name'     => _l('proposals'),
         'view'     => 'admin/projects/project_proposals',
         'position' => 5,
-        'visible'  => (has_permission('proposals', '', 'view') || has_permission('proposals', '', 'view_own') || (get_option('allow_staff_view_proposals_assigned') == 1 && staff_has_assigned_proposals())),
+        'visible'  => (staff_can('view',  'proposals') || staff_can('view_own',  'proposals') || (get_option('allow_staff_view_proposals_assigned') == 1 && staff_has_assigned_proposals())),
     ]);
 
     $CI->app_tabs->add_project_tab('project_notes', [

@@ -85,6 +85,7 @@
                             <a href="#" onclick="small_table_full_view(); return false;">
                                 <i class="fa fa-expand"></i></a>
                         </li>
+                        <?php hooks()->do_action('after_admin_estimate_preview_template_tab_menu_last_item', $estimate); ?>
                     </ul>
                 </div>
             </div>
@@ -479,7 +480,7 @@
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="tab_tasks">
-                    <?php init_relation_tasks_table(['data-new-rel-id' => $estimate->id, 'data-new-rel-type' => 'estimate']); ?>
+                    <?php init_relation_tasks_table(['data-new-rel-id' => $estimate->id, 'data-new-rel-type' => 'estimate'], 'tasksFilters'); ?>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="tab_reminders">
                     <a href="#" data-toggle="modal" class="btn btn-primary"
@@ -588,6 +589,7 @@
                     <hr />
                     <?php } ?>
                 </div>
+                <?php hooks()->do_action('after_admin_estimate_preview_template_tab_content_last_item', $estimate); ?>
             </div>
         </div>
     </div>

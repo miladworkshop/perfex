@@ -2,7 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-$hasPermissionDelete = has_permission('payments', '', 'delete');
+$hasPermissionDelete = staff_can('delete',  'payments');
 
 $aColumns = [
     db_prefix() . 'invoicepaymentrecords.id as id',
@@ -26,7 +26,7 @@ if ($clientid != '') {
     array_push($where, 'AND ' . db_prefix() . 'clients.userid=' . $this->ci->db->escape_str($clientid));
 }
 
-if (!has_permission('payments', '', 'view')) {
+if (staff_cant('view', 'payments')) {
     $whereUser = '';
     $whereUser .= 'AND (invoiceid IN (SELECT id FROM ' . db_prefix() . 'invoices WHERE (addedfrom=' . get_staff_user_id() . ' AND addedfrom IN (SELECT staff_id FROM ' . db_prefix() . 'staff_permissions WHERE feature = "invoices" AND capability="view_own")))';
     if (get_option('allow_staff_view_invoices_assigned') == 1) {
