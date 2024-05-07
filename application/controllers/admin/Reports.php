@@ -232,33 +232,35 @@ class Reports extends AdminController
                     } else {
                         $_data = $aRow[$aColumns[$i]];
                     }
-                    if ($aColumns[$i] == 'paymentmode') {
+                    if ($aColumns[$i] == 'note') {
+                        $_data = process_text_content_for_display($aRow['note']);
+                    } else if ($aColumns[$i] == 'paymentmode') {
                         $_data = $aRow['name'];
                         if (is_null($aRow['paymentmodeid'])) {
                             foreach ($payment_gateways as $gateway) {
                                 if ($aRow['paymentmode'] == $gateway['id']) {
-                                    $_data = $gateway['name'];
+                                    $_data = e($gateway['name']);
                                 }
                             }
                         }
                         if (!empty($aRow['paymentmethod'])) {
-                            $_data .= ' - ' . $aRow['paymentmethod'];
+                            $_data .= ' - ' . e($aRow['paymentmethod']);
                         }
                     } elseif ($aColumns[$i] == db_prefix() . 'invoicepaymentrecords.id') {
-                        $_data = '<a href="' . admin_url('payments/payment/' . $_data) . '" target="_blank">' . $_data . '</a>';
+                        $_data = '<a href="' . admin_url('payments/payment/' . $_data) . '" target="_blank">' . e($_data) . '</a>';
                     } elseif ($aColumns[$i] == db_prefix() . 'invoicepaymentrecords.date') {
-                        $_data = _d($_data);
+                        $_data = e(_d($_data));
                     } elseif ($aColumns[$i] == 'invoiceid') {
-                        $_data = '<a href="' . admin_url('invoices/list_invoices/' . $aRow[$aColumns[$i]]) . '" target="_blank">' . format_invoice_number($aRow['invoiceid']) . '</a>';
+                        $_data = '<a href="' . admin_url('invoices/list_invoices/' . $aRow[$aColumns[$i]]) . '" target="_blank">' . e(format_invoice_number($aRow['invoiceid'])) . '</a>';
                     } elseif ($i == 3) {
                         if (empty($aRow['deleted_customer_name'])) {
-                            $_data = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '" target="_blank">' . $aRow['company'] . '</a>';
+                            $_data = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '" target="_blank">' . e($aRow['company']) . '</a>';
                         } else {
-                            $row[] = $aRow['deleted_customer_name'];
+                            $row[] = e($aRow['deleted_customer_name']);
                         }
                     } elseif ($aColumns[$i] == 'amount') {
                         $footer_data['total_amount'] += $_data;
-                        $_data = app_format_money($_data, $currency->name);
+                        $_data = e(app_format_money($_data, $currency->name));
                     }
 
                     $row[] = $_data;
@@ -266,7 +268,7 @@ class Reports extends AdminController
                 $output['aaData'][] = $row;
             }
 
-            $footer_data['total_amount'] = app_format_money($footer_data['total_amount'], $currency->name);
+            $footer_data['total_amount'] = e(app_format_money($footer_data['total_amount'], $currency->name));
             $output['sums']              = $footer_data;
             echo json_encode($output);
             die();
@@ -384,44 +386,44 @@ class Reports extends AdminController
             foreach ($rResult as $aRow) {
                 $row = [];
 
-                $row[] = '<a href="' . admin_url('proposals/list_proposals/' . $aRow['id']) . '" target="_blank">' . format_proposal_number($aRow['id']) . '</a>';
+                $row[] = '<a href="' . admin_url('proposals/list_proposals/' . $aRow['id']) . '" target="_blank">' . e(format_proposal_number($aRow['id'])) . '</a>';
 
-                $row[] = '<a href="' . admin_url('proposals/list_proposals/' . $aRow['id']) . '" target="_blank">' . $aRow['subject'] . '</a>';
+                $row[] = '<a href="' . admin_url('proposals/list_proposals/' . $aRow['id']) . '" target="_blank">' . e($aRow['subject']) . '</a>';
 
                 if ($aRow['rel_type'] == 'lead') {
-                    $row[] = '<a href="#" onclick="init_lead(' . $aRow['rel_id'] . ');return false;" target="_blank" data-toggle="tooltip" data-title="' . _l('lead') . '">' . $aRow['proposal_to'] . '</a>' . '<span class="hide">' . _l('lead') . '</span>';
+                    $row[] = '<a href="#" onclick="init_lead(' . $aRow['rel_id'] . ');return false;" target="_blank" data-toggle="tooltip" data-title="' . _l('lead') . '">' . e($aRow['proposal_to']) . '</a>' . '<span class="hide">' . _l('lead') . '</span>';
                 } elseif ($aRow['rel_type'] == 'customer') {
-                    $row[] = '<a href="' . admin_url('clients/client/' . $aRow['rel_id']) . '" target="_blank" data-toggle="tooltip" data-title="' . _l('client') . '">' . $aRow['proposal_to'] . '</a>' . '<span class="hide">' . _l('client') . '</span>';
+                    $row[] = '<a href="' . admin_url('clients/client/' . $aRow['rel_id']) . '" target="_blank" data-toggle="tooltip" data-title="' . _l('client') . '">' . e($aRow['proposal_to']) . '</a>' . '<span class="hide">' . _l('client') . '</span>';
                 } else {
                     $row[] = '';
                 }
 
-                $row[] = _d($aRow['date']);
+                $row[] = e(_d($aRow['date']));
 
-                $row[] = _d($aRow['open_till']);
+                $row[] = e(_d($aRow['open_till']));
 
-                $row[] = app_format_money($aRow['subtotal'], $currency->name);
+                $row[] = e(app_format_money($aRow['subtotal'], $currency->name));
                 $footer_data['subtotal'] += $aRow['subtotal'];
 
-                $row[] = app_format_money($aRow['total'], $currency->name);
+                $row[] = e(app_format_money($aRow['total'], $currency->name));
                 $footer_data['total'] += $aRow['total'];
 
-                $row[] = app_format_money($aRow['total_tax'], $currency->name);
+                $row[] = e(app_format_money($aRow['total_tax'], $currency->name));
                 $footer_data['total_tax'] += $aRow['total_tax'];
 
                 $t = $totalTaxesColumns - 1;
                 $i = 0;
                 foreach ($proposalsTaxes as $tax) {
-                    $row[] = app_format_money(($aRow['total_tax_single_' . $t] == null ? 0 : $aRow['total_tax_single_' . $t]), $currency->name);
+                    $row[] = e(app_format_money(($aRow['total_tax_single_' . $t] == null ? 0 : $aRow['total_tax_single_' . $t]), $currency->name));
                     $footer_data['total_tax_single_' . $i] += ($aRow['total_tax_single_' . $t] == null ? 0 : $aRow['total_tax_single_' . $t]);
                     $t--;
                     $i++;
                 }
 
-                $row[] = app_format_money($aRow['discount_total'], $currency->name);
+                $row[] = e(app_format_money($aRow['discount_total'], $currency->name));
                 $footer_data['discount_total'] += $aRow['discount_total'];
 
-                $row[] = app_format_money($aRow['adjustment'], $currency->name);
+                $row[] = e(app_format_money($aRow['adjustment'], $currency->name));
                 $footer_data['adjustment'] += $aRow['adjustment'];
 
                 $row[]              = format_proposal_status($aRow['status']);
@@ -429,7 +431,7 @@ class Reports extends AdminController
             }
 
             foreach ($footer_data as $key => $total) {
-                $footer_data[$key] = app_format_money($total, $currency->name);
+                $footer_data[$key] = e(app_format_money($total, $currency->name));
             }
 
             $output['sums'] = $footer_data;
@@ -554,59 +556,59 @@ class Reports extends AdminController
             foreach ($rResult as $aRow) {
                 $row = [];
 
-                $row[] = '<a href="' . admin_url('estimates/list_estimates/' . $aRow['id']) . '" target="_blank">' . format_estimate_number($aRow['id']) . '</a>';
+                $row[] = '<a href="' . admin_url('estimates/list_estimates/' . $aRow['id']) . '" target="_blank">' . e(format_estimate_number($aRow['id'])) . '</a>';
 
                 if (empty($aRow['deleted_customer_name'])) {
-                    $row[] = '<a href="' . admin_url('clients/client/' . $aRow['userid']) . '" target="_blank">' . $aRow['company'] . '</a>';
+                    $row[] = '<a href="' . admin_url('clients/client/' . $aRow['userid']) . '" target="_blank">' . e($aRow['company']) . '</a>';
                 } else {
-                    $row[] = $aRow['deleted_customer_name'];
+                    $row[] = e($aRow['deleted_customer_name']);
                 }
 
                 if ($aRow['invoiceid'] === null) {
                     $row[] = '';
                 } else {
-                    $row[] = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['invoiceid']) . '" target="_blank">' . format_invoice_number($aRow['invoiceid']) . '</a>';
+                    $row[] = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['invoiceid']) . '" target="_blank">' . e(format_invoice_number($aRow['invoiceid'])) . '</a>';
                 }
 
                 $row[] = $aRow['year'];
 
-                $row[] = _d($aRow['date']);
+                $row[] = e(_d($aRow['date']));
 
-                $row[] = _d($aRow['expirydate']);
+                $row[] = e(_d($aRow['expirydate']));
 
-                $row[] = app_format_money($aRow['subtotal'], $currency->name);
+                $row[] = e(app_format_money($aRow['subtotal'], $currency->name));
                 $footer_data['subtotal'] += $aRow['subtotal'];
 
-                $row[] = app_format_money($aRow['total'], $currency->name);
+                $row[] = e(app_format_money($aRow['total'], $currency->name));
                 $footer_data['total'] += $aRow['total'];
 
-                $row[] = app_format_money($aRow['total_tax'], $currency->name);
+                $row[] = e(app_format_money($aRow['total_tax'], $currency->name));
                 $footer_data['total_tax'] += $aRow['total_tax'];
 
                 $t = $totalTaxesColumns - 1;
                 $i = 0;
                 foreach ($estimateTaxes as $tax) {
-                    $row[] = app_format_money(($aRow['total_tax_single_' . $t] == null ? 0 : $aRow['total_tax_single_' . $t]), $currency->name);
+                    $row[] = e(app_format_money(($aRow['total_tax_single_' . $t] == null ? 0 : $aRow['total_tax_single_' . $t]), $currency->name));
                     $footer_data['total_tax_single_' . $i] += ($aRow['total_tax_single_' . $t] == null ? 0 : $aRow['total_tax_single_' . $t]);
                     $t--;
                     $i++;
                 }
 
-                $row[] = app_format_money($aRow['discount_total'], $currency->name);
+                $row[] = e(app_format_money($aRow['discount_total'], $currency->name));
                 $footer_data['discount_total'] += $aRow['discount_total'];
 
-                $row[] = app_format_money($aRow['adjustment'], $currency->name);
+                $row[] = e(app_format_money($aRow['adjustment'], $currency->name));
                 $footer_data['adjustment'] += $aRow['adjustment'];
 
 
-                $row[] = $aRow['reference_no'];
+                $row[] = e($aRow['reference_no']);
 
                 $row[] = format_estimate_status($aRow['status']);
 
                 $output['aaData'][] = $row;
             }
             foreach ($footer_data as $key => $total) {
-                $footer_data[$key] = app_format_money($total, $currency->name);
+                $footer_data[$key] = e(app_format_money($total, $currency->name));
             }
             $output['sums'] = $footer_data;
             echo json_encode($output);
@@ -727,16 +729,16 @@ class Reports extends AdminController
             foreach ($rResult as $aRow) {
                 $row = [];
 
-                $row[] = $aRow['description'];
+                $row[] = e($aRow['description']);
                 $row[] = $aRow['quantity_sold'];
-                $row[] = app_format_money($aRow['rate'], $currency->name);
-                $row[] = app_format_money($aRow['avg_price'], $currency->name);
+                $row[] = e(app_format_money($aRow['rate'], $currency->name));
+                $row[] = e(app_format_money($aRow['avg_price'], $currency->name));
                 $footer_data['total_amount'] += $aRow['rate'];
                 $footer_data['total_qty'] += $aRow['quantity_sold'];
                 $output['aaData'][] = $row;
             }
 
-            $footer_data['total_amount'] = app_format_money($footer_data['total_amount'], $currency->name);
+            $footer_data['total_amount'] = e(app_format_money($footer_data['total_amount'], $currency->name));
 
             $output['sums'] = $footer_data;
             echo json_encode($output);
@@ -852,46 +854,46 @@ class Reports extends AdminController
             foreach ($rResult as $aRow) {
                 $row = [];
 
-                $row[] = '<a href="' . admin_url('credit_notes/list_credit_notes/' . $aRow['id']) . '" target="_blank">' . format_credit_note_number($aRow['id']) . '</a>';
+                $row[] = '<a href="' . admin_url('credit_notes/list_credit_notes/' . $aRow['id']) . '" target="_blank">' . e(format_credit_note_number($aRow['id'])) . '</a>';
 
-                $row[] = _d($aRow['date']);
+                $row[] = e(_d($aRow['date']));
 
                 if (empty($aRow['deleted_customer_name'])) {
-                    $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . $aRow['company'] . '</a>';
+                    $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . e($aRow['company']) . '</a>';
                 } else {
-                    $row[] = $aRow['deleted_customer_name'];
+                    $row[] = e($aRow['deleted_customer_name']);
                 }
 
-                $row[] = $aRow['reference_no'];
+                $row[] = e($aRow['reference_no']);
 
-                $row[] = app_format_money($aRow['subtotal'], $currency->name);
+                $row[] = e(app_format_money($aRow['subtotal'], $currency->name));
                 $footer_data['subtotal'] += $aRow['subtotal'];
 
-                $row[] = app_format_money($aRow['total'], $currency->name);
+                $row[] = e(app_format_money($aRow['total'], $currency->name));
                 $footer_data['total'] += $aRow['total'];
 
-                $row[] = app_format_money($aRow['total_tax'], $currency->name);
+                $row[] = e(app_format_money($aRow['total_tax'], $currency->name));
                 $footer_data['total_tax'] += $aRow['total_tax'];
 
                 $t = $totalTaxesColumns - 1;
                 $i = 0;
                 foreach ($credit_note_taxes as $tax) {
-                    $row[] = app_format_money(($aRow['total_tax_single_' . $t] == null ? 0 : $aRow['total_tax_single_' . $t]), $currency->name);
+                    $row[] = e(app_format_money(($aRow['total_tax_single_' . $t] == null ? 0 : $aRow['total_tax_single_' . $t]), $currency->name));
                     $footer_data['total_tax_single_' . $i] += ($aRow['total_tax_single_' . $t] == null ? 0 : $aRow['total_tax_single_' . $t]);
                     $t--;
                     $i++;
                 }
 
-                $row[] = app_format_money($aRow['discount_total'], $currency->name);
+                $row[] = e(app_format_money($aRow['discount_total'], $currency->name));
                 $footer_data['discount_total'] += $aRow['discount_total'];
 
-                $row[] = app_format_money($aRow['adjustment'], $currency->name);
+                $row[] = e(app_format_money($aRow['adjustment'], $currency->name));
                 $footer_data['adjustment'] += $aRow['adjustment'];
 
-                $row[] = app_format_money($aRow['remaining_amount'], $currency->name);
+                $row[] = e(app_format_money($aRow['remaining_amount'], $currency->name));
                 $footer_data['remaining_amount'] += $aRow['remaining_amount'];
 
-                $row[] = app_format_money($aRow['refund_amount'], $currency->name);
+                $row[] = e(app_format_money($aRow['refund_amount'], $currency->name));
                 $footer_data['refund_amount'] += $aRow['refund_amount'];
 
                 $row[] = format_credit_note_status($aRow['status']);
@@ -900,7 +902,7 @@ class Reports extends AdminController
             }
 
             foreach ($footer_data as $key => $total) {
-                $footer_data[$key] = app_format_money($total, $currency->name);
+                $footer_data[$key] = e(app_format_money($total, $currency->name));
             }
 
             $output['sums'] = $footer_data;
@@ -1037,49 +1039,49 @@ class Reports extends AdminController
             foreach ($rResult as $aRow) {
                 $row = [];
 
-                $row[] = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['id']) . '" target="_blank">' . format_invoice_number($aRow['id']) . '</a>';
+                $row[] = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['id']) . '" target="_blank">' . e(format_invoice_number($aRow['id'])) . '</a>';
 
                 if (empty($aRow['deleted_customer_name'])) {
-                    $row[] = '<a href="' . admin_url('clients/client/' . $aRow['userid']) . '" target="_blank">' . $aRow['company'] . '</a>';
+                    $row[] = '<a href="' . admin_url('clients/client/' . $aRow['userid']) . '" target="_blank">' . e($aRow['company']) . '</a>';
                 } else {
-                    $row[] = $aRow['deleted_customer_name'];
+                    $row[] = e($aRow['deleted_customer_name']);
                 }
 
                 $row[] = $aRow['year'];
 
-                $row[] = _d($aRow['date']);
+                $row[] = e(_d($aRow['date']));
 
-                $row[] = _d($aRow['duedate']);
+                $row[] = e(_d($aRow['duedate']));
 
-                $row[] = app_format_money($aRow['subtotal'], $currency->name);
+                $row[] = e(app_format_money($aRow['subtotal'], $currency->name));
                 $footer_data['subtotal'] += $aRow['subtotal'];
 
-                $row[] = app_format_money($aRow['total'], $currency->name);
+                $row[] = e(app_format_money($aRow['total'], $currency->name));
                 $footer_data['total'] += $aRow['total'];
 
-                $row[] = app_format_money($aRow['total_tax'], $currency->name);
+                $row[] = e(app_format_money($aRow['total_tax'], $currency->name));
                 $footer_data['total_tax'] += $aRow['total_tax'];
 
                 $t = $totalTaxesColumns - 1;
                 $i = 0;
                 foreach ($invoice_taxes as $tax) {
-                    $row[] = app_format_money(($aRow['total_tax_single_' . $t] == null ? 0 : $aRow['total_tax_single_' . $t]), $currency->name);
+                    $row[] = e(app_format_money(($aRow['total_tax_single_' . $t] == null ? 0 : $aRow['total_tax_single_' . $t]), $currency->name));
                     $footer_data['total_tax_single_' . $i] += ($aRow['total_tax_single_' . $t] == null ? 0 : $aRow['total_tax_single_' . $t]);
                     $t--;
                     $i++;
                 }
 
-                $row[] = app_format_money($aRow['discount_total'], $currency->name);
+                $row[] = e(app_format_money($aRow['discount_total'], $currency->name));
                 $footer_data['discount_total'] += $aRow['discount_total'];
 
-                $row[] = app_format_money($aRow['adjustment'], $currency->name);
+                $row[] = e(app_format_money($aRow['adjustment'], $currency->name));
                 $footer_data['adjustment'] += $aRow['adjustment'];
 
-                $row[] = app_format_money($aRow['credits_applied'], $currency->name);
+                $row[] = e(app_format_money($aRow['credits_applied'], $currency->name));
                 $footer_data['applied_credits'] += $aRow['credits_applied'];
 
                 $amountOpen = $aRow['amount_open'];
-                $row[]      = app_format_money($amountOpen, $currency->name);
+                $row[]      = e(app_format_money($amountOpen, $currency->name));
                 $footer_data['amount_open'] += $amountOpen;
 
                 $row[] = format_invoice_status($aRow['status']);
@@ -1088,7 +1090,7 @@ class Reports extends AdminController
             }
 
             foreach ($footer_data as $key => $total) {
-                $footer_data[$key] = app_format_money($total, $currency->name);
+                $footer_data[$key] = e(app_format_money($total, $currency->name));
             }
 
             $output['sums'] = $footer_data;
@@ -1128,7 +1130,6 @@ class Reports extends AdminController
             } else {
                 $data['current_year'] = $this->input->get('year');
             }
-
 
             $data['export_not_supported'] = ($this->agent->browser() == 'Internet Explorer' || $this->agent->browser() == 'Spartan');
 

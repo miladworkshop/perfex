@@ -63,8 +63,8 @@
                                             <span class="tw-font-semibold tw-mr-3 rtl:tw-ml-3 tw-text-lg">
                                                 <?php echo total_rows(db_prefix() . 'projects', $where); ?>
                                             </span>
-                                            <span style="color: <?php echo $status['color']; ?>" class="<?php echo 'project-status-'.$status['color']; ?>">
-                                                <?php echo $status['name']; ?>
+                                            <span style="color: <?php echo e($status['color']); ?>" class="<?php echo 'project-status-'.$status['color']; ?>">
+                                                <?php echo e($status['name']); ?>
                                             </span>
                                         </a>
                                     </div>

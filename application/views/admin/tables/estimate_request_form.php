@@ -16,7 +16,7 @@ foreach ($rResult as $aRow) {
     for ($i = 0; $i < count($aColumns); $i++) {
         $_data = $aRow[$aColumns[$i]];
         if ($aColumns[$i] == 'name') {
-            $_data = '<a href="' . admin_url('estimate_request/form/' . $aRow['id']) . '">' . $_data . '</a>';
+            $_data = '<a href="' . admin_url('estimate_request/form/' . $aRow['id']) . '">' . e($_data) . '</a>';
             $_data .= '<div class="row-options">';
             $_data .= '<a href="' . site_url('forms/quote/' . $aRow['form_key']) . '" target="_blank">' . _l('view') . '</a>';
             $_data .= ' | <a href="' . admin_url('estimate_request/form/' . $aRow['id']) . '">' . _l('edit') . '</a>';
@@ -25,7 +25,7 @@ foreach ($rResult as $aRow) {
             }
             $_data .= '</div>';
         } elseif ($aColumns[$i] == 'dateadded') {
-            $_data = '<span class="text-has-action is-date" data-toggle="tooltip" data-title="' . _dt($_data) . '">' . time_ago($_data) . '</span>';
+            $_data = '<span class="text-has-action is-date" data-toggle="tooltip" data-title="' . e(_dt($_data)) . '">' . e(time_ago($_data)) . '</span>';
         }
 
         $row[] = $_data;

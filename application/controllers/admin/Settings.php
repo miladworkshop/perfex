@@ -190,7 +190,7 @@ class Settings extends AdminController
         }
 
         update_option('company_logo' . ($type == 'dark' ? '_dark' : ''), '');
-        redirect($_SERVER['HTTP_REFERER']);
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     public function remove_fv()
@@ -203,7 +203,7 @@ class Settings extends AdminController
             unlink(get_upload_path_by_type('company') . '/' . get_option('favicon'));
         }
         update_option('favicon', '');
-        redirect($_SERVER['HTTP_REFERER']);
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     public function delete_option($name)

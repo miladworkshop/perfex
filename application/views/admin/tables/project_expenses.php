@@ -70,7 +70,7 @@ return App_table::find('project_expenses')
                 if ($aColumns[$i] == db_prefix() . 'expenses.id') {
                     $_data = '<span class="label label-default inline-block">' . $_data . '</span>';
                 } elseif (strpos($aColumns[$i], 'category_name') !== false) {
-                    $_data = '<a href="' . admin_url('expenses/list_expenses/' . $aRow[db_prefix() . 'expenses.id']) . '" target="_blank">' . $aRow['category_name'] . '</a>';
+                    $_data = '<a href="' . admin_url('expenses/list_expenses/' . $aRow[db_prefix() . 'expenses.id']) . '" target="_blank">' . e($aRow['category_name']) . '</a>';
                     if ($aRow['billable'] == 1) {
                         if ($aRow['invoiceid'] == null) {
                             $_data .= '<p class="text-danger">' . _l('expense_list_unbilled') . '</p>';
@@ -96,21 +96,23 @@ return App_table::find('project_expenses')
                         $_tax = get_tax_by_id($aRow['tax2']);
                         $total += ($tmp_total / 100 * $_tax->taxrate);
                     }
-                    $_data = app_format_money($total, get_currency($aRow['currency']));
+                    $_data = e(app_format_money($total, get_currency($aRow['currency'])));
+                } elseif ($aColumns[$i] == 'expense_name' || $aColumns[$i] == 'reference_no') {
+                    $_data = e($_data);
                 } elseif ($aColumns[$i] == 'paymentmode') {
                     $_data = '';
                     if ($aRow['paymentmode'] != '0' && !empty($aRow['paymentmode'])) {
-                        $_data = $this->ci->payment_modes_model->get($aRow['paymentmode'])->name;
+                        $_data = e($this->ci->payment_modes_model->get($aRow['paymentmode'])->name);
                     }
                 } elseif ($aColumns[$i] == 'file_name') {
                     if (!empty($_data)) {
-                        $_data = '<a href="' . site_url('download/file/expense/' . $aRow[db_prefix() . 'expenses.id']) . '">' . $_data . '</a>';
+                        $_data = '<a href="' . site_url('download/file/expense/' . $aRow[db_prefix() . 'expenses.id']) . '">' . e($_data) . '</a>';
                     }
                 } elseif ($aColumns[$i] == 'date') {
-                    $_data = _d($_data);
+                    $_data = e(_d($_data));
                 } elseif ($aColumns[$i] == 'invoiceid') {
                     if ($_data) {
-                        $_data = '<a href="' . admin_url('invoices/list_invoices/' . $_data) . '">' . format_invoice_number($_data) . '</a>';
+                        $_data = '<a href="' . admin_url('invoices/list_invoices/' . $_data) . '">' . e(format_invoice_number($_data)) . '</a>';
                     } else {
                         $_data = '';
                     }

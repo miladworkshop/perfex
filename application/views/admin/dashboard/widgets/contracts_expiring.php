@@ -42,16 +42,16 @@
                         <?php foreach ($expiringContracts as $contract) { ?>
                         <tr>
                             <td>
-                                <?php echo '<a href="' . admin_url('contracts/contract/' . $contract['id']) . '">' . $contract['subject'] . '</a>'; ?>
+                                <?php echo '<a href="' . admin_url('contracts/contract/' . $contract['id']) . '">' . e($contract['subject']) . '</a>'; ?>
                             </td>
                             <td>
-                                <?php echo '<a href="' . admin_url('clients/client/' . $contract['client']) . '">' . get_company_name($contract['client']) . '</a>'; ?>
+                                <?php echo '<a href="' . admin_url('clients/client/' . $contract['client']) . '">' . e(get_company_name($contract['client'])) . '</a>'; ?>
                             </td>
                             <td>
-                                <?php echo _d($contract['datestart']); ?>
+                                <?php echo e(_d($contract['datestart'])); ?>
                             </td>
                             <td>
-                                <?php echo _d($contract['dateend']); ?>
+                                <?php echo e(_d($contract['dateend'])); ?>
                             </td>
                         </tr>
                         <?php } ?>
@@ -59,10 +59,10 @@
                 </table>
             </div>
             <?php } else { ?>
-            <div class="text-center padding-5">
-                <i class="fa fa-check fa-5x" aria-hidden="true"></i>
-                <h4><?php echo _l('no_contracts_about_to_expire', ['7']) ; ?> </h4>
-            </div>
+                <div class="text-center padding-5 tw-text-neutral-500">
+                    <i class="fa fa-check fa-2x" aria-hidden="true"></i>
+                    <p class="tw-mt-4"><?php echo _l('no_contracts_about_to_expire', ['7']); ?></p>
+                </div>
             <?php } ?>
         </div>
     </div>

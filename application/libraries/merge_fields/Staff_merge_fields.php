@@ -175,10 +175,10 @@ class Staff_merge_fields extends App_merge_fields
             $fields['{two_factor_auth_code}'] = $staff->two_factor_auth_code;
         }
 
-        $fields['{staff_firstname}']   = $staff->firstname;
-        $fields['{staff_lastname}']    = $staff->lastname;
-        $fields['{staff_email}']       = $staff->email;
-        $fields['{staff_datecreated}'] = $staff->datecreated;
+        $fields['{staff_firstname}']   = e($staff->firstname);
+        $fields['{staff_lastname}']    = e($staff->lastname);
+        $fields['{staff_email}']       = e($staff->email);
+        $fields['{staff_datecreated}'] = e($staff->datecreated);
 
 
         $custom_fields = get_custom_fields('staff');

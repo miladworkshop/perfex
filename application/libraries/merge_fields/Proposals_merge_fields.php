@@ -160,25 +160,25 @@ class Proposals_merge_fields extends App_merge_fields
         }
 
         $fields['{proposal_id}']          = $proposal_id;
-        $fields['{proposal_number}']      = format_proposal_number($proposal_id);
+        $fields['{proposal_number}']      = e(format_proposal_number($proposal_id));
         $fields['{proposal_link}']        = site_url('proposal/' . $proposal_id . '/' . $proposal->hash);
-        $fields['{proposal_subject}']     = $proposal->subject;
-        $fields['{proposal_total}']       = app_format_money($proposal->total, $currency);
-        $fields['{proposal_subtotal}']    = app_format_money($proposal->subtotal, $currency);
-        $fields['{proposal_open_till}']   = _d($proposal->open_till);
-        $fields['{proposal_proposal_to}'] = $proposal->proposal_to;
-        $fields['{proposal_address}']     = $proposal->address;
-        $fields['{proposal_email}']       = $proposal->email;
-        $fields['{proposal_phone}']       = $proposal->phone;
+        $fields['{proposal_subject}']     = e($proposal->subject);
+        $fields['{proposal_total}']       = e(app_format_money($proposal->total, $currency));
+        $fields['{proposal_subtotal}']    = e(app_format_money($proposal->subtotal, $currency));
+        $fields['{proposal_open_till}']   = e(_d($proposal->open_till));
+        $fields['{proposal_proposal_to}'] = e($proposal->proposal_to);
+        $fields['{proposal_address}']     = e($proposal->address);
+        $fields['{proposal_email}']       = e($proposal->email);
+        $fields['{proposal_phone}']       = e($proposal->phone);
 
-        $fields['{proposal_city}']       = $proposal->city;
-        $fields['{proposal_state}']      = $proposal->state;
-        $fields['{proposal_zip}']        = $proposal->zip;
-        $fields['{proposal_country}']    = $proposal->short_name;
-        $fields['{proposal_assigned}']   = get_staff_full_name($proposal->assigned);
+        $fields['{proposal_city}']       = e($proposal->city);
+        $fields['{proposal_state}']      = e($proposal->state);
+        $fields['{proposal_zip}']        = e($proposal->zip);
+        $fields['{proposal_country}']    = e($proposal->short_name);
+        $fields['{proposal_assigned}']   = e(get_staff_full_name($proposal->assigned));
         $fields['{proposal_short_url}']  = get_proposal_shortlink($proposal);
-        $fields['{proposal_created_at}'] = _dt($proposal->datecreated);
-        $fields['{proposal_date}']       = _d($proposal->date);
+        $fields['{proposal_created_at}'] = e(_dt($proposal->datecreated));
+        $fields['{proposal_date}']       = e(_d($proposal->date));
 
         $custom_fields = get_custom_fields('proposal');
         foreach ($custom_fields as $field) {

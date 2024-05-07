@@ -159,17 +159,17 @@ class Payu_money extends App_Controller
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <?php echo _l('payment_for_invoice'); ?> -
-                            <?php echo _l('payment_total', app_format_money($data['total'], $data['invoice']->currency_name)); ?>
+                            <?php echo e(_l('payment_total', app_format_money($data['total'], $data['invoice']->currency_name))); ?>
                         </h4>
                         <a
                             href="<?php echo site_url('invoice/' . $data['invoice']->id . '/' . $data['invoice']->hash); ?>">
-                            <?php echo format_invoice_number($data['invoice']->id); ?>
+                            <?php echo e(format_invoice_number($data['invoice']->id)); ?>
                         </a>
                     </div>
                     <div class="panel-body">
                         <?php if ($this->payu_money_gateway->processingFees) { ?>
-                            <h4><?php echo _l('payment_attempt_amount') . ": " . app_format_money($data['attempt_amount'], $data['invoice']->currency_name); ?></h4>
-                            <h4><?php echo _l('payment_attempt_fee') . ": " . app_format_money($data['attempt_fee'], $data['invoice']->currency_name); ?></h4>
+                            <h4><?php echo _l('payment_attempt_amount') . ": " . e(app_format_money($data['attempt_amount'], $data['invoice']->currency_name)); ?></h4>
+                            <h4><?php echo _l('payment_attempt_fee') . ": " . e(app_format_money($data['attempt_fee'], $data['invoice']->currency_name)); ?></h4>
                         <?php } ?>
                         <hr />
                         <input type="hidden" name="key" value="<?php echo $data['key'] ?>" />
@@ -183,26 +183,26 @@ class Payu_money extends App_Controller
                             value="<?php echo site_url('gateways/payu_money/failure?invoiceid=' . $data['invoice']->id . '&hash=' . $data['invoice']->hash); ?>" />
                         <input type="hidden" name="service_provider" value="payu_paisa" size="64" />
                         <input type="hidden" name="productinfo"
-                            value="<?php echo str_replace('{invoice_number}', format_invoice_number($data['invoice']->id), $this->payu_money_gateway->getSetting('description_dashboard')); ?>" />
+                            value="<?php echo e(str_replace('{invoice_number}', format_invoice_number($data['invoice']->id), $this->payu_money_gateway->getSetting('description_dashboard'))); ?>" />
                         <div class="form-group">
                             <label for="first_name"> <?php echo _l('client_firstname'); ?></label>
                             <input type="text" class="form-control" id="first_name" name="firstname"
-                                value="<?php echo $data['firstname']; ?>" required>
+                                value="<?php echo e($data['firstname']); ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="last_name"> <?php echo _l('client_lastname'); ?></label>
                             <input type="text" class="form-control" id="last_name" name="lastname"
-                                value="<?php echo $data['lastname']; ?>">
+                                value="<?php echo e($data['lastname']); ?>">
                         </div>
                         <div class="form-group">
                             <label for="email"> <?php echo _l('client_email'); ?> </label>
                             <input type="email" class="form-control" id="email" name="email"
-                                value="<?php echo $data['email']; ?>" required>
+                                value="<?php echo e($data['email']); ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="phone"> <?php echo _l('client_phonenumber'); ?></label>
                             <input type="text" class="form-control" id="phone" name="phone"
-                                value="<?php echo $data['phonenumber']; ?>" required>
+                                value="<?php echo e($data['phonenumber']); ?>" required>
                         </div>
                     </div>
                     <?php if (!$data['hash']) { ?>

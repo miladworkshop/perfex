@@ -54,9 +54,9 @@
           } else {
               $key = $key + 1;
           } ?>
-            <option value="<?php echo $key; ?>" <?php if (get_option('calendar_first_day') == $key) {
+            <option value="<?php echo e($key); ?>" <?php if (get_option('calendar_first_day') == $key) {
               echo 'selected';
-          } ?>><?php echo $val; ?></option>
+          } ?>><?php echo e($val); ?></option>
             <?php
       } ?>
         </select>

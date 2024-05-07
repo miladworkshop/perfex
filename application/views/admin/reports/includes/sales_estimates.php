@@ -6,7 +6,7 @@
          <label for="estimate_status"><?php echo _l('estimate_status'); ?></label>
          <select name="estimate_status" class="selectpicker" multiple data-width="100%" data-none-selected-text="<?php echo _l('invoice_status_report_all'); ?>">
             <?php foreach($estimate_statuses as $status){ ?>
-            <option value="<?php echo $status; ?>"><?php echo format_estimate_status($status,'',false) ?></option>
+            <option value="<?php echo e($status); ?>"><?php echo format_estimate_status($status,'',false) ?></option>
             <?php } ?>
          </select>
       </div>
@@ -17,7 +17,7 @@
          <label for="sale_agent_estimates"><?php echo _l('sale_agent_string'); ?></label>
          <select name="sale_agent_estimates" class="selectpicker" multiple data-width="100%" data-none-selected-text="<?php echo _l('invoice_status_report_all'); ?>">
             <?php foreach($estimates_sale_agents as $agent){ ?>
-            <option value="<?php echo $agent['sale_agent']; ?>"><?php echo get_staff_full_name($agent['sale_agent']); ?></option>
+            <option value="<?php echo e($agent['sale_agent']); ?>"><?php echo e(get_staff_full_name($agent['sale_agent'])); ?></option>
             <?php } ?>
          </select>
       </div>
@@ -38,7 +38,7 @@
          <th><?php echo _l('report_invoice_amount_with_tax'); ?></th>
          <th><?php echo _l('report_invoice_total_tax'); ?></th>
          <?php foreach($estimate_taxes as $tax){ ?>
-         <th><?php echo $tax['taxname']; ?> <small><?php echo $tax['taxrate']; ?>%</small></th>
+         <th><?php echo e($tax['taxname']); ?> <small><?php echo e($tax['taxrate']); ?>%</small></th>
          <?php } ?>
          <th><?php echo _l('estimate_discount'); ?></th>
          <th><?php echo _l('estimate_adjustment'); ?></th>
@@ -59,7 +59,7 @@
          <td class="total"></td>
          <td class="total_tax"></td>
          <?php foreach($estimate_taxes as $key => $tax){ ?>
-         <td class="total_tax_single_<?php echo $key; ?>"></td>
+         <td class="total_tax_single_<?php echo e($key); ?>"></td>
          <?php } ?>
          <td class="discount_total"></td>
          <td class="adjustment"></td>

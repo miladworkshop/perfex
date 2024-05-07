@@ -6,10 +6,10 @@
             <div class="col-md-8 col-md-offset-2">
                 <div class="tw-flex tw-justify-between tw-text-neutral-700">
                     <h4 class="tw-mt-0 tw-font-semibold">
-                        <span class="tw-text-lg"><?php echo $title; ?></span>
+                        <span class="tw-text-lg"><?php echo e($title); ?></span>
                         <br />
                         <small>
-                            <?php echo $estimate_request->form_data->name ?? ''; ?>
+                            <?php echo e($estimate_request->form_data->name ?? ''); ?>
                         </small>
                     </h4>
                     <div>
@@ -37,7 +37,6 @@
                                         </a>
                                     </li>
                                     <?php } ?>
-
                                 </ul>
                             </span>
                             <?php } ?>
@@ -46,7 +45,7 @@
                                 <button type="button" class="btn btn-default dropdown-toggle mleft10"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                     id="actionsDropdown">
-                                    more <span class="caret"></span>
+                                    <?php echo _l('more'); ?> <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="actionsDropdown">
                                     <?php foreach ($statuses as $status) { ?>
@@ -140,7 +139,7 @@
 <script>
 var lead = <?php echo(isset($lead) ? json_encode($lead) : "''"); ?>;
 var contact = <?php echo(isset($contact) ? json_encode($contact) : "''"); ?>;
-var contactCompanyName = "<?php echo isset($contact) ? get_company_name($contact->userid) : ''; ?>";
+var contactCompanyName = "<?php echo e(isset($contact) ? get_company_name($contact->userid) : ''); ?>";
 var $createCustomerFields = $('#create_customer_fields');
 
 var $relIdSelect = $('#rel_id'),

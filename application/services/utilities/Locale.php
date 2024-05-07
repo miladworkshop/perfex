@@ -57,17 +57,17 @@ class Locale
         if ($locale == 'en') {
             return $lang;
         }
-
-        if ($locale == 'hi') {
-            return 'hi_IN';
-        } elseif ($locale == 'he') {
+        
+        if ($locale == 'he') {
             return 'he_IL';
+        } if ($locale == 'pt') {
+            return 'pt_BR';
         } elseif ($locale == 'sv') {
             return 'sv_SE';
         } elseif ($locale == 'sl') {
             return 'sl_SI';
         } elseif ($locale == 'zh') {
-            return 'zh_TW';
+            return 'zh_HK';
         } elseif ($locale == 'nb') {
             return 'nb_NO';
         }

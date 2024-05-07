@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Contract extends ClientsController
 {
-    public function index($id, $hash)
+    public function index($id = '', $hash = '')
     {
         check_contract_restrictions($id, $hash);
         $contract = $this->contracts_model->get($id);
@@ -31,7 +31,8 @@ class Contract extends ClientsController
                     $this->contracts_model->add_signature($id);
 
                     set_alert('success', _l('document_signed_successfully'));
-                    redirect($_SERVER['HTTP_REFERER']);
+                    
+                    redirect(site_url('contract/' . $id. '/' . $hash));
 
             break;
              case 'contract_comment':

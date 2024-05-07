@@ -40,9 +40,9 @@
     echo 'text-throught';
 } ?>">
                                                     <a
-                                                        href="<?php echo admin_url('emails/email_template/' . $ticket_template['emailtemplateid']); ?>"><?php echo $ticket_template['name']; ?></a>
+                                                        href="<?php echo admin_url('emails/email_template/' . $ticket_template['emailtemplateid']); ?>"><?php echo e($ticket_template['name']); ?></a>
                                                     <?php if (ENVIRONMENT !== 'production') { ?>
-                                                    <br /><small><?php echo $ticket_template['slug']; ?></small>
+                                                    <br /><small><?php echo e($ticket_template['slug']); ?></small>
                                                     <?php } ?>
                                                     <?php if ($hasPermissionEdit) { ?>
                                                     <a href="<?php echo admin_url('emails/' . ($ticket_template['active'] == '1' ? 'disable/' : 'enable/') . $ticket_template['emailtemplateid']); ?>"
@@ -85,9 +85,9 @@
     echo 'text-throught';
 } ?>">
                                                     <a
-                                                        href="<?php echo admin_url('emails/email_template/' . $estimate_template['emailtemplateid']); ?>"><?php echo $estimate_template['name']; ?></a>
+                                                        href="<?php echo admin_url('emails/email_template/' . $estimate_template['emailtemplateid']); ?>"><?php echo e($estimate_template['name']); ?></a>
                                                     <?php if (ENVIRONMENT !== 'production') { ?>
-                                                    <br /><small><?php echo $estimate_template['slug']; ?></small>
+                                                    <br /><small><?php echo e($estimate_template['slug']); ?></small>
                                                     <?php } ?>
                                                     <?php if ($hasPermissionEdit) { ?>
                                                     <a href="<?php echo admin_url('emails/' . ($estimate_template['active'] == '1' ? 'disable/' : 'enable/') . $estimate_template['emailtemplateid']); ?>"
@@ -131,9 +131,9 @@
     echo 'text-throught';
 } ?>">
                                                     <a
-                                                        href="<?php echo admin_url('emails/email_template/' . $contract_template['emailtemplateid']); ?>"><?php echo $contract_template['name']; ?></a>
+                                                        href="<?php echo admin_url('emails/email_template/' . $contract_template['emailtemplateid']); ?>"><?php echo e($contract_template['name']); ?></a>
                                                     <?php if (ENVIRONMENT !== 'production') { ?>
-                                                    <br /><small><?php echo $contract_template['slug']; ?></small>
+                                                    <br /><small><?php echo e($contract_template['slug']); ?></small>
                                                     <?php } ?>
                                                     <?php if ($hasPermissionEdit) { ?>
                                                     <a href="<?php echo admin_url('emails/' . ($contract_template['active'] == '1' ? 'disable/' : 'enable/') . $contract_template['emailtemplateid']); ?>"
@@ -176,9 +176,9 @@
     echo 'text-throught';
 } ?>">
                                                     <a
-                                                        href="<?php echo admin_url('emails/email_template/' . $invoice_template['emailtemplateid']); ?>"><?php echo $invoice_template['name']; ?></a>
+                                                        href="<?php echo admin_url('emails/email_template/' . $invoice_template['emailtemplateid']); ?>"><?php echo e($invoice_template['name']); ?></a>
                                                     <?php if (ENVIRONMENT !== 'production') { ?>
-                                                    <br /><small><?php echo $invoice_template['slug']; ?></small>
+                                                    <br /><small><?php echo e($invoice_template['slug']); ?></small>
                                                     <?php } ?>
                                                     <?php if ($hasPermissionEdit) { ?>
                                                     <a href="<?php echo admin_url('emails/' . ($invoice_template['active'] == '1' ? 'disable/' : 'enable/') . $invoice_template['emailtemplateid']); ?>"
@@ -222,9 +222,9 @@
     echo 'text-throught';
 } ?>">
                                                     <a
-                                                        href="<?php echo admin_url('emails/email_template/' . $subscription_template['emailtemplateid']); ?>"><?php echo $subscription_template['name']; ?></a>
+                                                        href="<?php echo admin_url('emails/email_template/' . $subscription_template['emailtemplateid']); ?>"><?php echo e($subscription_template['name']); ?></a>
                                                     <?php if (ENVIRONMENT !== 'production') { ?>
-                                                    <br /><small><?php echo $subscription_template['slug']; ?></small>
+                                                    <br /><small><?php echo e($subscription_template['slug']); ?></small>
                                                     <?php } ?>
                                                     <?php if ($hasPermissionEdit) { ?>
                                                     <a href="<?php echo admin_url('emails/' . ($subscription_template['active'] == '1' ? 'disable/' : 'enable/') . $subscription_template['emailtemplateid']); ?>"
@@ -268,9 +268,9 @@
     echo 'text-throught';
 } ?>">
                                                     <a
-                                                        href="<?php echo admin_url('emails/email_template/' . $credit_note_template['emailtemplateid']); ?>"><?php echo $credit_note_template['name']; ?></a>
+                                                        href="<?php echo admin_url('emails/email_template/' . $credit_note_template['emailtemplateid']); ?>"><?php echo e($credit_note_template['name']); ?></a>
                                                     <?php if (ENVIRONMENT !== 'production') { ?>
-                                                    <br /><small><?php echo $credit_note_template['slug']; ?></small>
+                                                    <br /><small><?php echo e($credit_note_template['slug']); ?></small>
                                                     <?php } ?>
                                                     <?php if ($hasPermissionEdit) { ?>
                                                     <a href="<?php echo admin_url('emails/' . ($credit_note_template['active'] == '1' ? 'disable/' : 'enable/') . $credit_note_template['emailtemplateid']); ?>"
@@ -314,9 +314,9 @@
     echo 'text-throught';
 } ?>">
                                                     <a
-                                                        href="<?php echo admin_url('emails/email_template/' . $task_template['emailtemplateid']); ?>"><?php echo $task_template['name']; ?></a>
+                                                        href="<?php echo admin_url('emails/email_template/' . $task_template['emailtemplateid']); ?>"><?php echo e($task_template['name']); ?></a>
                                                     <?php if (ENVIRONMENT !== 'production') { ?>
-                                                    <br /><small><?php echo $task_template['slug']; ?></small>
+                                                    <br /><small><?php echo e($task_template['slug']); ?></small>
                                                     <?php } ?>
                                                     <?php if ($hasPermissionEdit) { ?>
                                                     <a href="<?php echo admin_url('emails/' . ($task_template['active'] == '1' ? 'disable/' : 'enable/') . $task_template['emailtemplateid']); ?>"
@@ -362,9 +362,9 @@
         echo 'text-throught';
     } ?>">
                                                     <a
-                                                        href="<?php echo admin_url('emails/email_template/' . $client_template['emailtemplateid']); ?>"><?php echo $client_template['name']; ?></a>
+                                                        href="<?php echo admin_url('emails/email_template/' . $client_template['emailtemplateid']); ?>"><?php echo e($client_template['name']); ?></a>
                                                     <?php if (ENVIRONMENT !== 'production') { ?>
-                                                    <br /><small><?php echo $client_template['slug']; ?></small>
+                                                    <br /><small><?php echo e($client_template['slug']); ?></small>
                                                     <?php } ?>
                                                     <?php if ($hasPermissionEdit) { ?>
                                                     <a href="<?php echo admin_url('emails/' . ($client_template['active'] == '1' ? 'disable/' : 'enable/') . $client_template['emailtemplateid']); ?>"
@@ -409,9 +409,9 @@
         echo 'text-throught';
     } ?>">
                                                     <a
-                                                        href="<?php echo admin_url('emails/email_template/' . $proposal_template['emailtemplateid']); ?>"><?php echo $proposal_template['name']; ?></a>
+                                                        href="<?php echo admin_url('emails/email_template/' . $proposal_template['emailtemplateid']); ?>"><?php echo e($proposal_template['name']); ?></a>
                                                     <?php if (ENVIRONMENT !== 'production') { ?>
-                                                    <br /><small><?php echo $proposal_template['slug']; ?></small>
+                                                    <br /><small><?php echo e($proposal_template['slug']); ?></small>
                                                     <?php } ?>
                                                     <?php if ($hasPermissionEdit) { ?>
                                                     <a href="<?php echo admin_url('emails/' . ($proposal_template['active'] == '1' ? 'disable/' : 'enable/') . $proposal_template['emailtemplateid']); ?>"
@@ -453,9 +453,9 @@
         echo 'text-throught';
     } ?>">
                                                     <a
-                                                        href="<?php echo admin_url('emails/email_template/' . $project_template['emailtemplateid']); ?>"><?php echo $project_template['name']; ?></a>
+                                                        href="<?php echo admin_url('emails/email_template/' . $project_template['emailtemplateid']); ?>"><?php echo e($project_template['name']); ?></a>
                                                     <?php if (ENVIRONMENT !== 'production') { ?>
-                                                    <br /><small><?php echo $project_template['slug']; ?></small>
+                                                    <br /><small><?php echo e($project_template['slug']); ?></small>
                                                     <?php } ?>
                                                     <?php if ($hasPermissionEdit) { ?>
                                                     <a href="<?php echo admin_url('emails/' . ($project_template['active'] == '1' ? 'disable/' : 'enable/') . $project_template['emailtemplateid']); ?>"
@@ -498,9 +498,9 @@
         echo 'text-throught';
     } ?>">
                                                     <a
-                                                        href="<?php echo admin_url('emails/email_template/' . $staff_template['emailtemplateid']); ?>"><?php echo $staff_template['name']; ?></a>
+                                                        href="<?php echo admin_url('emails/email_template/' . $staff_template['emailtemplateid']); ?>"><?php echo e($staff_template['name']); ?></a>
                                                     <?php if (ENVIRONMENT !== 'production') { ?>
-                                                    <br /><small><?php echo $staff_template['slug']; ?></small>
+                                                    <br /><small><?php echo e($staff_template['slug']); ?></small>
                                                     <?php } ?>
                                                     <?php if ($hasPermissionEdit && $staff_template['slug'] != 'two-factor-authentication') { ?>
                                                     <a href="<?php echo admin_url('emails/' . ($staff_template['active'] == '1' ? 'disable/' : 'enable/') . $staff_template['emailtemplateid']); ?>"
@@ -543,9 +543,9 @@
         echo 'text-throught';
     } ?>">
                                                     <a
-                                                        href="<?php echo admin_url('emails/email_template/' . $lead_template['emailtemplateid']); ?>"><?php echo $lead_template['name']; ?></a>
+                                                        href="<?php echo admin_url('emails/email_template/' . $lead_template['emailtemplateid']); ?>"><?php echo e($lead_template['name']); ?></a>
                                                     <?php if (ENVIRONMENT !== 'production') { ?>
-                                                    <br /><small><?php echo $lead_template['slug']; ?></small>
+                                                    <br /><small><?php echo e($lead_template['slug']); ?></small>
                                                     <?php } ?>
                                                     <?php if ($hasPermissionEdit) { ?>
                                                     <a href="<?php echo admin_url('emails/' . ($lead_template['active'] == '1' ? 'disable/' : 'enable/') . $lead_template['emailtemplateid']); ?>"
@@ -588,9 +588,9 @@
         echo 'text-throught';
     } ?>">
                                                     <a
-                                                        href="<?php echo admin_url('emails/email_template/' . $estimate_request['emailtemplateid']); ?>"><?php echo $estimate_request['name']; ?></a>
+                                                        href="<?php echo admin_url('emails/email_template/' . $estimate_request['emailtemplateid']); ?>"><?php echo e($estimate_request['name']); ?></a>
                                                     <?php if (ENVIRONMENT !== 'production') { ?>
-                                                    <br /><small><?php echo $estimate_request['slug']; ?></small>
+                                                    <br /><small><?php echo e($estimate_request['slug']); ?></small>
                                                     <?php } ?>
                                                     <?php if ($hasPermissionEdit) { ?>
                                                     <a href="<?php echo admin_url('emails/' . ($estimate_request['active'] == '1' ? 'disable/' : 'enable/') . $estimate_request['emailtemplateid']); ?>"
@@ -633,9 +633,9 @@
         echo 'text-throught';
     } ?>">
                                                     <a
-                                                        href="<?php echo admin_url('emails/email_template/' . $notification['emailtemplateid']); ?>"><?php echo $notification['name']; ?></a>
+                                                        href="<?php echo admin_url('emails/email_template/' . $notification['emailtemplateid']); ?>"><?php echo e($notification['name']); ?></a>
                                                     <?php if (ENVIRONMENT !== 'production') { ?>
-                                                    <br /><small><?php echo $notification['slug']; ?></small>
+                                                    <br /><small><?php echo e($notification['slug']); ?></small>
                                                     <?php } ?>
                                                     <?php if ($hasPermissionEdit) { ?>
                                                     <a href="<?php echo admin_url('emails/' . ($notification['active'] == '1' ? 'disable/' : 'enable/') . $notification['emailtemplateid']); ?>"
@@ -680,9 +680,9 @@
         echo 'text-throught';
     } ?>">
                                                     <a
-                                                        href="<?php echo admin_url('emails/email_template/' . $gdpr_template['emailtemplateid']); ?>"><?php echo $gdpr_template['name']; ?></a>
+                                                        href="<?php echo admin_url('emails/email_template/' . $gdpr_template['emailtemplateid']); ?>"><?php echo e($gdpr_template['name']); ?></a>
                                                     <?php if (ENVIRONMENT !== 'production') { ?>
-                                                    <br /><small><?php echo $gdpr_template['slug']; ?></small>
+                                                    <br /><small><?php echo e($gdpr_template['slug']); ?></small>
                                                     <?php } ?>
                                                     <?php if ($hasPermissionEdit) { ?>
                                                     <a href="<?php echo admin_url('emails/' . ($gdpr_template['active'] == '1' ? 'disable/' : 'enable/') . $gdpr_template['emailtemplateid']); ?>"

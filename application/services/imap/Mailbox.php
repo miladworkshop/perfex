@@ -2,6 +2,7 @@
 
 namespace app\services\imap;
 
+use Exception;
 use DateTimeInterface;
 use Ddeboer\Imap\Message;
 use Ddeboer\Imap\MessageIterator;
@@ -225,6 +226,21 @@ class Mailbox implements MailboxInterface
     {
         if (!\imap_mail_copy($this->resource->getStream(), $this->prepareMessageIds($numbers), $mailbox->getEncodedName(), \CP_UID)) {
             throw new MessageCopyException(\sprintf('Messages cannot be copied to "%s"', $mailbox->getName()));
+        }
+    }
+
+    public function renameTo(string $newName): bool 
+    {
+        $currentName = $this->mailboxName; // The current name of the mailbox
+        $imapStream = $this->connection; // Your IMAP connection resource
+
+        $newNamePath = "INBOX.$newName"; // Adjust based on your server's naming convention
+
+        if (imap_renamemailbox($imapStream, $currentName, $newNamePath)) {
+           $this->mailboxName = $newNamePath;
+           return true;
+        } else {
+            throw new Exception('Failed to rename the mailbox: ' . imap_last_error());
         }
     }
 

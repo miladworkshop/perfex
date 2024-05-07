@@ -24,16 +24,16 @@
                             <tbody>
                                 <?php foreach ($priorities as $priority) { ?>
                                 <tr>
-                                    <td><?php echo $priority['priorityid']; ?></td>
+                                    <td><?php echo e($priority['priorityid']); ?></td>
                                     <td><a href="#"
-                                            onclick="edit_priority(this,<?php echo $priority['priorityid']; ?>);return false;"
-                                            data-name="<?php echo $priority['name']; ?>"><?php echo $priority['name']; ?></a>
+                                            onclick="edit_priority(this,<?php echo e($priority['priorityid']); ?>);return false;"
+                                            data-name="<?php echo e($priority['name']); ?>"><?php echo e($priority['name']); ?></a>
                                     </td>
                                     <td>
                                         <div class="tw-flex tw-items-center tw-space-x-3">
                                             <a href="#"
-                                                onclick="edit_priority(this,<?php echo $priority['priorityid']; ?>); return false"
-                                                data-name="<?php echo $priority['name']; ?>"
+                                                onclick="edit_priority(this,<?php echo e($priority['priorityid']); ?>); return false"
+                                                data-name="<?php echo e($priority['name']); ?>"
                                                 class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700">
                                                 <i class="fa-regular fa-pen-to-square fa-lg"></i>
                                             </a>

@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-6">
                 <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700">
-                    <?php echo $title; ?>
+                    <?php echo e($title); ?>
                 </h4>
                 <div class="panel_s">
                     <div class="panel-body">
@@ -61,8 +61,8 @@
                                    } ?>
                                 <hr />
                                 <h4 class="font-medium pointer bold"
-                                    onclick='slideToggle("#temp_<?php echo $availableLanguage; ?>");'>
-                                    <?php echo ucfirst($availableLanguage); ?>
+                                    onclick='slideToggle("#temp_<?php echo e($availableLanguage); ?>");'>
+                                    <?php echo e(ucfirst($availableLanguage)); ?>
                                 </h4>
                                 <?php
                            $lang_template = $lang_template[0];
@@ -162,8 +162,8 @@
 <script>
 $(function() {
     <?php foreach ($editors as $id) { ?>
-    init_editor('textarea[name="<?php echo $id; ?>"]', {
-        urlconverter_callback: 'merge_field_format_url',
+    init_editor('textarea[name="<?php echo e($id); ?>"]', {
+        urlconverter_callback: merge_field_format_url,
     });
     <?php } ?>
     var merge_fields_col = $('.merge_fields_col');

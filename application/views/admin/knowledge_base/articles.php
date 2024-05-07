@@ -37,8 +37,8 @@
                                     onclick="dt_custom_view('','.table-articles',''); return false;"><?php echo _l('view_articles_list_all'); ?></a>
                             </li>
                             <?php foreach ($groups as $group) { ?>
-                            <li><a href="#" data-cview="kb_group_<?php echo $group['groupid']; ?>"
-                                    onclick="dt_custom_view('kb_group_<?php echo $group['groupid']; ?>','.table-articles','kb_group_<?php echo $group['groupid']; ?>'); return false;"><?php echo $group['name']; ?></a>
+                            <li><a href="#" data-cview="kb_group_<?php echo e($group['groupid']); ?>"
+                                    onclick="dt_custom_view('kb_group_<?php echo e($group['groupid']); ?>','.table-articles','kb_group_<?php echo e($group['groupid']); ?>'); return false;"><?php echo e($group['name']); ?></a>
                             </li>
                             <?php } ?>
                         </ul>
@@ -67,25 +67,25 @@
                                   } ?>
                                     <ul class="kan-ban-col<?php if (!$has_permission_edit) {
                                       echo ' sortable-disabled';
-                                  } ?>" data-col-group-id="<?php echo $group['groupid']; ?>">
+                                  } ?>" data-col-group-id="<?php echo e($group['groupid']); ?>">
                                         <li class="kan-ban-col-wrapper">
                                             <div class="border-right panel_s">
                                                 <?php
                                        $group_color = 'style="background:' . $group['color'] . ';border:1px solid ' . $group['color'] . '"'; ?>
-                                                <div class="panel-heading tw-bg-neutral-700" <?php echo $group_color; ?>
-                                                    data-group-id="<?php echo $group['groupid']; ?>">
+                                                <div class="panel-heading tw-bg-neutral-700" <?php echo e($group_color); ?>
+                                                    data-group-id="<?php echo e($group['groupid']); ?>">
                                                     <?php if ($has_permission_edit) { ?>
                                                     <i class="fa fa-reorder pointer tw-text-white"></i> <?php } ?>
                                                     <a href="#" class="tw-text-white hover:tw-text-neutral-200"
                                                         <?php if ($has_permission_create || $has_permission_edit) { ?>
-                                                        onclick="edit_kb_group(this,<?php echo $group['groupid']; ?>); return false;"
-                                                        data-name="<?php echo $group['name']; ?>"
-                                                        data-slug="<?php echo $group['group_slug']; ?>"
-                                                        data-color="<?php echo $group['color']; ?>"
+                                                        onclick="edit_kb_group(this,<?php echo e($group['groupid']); ?>); return false;"
+                                                        data-name="<?php echo e($group['name']); ?>"
+                                                        data-slug="<?php echo e($group['group_slug']); ?>"
+                                                        data-color="<?php echo e($group['color']); ?>"
                                                         data-description="<?php echo clear_textarea_breaks($group['description']); ?>"
-                                                        data-order="<?php echo $group['group_order']; ?>"
-                                                        data-active="<?php echo $group['active']; ?>" <?php } ?>>
-                                                        <?php echo $group['name']; ?>
+                                                        data-order="<?php echo e($group['group_order']); ?>"
+                                                        data-active="<?php echo e($group['active']); ?>" <?php } ?>>
+                                                        <?php echo e($group['name']); ?>
                                                     </a>
                                                     <small class="tw-text-white"> -
                                                         <?php echo total_rows(db_prefix() . 'knowledge_base', 'articlegroup=' . $group['groupid']); ?></small>
@@ -93,7 +93,7 @@
                                                     <a href="#" onclick="return false;"
                                                         class="pull-right color-white kanban-color-picker"
                                                         data-placement="bottom" data-toggle="popover"
-                                                        data-content="<div class='kan-ban-settings cpicker-wrapper'><?php echo $kanban_colors; ?></div>"
+                                                        data-content="<div class='kan-ban-settings cpicker-wrapper'><?php echo e($kanban_colors); ?></div>"
                                                         data-html="true" data-trigger="focus">
                                                         <i class="fa fa-angle-down"></i>
                                                     </a>
@@ -109,21 +109,21 @@
                                                     <div class="kan-ban-content">
                                                         <ul class="sortable article-group groups<?php if (!$has_permission_edit) {
                                       echo 'sortable-disabled';
-                                  } ?>" data-group-id="<?php echo $group['groupid']; ?>">
+                                  } ?>" data-group-id="<?php echo e($group['groupid']); ?>">
                                                             <?php foreach ($articles as $article) { ?>
                                                             <li class="<?php if ($article['active'] == 0) {
                                       echo 'line-throught';
-                                  } ?>" data-article-id="<?php echo $article['articleid']; ?>">
+                                  } ?>" data-article-id="<?php echo e($article['articleid']); ?>">
                                                                 <div class="panel-body">
                                                                     <?php if ($article['staff_article'] == 1) { ?>
                                                                     <a
                                                                         href="<?php echo admin_url('knowledge_base/view/' . $article['slug']); ?>">
-                                                                        <?php echo $article['subject']; ?>
+                                                                        <?php echo e($article['subject']); ?>
                                                                     </a>
                                                                     <?php } else { ?>
                                                                     <a href="<?php echo site_url('knowledge-base/article/' . $article['slug']); ?>"
                                                                         target="_blank">
-                                                                        <?php echo $article['subject']; ?>
+                                                                        <?php echo e($article['subject']); ?>
                                                                     </a>
                                                                     <?php } ?>
                                                                     <?php if ($has_permission_edit) { ?>
@@ -136,7 +136,7 @@
                                                                     <hr class="hr-10" />
                                                                     <p class="pull-left no-mbot">
                                                                         <small><?php echo _l('article_total_views'); ?>:
-                                                                            <?php echo $article['total_views']; ?></small>
+                                                                            <?php echo e($article['total_views']); ?></small>
                                                                     </p>
                                                                     <?php if ($article['staff_article'] == 1) { ?>
                                                                     <span

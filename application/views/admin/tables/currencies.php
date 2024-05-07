@@ -31,7 +31,7 @@ foreach ($rResult as $aRow) {
         ];
 
         if ($aColumns[$i] == 'name') {
-            $_data = '<span class="name"><a href="#" ' . _attributes_to_string($attributes) . '>' . $_data . '</a></span>';
+            $_data = '<span class="name"><a href="#" ' . _attributes_to_string($attributes) . '>' . e($_data) . '</a></span>';
             if ($aRow['isdefault'] == 1) {
                 $_data .= '<span class="display-block text-info">' . _l('base_currency_string') . '</span>';
             }

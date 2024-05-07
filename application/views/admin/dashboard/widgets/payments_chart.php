@@ -30,8 +30,8 @@
     if ($currency['isdefault'] == 1) {
         $selected = 'selected';
     } ?>
-                                <option value="<?php echo $currency['id']; ?>" <?php echo $selected; ?>
-                                    data-subtext="<?php echo $currency['name']; ?>"><?php echo $currency['symbol']; ?>
+                                <option value="<?php echo e($currency['id']); ?>" <?php echo e($selected); ?>
+                                    data-subtext="<?php echo e($currency['name']); ?>"><?php echo e($currency['symbol']); ?>
                                 </option>
                                 <?php
 } ?>

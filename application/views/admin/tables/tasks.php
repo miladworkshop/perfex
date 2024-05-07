@@ -94,14 +94,14 @@ return App_table::find('tasks')
                 $outputName .= '<span class="pull-left text-danger"><i class="fa-regular fa-clock fa-fw tw-mr-1"></i></span>';
             }
 
-            $outputName .= '<a href="' . admin_url('tasks/view/' . $aRow['id']) . '" class="display-block main-tasks-table-href-name' . (!empty($aRow['rel_id']) ? ' mbot5' : '') . '" onclick="init_task_modal(' . $aRow['id'] . '); return false;">' . $aRow['task_name'] . '</a>';
+            $outputName .= '<a href="' . admin_url('tasks/view/' . $aRow['id']) . '" class="display-block main-tasks-table-href-name' . (!empty($aRow['rel_id']) ? ' mbot5' : '') . '" onclick="init_task_modal(' . $aRow['id'] . '); return false;">' . e($aRow['task_name']) . '</a>';
 
             if ($aRow['rel_name']) {
                 $relName = task_rel_name($aRow['rel_name'], $aRow['rel_id'], $aRow['rel_type']);
 
                 $link = task_rel_link($aRow['rel_id'], $aRow['rel_type']);
 
-                $outputName .= '<span class="hide"> - </span><a class="tw-text-neutral-700 task-table-related tw-text-sm" data-toggle="tooltip" title="' . _l('task_related_to') . '" href="' . $link . '">' . $relName . '</a>';
+                $outputName .= '<span class="hide"> - </span><a class="tw-text-neutral-700 task-table-related tw-text-sm" data-toggle="tooltip" title="' . _l('task_related_to') . '" href="' . $link . '">' . e($relName) . '</a>';
             }
 
             if ($aRow['recurring'] == 1) {
@@ -118,7 +118,7 @@ return App_table::find('tasks')
                 $class = 'text-dark disabled';
                 $style = 'style="opacity:0.6;cursor: not-allowed;"';
                 if ($aRow['status'] == Tasks_model::STATUS_COMPLETE) {
-                    $tooltip = ' data-toggle="tooltip" data-title="' . format_task_status($aRow['status'], false, true) . '"';
+                    $tooltip = ' data-toggle="tooltip" data-title="' . e(format_task_status($aRow['status'], false, true)) . '"';
                 } elseif ($aRow['billed'] == 1) {
                     $tooltip = ' data-toggle="tooltip" data-title="' . _l('task_billed_cant_start_timer') . '"';
                 } elseif (!$aRow['is_assigned']) {
@@ -149,9 +149,9 @@ return App_table::find('tasks')
             $status          = get_task_status_by_id($aRow['status']);
             $outputStatus    = '';
 
-            $outputStatus .= '<span class="label" style="color:' . $status['color'] . ';border:1px solid ' . adjust_hex_brightness($status['color'], 0.4) . ';background: ' . adjust_hex_brightness($status['color'], 0.04) . ';" task-status-table="' . $aRow['status'] . '">';
+            $outputStatus .= '<span class="label" style="color:' . $status['color'] . ';border:1px solid ' . adjust_hex_brightness($status['color'], 0.4) . ';background: ' . adjust_hex_brightness($status['color'], 0.04) . ';" task-status-table="' . e($aRow['status']) . '">';
 
-            $outputStatus .= $status['name'];
+            $outputStatus .= e($status['name']);
 
             if ($canChangeStatus) {
                 $outputStatus .= '<div class="dropdown inline-block mleft5 table-export-exclude">';
@@ -164,7 +164,7 @@ return App_table::find('tasks')
                     if ($aRow['status'] != $taskChangeStatus['id']) {
                         $outputStatus .= '<li>
                   <a href="#" onclick="task_mark_as(' . $taskChangeStatus['id'] . ',' . $aRow['id'] . '); return false;">
-                     ' . _l('task_mark_as', $taskChangeStatus['name']) . '
+                     ' . e(_l('task_mark_as', $taskChangeStatus['name'])) . '
                   </a>
                </li>';
                     }
@@ -177,15 +177,15 @@ return App_table::find('tasks')
 
             $row[] = $outputStatus;
 
-            $row[] = _d($aRow['startdate']);
+            $row[] = e(_d($aRow['startdate']));
 
-            $row[] = _d($aRow['duedate']);
+            $row[] = e(_d($aRow['duedate']));
 
             $row[] = format_members_by_ids_and_names($aRow['assignees_ids'], $aRow['assignees']);
 
             $row[] = render_tags($aRow['tags']);
 
-            $outputPriority = '<span style="color:' . task_priority_color($aRow['priority']) . ';" class="inline-block">' . task_priority($aRow['priority']);
+            $outputPriority = '<span style="color:' . e(task_priority_color($aRow['priority'])) . ';" class="inline-block">' . e(task_priority($aRow['priority']));
 
             if (staff_can('edit',  'tasks') && $aRow['status'] != Tasks_model::STATUS_COMPLETE) {
                 $outputPriority .= '<div class="dropdown inline-block mleft5 table-export-exclude">';
@@ -198,7 +198,7 @@ return App_table::find('tasks')
                     if ($aRow['priority'] != $priority['id']) {
                         $outputPriority .= '<li>
                   <a href="#" onclick="task_change_priority(' . $priority['id'] . ',' . $aRow['id'] . '); return false;">
-                     ' . $priority['name'] . '
+                     ' . e($priority['name']) . '
                   </a>
                </li>';
                     }

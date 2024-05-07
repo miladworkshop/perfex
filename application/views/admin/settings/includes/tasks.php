@@ -21,8 +21,8 @@
       <select name="settings[round_off_task_timer_option]" class="selectpicker" id="round_off_task_timer_option" data-width="100%" data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
         <?php
         foreach(get_task_timer_round_off_options() as $options){?>
-          <option value="<?php echo $options['id']; ?>"<?php if($options['id'] == get_option('round_off_task_timer_option')){echo ' selected';}; ?>>
-            <?php echo $options['name']; ?>
+          <option value="<?php echo e($options['id']); ?>"<?php if($options['id'] == get_option('round_off_task_timer_option')){echo ' selected';}; ?>>
+            <?php echo e($options['name']); ?>
           </option>
         <?php } ?>
       </select>
@@ -37,7 +37,7 @@
           <select name="settings[round_off_task_timer_time]" class="selectpicker" id="round_off_task_timer_time" data-width="100%" data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
             <?php
             foreach(get_task_timer_round_off_times() as $option){?>
-              <option value="<?php echo $option; ?>"<?php if($option == get_option('round_off_task_timer_time')){echo ' selected';}; ?>>
+              <option value="<?php echo e($option); ?>"<?php if($option == get_option('round_off_task_timer_time')){echo ' selected';}; ?>>
                 <?php echo $option ?>
               </option>
             <?php } ?>
@@ -59,8 +59,8 @@
   <select name="settings[default_task_status]" class="selectpicker" id="default_task_status" data-width="100%" data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
     <option value="auto" <?php if(get_option('default_task_status') == 'auto'){echo 'selected';} ?>><?php echo _l('auto'); ?></option>
     <?php foreach($task_statuses as $status){ ?>
-      <option value="<?php echo $status['id']; ?>"<?php if($status['id'] == get_option('default_task_status')){echo ' selected';}; ?>>
-        <?php echo $status['name']; ?>
+      <option value="<?php echo e($status['id']); ?>"<?php if($status['id'] == get_option('default_task_status')){echo ' selected';}; ?>>
+        <?php echo e($status['name']); ?>
       </option>
     <?php } ?>
   </select>
@@ -70,7 +70,7 @@
   <label for="default_task_priority" class="control-label"><?php echo _l('default_task_priority'); ?></label>
   <select name="settings[default_task_priority]" class="selectpicker" id="default_task_priority" data-width="100%" data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
     <?php foreach(get_tasks_priorities() as $priority) { ?>
-      <option value="<?php echo $priority['id']; ?>"<?php if(get_option('default_task_priority') == $priority['id']){echo ' selected';} ?>><?php echo $priority['name']; ?>
+      <option value="<?php echo e($priority['id']); ?>"<?php if(get_option('default_task_priority') == $priority['id']){echo ' selected';} ?>><?php echo e($priority['name']); ?>
     </option>
   <?php } ?>
 </select>

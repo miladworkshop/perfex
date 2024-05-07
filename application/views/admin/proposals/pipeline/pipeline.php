@@ -10,8 +10,8 @@ foreach ($statuses as $status) {
     $proposals       = $kanBan->get();
     $total_proposals = count($proposals);
     $total_pages     = $kanBan->totalPages(); ?>
-<ul class="kan-ban-col" data-col-status-id="<?php echo $status; ?>" data-total-pages="<?php echo $total_pages; ?>"
-    data-total="<?php echo $total_proposals; ?>">
+<ul class="kan-ban-col" data-col-status-id="<?php echo e($status); ?>" data-total-pages="<?php echo e($total_pages); ?>"
+    data-total="<?php echo e($total_proposals); ?>">
     <li class="kan-ban-col-wrapper">
         <div class="panel_s panel-<?php echo proposal_status_color_class($status); ?> no-mbot">
             <div class="panel-heading">
@@ -24,17 +24,17 @@ foreach ($statuses as $status) {
                 <div class="kan-ban-content">
                     <ul class="sortable<?php if (staff_can('edit',  'proposals')) {
         echo ' status pipeline-status';
-    } ?>" data-status-id="<?php echo $status; ?>">
+    } ?>" data-status-id="<?php echo e($status); ?>">
                         <?php
           foreach ($proposals as $proposal) {
               $this->load->view('admin/proposals/pipeline/_kanban_card', ['proposal' => $proposal, 'status' => $status]);
           } ?>
                         <?php if ($total_proposals > 0) { ?>
-                        <li class="text-center not-sortable kanban-load-more" data-load-status="<?php echo $status; ?>">
+                        <li class="text-center not-sortable kanban-load-more" data-load-status="<?php echo e($status); ?>">
                             <a href="#" class="btn btn-default btn-block<?php if ($total_pages <= 1 || $kanBan->getPage() === $total_pages) {
               echo ' disabled';
           } ?>" data-page="<?php echo $kanBan->getPage(); ?>"
-                                onclick="kanban_load_more(<?php echo $status; ?>,this,'proposals/pipeline_load_more',347,360); return false;"
+                                onclick="kanban_load_more(<?php echo e($status); ?>,this,'proposals/pipeline_load_more',347,360); return false;"
                                 ;><?php echo _l('load_more'); ?></a>
                         </li>
                         <?php } ?>

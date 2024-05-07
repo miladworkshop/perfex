@@ -62,14 +62,14 @@ foreach ($statuses as $status) {
     }
     $_where = $_where . ' AND merged_ticket_id IS NULL'; ?>
     <div class="col-md-2 col-xs-6 md:tw-border-r md:tw-border-solid md:tw-border-neutral-300 last:tw-border-r-0">
-        <a href="#" data-cview="ticket_status_<?php echo $status['ticketstatusid']; ?>"
+        <a href="#" data-cview="ticket_status_<?php echo e($status['ticketstatusid']); ?>"
             class="tw-text-neutral-600 hover:tw-opacity-70 tw-inline-flex tw-items-center"
             <?php echo ($hrefAttrs ?? null instanceof Closure) ? $hrefAttrs($status) : ''; ?>>
             <span class="tw-font-semibold tw-mr-3 rtl:tw-ml-3 tw-text-lg">
                 <?php echo total_rows(db_prefix() . 'tickets', $_where); ?>
             </span>
-            <span style="color:<?php echo $status['statuscolor']; ?>">
-                <?php echo ticket_status_translate($status['ticketstatusid']); ?>
+            <span style="color:<?php echo e($status['statuscolor']); ?>">
+                <?php echo e(ticket_status_translate($status['ticketstatusid'])); ?>
             </span>
         </a>
     </div>

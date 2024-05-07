@@ -41,25 +41,25 @@
                         <div class="media-left no-padding-right">
                             <div class="dragger todo-dragger"></div>
                             <div class="checkbox checkbox-default todo-checkbox">
-                                <input type="checkbox" name="todo_id" value="<?php echo $todo['todoid']; ?>">
+                                <input type="checkbox" name="todo_id" value="<?php echo e($todo['todoid']); ?>">
                                 <label></label>
                             </div>
                         </div>
                         <div class="media-body">
-                            <p class="todo-description read-more no-padding-left"
-                                data-todo-description="<?php echo $todo['todoid']; ?>">
-                                <?php echo $todo['description']; ?>
-                            </p>
-                            <a href="#" onclick="delete_todo_item(this,<?php echo $todo['todoid']; ?>); return false;"
+                            <div class="todo-description read-more no-padding-left"
+                                data-todo-description="<?php echo e($todo['todoid']); ?>">
+                                <?php echo process_text_content_for_display($todo['description']); ?>
+                            </div>
+                            <a href="#" onclick="delete_todo_item(this,<?php echo e($todo['todoid']); ?>); return false;"
                                 class="pull-right text-muted">
-                                <i class="fa fa-remove"></i>
+                                <i class="fa fa-remove fa-lg"></i>
                             </a>
-                            <a href="#" onclick="edit_todo_item(<?php echo $todo['todoid']; ?>); return false;"
-                                class="pull-right text-muted mright5">
+                            <a href="#" onclick="edit_todo_item(<?php echo e($todo['todoid']); ?>); return false;"
+                                class="pull-right text-muted tw-mr-3">
                                 <i class="fa fa-pencil"></i>
                             </a>
                             <span class="todo-date tw-text-sm tw-text-neutral-500">
-                                <?php echo $todo['dateadded']; ?>
+                                <?php echo e($todo['dateadded']); ?>
                             </span>
                         </div>
                     </div>
@@ -83,24 +83,24 @@
                         <div class="media-left no-padding-right">
                             <div class="dragger todo-dragger"></div>
                             <div class="checkbox checkbox-default todo-checkbox">
-                                <input type="checkbox" value="<?php echo $todo_finished['todoid']; ?>" name="todo_id"
+                                <input type="checkbox" value="<?php echo e($todo_finished['todoid']); ?>" name="todo_id"
                                     checked>
                                 <label></label>
                             </div>
                         </div>
                         <div class="media-body">
-                            <p class="todo-description read-more line-throught no-padding-left">
-                                <?php echo $todo_finished['description']; ?>
-                            </p>
+                            <div class="todo-description read-more line-throught no-padding-left">
+                                <?php echo process_text_content_for_display($todo_finished['description']); ?>
+                            </div>
                             <a href="#"
-                                onclick="delete_todo_item(this,<?php echo $todo_finished['todoid']; ?>); return false;"
+                                onclick="delete_todo_item(this,<?php echo e($todo_finished['todoid']); ?>); return false;"
                                 class="pull-right text-muted"><i class="fa fa-remove"></i></a>
-                            <a href="#" onclick="edit_todo_item(<?php echo $todo_finished['todoid']; ?>); return false;"
+                            <a href="#" onclick="edit_todo_item(<?php echo e($todo_finished['todoid']); ?>); return false;"
                                 class="pull-right text-muted mright5">
                                 <i class="fa fa-pencil"></i>
                             </a>
                             <span class="todo-date todo-date-finished tw-text-sm tw-text-neutral-500">
-                                <?php echo $todo_finished['datefinished']; ?>
+                                <?php echo e($todo_finished['datefinished']); ?>
                             </span>
                         </div>
                     </div>

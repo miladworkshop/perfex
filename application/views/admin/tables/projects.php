@@ -74,14 +74,14 @@ return App_table::find('projects')
 
             $row[] = '<a href="' . $link . '">' . $aRow['id'] . '</a>';
 
-            $name = '<a href="' . $link . '">' . $aRow['name'] . '</a>';
+            $name = '<a href="' . $link . '">' . e($aRow['name']) . '</a>';
 
             $name .= '<div class="row-options">';
 
             $name .= '<a href="' . $link . '">' . _l('view') . '</a>';
 
             if ($hasPermissionCreate && !$clientid) {
-                $name .= ' | <a href="#" data-name="' . htmlspecialchars($aRow['name'], ENT_QUOTES) . '" onclick="copy_project(' . $aRow['id'] . ', this);return false;">' . _l('copy_project') . '</a>';
+                $name .= ' | <a href="#" data-name="' . e($aRow['name']) . '" onclick="copy_project(' . $aRow['id'] . ', this);return false;">' . _l('copy_project') . '</a>';
             }
 
             if ($hasPermissionEdit) {
@@ -96,13 +96,13 @@ return App_table::find('projects')
 
             $row[] = $name;
 
-            $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . $aRow['company'] . '</a>';
+            $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . e($aRow['company']) . '</a>';
 
             $row[] = render_tags($aRow['tags']);
 
-            $row[] = _d($aRow['start_date']);
+            $row[] = e(_d($aRow['start_date']));
 
-            $row[] = _d($aRow['deadline']);
+            $row[] = e(_d($aRow['deadline']));
 
             $membersOutput = '<div class="tw-flex -tw-space-x-1">';
             $members       = explode(',', $aRow['members']);
@@ -128,7 +128,7 @@ return App_table::find('projects')
             $row[] = $membersOutput;
 
             $status = get_project_status_by_id($aRow['status']);
-            $row[]  = '<span class="label project-status-' . $aRow['status'] . '" style="color:' . $status['color'] . ';border:1px solid ' . adjust_hex_brightness($status['color'], 0.4) . ';background: ' . adjust_hex_brightness($status['color'], 0.04) . ';">' . $status['name'] . '</span>';
+            $row[]  = '<span class="label project-status-' . $aRow['status'] . '" style="color:' . $status['color'] . ';border:1px solid ' . adjust_hex_brightness($status['color'], 0.4) . ';background: ' . adjust_hex_brightness($status['color'], 0.04) . ';">' . e($status['name']) . '</span>';
 
             // Custom fields add values
             foreach ($customFieldsColumns as $customFieldColumn) {
@@ -159,4 +159,19 @@ return App_table::find('projects')
                     'label' => $data['name'],
                 ])->all();
         }),
+
+        App_table_filter::new('members', 'MultiSelectRule')->label(_l('project_members'))
+            ->isVisible(fn () => staff_can('view', 'projects'))
+            ->options(function ($ci) {
+                return collect($ci->projects_model->get_distinct_projects_members())->map(function ($staff) {
+                    return [
+                        'value' => $staff['staff_id'],
+                        'label' => get_staff_full_name($staff['staff_id'])
+                    ];
+                })->all();
+            })->raw(function ($value, $operator, $sqlOperator) {
+                $dbPrefix = db_prefix();
+                $sqlOperator = $sqlOperator['operator'];
+                return "({$dbPrefix}projects.id IN (SELECT project_id FROM {$dbPrefix}project_members WHERE staff_id $sqlOperator ('" . implode("','", $value) . "')))";
+            })
     ]);

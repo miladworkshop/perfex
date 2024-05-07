@@ -127,7 +127,7 @@ function render_tags($tags)
                 $tag_id = is_object($tag_row) ? $tag_row->id : $tag_row;
             }
 
-            $tags_html .= '<span class="label label-tag tag-id-' . $tag_id . '"><span class="tag">' . $tag . '</span><span class="hide">' . ($i != $len - 1 ? ', ' : '') . '</span></span>';
+            $tags_html .= '<span class="label label-tag tag-id-' . $tag_id . '"><span class="tag">' . e($tag) . '</span><span class="hide">' . ($i != $len - 1 ? ', ' : '') . '</span></span>';
             $i++;
         }
         $tags_html .= '</div>';

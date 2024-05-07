@@ -259,7 +259,7 @@ class Surveys extends AdminController
             access_denied('Surveys');
         }
         $this->surveys_model->remove_survey_send($id);
-        redirect($_SERVER['HTTP_REFERER']);
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     /* View survey participating results*/

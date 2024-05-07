@@ -10,7 +10,7 @@
                         foreach ($menu_items as $item) {
                             $disabled = isset($menu_options->{$item['slug']}) && $menu_options->{$item['slug']}->disabled == 'true'; ?>
                     <li class="dd-item dd3-item main<?php echo(!isset($item['collapse']) ? ' dd-nochildren' : ''); ?>"
-                        data-id="<?php echo $item['slug']; ?>" <?php if ($disabled) {
+                        data-id="<?php echo e($item['slug']); ?>" <?php if ($disabled) {
                                 echo '  style="opacity:0.5"';
                             } ?>>
                         <div class="dd-handle dd3-handle"></div>
@@ -19,15 +19,15 @@
                                     class="fa fa-cog"></i></a>
                         </div>
                         <div class="menu-options main-item-options" style="display:none;"
-                            data-menu-options="<?php echo $item['slug']; ?>">
+                            data-menu-options="<?php echo e($item['slug']); ?>">
                             <?php if (!isset($item['collapse']) && !in_array($item['slug'], $no_disable)) { ?>
                             <div class="form-group">
                                 <div class="checkbox">
                                     <input type="checkbox" class="is-disabled-main" value="1"
-                                        id="menu_disabled_<?php echo $item['slug']; ?>" name="disabled" <?php if ($disabled) {
+                                        id="menu_disabled_<?php echo e($item['slug']); ?>" name="disabled" <?php if ($disabled) {
                                 echo ' checked';
                             } ?>>
-                                    <label for="menu_disabled_<?php echo $item['slug']; ?>">Disabled?</label>
+                                    <label for="menu_disabled_<?php echo e($item['slug']); ?>">Disabled?</label>
                                 </div>
                             </div>
                             <?php } ?>
@@ -37,7 +37,7 @@
                                   $icon = app_get_menu_setup_icon($menu_options, $item['slug'], 'setup'); ?>
                                 <input type="text" value="<?php if ($icon) {
                                       echo $icon;
-                                  } ?>" class="form-control" id="icon-<?php echo $item['slug']; ?>">
+                                  } ?>" class="form-control" id="icon-<?php echo e($item['slug']); ?>">
                                 <span class="input-group-btn">
                                     <a href="https://fontawesome.com/icons" class="btn btn-default"
                                         target="_blank">FontAwesome</a>
@@ -48,7 +48,7 @@
                         <ol class="dd-list dd-list-sub-items">
                             <?php foreach ($item['children'] as $submenu) {
                                       $child_disabled = (isset($menu_options->{$item['slug']}->children->{$submenu['slug']}) && $menu_options->{$item['slug']}->children->{$submenu['slug']}->disabled == 'true'); ?>
-                            <li class="dd-item dd3-item sub-items" data-id="<?php echo $submenu['slug']; ?>" <?php if ($child_disabled) {
+                            <li class="dd-item dd3-item sub-items" data-id="<?php echo e($submenu['slug']); ?>" <?php if ($child_disabled) {
                                           echo '  style="opacity:0.5"';
                                       } ?>>
                                 <div class="dd-handle dd3-handle"></div>
@@ -57,15 +57,15 @@
                                             class="fa fa-cog"></i></a>
                                 </div>
                                 <div class="menu-options sub-item-options" style="display:none;"
-                                    data-menu-options="<?php echo $submenu['slug']; ?>">
+                                    data-menu-options="<?php echo e($submenu['slug']); ?>">
                                     <?php if (!in_array($submenu['slug'], $no_disable)) { ?>
                                     <div class="form-group">
                                         <div class="checkbox">
                                             <input type="checkbox" class="is-disabled-child" value="1"
-                                                id="menu_disabled_<?php echo $submenu['slug']; ?>" name="disabled" <?php if ($child_disabled) {
+                                                id="menu_disabled_<?php echo e($submenu['slug']); ?>" name="disabled" <?php if ($child_disabled) {
                                           echo ' checked';
                                       } ?>>
-                                            <label for="menu_disabled_<?php echo $submenu['slug']; ?>">Disabled?</label>
+                                            <label for="menu_disabled_<?php echo e($submenu['slug']); ?>">Disabled?</label>
                                         </div>
                                     </div>
                                     <?php } ?>
@@ -75,7 +75,7 @@
                                        $icon = app_get_menu_setup_icon($menu_options, $submenu['slug'], 'setup'); ?>
                                         <input type="text" value="<?php if ($icon) {
                                            echo $icon;
-                                       } ?>" class="form-control" id="icon-<?php echo $submenu['slug']; ?>">
+                                       } ?>" class="form-control" id="icon-<?php echo e($submenu['slug']); ?>">
                                         <span class="input-group-btn">
                                             <a href="https://fontawesome.com/icons" class="btn btn-default"
                                                 target="_blank">FontAwesome</a>

@@ -575,8 +575,8 @@ function _l($line, $label = '', $log_errors = true)
 
 /**
  * Format date to selected dateformat
- * @param  date $date Valid date
- * @return date/string
+ * @param  string $date Valid date
+ * @return string
  */
 function _d($date)
 {
@@ -991,5 +991,17 @@ if (!function_exists('collect')) {
     function collect($items)
     {
         return new Illuminate\Support\Collection($items);
+    }
+}
+
+if (!function_exists('previous_url')) {
+    /**
+     * Get the previous URL.
+     * @since  3.1.3
+     * @return string|null
+     */
+    function previous_url() 
+    {
+        return get_instance()->session->userdata('_prev_url');
     }
 }

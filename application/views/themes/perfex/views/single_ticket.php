@@ -3,7 +3,7 @@
     <?php if ($ticket->project_id) { ?>
     <div class="col-md-12 single-ticket-project-area">
         <div class="alert alert-info">
-            <?php echo _l('ticket_linked_to_project', '<a href="' . site_url('clients/project/' . $ticket->project_id) . '"><b>' . get_project_name_by_id($ticket->project_id) . '</b></a>') ; ?>
+            <?php echo _l('ticket_linked_to_project', '<a href="' . site_url('clients/project/' . $ticket->project_id) . '"><b>' . e(get_project_name_by_id($ticket->project_id)) . '</b></a>') ; ?>
         </div>
     </div>
     <?php } ?>
@@ -18,19 +18,19 @@
                 <div class="row">
                     <div class="col-md-12">
                         <h4 class="tw-font-medium tw-my-0">
-                            #<?php echo $ticket->ticketid; ?> - <?php echo $ticket->subject; ?>
+                            #<?php echo e($ticket->ticketid); ?> - <?php echo e($ticket->subject); ?>
                         </h4>
                         <div class="tw-divide-solid tw-divide-y tw-divide-neutral-100 tw-mt-4 [&>p:last-child]:tw-pb-0">
                             <p class="tw-py-2.5 tw-mb-0 tw-text-neutral-500">
-                                <?php echo _l('clients_ticket_single_department', '<span class="tw-font-medium tw-text-neutral-700">' . $ticket->department_name . '</span>'); ?>
+                                <?php echo _l('clients_ticket_single_department', '<span class="tw-font-medium tw-text-neutral-700">' . e($ticket->department_name) . '</span>'); ?>
                             </p>
                             <p class="tw-py-2.5 tw-mb-0 tw-text-neutral-500">
-                                <?php echo _l('clients_ticket_single_submitted', '<span class="tw-font-medium tw-text-neutral-700">' . _dt($ticket->date) . '</span>'); ?>
+                                <?php echo _l('clients_ticket_single_submitted', '<span class="tw-font-medium tw-text-neutral-700">' . e(_dt($ticket->date)) . '</span>'); ?>
                             </p>
                             <p class="tw-py-2.5 tw-mb-0 tw-text-neutral-500">
                                 <?php echo _l('ticket_dt_submitter'); ?>:
                                 <span class="tw-font-medium tw-text-neutral-700">
-                                    <?php echo $ticket->submitter; ?>
+                                    <?php echo e($ticket->submitter); ?>
                                 </span>
                             </p>
                             <div class="tw-py-2">
@@ -40,8 +40,8 @@
                                     </span>
                                     <div class="ticket-status-inline">
                                         <span class="label tw-font-medium"
-                                            style="background:<?php echo $ticket->statuscolor; ?>">
-                                            <?php echo ticket_status_translate($ticket->ticketstatusid); ?>
+                                            style="background:<?php echo e($ticket->statuscolor); ?>">
+                                            <?php echo e(ticket_status_translate($ticket->ticketstatusid)); ?>
                                             <?php if (get_option('allow_customer_to_change_ticket_status') == 1) { ?>
                                             <i
                                                 class="fa-regular fa-pen-to-square pointer toggle-change-ticket-status"></i>
@@ -56,16 +56,15 @@
                                                 id="ticket_status_single" class="form-control"
                                                 name="ticket_status_single">
                                                 <?php foreach ($ticket_statuses as $status) {
-    if (!can_change_ticket_status_in_clients_area($status['ticketstatusid'])) {
-        continue;
-    } ?>
-                                                <option value="<?php echo $status['ticketstatusid']; ?>" <?php if ($status['ticketstatusid'] == $ticket->ticketstatusid) {
-        echo 'selected';
-    } ?>>
-                                                    <?php echo ticket_status_translate($status['ticketstatusid']); ?>
+                                                if (!can_change_ticket_status_in_clients_area($status['ticketstatusid'])) {
+                                                    continue;
+                                                } ?>
+                                                <option value="<?php echo e($status['ticketstatusid']); ?>" <?php if ($status['ticketstatusid'] == $ticket->ticketstatusid) {
+                                                    echo 'selected';
+                                                } ?>>
+                                                    <?php echo e(ticket_status_translate($status['ticketstatusid'])); ?>
                                                 </option>
-                                                <?php
-} ?>
+                                                <?php } ?>
                                             </select>
                                             <span class="input-group-btn">
                                                 <button class="btn btn-default toggle-change-ticket-status"
@@ -79,11 +78,11 @@
                                 </div>
                             </div>
                             <p class="tw-py-2.5 tw-mb-0 tw-text-neutral-500">
-                                <?php echo _l('clients_ticket_single_priority', '<span class="tw-font-medium tw-text-neutral-700">' . ticket_priority_translate($ticket->priorityid) . '</span>'); ?>
+                                <?php echo _l('clients_ticket_single_priority', '<span class="tw-font-medium tw-text-neutral-700">' . e(ticket_priority_translate($ticket->priorityid)) . '</span>'); ?>
                             </p>
                             <?php if (get_option('services') == 1 && !empty($ticket->service_name)) { ?>
                             <p class="tw-py-2.5 tw-mb-0 tw-text-neutral-500">
-                                <?php echo _l('service') . ': <span class="tw-font-medium tw-text-neutral-700">' . $ticket->service_name . '</span>'; ?>
+                                <?php echo _l('service') . ': <span class="tw-font-medium tw-text-neutral-700">' . e($ticket->service_name) . '</span>'; ?>
                             </p>
                             <?php } ?>
                             <?php
@@ -93,12 +92,11 @@
                                     if (empty($cfValue)) {
                                         continue;
                                     } ?>
-                            <p class="tw-py-2.5 tw-mb-0 tw-text-neutral-500">
-                                <?php echo $field['name']; ?>:
-                                <span class="tw-font-medium tw-text-neutral-700"><?php echo $cfValue; ?></span>
-                            </p>
-                            <?php
-                                } ?>
+                                    <p class="tw-py-2.5 tw-mb-0 tw-text-neutral-500">
+                                        <?php echo e($field['name']); ?>:
+                                        <span class="tw-font-medium tw-text-neutral-700"><?php echo $cfValue; ?></span>
+                                    </p>
+                                    <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -156,16 +154,23 @@
                 <div class="row">
                     <div class="col-md-3 border-right tw-font-medium">
                         <?php if ($ticket->admin == null || $ticket->admin == 0) { ?>
-                        <p><?php echo $ticket->submitter; ?></p>
+                        <p><?php echo e($ticket->submitter); ?></p>
                         <?php } else { ?>
-                        <p><?php echo $ticket->opened_by; ?></p>
+                        <p><?php echo e($ticket->opened_by); ?></p>
                         <p class="text-muted">
                             <?php echo _l('ticket_staff_string'); ?>
                         </p>
                         <?php } ?>
                     </div>
                     <div class="col-md-9">
-                        <?php echo check_for_links($ticket->message); ?><br />
+                        <?php
+                            if(empty($ticket->admin)) {
+                                echo process_text_content_for_display($ticket->message);
+                            } else {
+                                echo check_for_links($ticket->message);
+                            }
+                        ?>
+                        <br />
                         <p>-----------------------------</p>
                         <?php if (count($ticket->attachments) > 0) {
                                     echo '<hr />';
@@ -181,7 +186,7 @@
                         <a href="<?php echo site_url('download/file/ticket/' . $attachment['id']); ?>"
                             class="display-block mbot5">
                             <i class="<?php echo get_mime_class($attachment['filetype']); ?>"></i>
-                            <?php echo $attachment['file_name']; ?>
+                            <?php echo e($attachment['file_name']); ?>
                             <?php if ($is_image) { ?>
                             <img src="<?php echo site_url('download/preview_image?path=' . protected_file_url_by_path($path) . '&type=' . $attachment['filetype']); ?>"
                                 class="mtop5">
@@ -202,16 +207,22 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-3 border-right tw-font-medium">
-                        <p><?php echo $reply['submitter']; ?></p>
+                        <p><?php echo e($reply['submitter']); ?></p>
                         <p class="text-muted">
                             <?php if ($reply['admin'] !== null) {
-                                    echo _l('ticket_staff_string');
-                                }
-                        ?>
+                                echo _l('ticket_staff_string');
+                            } ?>
                         </p>
                     </div>
                     <div class="col-md-9">
-                        <?php echo check_for_links($reply['message']); ?><br />
+                        <?php
+                            if(empty($reply['admin'])) {
+                                echo process_text_content_for_display($reply['message']);
+                            } else {
+                                echo check_for_links($reply['message']);
+                            }
+                        ?>
+                        <br />
                         <p>-----------------------------</p>
                         <?php if (count($reply['attachments']) > 0) {
                             echo '<hr />';
@@ -224,7 +235,7 @@
                         <a href="<?php echo site_url('download/file/ticket/' . $attachment['id']); ?>"
                             class="inline-block mbot5">
                             <i class="<?php echo get_mime_class($attachment['filetype']); ?>"></i>
-                            <?php echo $attachment['file_name']; ?>
+                            <?php echo e($attachment['file_name']); ?>
                             <?php if ($is_image) { ?>
                             <img src="<?php echo site_url('download/preview_image?path=' . protected_file_url_by_path($path) . '&type=' . $attachment['filetype']); ?>"
                                 class="mtop5">
@@ -240,7 +251,7 @@
                 </div>
             </div>
             <div class="panel-footer">
-                <span><?php echo _l('clients_single_ticket_replied', _dt($reply['date'])); ?></span>
+                <span><?php echo e(_l('clients_single_ticket_replied', _dt($reply['date']))); ?></span>
             </div>
         </div>
         <?php } ?>

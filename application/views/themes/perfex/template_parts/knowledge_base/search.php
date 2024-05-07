@@ -12,7 +12,7 @@
                         <div class="form-group has-feedback has-feedback-left">
                             <div class="input-group">
                                 <input type="search" name="q" placeholder="<?php echo _l('have_a_question'); ?>"
-                                    class="form-control kb-search-input" value="<?php echo $this->input->get('q'); ?>">
+                                    class="form-control kb-search-input" value="<?php echo e($this->input->get('q', false)); ?>">
                                 <span class="input-group-btn">
                                     <button type="submit"
                                         class="btn btn-success kb-search-button"><?php echo _l('kb_search'); ?></button>

@@ -68,8 +68,8 @@ class Newsfeed extends AdminController
 
             $response .= '</div>';
             $response .= '<div class="media-body">';
-            $response .= '<p class="media-heading no-mbot"><a href="' . admin_url('profile/' . $post['creator']) . '">' . get_staff_full_name($post['creator']) . '</a></p>';
-            $response .= '<small class="post-time-ago">' . time_ago($post['datecreated']) . '</small>';
+            $response .= '<p class="media-heading no-mbot"><a href="' . admin_url('profile/' . $post['creator']) . '">' . e(get_staff_full_name($post['creator'])) . '</a></p>';
+            $response .= '<small class="post-time-ago">' . e(time_ago($post['datecreated'])) . '</small>';
             if ($post['creator'] == get_staff_user_id() || is_admin()) {
                 $response .= '<div class="dropdown pull-right btn-post-options-wrapper">';
                 $response .= '<button class="btn btn-default dropdown-toggle btn-post-options btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa fa-angle-down"></i></button>';
@@ -91,7 +91,7 @@ class Newsfeed extends AdminController
                 $visible_departments = substr($visible_departments, 0, -2);
                 $response .= '<i class="fa-regular fa-circle-question" data-toggle="tooltip" data-title="' . _l('newsfeed_newsfeed_post_only_visible_to_departments', $visible_departments) . '"></i> ';
             }
-            $response .= check_for_links($post['content']);
+            $response .= process_text_content_for_display($post['content']);
             $response .= '<div class="clearfix mbot10"></div>';
             $image_attachments       = $this->newsfeed_model->get_post_attachments($post['postid'], true);
             $total_image_attachments = count($image_attachments);
@@ -195,11 +195,11 @@ class Newsfeed extends AdminController
                 $_likes .= _l('newsfeed_you_like_this');
             } elseif (($this->newsfeed_model->user_liked_post($id) && $total_post_likes > 1) || ($this->newsfeed_model->user_liked_post($id) && $total_post_likes >= 2)) {
                 if ($total_likes == 1) {
-                    $_likes .= _l('newsfeed_you_and') . ' ' . $likes[0]['firstname'] . ' ' . $likes[0]['lastname'] . ' ' . _l('newsfeed_like_this');
+                    $_likes .= _l('newsfeed_you_and') . ' ' . e($likes[0]['firstname']) . ' ' . e($likes[0]['lastname']) . ' ' . _l('newsfeed_like_this');
                 } elseif ($total_likes == 2) {
-                    $_likes .= _l('newsfeed_you') . ', ' . $likes[0]['firstname'] . ' ' . $likes[0]['lastname'] . ' and ' . $likes[1]['firstname'] . ' ' . $likes[1]['lastname'] . _l('newsfeed_like_this');
+                    $_likes .= _l('newsfeed_you') . ', ' . e($likes[0]['firstname']) . ' ' . e($likes[0]['lastname']) . ' and ' . e($likes[1]['firstname']) . ' ' . $likes[1]['lastname'] . _l('newsfeed_like_this');
                 } else {
-                    $_likes .= 'You, ' . $likes[0]['firstname'] . ' ' . $likes[0]['lastname'] . ', ' . $likes[1]['firstname'] . ' ' . $likes[1]['lastname'] . ' and ' . $likes_modal . ' ' . ($total_likes - 2) . ' ' . _l('newsfeed_one_other') . '</a> ' . _l('newsfeed_like_this');
+                    $_likes .= 'You, ' . e($likes[0]['firstname']) . ' ' . e($likes[0]['lastname']) . ', ' . e($likes[1]['firstname']) . ' ' . $likes[1]['lastname'] . ' and ' . $likes_modal . ' ' . ($total_likes - 2) . ' ' . _l('newsfeed_one_other') . '</a> ' . _l('newsfeed_like_this');
                 }
             } else {
                 $i = 1;
@@ -215,7 +215,7 @@ class Newsfeed extends AdminController
 
                         break;
                     }
-                    $_likes .= $like['firstname'] . ' ' . $like['lastname'] . ', ';
+                    $_likes .= e($like['firstname'] . ' ' . $like['lastname']) . ', ';
 
                     $i++;
                 }
@@ -279,7 +279,7 @@ class Newsfeed extends AdminController
             $_comments .= '<span class="pull-right"><a href="#" class="remove-post-comment" onclick="remove_post_comment(' . $comment['id'] . ',' . $comment['postid'] . '); return false;"><i class="fa fa-remove"></i></span></a>';
         }
         $_comments .= '<div class="media-body">';
-        $_comments .= '<p class="no-margin comment-content"><a href="' . admin_url('profile/' . $comment['userid']) . '">' . get_staff_full_name($comment['userid']) . '</a> ' . check_for_links($comment['content']) . '</p>';
+        $_comments .= '<p class="no-margin comment-content"><a href="' . admin_url('profile/' . $comment['userid']) . '">' . e(get_staff_full_name($comment['userid'])) . '</a> ' . process_text_content_for_display($comment['content']) . '</p>';
         $total_comment_likes = total_rows(db_prefix() . 'newsfeed_comment_likes', [
             'commentid' => $comment['id'],
             'postid'    => $comment['postid'],
@@ -293,9 +293,9 @@ class Newsfeed extends AdminController
             $_comment_likes .= '</a>';
         }
         if (!$this->newsfeed_model->user_liked_comment($comment['id'])) {
-            $_comments .= '<p class="no-margin"><a href="#" onclick="like_comment(' . $comment['id'] . ',' . $comment['postid'] . '); return false;"><small>' . _l('newsfeed_like_this_saying') . ' ' . $_comment_likes . ' - ' . _dt($comment['dateadded']) . '</small></p>';
+            $_comments .= '<p class="no-margin"><a href="#" onclick="like_comment(' . $comment['id'] . ',' . $comment['postid'] . '); return false;"><small>' . _l('newsfeed_like_this_saying') . ' ' . $_comment_likes . ' - ' . e(_dt($comment['dateadded'])) . '</small></p>';
         } else {
-            $_comments .= '<p class="no-margin"><a href="#" onclick="unlike_comment(' . $comment['id'] . ',' . $comment['postid'] . '); return false;"><small>' . _l('newsfeed_unlike_this_saying') . ' ' . $_comment_likes . ' - ' . _dt($comment['dateadded']) . '</small></p>';
+            $_comments .= '<p class="no-margin"><a href="#" onclick="unlike_comment(' . $comment['id'] . ',' . $comment['postid'] . '); return false;"><small>' . _l('newsfeed_unlike_this_saying') . ' ' . $_comment_likes . ' - ' . e(_dt($comment['dateadded'])) . '</small></p>';
         }
         $_comments .= '</div>';
         $_comments .= '</div>';
@@ -324,7 +324,7 @@ class Newsfeed extends AdminController
                     'pull-left',
                 ]) . '</a>
                 <div class="media-body">
-                 <a href="' . admin_url('profile/' . $like['userid']) . '" target="_blank">' . get_staff_full_name($like['userid']) . '</a>
+                 <a href="' . admin_url('profile/' . $like['userid']) . '" target="_blank">' . e(get_staff_full_name($like['userid'])) . '</a>
              </div>
          </div></div>';
             }
@@ -344,7 +344,7 @@ class Newsfeed extends AdminController
                     'no-radius',
                 ]) . '</a>
             <div class="media-body">
-             <a href="' . admin_url('profile/' . $like['userid']) . '" target="_blank">' . get_staff_full_name($like['userid']) . '</a>
+             <a href="' . admin_url('profile/' . $like['userid']) . '" target="_blank">' . e(get_staff_full_name($like['userid'])) . '</a>
           </div>
       </div></div>';
             }

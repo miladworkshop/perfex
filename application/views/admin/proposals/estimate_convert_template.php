@@ -40,16 +40,16 @@
     init_tags_inputs();
     validate_estimate_form('#proposal_convert_to_estimate_form');
     <?php if ($proposal->assigned != 0) { ?>
-    $('#convert_to_estimate #sale_agent').selectpicker('val',<?php echo $proposal->assigned; ?>);
+    $('#convert_to_estimate #sale_agent').selectpicker('val',<?php echo e($proposal->assigned); ?>);
     <?php } ?>
-    $('select[name="discount_type"]').selectpicker('val','<?php echo $proposal->discount_type; ?>');
-    $('input[name="discount_percent"]').val('<?php echo $proposal->discount_percent; ?>');
-    $('input[name="discount_total"]').val('<?php echo $proposal->discount_total; ?>');
+    $('select[name="discount_type"]').selectpicker('val','<?php echo e($proposal->discount_type); ?>');
+    $('input[name="discount_percent"]').val('<?php echo e($proposal->discount_percent); ?>');
+    $('input[name="discount_total"]').val('<?php echo e($proposal->discount_total); ?>');
     <?php if (is_sale_discount($proposal, 'fixed')) { ?>
         $('.discount-total-type.discount-type-fixed').click();
     <?php } ?>
-    $('input[name="adjustment"]').val('<?php echo $proposal->adjustment; ?>');
-    $('input[name="show_quantity_as"][value="<?php echo $proposal->show_quantity_as; ?>"]').prop('checked',true).change();
+    $('input[name="adjustment"]').val('<?php echo e($proposal->adjustment); ?>');
+    $('input[name="show_quantity_as"][value="<?php echo e($proposal->show_quantity_as); ?>"]').prop('checked',true).change();
     <?php if (!isset($project_id) || !$project_id) { ?>
         $('#convert_to_estimate #clientid').change();
     <?php } else { ?>

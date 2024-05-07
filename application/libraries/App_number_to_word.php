@@ -90,7 +90,13 @@ class App_number_to_word
             if ($in_currency1 == false) {
                 $this->currency1 = '';
             } else {
-                $this->currency1 = _l('num_word_cents');
+                $cents = _l($key = 'num_word_cents_' . $in_currency0, '', false);
+                
+                if($cents === $key) {
+                    $cents = _l('num_word_cents');
+                }
+
+                $this->currency1 = $cents;
             }
             // remove commas from comma separated numbers
             $this->val = abs(floatval(str_replace(',', '', $this->val)));

@@ -298,14 +298,14 @@ foreach ($rResult as $aRow) {
     $row = [];
 
     if ($view_all === true) {
-        $row[] = '<a href="' . admin_url('staff/member/' . $aRow['staff_id']) . '" target="_blank">' . get_staff_full_name($aRow['staff_id']) . '</a>';
+        $row[] = '<a href="' . admin_url('staff/member/' . $aRow['staff_id']) . '" target="_blank">' . e(get_staff_full_name($aRow['staff_id'])) . '</a>';
     }
 
-    $taskName = '<a href="' . admin_url('tasks/view/' . $aRow['task_id']) . '" onclick="init_task_modal(' . $aRow['task_id'] . '); return false;">' . $aRow['name'] . '</a>';
+    $taskName = '<a href="' . admin_url('tasks/view/' . $aRow['task_id']) . '" onclick="init_task_modal(' . $aRow['task_id'] . '); return false;">' . e($aRow['name']) . '</a>';
 
     $status = get_task_status_by_id($aRow['status']);
 
-    $taskName .= '<br /><span class="hidden"> - </span><span class="label" style="color:' . $status['color'] . ';border:1px solid ' . adjust_hex_brightness($status['color'], 0.4) . ';background: ' . adjust_hex_brightness($status['color'], 0.04) . ';" task-status-table="' . $aRow['status'] . '">' . $status['name'] . '</span>';
+    $taskName .= '<br /><span class="hidden"> - </span><span class="label" style="color:' . $status['color'] . ';border:1px solid ' . adjust_hex_brightness($status['color'], 0.4) . ';background: ' . adjust_hex_brightness($status['color'], 0.04) . ';" task-status-table="' . $aRow['status'] . '">' . e($status['name']) . '</span>';
 
     if (!$this->ci->input->post('group_by_task') && (!$aRow['end_time'] && is_admin() && $aRow['billed'] == 0)) {
         $taskName .= '<br /><a href="#"
@@ -330,16 +330,16 @@ foreach ($rResult as $aRow) {
     $row[] = render_tags($aRow['tags']);
 
     if (! $roundTimesheets) {
-        $row[] = _dt($aRow['start_time'], true);
-        $row[] = ($aRow['end_time'] ? _dt($aRow['end_time'], true) : '');
+        $row[] = e(_dt($aRow['start_time'], true));
+        $row[] = e(($aRow['end_time'] ? _dt($aRow['end_time'], true) : ''));
     }
 
-    $row[] = $aRow['note'];
+    $row[] = process_text_content_for_display($aRow['note']);
 
     if ($aRow['rel_name']) {
         $relName = task_rel_name($aRow['rel_name'], $aRow['rel_id'], $aRow['rel_type']);
         $link    = task_rel_link($aRow['rel_id'], $aRow['rel_type']);
-        $row[]   = '<a href="' . $link . '">' . $relName . '</a>';
+        $row[]   = '<a href="' . $link . '">' . e($relName) . '</a>';
     } else {
         $row[] = '';
     }
@@ -350,7 +350,7 @@ foreach ($rResult as $aRow) {
     } else {
         $total_logged_time = $aRow['time_h'];
     }
-    $row[] = seconds_to_time_format(task_timer_round($total_logged_time));
+    $row[] = e(seconds_to_time_format(task_timer_round($total_logged_time)));
 
     $total_logged_time = 0;
     if ($aRow['time_d'] == null) {
@@ -358,7 +358,7 @@ foreach ($rResult as $aRow) {
     } else {
         $total_logged_time = $aRow['time_d'];
     }
-    $row[] = sec2qty(task_timer_round($total_logged_time));
+    $row[] = e(sec2qty(task_timer_round($total_logged_time)));
 
     $output['aaData'][] = $row;
 }
@@ -399,7 +399,7 @@ $output['chart']      = $footer_data['chart'];
 $output['chart_type'] = $chart_type;
 unset($footer_data['chart']);
 
-$footer_data['total_logged_time_h'] = seconds_to_time_format($footer_data['total_logged_time_h']);
-$footer_data['total_logged_time_d'] = sec2qty($footer_data['total_logged_time_d']);
+$footer_data['total_logged_time_h'] = e(seconds_to_time_format($footer_data['total_logged_time_h']));
+$footer_data['total_logged_time_d'] = e(sec2qty($footer_data['total_logged_time_d']));
 
 $output['logged_time'] = $footer_data;

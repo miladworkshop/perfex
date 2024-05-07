@@ -23,7 +23,7 @@ $(function() {
         Proposals_ServerParams[$(this).attr('name')] = '[name="' + $(this).attr('name') + '"]';
     });
     initDataTable('.table-proposals', admin_url + 'proposals/table', ['undefined'], ['undefined'],
-        Proposals_ServerParams, [7, 'desc']);
+        Proposals_ServerParams, [8, 'desc']);
     init_proposal();
 });
 </script>

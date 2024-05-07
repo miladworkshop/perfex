@@ -85,18 +85,18 @@ class Two_checkout extends App_Controller
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <?php echo _l('payment_for_invoice'); ?>
-                            <?php echo _l('payment_total', app_format_money($data['total'], $data['invoice']->currency_name)); ?>
+                            <?php echo e(_l('payment_total', app_format_money($data['total'], $data['invoice']->currency_name))); ?>
                         </h4>
                         <a
                             href="<?php echo site_url('invoice/' . $data['invoice']->id . '/' . $data['invoice']->hash); ?>">
-                            <?php echo format_invoice_number($data['invoice']->id); ?>
+                            <?php echo e(format_invoice_number($data['invoice']->id)); ?>
                         </a>
                     </div>
                     <?php if ($this->two_checkout_gateway->processingFees) { ?>
                         <div class="panel-body">
                             <div>
-                                <h5><?php echo _l('payment_attempt_amount') . ": " . app_format_money($data['attempt_amount'], $data['invoice']->currency_name); ?></h5>
-                                <h5><?php echo _l('payment_attempt_fee') . ": " . app_format_money($data['attempt_fee'], $data['invoice']->currency_name); ?></h5>
+                                <h5><?php echo _l('payment_attempt_amount') . ": " . e(app_format_money($data['attempt_amount'], $data['invoice']->currency_name)); ?></h5>
+                                <h5><?php echo _l('payment_attempt_fee') . ": " . e(app_format_money($data['attempt_fee'], $data['invoice']->currency_name)); ?></h5>
                             </div>
                         </div>
                     <?php } ?>
@@ -125,9 +125,9 @@ class Two_checkout extends App_Controller
         TwoCoInlineCart.register();
 
         TwoCoInlineCart.products.add({
-            name: "<?php echo  $data['description']; ?>",
+            name: "<?php echo $data['description']; ?>",
             quantity: 1,
-            price: "<?php echo  $data['total']; ?>",
+            price: "<?php echo $data['total']; ?>",
         });
 
         TwoCoInlineCart.cart.setOrderExternalRef("<?php echo $data['reference'] ?>");

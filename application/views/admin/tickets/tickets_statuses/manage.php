@@ -23,21 +23,21 @@
                             <tbody>
                                 <?php foreach ($statuses as $status) { ?>
                                 <tr>
-                                    <td><?php echo $status['ticketstatusid']; ?></td>
+                                    <td><?php echo e($status['ticketstatusid']); ?></td>
                                     <td><a href="#"
-                                            onclick="edit_status(this,<?php echo $status['ticketstatusid']; ?>); return false"
-                                            data-name="<?php echo $status['name']; ?>"
-                                            data-color="<?php echo $status['statuscolor']; ?>"
-                                            data-order="<?php echo $status['statusorder']; ?>"><?php echo $status['name']; ?></a><br />
+                                            onclick="edit_status(this,<?php echo e($status['ticketstatusid']); ?>); return false"
+                                            data-name="<?php echo e($status['name']); ?>"
+                                            data-color="<?php echo e($status['statuscolor']); ?>"
+                                            data-order="<?php echo e($status['statusorder']); ?>"><?php echo e($status['name']); ?></a><br />
                                         <?php echo _l('ticket_statuses_table_total', total_rows(db_prefix() . 'tickets', ['status' => $status['ticketstatusid']])); ?>
                                     </td>
                                     <td>
                                         <div class="tw-flex tw-items-center tw-space-x-3">
                                             <a href="#"
-                                                onclick="edit_status(this,<?php echo $status['ticketstatusid']; ?>); return false"
-                                                data-name="<?php echo $status['name']; ?>"
-                                                data-color="<?php echo $status['statuscolor']; ?>"
-                                                data-order="<?php echo $status['statusorder']; ?>"
+                                                onclick="edit_status(this,<?php echo e($status['ticketstatusid']); ?>); return false"
+                                                data-name="<?php echo e($status['name']); ?>"
+                                                data-color="<?php echo e($status['statuscolor']); ?>"
+                                                data-order="<?php echo e($status['statusorder']); ?>"
                                                 class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700">
                                                 <i class="fa-regular fa-pen-to-square fa-lg"></i>
                                             </a>

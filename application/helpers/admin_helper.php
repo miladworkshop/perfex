@@ -419,7 +419,8 @@ function render_admin_js_variables()
         'ticket'                                                  => _l('ticket'),
         'lead'                                                    => _l('lead'),
         'create_reminder'                                         => _l('create_reminder'),
-
+        'something_went_wrong'                                    => _l('something_went_wrong'),
+        
         'filter_boolean_yes' => _l('filter_boolean_yes'),
         'filter_boolean_no' => _l('filter_boolean_no'),
         'filter_matchtype_and' => _l('filter_matchtype_and'),
@@ -427,6 +428,7 @@ function render_admin_js_variables()
         'filter_share' => _l('filter_share'),
         'filter_mark_as_default' => _l('filter_mark_as_default'),
         'filter_unmark_as_default' => _l('filter_unmark_as_default'),
+        'default_filter_info' => _l('default_filter_info'),
         'filter_save' => _l('filter_save'),
         'filter_name' => _l('filter_name'),
         'filter_apply' => _l('filter_apply'),
@@ -469,6 +471,7 @@ function render_admin_js_variables()
 
     echo 'var app = {};';
 
+    echo 'app.version = ' . config_item('migration_version') . ';';
     echo 'app.available_tags = ' . json_encode(get_tags_clean()) . ';';
     echo 'app.available_tags_ids = ' . json_encode(get_tags_ids()) . ';';
     echo 'app.user_recent_searches = ' . json_encode(get_staff_recent_search_history()) . ';';

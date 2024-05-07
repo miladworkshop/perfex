@@ -8,8 +8,8 @@ foreach($attachments as $attachment) {
     $data .= '<div class="display-block estimate_request-attachment-wrapper">';
     $data .= '<div class="col-md-10">';
     $data .= '<div class="pull-left"><i class="'.get_mime_class($attachment['filetype']).'"></i></div>';
-    $data .= '<a href="'.$attachment_url.'" target="_blank">'.$attachment['file_name'].'</a>';
-    $data .= '<p class="text-muted">'.$attachment["filetype"].'</p>';
+    $data .= '<a href="'.e($attachment_url).'" target="_blank">'.e($attachment['file_name']).'</a>';
+    $data .= '<p class="text-muted">'.e($attachment["filetype"]).'</p>';
     $data .= '</div>';
     $data .= '<div class="col-md-2 text-right">';
     $data .= '</div>';

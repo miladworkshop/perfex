@@ -1,14 +1,14 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <?php if ((credits_can_be_applied_to_invoice($invoice->status) && $credits_available > 0)) { ?>
 <!-- Modal Apply Credits -->
-<div class="modal fade apply-credits-from-invoice" id="apply_credits" data-balance-due="<?php echo $invoice->total_left_to_pay; ?>" tabindex="-1" role="dialog" aria-labelledby="modalLabelApplyCredits">
+<div class="modal fade apply-credits-from-invoice" id="apply_credits" data-balance-due="<?php echo e($invoice->total_left_to_pay); ?>" tabindex="-1" role="dialog" aria-labelledby="modalLabelApplyCredits">
   <div class="modal-dialog modal-lg" role="document">
     <?php echo form_open(admin_url('invoices/apply_credits/' . $invoice->id), ['id' => 'apply_credits_form']); ?>
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="modalLabelApplyCredits">
-            <?php echo format_invoice_number($invoice->id); ?> - <?php echo _l('apply_credits'); ?>
+            <?php echo e(format_invoice_number($invoice->id)); ?> - <?php echo _l('apply_credits'); ?>
         </h4>
     </div>
     <div class="modal-body">
@@ -21,7 +21,7 @@
                     <?php
                         $custom_fields = get_custom_fields('credit_note', ['show_on_table' => 1]);
                         foreach ($custom_fields as $field) {
-                            echo '<td class="bold">' . $field['name'] . '</td>';
+                            echo '<td class="bold">' . e($field['name']) . '</td>';
                         }
                     ?>
                     <th><span class="bold"><?php echo _l('credit_amount'); ?></span></th>
@@ -32,17 +32,17 @@
             <tbody>
                 <?php foreach ($open_credits as $credit) { ?>
                 <tr>
-                    <td><a href="<?php echo admin_url('credit_notes/list_credit_notes/' . $credit['id']); ?>" target="_blank"><?php echo format_credit_note_number($credit['id']); ?></a></td>
-                    <td><?php echo _d($credit['date']); ?></td>
+                    <td><a href="<?php echo admin_url('credit_notes/list_credit_notes/' . $credit['id']); ?>" target="_blank"><?php echo e(format_credit_note_number($credit['id'])); ?></a></td>
+                    <td><?php echo e(_d($credit['date'])); ?></td>
                     <?php
                         foreach ($custom_fields as $field) {
                             echo '<td>' . get_custom_field_value($credit['id'], $field['id'], 'credit_note') . '</td>';
                         }
                     ?>
-                    <td><?php echo app_format_money($credit['total'], $customer_currency) ?></td>
-                    <td><?php echo app_format_money($credit['available_credits'], $customer_currency) ?></td>
+                    <td><?php echo e(app_format_money($credit['total'], $customer_currency)); ?></td>
+                    <td><?php echo e(app_format_money($credit['available_credits'], $customer_currency)); ?></td>
                     <td>
-                        <input type="number" max="<?php echo $credit['available_credits']; ?>" name="amount[<?php echo $credit['id']; ?>]" class="form-control apply-credits-field" value="0">
+                        <input type="number" max="<?php echo e($credit['available_credits']); ?>" name="amount[<?php echo e($credit['id']); ?>]" class="form-control apply-credits-field" value="0">
                     </td>
                 </tr>
                 <?php } ?>
@@ -57,13 +57,13 @@
                      <tr>
                         <td class="bold"><?php echo _l('amount_to_credit'); ?>:</td>
                         <td class="amount-to-credit">
-                            <?php echo app_format_money(0, $invoice->currency_name); ?>
+                            <?php echo e(app_format_money(0, $invoice->currency_name)); ?>
                         </td>
                     </tr>
                     <tr>
                         <td class="bold"><?php echo _l('balance_due'); ?>:</td>
                         <td class="invoice-balance-due">
-                            <?php echo app_format_money($invoice->total_left_to_pay, $invoice->currency_name); ?>
+                            <?php echo e(app_format_money($invoice->total_left_to_pay, $invoice->currency_name)); ?>
                         </td>
                     </tr>
                 </tbody>
@@ -82,7 +82,7 @@
 </div>
 <script>
     $('body').addClass('no-calculate-total');
-    init_currency(<?php echo $invoice->currency; ?>);
+    init_currency(<?php echo e($invoice->currency); ?>);
     $(function(){
         appValidateForm('#apply_credits_form');
     });

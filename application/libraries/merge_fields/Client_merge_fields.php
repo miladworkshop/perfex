@@ -454,29 +454,29 @@ class Client_merge_fields extends App_merge_fields
         $contact = $this->ci->db->get(db_prefix() . 'contacts')->row();
 
         if ($contact) {
-            $fields['{contact_firstname}']          = $contact->firstname;
-            $fields['{contact_lastname}']           = $contact->lastname;
-            $fields['{contact_email}']              = $contact->email;
-            $fields['{contact_phonenumber}']        = $contact->phonenumber;
-            $fields['{contact_title}']              = $contact->title;
+            $fields['{contact_firstname}']          = e($contact->firstname);
+            $fields['{contact_lastname}']           = e($contact->lastname);
+            $fields['{contact_email}']              = e($contact->email);
+            $fields['{contact_phonenumber}']        = e($contact->phonenumber);
+            $fields['{contact_title}']              = e($contact->title);
             $fields['{contact_public_consent_url}'] = contact_consent_url($contact->id);
             $fields['{email_verification_url}']     = site_url('verification/verify/' . $contact->id . '/' . $contact->email_verification_key);
         }
 
         if (!empty($client->vat)) {
-            $fields['{client_vat_number}'] = $client->vat;
+            $fields['{client_vat_number}'] = e($client->vat);
         }
 
         $fields['{customer_profile_files_admin_link}'] = admin_url('clients/client/' . $client->userid . '?group=attachments');
-        $fields['{client_company}']                    = $client->company;
-        $fields['{client_phonenumber}']                = $client->phonenumber;
-        $fields['{client_country}']                    = get_country_short_name($client->country);
-        $fields['{client_city}']                       = $client->city;
-        $fields['{client_zip}']                        = $client->zip;
-        $fields['{client_state}']                      = $client->state;
-        $fields['{client_address}']                    = $client->address;
-        $fields['{client_website}']                    = $client->website;
-        $fields['{client_id}']                         = $client_id;
+        $fields['{client_company}']                    = e($client->company);
+        $fields['{client_phonenumber}']                = e($client->phonenumber);
+        $fields['{client_country}']                    = e(get_country_short_name($client->country));
+        $fields['{client_city}']                       = e($client->city);
+        $fields['{client_zip}']                        = e($client->zip);
+        $fields['{client_state}']                      = e($client->state);
+        $fields['{client_address}']                    = e($client->address);
+        $fields['{client_website}']                    = e($client->website);
+        $fields['{client_id}']                         = e($client_id);
 
         if ($password != '') {
             $fields['{password}'] = htmlentities($password);

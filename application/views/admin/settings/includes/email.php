@@ -270,9 +270,9 @@
                 <?php foreach ($queueEmails as $email) {
             $headers = unserialize($email->headers); ?>
                 <tr>
-                    <td><?php echo $headers['subject']; ?></td>
-                    <td><?php echo $email->email; ?></td>
-                    <td><?php echo $email->status; ?></td>
+                    <td><?php echo e($headers['subject']); ?></td>
+                    <td><?php echo e($email->email); ?></td>
+                    <td><?php echo e($email->status); ?></td>
                     <td>
                         <a href="<?php echo admin_url('emails/delete_queued_email/' . $email->id); ?>"
                             class="text-danger">
@@ -280,8 +280,7 @@
                         </a>
                     </td>
                 </tr>
-                <?php
-        } ?>
+                <?php } ?>
             </tbody>
         </table>
     </div>

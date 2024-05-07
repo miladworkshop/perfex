@@ -211,25 +211,25 @@ class Leads_merge_fields extends App_merge_fields
         $fields['{lead_public_form_url}']    = leads_public_url($lead->id);
         $fields['{lead_public_consent_url}'] = lead_consent_url($lead->id);
         $fields['{lead_link}']               = admin_url('leads/index/' . $lead->id);
-        $fields['{lead_name}']               = $lead->name;
-        $fields['{lead_email}']              = $lead->email;
-        $fields['{lead_position}']           = $lead->title;
-        $fields['{lead_phonenumber}']        = $lead->phonenumber;
-        $fields['{lead_company}']            = $lead->company;
-        $fields['{lead_zip}']                = $lead->zip;
-        $fields['{lead_city}']               = $lead->city;
-        $fields['{lead_state}']              = $lead->state;
-        $fields['{lead_address}']            = $lead->address;
-        $fields['{lead_website}']            = $lead->website;
-        $fields['{lead_description}']        = $lead->description;
+        $fields['{lead_name}']               = e($lead->name);
+        $fields['{lead_email}']              = e($lead->email);
+        $fields['{lead_position}']           = e($lead->title);
+        $fields['{lead_phonenumber}']        = e($lead->phonenumber);
+        $fields['{lead_company}']            = e($lead->company);
+        $fields['{lead_zip}']                = e($lead->zip);
+        $fields['{lead_city}']               = e($lead->city);
+        $fields['{lead_state}']              = e($lead->state);
+        $fields['{lead_address}']            = e($lead->address);
+        $fields['{lead_website}']            = e($lead->website);
+        $fields['{lead_description}']        = e($lead->description);
 
         if ($lead->assigned != 0) {
-            $fields['{lead_assigned}'] = get_staff_full_name($lead->assigned);
+            $fields['{lead_assigned}'] = e(get_staff_full_name($lead->assigned));
         }
 
         if ($lead->country != 0) {
             $country                  = get_country($lead->country);
-            $fields['{lead_country}'] = $country->short_name;
+            $fields['{lead_country}'] = e($country->short_name);
         }
 
         if ($lead->junk == 1) {
@@ -242,7 +242,7 @@ class Leads_merge_fields extends App_merge_fields
             $this->ci->db->where('id', $lead->status);
             $status = $this->ci->db->get()->row();
             if ($status) {
-                $fields['{lead_status}'] = $status->name;
+                $fields['{lead_status}'] = e($status->name);
             }
         }
 
@@ -251,7 +251,7 @@ class Leads_merge_fields extends App_merge_fields
         $this->ci->db->where('id', $lead->source);
         $source = $this->ci->db->get()->row();
         if ($source) {
-            $fields['{lead_source}'] = $source->name;
+            $fields['{lead_source}'] = e($source->name);
         }
 
         $custom_fields = get_custom_fields('leads');

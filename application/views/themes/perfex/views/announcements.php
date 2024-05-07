@@ -15,17 +15,21 @@
             <tbody>
                 <?php foreach ($announcements as $announcement) { ?>
                 <tr>
-                    <td><a
-                            href="<?php echo site_url('clients/announcement/' . $announcement['announcementid']); ?>"><?php echo $announcement['name']; ?></a>
+                    <td>
+                        <a
+                            href="<?php echo site_url('clients/announcement/' . $announcement['announcementid']); ?>">
+                            <?php echo e($announcement['name']); ?>
+                        </a>
                     </td>
-                    <td data-order="<?php echo $announcement['dateadded']; ?>">
-                        <?php echo _d($announcement['dateadded']); ?></td>
+                    <td data-order="<?php echo e($announcement['dateadded']); ?>">
+                        <?php echo e(_dt($announcement['dateadded'])); ?>
+                    </td>
                 </tr>
                 <?php } ?>
             </tbody>
         </table>
         <?php } else { ?>
-        <p class="no-margin"><?php echo _l('no_announcements'); ?></p>
+            <p class="no-margin"><?php echo _l('no_announcements'); ?></p>
         <?php } ?>
     </div>
 </div>

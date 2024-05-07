@@ -19,8 +19,8 @@
                             </div>
                             <?php foreach ($estimate_statuses as $status) { ?>
                             <div class="radio radio-primary">
-                                <input type="radio" value="<?php echo $status; ?>" id="est_<?php echo $status; ?>" name="estimate_zip_status">
-                                <label for="est_<?php echo $status; ?>"><?php echo format_estimate_status($status, '', false); ?></label>
+                                <input type="radio" value="<?php echo e($status); ?>" id="est_<?php echo e($status); ?>" name="estimate_zip_status">
+                                <label for="est_<?php echo e($status); ?>"><?php echo format_estimate_status($status, '', false); ?></label>
                             </div>
                             <?php } ?>
                         </div>

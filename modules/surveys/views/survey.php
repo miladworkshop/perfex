@@ -7,7 +7,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700">
-                            <?php echo $title; ?>
+                            <?php echo e($title); ?>
                         </h4>
                         <?php echo form_open($this->uri->uri_string(), ['id' => 'survey_form']); ?>
                         <div class="panel_s">
@@ -42,14 +42,14 @@
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false">
-                                        <?php echo $list['name']; ?> <span class="caret"></span>
+                                        <?php echo e($list['name']); ?> <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
                                         <?php foreach ($list['customfields'] as $custom_field) { ?>
                                         <li><a href="#" class="add_email_list_custom_field_to_survey"
                                                 data-toggle="tooltip"
-                                                title="{<?php echo $custom_field['fieldslug']; ?>}"
-                                                data-slug="{<?php echo $custom_field['fieldslug']; ?>}"><?php echo $custom_field['fieldname']; ?></a>
+                                                title="{<?php echo e($custom_field['fieldslug']); ?>}"
+                                                data-slug="{<?php echo e($custom_field['fieldslug']); ?>}"><?php echo e($custom_field['fieldname']); ?></a>
                                         </li>
                                         <?php } ?>
                                     </ul>
@@ -135,22 +135,22 @@
                                         <ul class="dropdown-menu">
                                             <li>
                                                 <a href="#"
-                                                    onclick="add_survey_question('checkbox',<?php echo $survey->surveyid; ?>);return false;">
+                                                    onclick="add_survey_question('checkbox',<?php echo e($survey->surveyid); ?>);return false;">
                                                     <?php echo _l('survey_field_checkbox'); ?></a>
                                             </li>
                                             <li>
                                                 <a href="#"
-                                                    onclick="add_survey_question('radio',<?php echo $survey->surveyid; ?>);return false;">
+                                                    onclick="add_survey_question('radio',<?php echo e($survey->surveyid); ?>);return false;">
                                                     <?php echo _l('survey_field_radio'); ?></a>
                                             </li>
                                             <li>
                                                 <a href="#"
-                                                    onclick="add_survey_question('input',<?php echo $survey->surveyid; ?>);return false;">
+                                                    onclick="add_survey_question('input',<?php echo e($survey->surveyid); ?>);return false;">
                                                     <?php echo _l('survey_field_input'); ?></a>
                                             </li>
                                             <li>
                                                 <a href="#"
-                                                    onclick="add_survey_question('textarea',<?php echo $survey->surveyid; ?>);return false;">
+                                                    onclick="add_survey_question('textarea',<?php echo e($survey->surveyid); ?>);return false;">
                                                     <?php echo _l('survey_field_textarea'); ?></a>
                                             </li>
                                         </ul>
@@ -246,10 +246,10 @@
                                         <hr class="hr-10" />
                                         <?php foreach ($customers_groups as $group) { ?>
                                         <div class="checkbox checkbox-primary mleft10 survey-customer-groups">
-                                            <input type="checkbox" name="customer_group[<?php echo $group['id']; ?>]"
-                                                id="ml_customer_group_<?php echo $group['id']; ?>">
+                                            <input type="checkbox" name="customer_group[<?php echo e($group['id']); ?>]"
+                                                id="ml_customer_group_<?php echo e($group['id']); ?>">
                                             <label
-                                                for="ml_customer_group_<?php echo $group['id']; ?>"><?php echo $group['name']; ?></label>
+                                                for="ml_customer_group_<?php echo e($group['id']); ?>"><?php echo e($group['name']); ?></label>
                                         </div>
                                         <?php } ?>
                                         <?php
@@ -258,8 +258,8 @@
                                             multiple="true" id="contacts_consent" class="selectpicker"
                                             data-width="100%">
                                             <?php foreach ($purposes as $purpose) { ?>
-                                            <option value="<?php echo $purpose['id']; ?>">
-                                                <?php echo $purpose['name']; ?>
+                                            <option value="<?php echo e($purpose['id']); ?>">
+                                                <?php echo e($purpose['name']); ?>
                                             </option>
                                             <?php } ?>
                                         </select>
@@ -280,10 +280,10 @@
 
                                         <?php foreach ($leads_statuses as $status) { ?>
                                         <div class="checkbox checkbox-primary mleft10 survey-lead-status">
-                                            <input type="checkbox" name="leads_status[<?php echo $status['id']; ?>]"
-                                                id="ml_leads_status_<?php echo $status['id']; ?>">
+                                            <input type="checkbox" name="leads_status[<?php echo e($status['id']); ?>]"
+                                                id="ml_leads_status_<?php echo e($status['id']); ?>">
                                             <label
-                                                for="ml_leads_status_<?php echo $status['id']; ?>"><?php echo $status['name']; ?></label>
+                                                for="ml_leads_status_<?php echo e($status['id']); ?>"><?php echo e($status['name']); ?></label>
                                         </div>
                                         <?php } ?>
                                         <?php
@@ -291,8 +291,8 @@
                                         <select name="leads_consent[]" title="<?php echo _l('gdpr_consent'); ?>"
                                             multiple="true" id="leads_consent" class="selectpicker" data-width="100%">
                                             <?php foreach ($purposes as $purpose) { ?>
-                                            <option value="<?php echo $purpose['id']; ?>">
-                                                <?php echo $purpose['name']; ?>
+                                            <option value="<?php echo e($purpose['id']); ?>">
+                                                <?php echo e($purpose['name']); ?>
                                             </option>
                                             <?php } ?>
                                         </select>
@@ -308,10 +308,10 @@
                                     <p class="bold"><?php echo _l('survey_send_mail_lists_string'); ?></p>
                                     <?php foreach ($mail_lists as $list) { ?>
                                     <div class="checkbox checkbox-primary">
-                                        <input type="checkbox" id="ml_custom_<?php echo $list['listid']; ?>"
-                                            name="send_survey_to[<?php echo $list['listid']; ?>]">
+                                        <input type="checkbox" id="ml_custom_<?php echo e($list['listid']); ?>"
+                                            name="send_survey_to[<?php echo e($list['listid']); ?>]">
                                         <label
-                                            for="ml_custom_<?php echo $list['listid']; ?>"><?php echo $list['name']; ?></label>
+                                            for="ml_custom_<?php echo e($list['listid']); ?>"><?php echo e($list['name']); ?></label>
                                     </div>
                                     <?php } ?>
                                     <?php } ?>
@@ -326,10 +326,10 @@
                                         <a href="<?php echo admin_url('surveys/remove_survey_send/' . $log['id']); ?>"
                                             class="_delete text-danger"><i class="fa fa-remove"></i></a>
                                         <?php } ?>
-                                        <?php echo _l('survey_added_to_queue', _dt($log['date'])); ?>
+                                        <?php echo e(_l('survey_added_to_queue', _dt($log['date']))); ?>
                                         (
                                         <?php echo($log['iscronfinished'] == 0 ? _l('survey_send_till_now') . ' ' : '') ?>
-                                        <?php echo _l('survey_send_to_total', $log['total']); ?> )
+                                        <?php echo e(_l('survey_send_to_total', $log['total'])); ?> )
                                         <br />
                                         <b class="bold">
                                             <?php echo _l('survey_send_finished', ($log['iscronfinished'] == 1 ? _l('settings_yes') : _l('settings_no'))); ?>

@@ -711,8 +711,13 @@ class Proposals_model extends App_Model
                 if ($status == 2) {
                     $message = 'not_proposal_proposal_declined';
                 } elseif ($status == 3) {
+                    // Accepted
+                    if (get_option('proposal_auto_convert_to_invoice_on_client_accept') == '1') {
+                        $this->convert_to_invoice($id);
+                    }
                     $message = 'not_proposal_proposal_accepted';
-                // Accepted
+
+
                 } else {
                     $revert = true;
                 }
@@ -1006,5 +1011,162 @@ class Proposals_model extends App_Model
         }
 
         return $kanBan->get();
+    }
+
+    /**
+     * Convert proposal to invoice
+     * @param mixed $id proposal id
+     * @return mixed     New invoice ID
+     */
+    public function convert_to_invoice($id)
+    {
+        // Recurring invoice date is okey lets convert it to new invoice
+        $proposal = $this->get($id);
+
+        if ($proposal->rel_type != 'customer') {
+            return false;
+        }
+
+        $new_invoice_data = [];
+        $new_invoice_data['clientid']   = $proposal->rel_id;
+        $new_invoice_data['project_id'] = $proposal->project_id;
+        $new_invoice_data['number']     = get_option('next_invoice_number');
+        $new_invoice_data['date']       = _d(date('Y-m-d'));
+        $new_invoice_data['duedate']    = _d(date('Y-m-d'));
+        if (get_option('invoice_due_after') != 0) {
+            $new_invoice_data['duedate'] = _d(date('Y-m-d', strtotime('+' . get_option('invoice_due_after') . ' DAY', strtotime(date('Y-m-d')))));
+        }
+        $new_invoice_data['show_quantity_as'] = $proposal->show_quantity_as;
+        $new_invoice_data['currency']         = $proposal->currency;
+        $new_invoice_data['subtotal']         = $proposal->subtotal;
+        $new_invoice_data['total']            = $proposal->total;
+        $new_invoice_data['adjustment']       = $proposal->adjustment;
+        $new_invoice_data['discount_percent'] = $proposal->discount_percent;
+        $new_invoice_data['discount_total']   = $proposal->discount_total;
+        $new_invoice_data['discount_type']    = $proposal->discount_type;
+        $new_invoice_data['sale_agent']       = $proposal->assigned;
+
+        $new_invoice_data['billing_street']   = clear_textarea_breaks($proposal->address);
+        $new_invoice_data['billing_city']     = $proposal->city;
+        $new_invoice_data['billing_state']    = $proposal->state;
+        $new_invoice_data['billing_zip']      = $proposal->zip;
+        $new_invoice_data['billing_country']  = $proposal->country;
+        $new_invoice_data['shipping_street']  = '';
+        $new_invoice_data['shipping_city']    = '';
+        $new_invoice_data['shipping_state']   = '';
+        $new_invoice_data['shipping_zip']     = '';
+        $new_invoice_data['shipping_country'] = '';
+        $new_invoice_data['include_shipping'] = 0;
+        $new_invoice_data['show_shipping_on_invoice'] = 0;
+
+        $new_invoice_data['terms']                    = get_option('predefined_terms_invoice');
+        $new_invoice_data['clientnote']               = get_option('predefined_clientnote_invoice');
+        // Set to unpaid status automatically
+        $new_invoice_data['status']    = 1;
+        $new_invoice_data['adminnote'] = '';
+
+        $this->load->model('payment_modes_model');
+        $modes = $this->payment_modes_model->get('', [
+            'expenses_only !=' => 1,
+        ]);
+        $temp_modes = [];
+        foreach ($modes as $mode) {
+            if ($mode['selected_by_default'] == 0) {
+                continue;
+            }
+            $temp_modes[] = $mode['id'];
+        }
+        $new_invoice_data['allowed_payment_modes'] = $temp_modes;
+        $new_invoice_data['newitems']              = [];
+        $key                                       = 1;
+
+        foreach ($proposal->items as $item) {
+            $new_invoice_data['newitems'][$key]['description']      = $item['description'];
+            $new_invoice_data['newitems'][$key]['long_description'] = clear_textarea_breaks($item['long_description']);
+            $new_invoice_data['newitems'][$key]['qty']              = $item['qty'];
+            $new_invoice_data['newitems'][$key]['unit']             = $item['unit'];
+            $new_invoice_data['newitems'][$key]['taxname']          = [];
+            $taxes                                                  = get_proposal_item_taxes($item['id']);
+            foreach ($taxes as $tax) {
+                // tax name is in format TAX1|10.00
+                array_push($new_invoice_data['newitems'][$key]['taxname'], $tax['taxname']);
+            }
+            $new_invoice_data['newitems'][$key]['rate']  = $item['rate'];
+            $new_invoice_data['newitems'][$key]['order'] = $item['item_order'];
+            $key++;
+        }
+        $this->load->model('invoices_model');
+        $invoice_id = $this->invoices_model->add($new_invoice_data);
+        if ($invoice_id) {
+            // Customer accepted the estimate and is auto converted to invoice
+            if (!is_staff_logged_in()) {
+                $this->db->where('rel_type', 'invoice');
+                $this->db->where('rel_id', $invoice_id);
+                $this->db->delete(db_prefix() . 'sales_activity');
+                $this->invoices_model->log_invoice_activity($id, 'invoice_activity_auto_converted_from_proposal', true, serialize([
+                    '<a href="' . admin_url('proposals#' . $proposal->id) . '">' . format_proposal_number($proposal->id) . '</a>',
+                ]));
+            }
+            // For all cases update addefrom and sale agent from the invoice
+            // May happen staff is not logged in and these values to be 0
+            $this->db->where('id', $invoice_id);
+            $this->db->update(db_prefix() . 'invoices', [
+                'addedfrom'  => $proposal->addedfrom,
+                'sale_agent' => $proposal->assigned,
+            ]);
+
+            // Update estimate with the new invoice data and set to status accepted
+            $this->db->where('id', $proposal->id);
+            $this->db->update(db_prefix() . 'proposals', [
+                'invoice_id'     => $invoice_id,
+                'status'     => 3,
+            ]);
+
+
+            if (is_custom_fields_smart_transfer_enabled()) {
+                $this->db->where('fieldto', 'proposal');
+                $this->db->where('active', 1);
+                $cfProposals = $this->db->get(db_prefix() . 'customfields')->result_array();
+                foreach ($cfProposals as $field) {
+                    $tmpSlug = explode('_', $field['slug'], 2);
+                    if (isset($tmpSlug[1])) {
+                        $this->db->where('fieldto', 'invoice');
+
+                        $this->db->group_start();
+                        $this->db->like('slug', 'invoice_' . $tmpSlug[1], 'after');
+                        $this->db->where('type', $field['type']);
+                        $this->db->where('options', $field['options']);
+                        $this->db->where('active', 1);
+                        $this->db->group_end();
+
+                        // $this->db->where('slug LIKE "invoice_' . $tmpSlug[1] . '%" AND type="' . $field['type'] . '" AND options="' . $field['options'] . '" AND active=1');
+                        $cfTransfer = $this->db->get(db_prefix() . 'customfields')->result_array();
+
+                        // Don't make mistakes
+                        // Only valid if 1 result returned
+                        // + if field names similarity is equal or more then CUSTOM_FIELD_TRANSFER_SIMILARITY%
+                        if (count($cfTransfer) == 1 && ((similarity($field['name'], $cfTransfer[0]['name']) * 100) >= CUSTOM_FIELD_TRANSFER_SIMILARITY)) {
+                            $value = get_custom_field_value($proposal->id, $field['id'], 'estimate', false);
+
+                            if ($value == '') {
+                                continue;
+                            }
+
+                            $this->db->insert(db_prefix() . 'customfieldsvalues', [
+                                'relid'   => $id,
+                                'fieldid' => $cfTransfer[0]['id'],
+                                'fieldto' => 'invoice',
+                                'value'   => $value,
+                            ]);
+                        }
+                    }
+                }
+            }
+
+            hooks()->do_action('after_proposal_converted_to_invoice', ['proposal_id' => $id, 'invoice_id' => $invoice_id]);
+            log_activity('Proposal Converted to Invoice [InvoiceID: ' . $invoice_id . ', ProposalID: ' . $id . ']');
+        }
+
+        return $id;
     }
 }

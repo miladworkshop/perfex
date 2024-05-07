@@ -82,7 +82,7 @@ function _apply_menu_items_position($items, $options)
 
                 if (isset($item->children)) {
                     foreach ($item->children as $child) {
-                        if ($newChildItem = $CI->app_menu->filter_item($items, $child->id)) {
+                        if (property_exists($child, 'id') && $newChildItem = $CI->app_menu->filter_item($items, $child->id)) {
                             $newItems[$key]['children'][] = $newChildItem;
                             $newItemsAddedKeys[]          = $newChildItem['slug'];
                         }

@@ -11,7 +11,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">
-                    <?php echo $title; ?>
+                    <?php echo e($title); ?>
                 </h4>
             </div>
             <div class="modal-body">
@@ -25,7 +25,7 @@
                       $rel_type = isset($task) ? $task->rel_type : $this->input->get('rel_type');
                   }
                    if (isset($task) && $task->billed == 1) {
-                       echo '<div class="alert alert-success text-center no-margin">' . _l('task_is_billed', '<a href="' . admin_url('invoices/list_invoices/' . $task->invoice_id) . '" target="_blank">' . format_invoice_number($task->invoice_id)) . '</a></div><br />';
+                       echo '<div class="alert alert-success text-center no-margin">' . _l('task_is_billed', '<a href="' . admin_url('invoices/list_invoices/' . $task->invoice_id) . '" target="_blank">' . e(format_invoice_number($task->invoice_id))) . '</a></div><br />';
                    }
                   ?>
                         <?php if (isset($task)) { ?>
@@ -137,31 +137,31 @@
                             </div>
                         </div>
                         <?php
-                     if ($this->input->get('ticket_to_task')) {
-                         echo form_hidden('ticket_to_task', $rel_id);
-                     }
-                  } ?>
+                            if ($this->input->get('ticket_to_task')) {
+                                echo form_hidden('ticket_to_task', $rel_id);
+                            }
+                        } ?>
                         <hr class="-tw-mx-3.5" />
                         <?php $value = (isset($task) ? $task->name : ''); ?>
                         <?php echo render_input('name', 'task_add_edit_subject', $value); ?>
                         <div class="task-hours<?php if (isset($task) && $task->rel_type == 'project' && total_rows(db_prefix() . 'projects', ['id' => $task->rel_id, 'billing_type' => 3]) == 0) {
-                      echo ' hide';
-                  } ?>">
+                            echo ' hide';
+                          } ?>">
                             <?php $value = (isset($task) ? $task->hourly_rate : 0); ?>
                             <?php echo render_input('hourly_rate', 'task_hourly_rate', $value); ?>
                         </div>
                         <div class="project-details<?php if ($rel_type != 'project') {
-                      echo ' hide';
-                  } ?>">
+                            echo ' hide';
+                          } ?>">
                             <div class="form-group">
                                 <label for="milestone"><?php echo _l('task_milestone'); ?></label>
                                 <select name="milestone" id="milestone" class="selectpicker" data-width="100%"
                                     data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                                     <option value=""></option>
                                     <?php foreach ($milestones as $milestone) { ?>
-                                    <option value="<?php echo $milestone['id']; ?>" <?php if (isset($task) && $task->milestone == $milestone['id']) {
+                                    <option value="<?php echo e($milestone['id']); ?>" <?php if (isset($task) && $task->milestone == $milestone['id']) {
                       echo 'selected';
-                  } ?>><?php echo $milestone['name']; ?></option>
+                  } ?>><?php echo e($milestone['name']); ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -193,9 +193,9 @@
                                     <select name="priority" class="selectpicker" id="priority" data-width="100%"
                                         data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                                         <?php foreach (get_tasks_priorities() as $priority) { ?>
-                                        <option value="<?php echo $priority['id']; ?>" <?php if (isset($task) && $task->priority == $priority['id'] || !isset($task) && get_option('default_task_priority') == $priority['id']) {
+                                        <option value="<?php echo e($priority['id']); ?>" <?php if (isset($task) && $task->priority == $priority['id'] || !isset($task) && get_option('default_task_priority') == $priority['id']) {
                             echo ' selected';
-                        } ?>><?php echo $priority['name']; ?></option>
+                        } ?>><?php echo e($priority['name']); ?></option>
                                         <?php } ?>
                                         <?php hooks()->do_action('task_priorities_select', (isset($task) ? $task : 0)); ?>
                                     </select>
@@ -271,15 +271,15 @@
                             <div class="form-group recurring-cycles">
                                 <label for="cycles"><?php echo _l('recurring_total_cycles'); ?>
                                     <?php if (isset($task) && $task->total_cycles > 0) {
-                            echo '<small>' . _l('cycles_passed', $task->total_cycles) . '</small>';
+                            echo '<small>' . e(_l('cycles_passed', $task->total_cycles)) . '</small>';
                         }
                         ?>
                                 </label>
                                 <div class="input-group">
                                     <input type="number" class="form-control" <?php if ($value == 0) {
                             echo ' disabled';
-                        } ?> name="cycles" id="cycles" value="<?php echo $value; ?>" <?php if (isset($task) && $task->total_cycles > 0) {
-                            echo 'min="' . ($task->total_cycles) . '"';
+                        } ?> name="cycles" id="cycles" value="<?php echo e($value); ?>" <?php if (isset($task) && $task->total_cycles > 0) {
+                            echo 'min="' . e($task->total_cycles) . '"';
                         } ?>>
                                     <div class="input-group-addon">
                                         <div class="checkbox">
@@ -395,10 +395,10 @@
                                         data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>"
                                         multiple data-live-search="true">
                                         <?php foreach ($members as $member) { ?>
-                                        <option value="<?php echo $member['staffid']; ?>" <?php if ((get_option('new_task_auto_assign_current_member') == '1') && get_staff_user_id() == $member['staffid']) {
+                                        <option value="<?php echo e($member['staffid']); ?>" <?php if ((get_option('new_task_auto_assign_current_member') == '1') && get_staff_user_id() == $member['staffid']) {
                                 echo 'selected';
                             } ?>>
-                                            <?php echo $member['firstname'] . ' ' . $member['lastname']; ?>
+                                            <?php echo e($member['firstname'] . ' ' . $member['lastname']); ?>
                                         </option>
                                         <?php } ?>
                                     </select>
@@ -416,7 +416,7 @@
                         <?php
                   if (isset($task)
                      && $task->status == Tasks_model::STATUS_COMPLETE
-                     && (has_permission('create') || has_permission('edit'))) {
+                     && (staff_can('create', 'tasks') || staff_can('edit', 'tasks'))) {
                       echo render_datetime_input('datefinished', 'task_finished', _dt($task->datefinished));
                   }
                ?>
@@ -430,8 +430,8 @@
                                 data-width="100%" data-live-search="true" data-actions-box="true">
                                 <option value="" class="hide"></option>
                                 <?php foreach ($checklistTemplates as $chkTemplate) { ?>
-                                <option value="<?php echo $chkTemplate['id']; ?>">
-                                    <?php echo $chkTemplate['description']; ?>
+                                <option value="<?php echo e($chkTemplate['id']); ?>">
+                                    <?php echo e($chkTemplate['description']); ?>
                                 </option>
                                 <?php } ?>
                             </select>

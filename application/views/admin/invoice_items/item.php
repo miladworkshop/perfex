@@ -21,16 +21,16 @@
                         <?php echo render_textarea('long_description', 'invoice_item_long_description'); ?>
                         <div class="form-group">
                         <label for="rate" class="control-label">
-                            <?php echo _l('invoice_item_add_edit_rate_currency', $base_currency->name . ' <small>(' . _l('base_currency_string') . ')</small>'); ?></label>
+                            <?php echo _l('invoice_item_add_edit_rate_currency', e($base_currency->name) . ' <small>(' . _l('base_currency_string') . ')</small>'); ?></label>
                             <input type="number" id="rate" name="rate" class="form-control" value="">
                         </div>
                         <?php
                             foreach ($currencies as $currency) {
                                 if ($currency['isdefault'] == 0 && total_rows(db_prefix() . 'clients', ['default_currency' => $currency['id']]) > 0) { ?>
                                 <div class="form-group">
-                                    <label for="rate_currency_<?php echo $currency['id']; ?>" class="control-label">
-                                        <?php echo _l('invoice_item_add_edit_rate_currency', $currency['name']); ?></label>
-                                        <input type="number" id="rate_currency_<?php echo $currency['id']; ?>" name="rate_currency_<?php echo $currency['id']; ?>" class="form-control" value="">
+                                    <label for="rate_currency_<?php echo e($currency['id']); ?>" class="control-label">
+                                        <?php echo e(_l('invoice_item_add_edit_rate_currency', $currency['name'])); ?></label>
+                                        <input type="number" id="rate_currency_<?php echo e($currency['id']); ?>" name="rate_currency_<?php echo e($currency['id']); ?>" class="form-control" value="">
                                     </div>
                              <?php   }
                             }
@@ -42,7 +42,9 @@
                                 <select class="selectpicker display-block" data-width="100%" name="tax" data-none-selected-text="<?php echo _l('no_tax'); ?>">
                                     <option value=""></option>
                                     <?php foreach ($taxes as $tax) { ?>
-                                    <option value="<?php echo $tax['id']; ?>" data-subtext="<?php echo $tax['name']; ?>"><?php echo $tax['taxrate']; ?>%</option>
+                                    <option value="<?php echo e($tax['id']); ?>" data-subtext="<?php echo e($tax['name']); ?>">
+                                        <?php echo e($tax['taxrate']); ?>%
+                                    </option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -53,7 +55,9 @@
                             <select class="selectpicker display-block" disabled data-width="100%" name="tax2" data-none-selected-text="<?php echo _l('no_tax'); ?>">
                                 <option value=""></option>
                                 <?php foreach ($taxes as $tax) { ?>
-                                <option value="<?php echo $tax['id']; ?>" data-subtext="<?php echo $tax['name']; ?>"><?php echo $tax['taxrate']; ?>%</option>
+                                <option value="<?php echo e($tax['id']); ?>" data-subtext="<?php echo e($tax['name']); ?>">
+                                    <?php echo e($tax['taxrate']); ?>%
+                                </option>
                                 <?php } ?>
                             </select>
                         </div>

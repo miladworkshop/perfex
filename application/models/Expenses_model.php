@@ -354,13 +354,13 @@ class Expenses_model extends App_Model
         $data['note'] = nl2br($data['note']);
 
         // Recurring expense set to NO, Cancelled
-        if ($original_expense->repeat_every != '' && $data['repeat_every'] == '') {
+        if ($original_expense->repeat_every != '' && ($data['repeat_every'] ?? '') == '') {
             $data['cycles']              = 0;
             $data['total_cycles']        = 0;
             $data['last_recurring_date'] = null;
         }
 
-        if ($data['repeat_every'] != '') {
+        if (isset($data['repeat_every']) && $data['repeat_every'] != '') {
             $data['recurring'] = 1;
             if ($data['repeat_every'] == 'custom') {
                 $data['repeat_every']     = $data['repeat_every_custom'];

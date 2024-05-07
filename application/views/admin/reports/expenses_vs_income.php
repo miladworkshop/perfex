@@ -11,8 +11,8 @@
                     data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                     <?php foreach ($years as $year) {
         ?>
-                    <option value="<?php echo $year; ?>" <?php echo $year == $report_year ? 'selected' : ''; ?>>
-                        <?php echo $year; ?>
+                    <option value="<?php echo e($year); ?>" <?php echo $year == $report_year ? 'selected' : ''; ?>>
+                        <?php echo e($year); ?>
                     </option>
                     <?php
     } ?>
@@ -37,7 +37,7 @@
 <?php init_tail(); ?>
 <script>
 $(function() {
-    init_currency(<?php echo $base_currency->id; ?>, function() {
+    init_currency(<?php echo e($base_currency->id); ?>, function() {
         chartExpenseVsIncome = new Chart($('#report-expense-vs-income'), {
             type: 'bar',
             data: <?php echo $chart_expenses_vs_income_values; ?>,

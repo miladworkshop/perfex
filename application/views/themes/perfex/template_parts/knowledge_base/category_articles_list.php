@@ -10,15 +10,15 @@
                         <h4 class="tw-text-lg tw-font-medium tw-my-0">
                             <a href="<?php echo site_url('knowledge-base/article/' . $article['slug']); ?>"
                                 class="tw-text-neutral-600 hover:tw-text-neutral-800 active:tw-text-neutral-800">
-                                <?php echo $article['subject']; ?>
+                                <?php echo e($article['subject']); ?>
                             </a>
                         </h4>
                         <span class="tw-text-neutral-500 tw-text-xs tw-self-start">
-                            <?php echo _dt($article['datecreated']); ?>
+                            <?php echo e(_dt($article['datecreated'])); ?>
                         </span>
                     </div>
                     <div class="tw-text-neutral-500 tw-mt-4 sm:tw-mt-0">
-                        <?php echo strip_tags(mb_substr($article['description'], 0, 250)); ?>...
+                        <?php echo process_text_content_for_display(strip_tags(mb_substr($article['description'], 0, 250))); ?>...
                     </div>
                 </li>
                 <?php } ?>

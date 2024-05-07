@@ -14,8 +14,8 @@
                                         id="custom_view" class="selectpicker" data-width="100%">
                                         <option value=""></option>
                                         <?php foreach ($consent_purposes as $purpose) { ?>
-                                        <option value="consent_<?php echo $purpose['id']; ?>">
-                                            <?php echo $purpose['name']; ?>
+                                        <option value="consent_<?php echo e($purpose['id']); ?>">
+                                            <?php echo e($purpose['name']); ?>
                                         </option>
                                         <?php } ?>
                                     </select>

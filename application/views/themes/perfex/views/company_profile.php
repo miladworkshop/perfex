@@ -31,18 +31,18 @@
                         <?php if (get_option('company_requires_vat_number_field') == 1) { ?>
                         <div class="form-group company-profile-vat-group">
                             <label for="vat" class="control-label"><?php echo _l('clients_vat'); ?></label>
-                            <input type="text" class="form-control" name="vat" value="<?php echo $client->vat; ?>">
+                            <input type="text" class="form-control" name="vat" value="<?php echo e($client->vat); ?>">
                         </div>
                         <?php } ?>
                         <div class="form-group company-profile-phone-group">
                             <label for="phonenumber"><?php echo _l('clients_phone'); ?></label>
                             <input type="text" class="form-control" name="phonenumber" id="phonenumber"
-                                value="<?php echo $client->phonenumber; ?>">
+                                value="<?php echo e($client->phonenumber); ?>">
                         </div>
                         <div class="form-group company-profile-website-group">
                             <label class="control-label" for="website"><?php echo _l('client_website'); ?></label>
                             <input type="text" class="form-control" name="website" id="website"
-                                value="<?php echo $client->website; ?>">
+                                value="<?php echo e($client->website); ?>">
                         </div>
                         <div class="form-group company-profile-country-group">
                             <label for="lastname"><?php echo _l('clients_country'); ?></label>
@@ -56,9 +56,9 @@
                                     echo $selected = true;
                                 }
                                 ?>
-                                <option value="<?php echo $country['country_id']; ?>"
+                                <option value="<?php echo e($country['country_id']); ?>"
                                     <?php echo set_select('country', $country['country_id'], $selected); ?>>
-                                    <?php echo $country['short_name']; ?></option>
+                                    <?php echo e($country['short_name']); ?></option>
                                 <?php } ?>
                             </select>
                         </div>
@@ -67,7 +67,7 @@
                         <div class="form-group company-profile-city-group">
                             <label for="city"><?php echo _l('clients_city'); ?></label>
                             <input type="text" class="form-control" name="city" id="city"
-                                value="<?php echo $client->city; ?>">
+                                value="<?php echo e($client->city); ?>">
                         </div>
                         <div class="form-group company-profile-address-group">
                             <label for="address"><?php echo _l('clients_address'); ?></label>
@@ -77,12 +77,12 @@
                         <div class="form-group company-profile-zip-group">
                             <label for="zip"><?php echo _l('clients_zip'); ?></label>
                             <input type="text" class="form-control" name="zip" id="zip"
-                                value="<?php echo $client->zip; ?>">
+                                value="<?php echo e($client->zip); ?>">
                         </div>
                         <div class="form-group company-profile-state-group">
                             <label for="state"><?php echo _l('clients_state'); ?></label>
                             <input type="text" class="form-control" name="state" id="state"
-                                value="<?php echo $client->state; ?>">
+                                value="<?php echo e($client->state); ?>">
                         </div>
                         <?php if (!is_language_disabled()) { ?>
                         <div class="form-group company-profile-language-group">
@@ -99,8 +99,8 @@
                                     if ($client->default_language == $availableLanguage) {
                                         $selected = 'selected';
                                     } ?>
-                                <option value="<?php echo $availableLanguage; ?>" <?php echo $selected; ?>>
-                                    <?php echo ucfirst($availableLanguage); ?></option>
+                                <option value="<?php echo e($availableLanguage); ?>" <?php echo e($selected); ?>>
+                                    <?php echo e(ucfirst($availableLanguage)); ?></option>
                                 <?php
                                 } ?>
                             </select>
@@ -127,17 +127,17 @@
                         <div class="form-group company-profile-billing-city-group">
                             <label for="billing_city"><?php echo _l('billing_city'); ?></label>
                             <input type="text" class="form-control" name="billing_city" id="billing_city"
-                                value="<?php echo $client->billing_city; ?>">
+                                value="<?php echo e($client->billing_city); ?>">
                         </div>
                         <div class="form-group company-profile-billing-state-group">
                             <label for="billing_state"><?php echo _l('billing_state'); ?></label>
                             <input type="text" class="form-control" name="billing_state" id="billing_state"
-                                value="<?php echo $client->billing_state; ?>">
+                                value="<?php echo e($client->billing_state); ?>">
                         </div>
                         <div class="form-group company-profile-billing-zip-group">
                             <label for="billing_zip"><?php echo _l('billing_zip'); ?></label>
                             <input type="text" class="form-control" name="billing_zip" id="billing_zip"
-                                value="<?php echo $client->billing_zip; ?>">
+                                value="<?php echo e($client->billing_zip); ?>">
                         </div>
                         <div class="form-group company-profile-billing-country-group">
                             <label for="billing_country"><?php echo _l('billing_country'); ?></label>
@@ -145,9 +145,9 @@
                                 name="billing_country" id="billing_country" class="form-control">
                                 <option value=""></option>
                                 <?php foreach ($countries as $country) { ?>
-                                <option value="<?php echo $country['country_id']; ?>" <?php if ($client->billing_country == $country['country_id']) {
+                                <option value="<?php echo e($country['country_id']); ?>" <?php if ($client->billing_country == $country['country_id']) {
                                     echo ' selected';
-                                } ?>><?php echo $country['short_name']; ?></option>
+                                } ?>><?php echo e($country['short_name']); ?></option>
                                 <?php } ?>
                             </select>
                         </div>
@@ -164,17 +164,17 @@
                         <div class="form-group company-profile-shipping-city-group">
                             <label for="shipping_city"><?php echo _l('shipping_city'); ?></label>
                             <input type="text" class="form-control" name="shipping_city" id="shipping_city"
-                                value="<?php echo $client->shipping_city; ?>">
+                                value="<?php echo e($client->shipping_city); ?>">
                         </div>
                         <div class="form-group company-profile-shipping-state-group">
                             <label for="shipping_state"><?php echo _l('shipping_state'); ?></label>
                             <input type="text" class="form-control" name="shipping_state" id="shipping_state"
-                                value="<?php echo $client->shipping_state; ?>">
+                                value="<?php echo e($client->shipping_state); ?>">
                         </div>
                         <div class="form-group company-profile-shipping-zip-group">
                             <label for="shipping_zip"><?php echo _l('shipping_zip'); ?></label>
                             <input type="text" class="form-control" name="shipping_zip" id="shipping_zip"
-                                value="<?php echo $client->shipping_zip; ?>">
+                                value="<?php echo e($client->shipping_zip); ?>">
                         </div>
                         <div class="form-group company-profile-shipping-country-group">
                             <label for="shipping_country"><?php echo _l('shipping_country'); ?></label>
@@ -182,9 +182,9 @@
                                 name="shipping_country" id="shipping_country" class="form-control">
                                 <option value=""></option>
                                 <?php foreach ($countries as $country) { ?>
-                                <option value="<?php echo $country['country_id']; ?>" <?php if ($client->shipping_country == $country['country_id']) {
+                                <option value="<?php echo e($country['country_id']); ?>" <?php if ($client->shipping_country == $country['country_id']) {
                                     echo ' selected';
-                                } ?>><?php echo $country['short_name']; ?></option>
+                                } ?>><?php echo e($country['short_name']); ?></option>
                                 <?php } ?>
                             </select>
                         </div>

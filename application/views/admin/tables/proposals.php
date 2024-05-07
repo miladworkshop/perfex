@@ -79,7 +79,7 @@ return App_table::find('proposals')
         foreach ($rResult as $aRow) {
             $row = [];
 
-            $numberOutput = '<a href="' . admin_url('proposals/list_proposals/' . $aRow[db_prefix() . 'proposals.id']) . '"' . ($project_id ? 'target="_blank"' : 'onclick="init_proposal(' . $aRow[db_prefix() . 'proposals.id'] . '); return false;"') . '>' . format_proposal_number($aRow[db_prefix() . 'proposals.id']) . '</a>';
+            $numberOutput = '<a href="' . admin_url('proposals/list_proposals/' . $aRow[db_prefix() . 'proposals.id']) . '"' . ($project_id ? 'target="_blank"' : 'onclick="init_proposal(' . $aRow[db_prefix() . 'proposals.id'] . '); return false;"') . '>' . e(format_proposal_number($aRow[db_prefix() . 'proposals.id'])) . '</a>';
 
             $numberOutput .= '<div class="row-options">';
 
@@ -91,7 +91,7 @@ return App_table::find('proposals')
 
             $row[] = $numberOutput;
 
-            $row[] = '<a href="' . admin_url('proposals/list_proposals/' . $aRow[db_prefix() . 'proposals.id']) . '"' . ($project_id ? 'target="_blank"' : 'onclick="init_proposal(' . $aRow[db_prefix() . 'proposals.id'] . '); return false;"') . '>' . $aRow['subject'] . '</a>';
+            $row[] = '<a href="' . admin_url('proposals/list_proposals/' . $aRow[db_prefix() . 'proposals.id']) . '"' . ($project_id ? 'target="_blank"' : 'onclick="init_proposal(' . $aRow[db_prefix() . 'proposals.id'] . '); return false;"') . '>' . e($aRow['subject']) . '</a>';
 
             if ($aRow['rel_type'] == 'lead') {
                 $toOutput = '<a href="#" onclick="init_lead(' . $aRow['rel_id'] . ');return false;" target="_blank" data-toggle="tooltip" data-title="' . _l('lead') . '">' . $aRow['proposal_to'] . '</a>';
@@ -101,7 +101,7 @@ return App_table::find('proposals')
 
             $row[] = $toOutput;
 
-            $amount = app_format_money($aRow['total'], ($aRow['currency'] != 0 ? get_currency($aRow['currency']) : $baseCurrency));
+            $amount = e(app_format_money($aRow['total'], ($aRow['currency'] != 0 ? get_currency($aRow['currency']) : $baseCurrency)));
 
             if ($aRow['invoice_id']) {
                 $amount .= '<br /> <span class="hide"> - </span><span class="text-success tw-text-sm">' . _l('estimate_invoiced') . '</span>';
@@ -109,18 +109,17 @@ return App_table::find('proposals')
 
             $row[] = $amount;
 
+            $row[] = e(_d($aRow['date']));
 
-            $row[] = _d($aRow['date']);
-
-            $row[] = _d($aRow['open_till']);
+            $row[] = e(_d($aRow['open_till']));
 
             if (!$project_id) {
-                $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '" target="_blank">' . $aRow['project_name'] . '</a>';
+                $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '" target="_blank">' . e($aRow['project_name']) . '</a>';
             }
 
             $row[] = render_tags($aRow['tags']);
 
-            $row[] = _d($aRow['datecreated']);
+            $row[] = e(_d($aRow['datecreated']));
 
             $row[] = format_proposal_status($aRow['proposal_status']);
 

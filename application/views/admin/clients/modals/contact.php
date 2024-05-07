@@ -10,19 +10,20 @@
                 <div class="tw-flex">
                     <div class="tw-mr-4 tw-flex-shrink-0 tw-relative">
                         <?php if (isset($contact)) { ?>
-                        <img src="<?php echo contact_profile_image_url($contact->id, 'small'); ?>" id="contact-img"
+                        <img src="<?php echo e(contact_profile_image_url($contact->id, 'small')); ?>
+" id="contact-img"
                             class="client-profile-image-small">
                         <?php if (!empty($contact->profile_image)) { ?>
-                        <a href="#" onclick="delete_contact_profile_image(<?php echo $contact->id; ?>); return false;"
+                        <a href="#" onclick="delete_contact_profile_image(<?php echo e($contact->id); ?>); return false;"
                             class="tw-bg-neutral-500/30 tw-text-neutral-600 hover:tw-text-neutral-500 tw-h-8 tw-w-8 tw-inline-flex tw-items-center tw-justify-center tw-rounded-full tw-absolute tw-inset-0"
                             id="contact-remove-img"><i class="fa fa-remove tw-mt-1"></i></a>
                         <?php } ?>
                         <?php } ?>
                     </div>
                     <div>
-                        <h4 class="modal-title tw-mb-0"><?php echo $title; ?></h4>
+                        <h4 class="modal-title tw-mb-0"><?php echo e($title); ?></h4>
                         <p class="tw-mb-0">
-                            <?php echo get_company_name($customer_id, true); ?>
+                            <?php echo e(get_company_name($customer_id, true)); ?>
                         </p>
                     </div>
                 </div>
@@ -43,7 +44,7 @@
                             <?php echo _l('proposal_warning_email_change', [_l('contact_lowercase'), _l('contact_lowercase'), _l('contact_lowercase')]); ?>
                             <hr />
                             <a href="#" id="contact_update_proposals_emails" data-original-email=""
-                                onclick="update_all_proposal_emails_linked_to_contact(<?php echo $contact->id; ?>); return false;"><?php echo _l('update_proposal_email_yes'); ?></a>
+                                onclick="update_all_proposal_emails_linked_to_contact(<?php echo e($contact->id); ?>); return false;"><?php echo _l('update_proposal_email_yes'); ?></a>
                             <br />
                             <a href="#"
                                 onclick="close_modal_manually('#contact'); return false;"><?php echo _l('update_proposal_email_no'); ?></a>
@@ -116,7 +117,7 @@
                             </p>
                             <?php if ($contact->last_password_change != null) {
                             echo _l('client_password_last_changed');
-                            echo '<span class="text-has-action" data-toggle="tooltip" data-title="' . _dt($contact->last_password_change) . '"> ' . time_ago($contact->last_password_change) . '</span>';
+                            echo '<span class="text-has-action" data-toggle="tooltip" data-title="' . e(_dt($contact->last_password_change)) . '"> ' . e(time_ago($contact->last_password_change)) . '</span>';
                         }
                     } ?>
                         </div>
@@ -160,15 +161,15 @@
                         <div class="col-md-6 row">
                             <div class="row">
                                 <div class="col-md-6 mtop10 border-right">
-                                    <span><?php echo $permission['name']; ?></span>
+                                    <span><?php echo e($permission['name']); ?></span>
                                 </div>
                                 <div class="col-md-6 mtop10">
                                     <div class="onoffswitch">
-                                        <input type="checkbox" id="<?php echo $permission['id']; ?>"
+                                        <input type="checkbox" id="<?php echo e($permission['id']); ?>"
                                             class="onoffswitch-checkbox" <?php if (isset($contact) && has_contact_permission($permission['short_name'], $contact->id) || is_array($default_contact_permissions) && in_array($permission['id'], $default_contact_permissions)) {
                     echo 'checked';
-                } ?> value="<?php echo $permission['id']; ?>" name="permissions[]">
-                                        <label class="onoffswitch-label" for="<?php echo $permission['id']; ?>"></label>
+                } ?> value="<?php echo e($permission['id']); ?>" name="permissions[]">
+                                        <label class="onoffswitch-label" for="<?php echo e($permission['id']); ?>"></label>
                                     </div>
                                 </div>
                             </div>

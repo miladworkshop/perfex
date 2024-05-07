@@ -60,14 +60,14 @@
                         }
                     } ?>
                             <li>
-                                <a href="<?php echo $url; ?>" <?php echo $href_attributes; ?>
+                                <a href="<?php echo e($url); ?>" <?php echo $href_attributes; ?>
                                     class="tw-group tw-inline-flex tw-space-x-0.5 tw-text-neutral-700">
                                     <?php if (isset($item['icon'])) { ?>
                                     <i
-                                        class="<?php echo $item['icon']; ?> tw-text-neutral-400 group-hover:tw-text-neutral-600 tw-h-5 tw-w-5"></i>
+                                        class="<?php echo e($item['icon']); ?> tw-text-neutral-400 group-hover:tw-text-neutral-600 tw-h-5 tw-w-5"></i>
                                     <?php } ?>
                                     <span>
-                                        <?php echo $item['name']; ?>
+                                        <?php echo e($item['name']); ?>
                                     </span>
                                 </a>
                             </li>
@@ -167,12 +167,12 @@
 
                         <span
                             class="tw-leading-none tw-px-1 tw-py-0.5 tw-text-xs bg-warning tw-z-10 tw-absolute tw-rounded-full tw-right-1 tw-top-2.5 tw-min-w-[18px] tw-min-h-[18px] tw-inline-flex tw-items-center tw-justify-center nav-total-todos<?php echo $current_user->total_unfinished_todos == 0 ? ' hide' : ''; ?>">
-                            <?php echo $current_user->total_unfinished_todos; ?>
+                            <?php echo e($current_user->total_unfinished_todos); ?>
                         </span>
                     </a>
                 </li>
 
-                <li class="icon header-user-profile" data-toggle="tooltip" title="<?php echo get_staff_full_name(); ?>"
+                <li class="icon header-user-profile" data-toggle="tooltip" title="<?php echo e(get_staff_full_name()); ?>"
                     data-placement="bottom">
                     <a href="#" class="dropdown-toggle profile tw-block rtl:!tw-px-0.5 !tw-py-1" data-toggle="dropdown"
                         aria-expanded="false">
@@ -200,7 +200,7 @@
                                 <li
                                     class="<?php echo $current_user->default_language == $user_lang ? 'active' : ''; ?>">
                                     <a href="<?php echo admin_url('staff/change_language/' . $user_lang); ?>">
-                                        <?php echo ucfirst($user_lang); ?>
+                                        <?php echo e(ucfirst($user_lang)); ?>
                                     </a>
                                     <?php } ?>
                             </ul>

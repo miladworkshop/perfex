@@ -26,7 +26,7 @@
                             <span class="tw-text-neutral-500">
                                 <?php echo _l('home_upcoming_events_next_week'); ?>:
                             </span> <span class="text-neutral-900">
-                                <?php echo $upcoming_events_next_week; ?>
+                                <?php echo e($upcoming_events_next_week); ?>
                             </span>
                         </span>
                     </p>
@@ -43,12 +43,12 @@
                             <div class="tw-flex-auto">
                                 <h3
                                     class="tw-pr-10 tw-m-0 tw-text-base tw-font-semibold tw-text-neutral-900 xl:tw-pr-0">
-                                    <a href="#" onclick="view_event(<?php echo $event['eventid']; ?>); return false;">
-                                        <?php echo $event['title']; ?>
+                                    <a href="#" onclick="view_event(<?php echo e($event['eventid']); ?>); return false;">
+                                        <?php echo e($event['title']); ?>
                                     </a>
                                 </h3>
 
-                                <p class="text-muted no-margin"><?php echo $event['description']; ?></p>
+                                <?php echo process_text_content_for_display($event['description']); ?>
 
                                 <dl class="tw-mt-2 tw-flex tw-flex-col tw-text-neutral-500 xl:tw-flex-row">
                                     <div class="tw-flex tw-items-center tw-space-x-3">
@@ -62,8 +62,8 @@
                                             </svg>
                                         </dt>
                                         <dd>
-                                            <time datetime="<?php echo $event['start']; ?>">
-                                                <?php echo _dt($event['start']); ?>
+                                            <time datetime="<?php echo e($event['start']); ?>">
+                                                <?php echo e($event['start']); ?>
                                             </time>
                                         </dd>
                                     </div>
@@ -79,7 +79,7 @@
                                     <div
                                         class="tw-mt-2 tw-flex tw-items-start tw-space-x-3 xl:tw-mt-0 xl:tw-ml-3.5 xl:tw-border-solid xl:tw-border-l xl:tw-border-neutral-400 xl:tw-border-opacity-50 xl:tw-pl-3.5">
                                         <span class="tw-text-neutral-500">
-                                            <?php echo _l('home_event_added_by'); ?><?php echo get_staff_full_name($event['userid']); ?>
+                                            <?php echo _l('home_event_added_by'); ?><?php echo e(get_staff_full_name($event['userid'])); ?>
                                         </span>
                                     </div>
                                     <?php } ?>

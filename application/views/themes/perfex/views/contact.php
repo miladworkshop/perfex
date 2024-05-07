@@ -19,10 +19,11 @@
         <div class="row">
             <div class="col-md-12">
                 <?php if (isset($my_contact)) { ?>
-                <img src="<?php echo contact_profile_image_url($my_contact->id, 'thumb'); ?>" id="contact-img"
+                <img src="<?php echo e(contact_profile_image_url($my_contact->id, 'thumb')); ?>
+" id="contact-img"
                     class="client-profile-image-thumb">
                 <?php if (!empty($my_contact->profile_image)) { ?>
-                <a href="#" onclick="delete_contact_profile_image(<?php echo $my_contact->id; ?>); return false;"
+                <a href="#" onclick="delete_contact_profile_image(<?php echo e($my_contact->id); ?>); return false;"
                     class="text-danger pull-right" id="contact-remove-img"><i class="fa fa-remove"></i></a>
                 <?php } ?>
                 <hr />
@@ -107,7 +108,7 @@
                 </p>
                 <?php if ($my_contact->last_password_change != null) {
                        echo _l('client_password_last_changed');
-                       echo '<span class="text-has-action" data-toggle="tooltip" data-title="' . _dt($my_contact->last_password_change) . '"> ' . time_ago($my_contact->last_password_change) . '</span>';
+                       echo '<span class="text-has-action" data-toggle="tooltip" data-title="' . e(_dt($my_contact->last_password_change)) . '"> ' . e(time_ago($my_contact->last_password_change)) . '</span>';
                    }
                } ?>
             </div>

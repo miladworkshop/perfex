@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700">
-                    <?php echo $title; ?>
+                    <?php echo e($title); ?>
                 </h4>
                 <?php echo form_open($this->uri->uri_string()); ?>
                 <div class="panel_s">
@@ -17,7 +17,7 @@
                                 data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                                 <option value=""></option>
                                 <?php foreach ($bulk_pdf_export_available_features as $feature) { ?>
-                                <option value="<?php echo $feature['feature']; ?>"><?php echo $feature['name']; ?>
+                                <option value="<?php echo e($feature['feature']); ?>"><?php echo e($feature['name']); ?>
                                 </option>
                                 <?php } ?>
                             </select>
@@ -34,7 +34,7 @@
                             <?php foreach ($estimate_statuses as $status) { ?>
                             <div class="radio radio-primary">
                                 <input type="radio" id="<?php echo format_estimate_status($status, '', false); ?>"
-                                    value="<?php echo $status; ?>" name="estimates_export_status">
+                                    value="<?php echo e($status); ?>" name="estimates_export_status">
                                 <label
                                     for="<?php echo format_estimate_status($status, '', false); ?>"><?php echo format_estimate_status($status, '', false); ?></label>
                             </div>
@@ -49,10 +49,10 @@
                             </div>
                             <?php foreach ($credit_notes_statuses as $status) { ?>
                             <div class="radio radio-primary">
-                                <input type="radio" id="credit_note_<?php echo $status['id']; ?>"
-                                    value="<?php echo $status['id']; ?>" name="credit_notes_export_status">
+                                <input type="radio" id="credit_note_<?php echo e($status['id']); ?>"
+                                    value="<?php echo e($status['id']); ?>" name="credit_notes_export_status">
                                 <label
-                                    for="credit_note_<?php echo $status['id']; ?>"><?php echo $status['name']; ?></label>
+                                    for="credit_note_<?php echo e($status['id']); ?>"><?php echo e($status['name']); ?></label>
                             </div>
                             <?php } ?>
                         </div>
@@ -66,7 +66,7 @@
                             <div class="radio radio-primary">
                                 <input type="radio"
                                     id="invoice_<?php echo format_invoice_status($status, '', false); ?>"
-                                    value="<?php echo $status; ?>" name="invoices_export_status">
+                                    value="<?php echo e($status); ?>" name="invoices_export_status">
                                 <label
                                     for="invoice_<?php echo format_invoice_status($status, '', false); ?>"><?php echo format_invoice_status($status, '', false); ?></label>
                             </div>
@@ -89,7 +89,7 @@
         continue;
     } ?>
                             <div class="radio radio-primary">
-                                <input type="radio" value="<?php echo $status; ?>" name="proposals_export_status"
+                                <input type="radio" value="<?php echo e($status); ?>" name="proposals_export_status"
                                     id="proposal_<?php echo format_proposal_status($status, '', false); ?>">
                                 <label
                                     for="proposal_<?php echo format_proposal_status($status, '', false); ?>"><?php echo format_proposal_status($status, '', false); ?></label>

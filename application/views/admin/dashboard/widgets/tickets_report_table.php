@@ -17,17 +17,15 @@
     <?php foreach ($tickets_report as $staff) { ?>
         <tr>
             <td>
-                <a href="<?php
-                echo admin_url("staff/member/$staff->staffid"); ?>">
-                    <?php
-                    echo "$staff->firstname $staff->lastname"; ?>
+                <a href="<?php echo admin_url("staff/member/$staff->staffid"); ?>">
+                    <?php echo e("$staff->firstname $staff->lastname"); ?>
                 </a>
             </td>
-            <td><?php echo $staff->total_assigned; ?></td>
-            <td><?php echo $staff->total_open_tickets; ?></td>
-            <td><?php echo $staff->total_closed_tickets; ?></td>
-            <td><?php echo $staff->total_replies; ?></td>
-            <td><?php echo $staff->average_reply_time; ?></td>
+            <td><?php echo e($staff->total_assigned); ?></td>
+            <td><?php echo e($staff->total_open_tickets); ?></td>
+            <td><?php echo e($staff->total_closed_tickets); ?></td>
+            <td><?php echo e($staff->total_replies); ?></td>
+            <td><?php echo e($staff->average_reply_time); ?></td>
         </tr>
     <?php } ?>
     </tbody>

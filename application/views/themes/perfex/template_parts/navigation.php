@@ -17,15 +17,15 @@
             <ul class="nav navbar-nav navbar-right">
                 <?php hooks()->do_action('customers_navigation_start'); ?>
                 <?php foreach ($menu as $item_id => $item) { ?>
-                <li class="customers-nav-item-<?php echo $item_id; ?><?php echo $item['href'] === current_full_url() ? ' active' : ''; ?>"
+                <li class="customers-nav-item-<?php echo e($item_id); ?><?php echo $item['href'] === current_full_url() ? ' active' : ''; ?>"
                     <?php echo _attributes_to_string(isset($item['li_attributes']) ? $item['li_attributes'] : []); ?>>
-                    <a href="<?php echo $item['href']; ?>"
+                    <a href="<?php echo e($item['href']); ?>"
                         <?php echo _attributes_to_string(isset($item['href_attributes']) ? $item['href_attributes'] : []); ?>>
                         <?php
                      if (!empty($item['icon'])) {
                          echo '<i class="' . $item['icon'] . '"></i> ';
                      }
-                     echo $item['name'];
+                     echo e($item['name']);
                      ?>
                     </a>
                 </li>
@@ -35,8 +35,9 @@
                 <li class="dropdown customers-nav-item-profile">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                         aria-expanded="false">
-                        <img src="<?php echo contact_profile_image_url($contact->id, 'thumb'); ?>" data-toggle="tooltip"
-                            data-title="<?php echo html_escape($contact->firstname . ' ' . $contact->lastname); ?>"
+                        <img src="<?php echo e(contact_profile_image_url($contact->id, 'thumb')); ?>
+" data-toggle="tooltip"
+                            data-title="<?php echo e($contact->firstname . ' ' . $contact->lastname); ?>"
                             data-placement="bottom" class="client-profile-image-small">
                     </a>
                     <ul class="dropdown-menu animated fadeIn">
@@ -77,7 +78,7 @@
                             <a href="<?php echo site_url('clients/announcements'); ?>">
                                 <?php echo _l('announcements'); ?>
                                 <?php if ($total_undismissed_announcements != 0) { ?>
-                                <span class="badge"><?php echo $total_undismissed_announcements; ?></span>
+                                <span class="badge"><?php echo e($total_undismissed_announcements); ?></span>
                                 <?php } ?>
                             </a>
                         </li>
@@ -100,7 +101,7 @@
                              echo 'class="active"';
                          } ?>>
                                     <a href="<?php echo site_url('clients/change_language/' . $user_lang); ?>">
-                                        <?php echo ucfirst($user_lang); ?>
+                                        <?php echo e(ucfirst($user_lang)); ?>
                                     </a>
                                 </li>
                                 <?php } ?>

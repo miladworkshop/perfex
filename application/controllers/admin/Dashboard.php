@@ -10,7 +10,7 @@ class Dashboard extends AdminController
         $this->load->model('dashboard_model');
     }
 
-    /* This is admin dashboard view */
+    // This is admin dashboard view
     public function index()
     {
         close_setup_menu();
@@ -71,7 +71,7 @@ class Dashboard extends AdminController
 
         $data['user_dashboard_visibility'] = get_staff_meta(get_staff_user_id(), 'dashboard_widgets_visibility');
 
-        if (!$data['user_dashboard_visibility']) {
+        if (! $data['user_dashboard_visibility']) {
             $data['user_dashboard_visibility'] = [];
         } else {
             $data['user_dashboard_visibility'] = unserialize($data['user_dashboard_visibility']);
@@ -80,34 +80,36 @@ class Dashboard extends AdminController
 
         $data['tickets_report'] = [];
         if (is_admin()) {
-            $data['tickets_report'] = (new \app\services\TicketsReportByStaff())->filterBy('this_month');
+            $data['tickets_report'] = (new app\services\TicketsReportByStaff())->filterBy('this_month');
         }
 
         $data = hooks()->apply_filters('before_dashboard_render', $data);
         $this->load->view('admin/dashboard/dashboard', $data);
     }
 
-    /* Chart weekly payments statistics on home page / ajax */
+    // Chart weekly payments statistics on home page / ajax
     public function weekly_payments_statistics($currency)
     {
         if ($this->input->is_ajax_request()) {
             echo json_encode($this->dashboard_model->get_weekly_payments_statistics($currency));
-            die();
+
+            exit();
         }
     }
 
-    /* Chart monthly payments statistics on home page / ajax */
+    // Chart monthly payments statistics on home page / ajax
     public function monthly_payments_statistics($currency)
     {
         if ($this->input->is_ajax_request()) {
             echo json_encode($this->dashboard_model->get_monthly_payments_statistics($currency));
-            die();
+
+            exit();
         }
     }
 
     public function ticket_widget($type)
     {
-        $data['tickets_report'] = (new \app\services\TicketsReportByStaff())->filterBy($type);
+        $data['tickets_report'] = (new app\services\TicketsReportByStaff())->filterBy($type);
         $this->load->view('admin/dashboard/widgets/tickets_report_table', $data);
     }
 }

@@ -222,7 +222,7 @@ class Leads extends AdminController
         $this->session->set_userdata([
             'leads_kanban_view' => $set,
         ]);
-        redirect($_SERVER['HTTP_REFERER']);
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     public function export($id)
@@ -1345,7 +1345,7 @@ class Leads extends AdminController
         $files = $this->leads_model->get_lead_attachments($lead_id);
 
         if (count($files) == 0) {
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
         }
 
         $path = get_upload_path_by_type('lead') . $lead_id;

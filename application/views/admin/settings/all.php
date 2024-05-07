@@ -27,11 +27,11 @@
                     <?php
 $i = 0;
 foreach ($tabs as $group) { ?>
-                    <li class="settings-group-<?php echo $group['slug']; ?><?php echo ($i === 0) ? ' active' : '' ?>">
+                    <li class="settings-group-<?php echo e($group['slug']); ?><?php echo ($i === 0) ? ' active' : '' ?>">
                         <a href="<?php echo admin_url('settings?group=' . $group['slug']); ?>"
-                            data-group="<?php echo $group['slug']; ?>">
+                            data-group="<?php echo e($group['slug']); ?>">
                             <i class="<?php echo $group['icon'] ?: 'fa-regular fa-circle-question'; ?> menu-icon"></i>
-                            <?php echo $group['name']; ?>
+                            <?php echo e($group['name']); ?>
 
                             <?php if (isset($group['badge'], $group['badge']['value']) && !empty($group['badge'])) {?>
                             <span
@@ -82,7 +82,7 @@ foreach ($tabs as $group) { ?>
             </div>
             <div class="col-md-9">
                 <h4 class="tw-font-semibold tw-mt-0 tw-text-neutral-800">
-                    <?php echo $tab['name']; ?>
+                    <?php echo e($tab['name']); ?>
                 </h4>
                 <div class="panel_s">
                     <div class="panel-body">
@@ -102,7 +102,7 @@ foreach ($tabs as $group) { ?>
 <?php init_tail(); ?>
 <script>
 $(function() {
-    var slug = "<?php echo $tab['slug']; ?>";
+    var slug = "<?php echo e($tab['slug']); ?>";
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
         var settingsForm = $('#settings-form');
 

@@ -12,7 +12,7 @@
     foreach ($payment_gateways as $gateway) {
         ?>
             <li role="presentation">
-                <a href="#online_payments_<?php echo $gateway['id']; ?>_tab" aria-controls="online_payments_paypal_tab"
+                <a href="#online_payments_<?php echo e($gateway['id']); ?>_tab" aria-controls="online_payments_paypal_tab"
                     role="tab" data-toggle="tab">
                     <?php echo $gateway['instance']->getName(); ?>
                 </a>
@@ -33,7 +33,7 @@
     <?php
   foreach ($payment_gateways as $gateway) {
       ?>
-    <div role="tabpanel" class="tab-pane" id="online_payments_<?php echo $gateway['id']; ?>_tab">
+    <div role="tabpanel" class="tab-pane" id="online_payments_<?php echo e($gateway['id']); ?>_tab">
         <h4><?php echo $gateway['instance']->getName(); ?></h4>
         <?php hooks()->do_action('before_render_payment_gateway_settings', $gateway); ?>
         <hr />

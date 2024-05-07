@@ -7,7 +7,7 @@
                 <div class="panel_s">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <?php echo $title; ?>
+                            <?php echo e($title); ?>
                         </h4>
                     </div>
                     <div class="panel-body">
@@ -16,7 +16,7 @@
     foreach ($survey->questions as $question) {  ?>
                         <div class="mbot20">
                             <?php if ($question['boxtype'] == 'checkbox' || $question['boxtype'] == 'radio') { ?>
-                            <h4 class="bold no-mbot"><?php echo $question['question']; ?></h4>
+                            <h4 class="bold no-mbot"><?php echo e($question['question']); ?></h4>
                             <hr />
                             <?php $x = 0;
                                 foreach ($question['box_descriptions'] as $box_description) { ?>
@@ -24,15 +24,15 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-8">
-                                            <span class="bold"><?php echo $box_description['description']; ?></span>
+                                            <span class="bold"><?php echo e($box_description['description']); ?></span>
                                         </div>
                                         <div class="col-md-4 text-right">
                                             <?php
                                                 $total_box_description_answers = total_rows(db_prefix() . 'form_results', ['rel_id' => $survey->surveyid, 'boxdescriptionid' => $box_description['questionboxdescriptionid'], 'rel_type' => 'survey']);
                                                 $total_box_answers             = total_rows(db_prefix() . 'form_results', ['rel_id' => $survey->surveyid, 'boxid' => $box_description['boxid'], 'rel_type' => 'survey']);
                                                 ?>
-                                            <?php echo $total_box_description_answers; ?> /
-                                            <?php echo $total_box_answers; ?>
+                                            <?php echo e($total_box_description_answers); ?> /
+                                            <?php echo e($total_box_answers); ?>
                                         </div>
                                     </div>
                                 </div>
@@ -43,8 +43,8 @@
                                     <div class="progress">
                                         <div class="progress-bar progress-bar-info progress-bar-striped"
                                             role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
-                                            style="width: 0%" data-percent="<?php echo $percent; ?>">
-                                            <?php echo $percent; ?>%
+                                            style="width: 0%" data-percent="<?php echo e($percent); ?>">
+                                            <?php echo e($percent); ?>%
                                         </div>
                                     </div>
                                 </div>
@@ -74,20 +74,20 @@
                         <?php
                             $original_questions = $text_questions;
                             foreach ($text_questions as $question) { ?>
-                        <h4 class="bold no-mbot"><?php echo $question['question']; ?></h4>
-                        <a href="#questionid_<?php echo $question['questionid']; ?>"
+                        <h4 class="bold no-mbot"><?php echo e($question['question']); ?></h4>
+                        <a href="#questionid_<?php echo e($question['questionid']); ?>"
                             data-toggle="modal"><?php echo _l('survey_view_all_answers'); ?></a>
                         <?php
                             $answers = surveys_get_text_question_answers($question['questionid'], $question['rel_id']);
                             ?>
-                        <div class="modal fade" id="questionid_<?php echo $question['questionid']; ?>" tabindex="-1"
+                        <div class="modal fade" id="questionid_<?php echo e($question['questionid']); ?>" tabindex="-1"
                             role="dialog" aria-labelledby="myModalLabel">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal"
                                             aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title" id="myModalLabel"><?php echo $question['question']; ?>
+                                        <h4 class="modal-title" id="myModalLabel"><?php echo e($question['question']); ?>
                                         </h4>
                                     </div>
                                     <div class="modal-body">

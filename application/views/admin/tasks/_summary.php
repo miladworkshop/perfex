@@ -15,14 +15,14 @@
     <div class="col-md-2 col-xs-6 md:tw-border-r md:tw-border-solid md:tw-border-neutral-300 last:tw-border-r-0">
         <div class="tw-flex tw-items-center">
             <span class="tw-font-semibold tw-mr-3 rtl:tw-ml-3 tw-text-lg">
-                <?php echo $summary['total_tasks']; ?>
+                <?php echo e($summary['total_tasks']); ?>
             </span>
-            <span style="color:<?php echo $summary['color']; ?>">
-                <?php echo $summary['name']; ?>
+            <span style="color:<?php echo e($summary['color']); ?>">
+                <?php echo e($summary['name']); ?>
             </span>
         </div>
         <p class="tw-text-sm tw-mb-0 tw-text-neutral-600">
-            <?php echo _l('tasks_view_assigned_to_user'); ?>: <?php echo $summary['total_my_tasks']; ?>
+            <?php echo _l('tasks_view_assigned_to_user'); ?>: <?php echo e($summary['total_my_tasks']); ?>
         </p>
     </div>
     <?php } ?>

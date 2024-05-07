@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <div class="panel_s mtop25">
     <div class="panel-body">
-        <h4 class="pull-left"><?php echo $lead->name; ?><br /><small><?php echo get_option('companyname'); ?></small>
+        <h4 class="pull-left"><?php echo e($lead->name); ?><br /><small><?php echo e(get_option('companyname')); ?></small>
         </h4>
         <?php if (get_option('gdpr_data_portability_leads') == '1') { ?>
         <?php echo form_open($this->uri->uri_string()); ?>
@@ -52,8 +52,8 @@
         if ($lead->default_language == $availableLanguage) {
             $selected = 'selected';
         } ?>
-                        <option value="<?php echo $availableLanguage; ?>" <?php echo $selected; ?>>
-                            <?php echo ucfirst($availableLanguage); ?></option>
+                        <option value="<?php echo e($availableLanguage); ?>" <?php echo e($selected); ?>>
+                            <?php echo e(ucfirst($availableLanguage)); ?></option>
                         <?php
     } ?>
                     </select>

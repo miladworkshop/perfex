@@ -13,7 +13,7 @@
                 <h4
                     class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700 tw-flex tw-items-center tw-space-x-2">
                     <span>
-                        <?php echo isset($credit_note) ? format_credit_note_number($credit_note->id) : _l('new_credit_note'); ?>
+                        <?php echo e(isset($credit_note) ? format_credit_note_number($credit_note->id) : _l('new_credit_note')); ?>
                     </span>
                     <?php echo isset($credit_note) ? format_credit_note_status($credit_note->status) : ''; ?>
                 </h4>
@@ -51,7 +51,7 @@
                                             data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                                             <?php
         if (isset($credit_note) && $credit_note->project_id) {
-            echo '<option value="' . $credit_note->project_id . '" selected>' . get_project_name_by_id($credit_note->project_id) . '</option>';
+            echo '<option value="' . $credit_note->project_id . '" selected>' . e(get_project_name_by_id($credit_note->project_id)) . '</option>';
         }
        ?>
                                         </select>
@@ -71,24 +71,24 @@
                                             <span class="billing_street">
                                                 <?php $billing_street = (isset($credit_note) ? $credit_note->billing_street : '--'); ?>
                                                 <?php $billing_street = ($billing_street == '' ? '--' :$billing_street); ?>
-                                                <?php echo $billing_street; ?></span><br>
+                                                <?php echo process_text_content_for_display($billing_street); ?></span><br>
                                             <span class="billing_city">
                                                 <?php $billing_city = (isset($credit_note) ? $credit_note->billing_city : '--'); ?>
                                                 <?php $billing_city = ($billing_city == '' ? '--' :$billing_city); ?>
-                                                <?php echo $billing_city; ?></span>,
+                                                <?php echo e($billing_city); ?></span>,
                                             <span class="billing_state">
                                                 <?php $billing_state = (isset($credit_note) ? $credit_note->billing_state : '--'); ?>
                                                 <?php $billing_state = ($billing_state == '' ? '--' :$billing_state); ?>
-                                                <?php echo $billing_state; ?></span>
+                                                <?php echo e($billing_state); ?></span>
                                             <br />
                                             <span class="billing_country">
                                                 <?php $billing_country = (isset($credit_note) ? get_country_short_name($credit_note->billing_country) : '--'); ?>
                                                 <?php $billing_country = ($billing_country == '' ? '--' :$billing_country); ?>
-                                                <?php echo $billing_country; ?></span>,
+                                                <?php echo e($billing_country); ?></span>,
                                             <span class="billing_zip">
                                                 <?php $billing_zip = (isset($credit_note) ? $credit_note->billing_zip : '--'); ?>
                                                 <?php $billing_zip = ($billing_zip == '' ? '--' :$billing_zip); ?>
-                                                <?php echo $billing_zip; ?></span>
+                                                <?php echo e($billing_zip); ?></span>
                                         </address>
                                     </div>
                                     <div class="col-md-6">
@@ -97,24 +97,24 @@
                                             <span class="shipping_street">
                                                 <?php $shipping_street = (isset($credit_note) ? $credit_note->shipping_street : '--'); ?>
                                                 <?php $shipping_street = ($shipping_street == '' ? '--' :$shipping_street); ?>
-                                                <?php echo $shipping_street; ?></span><br>
+                                                <?php echo process_text_content_for_display($shipping_street); ?></span><br>
                                             <span class="shipping_city">
                                                 <?php $shipping_city = (isset($credit_note) ? $credit_note->shipping_city : '--'); ?>
                                                 <?php $shipping_city = ($shipping_city == '' ? '--' :$shipping_city); ?>
-                                                <?php echo $shipping_city; ?></span>,
+                                                <?php echo e($shipping_city); ?></span>,
                                             <span class="shipping_state">
                                                 <?php $shipping_state = (isset($credit_note) ? $credit_note->shipping_state : '--'); ?>
                                                 <?php $shipping_state = ($shipping_state == '' ? '--' :$shipping_state); ?>
-                                                <?php echo $shipping_state; ?></span>
+                                                <?php echo e($shipping_state); ?></span>
                                             <br />
                                             <span class="shipping_country">
                                                 <?php $shipping_country = (isset($credit_note) ? get_country_short_name($credit_note->shipping_country) : '--'); ?>
                                                 <?php $shipping_country = ($shipping_country == '' ? '--' :$shipping_country); ?>
-                                                <?php echo $shipping_country; ?></span>,
+                                                <?php echo e($shipping_country); ?></span>,
                                             <span class="shipping_zip">
                                                 <?php $shipping_zip = (isset($credit_note) ? $credit_note->shipping_zip : '--'); ?>
                                                 <?php $shipping_zip = ($shipping_zip == '' ? '--' :$shipping_zip); ?>
-                                                <?php echo $shipping_zip; ?></span>
+                                                <?php echo e($shipping_zip); ?></span>
                                         </address>
                                     </div>
                                 </div>
@@ -180,25 +180,25 @@
                                                     <?php if (isset($credit_note)) { ?>
                                                     <a href="#" onclick="return false;" data-toggle="popover"
                                                         data-container='._transaction_form' data-html="true"
-                                                        data-content="<label class='control-label'><?php echo _l('credit_note_prefix'); ?></label><div class='input-group'><input name='s_prefix' type='text' class='form-control' value='<?php echo $credit_note->prefix; ?>'></div><button type='button' onclick='save_sales_number_settings(this); return false;' data-url='<?php echo admin_url('credit_notes/update_number_settings/' . $credit_note->id); ?>' class='btn btn-primary btn-block mtop15'><?php echo _l('submit'); ?></button>"><i
+                                                        data-content="<label class='control-label'><?php echo _l('credit_note_prefix'); ?></label><div class='input-group'><input name='s_prefix' type='text' class='form-control' value='<?php echo e($credit_note->prefix); ?>'></div><button type='button' onclick='save_sales_number_settings(this); return false;' data-url='<?php echo admin_url('credit_notes/update_number_settings/' . $credit_note->id); ?>' class='btn btn-primary btn-block mtop15'><?php echo _l('submit'); ?></button>"><i
                                                             class="fa fa-cog"></i></a>
                                                     <?php } ?>
-                                                    <?php echo $prefix; ?></span>
+                                                    <?php echo e($prefix); ?></span>
                                                 <input type="text" name="number" class="form-control"
-                                                    value="<?php echo $_credit_note_number; ?>"
-                                                    data-isedit="<?php echo $isedit; ?>"
-                                                    data-original-number="<?php echo $data_original_number; ?>">
+                                                    value="<?php echo e($_credit_note_number); ?>"
+                                                    data-isedit="<?php echo e($isedit); ?>"
+                                                    data-original-number="<?php echo e($data_original_number); ?>">
                                                 <?php if ($format == 3) { ?>
                                                 <span class="input-group-addon">
-                                                    <span id="prefix_year" class="format-n-yy"><?php echo $yy; ?></span>
+                                                    <span id="prefix_year" class="format-n-yy"><?php echo e($yy); ?></span>
                                                 </span>
                                                 <?php } elseif ($format == 4) { ?>
                                                 <span class="input-group-addon">
                                                     <span id="prefix_month"
-                                                        class="format-mm-yyyy"><?php echo $mm; ?></span>
+                                                        class="format-mm-yyyy"><?php echo e($mm); ?></span>
                                                     /
                                                     <span id="prefix_year"
-                                                        class="format-mm-yyyy"><?php echo $yyyy; ?></span>
+                                                        class="format-mm-yyyy"><?php echo e($yyyy); ?></span>
                                                 </span>
                                                 <?php } ?>
                                             </div>
@@ -317,7 +317,7 @@
                                         <?php
     $custom_fields = get_custom_fields('items');
     foreach ($custom_fields as $cf) {
-        echo '<th width="15%" align="left" class="custom_field">' . $cf['name'] . '</th>';
+        echo '<th width="15%" align="left" class="custom_field">' . e($cf['name']) . '</th>';
     }
    $qty_heading = _l('credit_note_table_quantity_heading');
    if (isset($credit_note) && $credit_note->show_quantity_as == 2 || isset($hours_quantity)) {
@@ -326,7 +326,7 @@
        $qty_heading = _l('credit_note_table_quantity_heading') . '/' . _l('credit_note_table_hours_heading');
    }
   ?>
-                                        <th width="10%" class="qty" align="right"><?php echo $qty_heading; ?></th>
+                                        <th width="10%" class="qty" align="right"><?php echo e($qty_heading); ?></th>
                                         <th width="15%" align="right">
                                             <?php echo _l('credit_note_table_rate_heading'); ?></th>
                                         <th width="20%" align="right"><?php echo _l('credit_note_table_tax_heading'); ?>
@@ -385,7 +385,7 @@
  }
 ?>
                                             <button type="button"
-                                                onclick="add_item_to_table('undefined','undefined',<?php echo $new_item; ?>); return false;"
+                                                onclick="add_item_to_table('undefined','undefined',<?php echo e($new_item); ?>); return false;"
                                                 class="btn btn-primary pull-right "><i class="fa fa-check"></i></button>
                                         </td>
                                     </tr>

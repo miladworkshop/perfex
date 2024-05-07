@@ -97,17 +97,17 @@ class Other_merge_fields extends App_merge_fields
 
         $logo_width = hooks()->apply_filters('merge_field_logo_img_width', '');
 
-        $fields['{logo_image_with_url}'] = '<a href="' . site_url() . '" target="_blank"><img src="' . base_url('uploads/company/' . get_option('company_logo')) . '"' . ($logo_width != '' ? ' width="' . $logo_width . '"' : '') . '></a>';
+        $fields['{logo_image_with_url}'] = '<a href="' . site_url() . '" target="_blank"><img src="' . base_url('uploads/company/' . get_option('company_logo')) . '"' . ($logo_width != '' ? ' width="' . e($logo_width) . '"' : '') . '></a>';
 
         $fields['{dark_logo_image_with_url}'] = '';
         if (get_option('company_logo_dark') != '') {
-            $fields['{dark_logo_image_with_url}'] = '<a href="' . site_url() . '" target="_blank"><img src="' . base_url('uploads/company/' . get_option('company_logo_dark')) . '"' . ($logo_width != '' ? ' width="' . $logo_width . '"' : '') . '></a>';
+            $fields['{dark_logo_image_with_url}'] = '<a href="' . site_url() . '" target="_blank"><img src="' . base_url('uploads/company/' . get_option('company_logo_dark')) . '"' . ($logo_width != '' ? ' width="' . e($logo_width) . '"' : '') . '></a>';
         }
 
         $fields['{crm_url}']     = rtrim(site_url(), '/');
         $fields['{admin_url}']   = admin_url();
-        $fields['{main_domain}'] = get_option('main_domain');
-        $fields['{companyname}'] = get_option('companyname');
+        $fields['{main_domain}'] = e(get_option('main_domain'));
+        $fields['{companyname}'] = e(get_option('companyname'));
 
         if (!is_staff_logged_in() || is_client_logged_in()) {
             $fields['{email_signature}'] = get_option('email_signature');

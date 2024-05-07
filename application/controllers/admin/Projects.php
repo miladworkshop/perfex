@@ -500,14 +500,14 @@ class Projects extends AdminController
     public function pin_action($project_id)
     {
         $this->projects_model->pin_action($project_id);
-        redirect($_SERVER['HTTP_REFERER']);
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     public function add_edit_members($project_id)
     {
         if (staff_can('edit', 'projects')) {
             $this->projects_model->add_edit_members($this->input->post(), $project_id);
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
         }
     }
 
@@ -812,7 +812,7 @@ class Projects extends AdminController
                     continue;
                 }
             }
-            $data .= '<option value="' . $staff['assigneeid'] . '"' . $selected . '>' . get_staff_full_name($staff['assigneeid']) . '</option>';
+            $data .= '<option value="' . $staff['assigneeid'] . '"' . $selected . '>' . e(get_staff_full_name($staff['assigneeid'])) . '</option>';
         }
         echo $data;
     }
@@ -846,11 +846,7 @@ class Projects extends AdminController
             $success = $this->projects_model->delete($project_id);
             if ($success) {
                 set_alert('success', _l('deleted', _l('project')));
-                if (strpos($_SERVER['HTTP_REFERER'], 'clients/') !== false) {
-                    redirect($_SERVER['HTTP_REFERER']);
-                } else {
-                    redirect(admin_url('projects'));
-                }
+                redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
             } else {
                 set_alert('warning', _l('problem_deleting', _l('project_lowercase')));
                 redirect(admin_url('projects/view/' . $project_id));

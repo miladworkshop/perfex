@@ -377,15 +377,18 @@ class Authentication_model extends App_Model
         $password = app_hash_password($password);
         $table    = db_prefix() . 'contacts';
         $_id      = 'id';
+
         if ($staff == true) {
             $table = db_prefix() . 'staff';
             $_id   = 'staffid';
         }
+
         $this->db->where($_id, $userid);
         $this->db->where('new_pass_key', $new_pass_key);
         $this->db->update($table, [
             'password' => $password,
         ]);
+        
         if ($this->db->affected_rows() > 0) {
             log_activity('User Set Password [User ID: ' . $userid . ', Is Staff Member: ' . ($staff == true ? 'Yes' : 'No') . ', IP: ' . $this->input->ip_address() . ']');
             $this->db->set('new_pass_key', null);
@@ -440,13 +443,12 @@ class Authentication_model extends App_Model
             $this->db->where($_id, $userid);
             $user = $this->db->get($table)->row();
 
-            $merge_fields = [];
             if ($staff == false) {
                 $sent = send_mail_template('customer_contact_password_resetted', $user->email, $user->userid, $user->$_id);
             } else {
                 $sent = send_mail_template('staff_password_resetted', $user->email, $user->$_id);
             }
-
+            
             if ($sent) {
                 return true;
             }

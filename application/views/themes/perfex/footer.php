@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-md-12 text-center">
                 <span class="copyright-footer"><?php echo date('Y'); ?>
-                    <?php echo _l('clients_copyright', get_option('companyname')); ?>
+                    <?php echo e(_l('clients_copyright', get_option('companyname'))); ?>
                 </span>
                 <?php if (is_gdpr() && get_option('gdpr_show_terms_and_conditions_in_footer') == '1') { ?>
                 - <a href="<?php echo terms_url(); ?>" class="terms-and-conditions-footer">

@@ -45,9 +45,9 @@
                                 data-title="<?php echo _l('task_status'); ?>">
                                 <option value="" selected><?php echo _l('task_list_all'); ?></option>
                                 <?php foreach ($task_statuses as $status) { ?>
-                                <option value="<?php echo $status['id']; ?>" <?php if ($this->input->post('status') == $status['id']) {
+                                <option value="<?php echo e($status['id']); ?>" <?php if ($this->input->post('status') == $status['id']) {
                                echo 'selected';
-                           } ?>><?php echo $status['name']; ?></option>
+                           } ?>><?php echo e($status['name']); ?></option>
                                 <?php } ?>
                             </select>
                         </div>
@@ -55,9 +55,9 @@
                     <div class="col-md-2 border-right select-placeholder">
                         <select name="year" id="year" class="selectpicker no-margin" data-width="100%">
                             <?php foreach ($years as $data) { ?>
-                            <option value="<?php echo $data['year']; ?>" <?php if ($this->input->post('year') == $data['year'] || date('Y') == $data['year']) {
+                            <option value="<?php echo e($data['year']); ?>" <?php if ($this->input->post('year') == $data['year'] || date('Y') == $data['year']) {
                                echo 'selected';
-                           } ?>><?php echo $data['year']; ?></option>
+                           } ?>><?php echo e($data['year']); ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -76,10 +76,10 @@
                                } ?>
                         <h4 class="bold tw-mb-6 text-success"><?php echo  _l(date('F', mktime(0, 0, 0, $month, 1))); ?>
                             <?php if ($this->input->get('project_id')) {
-                                   echo ' - ' . get_project_name_by_id($this->input->get('project_id'));
+                                   echo ' - ' . e(get_project_name_by_id($this->input->get('project_id')));
                                } ?>
                             <?php if (is_numeric($staff_id) && staff_can('view',  'tasks')) {
-                                   echo ' (' . get_staff_full_name($staff_id) . ')';
+                                   echo ' (' . e(get_staff_full_name($staff_id)) . ')';
                                } ?>
                         </h4>
                         <table class="table tasks-overview dt-table">
@@ -103,42 +103,45 @@
                                 <tr>
                                     <td data-order="<?php echo htmlentities($task['name']); ?>"><a
                                             href="<?php echo admin_url('tasks/view/' . $task['id']); ?>"
-                                            onclick="init_task_modal(<?php echo $task['id']; ?>); return false;"><?php echo $task['name']; ?></a>
-                                        <?php
-                                 if (!empty($task['rel_id'])) {
-                                     echo '<br />' . _l('task_related_to') . ': <a class="text-muted" href="' . task_rel_link($task['rel_id'], $task['rel_type']) . '">' . task_rel_name($task['rel_name'], $task['rel_id'], $task['rel_type']) . '</a>';
-                                 }
+                                            onclick="init_task_modal(<?php echo e($task['id']); ?>); return false;">
+                                            <?php echo e($task['name']); ?>
+                                </a>
+                                <?php
+                                    if (!empty($task['rel_id'])) {
+                                        echo '<br />' . _l('task_related_to') . ': <a class="text-muted" href="' . e(task_rel_link($task['rel_id'], $task['rel_type'])) . '">' . e(task_rel_name($task['rel_name'], $task['rel_id'], $task['rel_type'])) . '</a>';
+                                    }
                                  ?>
                                     </td>
-                                    <td data-order="<?php echo $task['startdate']; ?>">
-                                        <?php echo _d($task['startdate']); ?></td>
-                                    <td data-order="<?php echo $task['duedate']; ?>"><?php echo _d($task['duedate']); ?>
+                                    <td data-order="<?php echo e($task['startdate']); ?>">
+                                        <?php echo e(_d($task['startdate'])); ?></td>
+                                    <td data-order="<?php echo e($task['duedate']); ?>">
+                                        <?php echo e(_d($task['duedate'])); ?>
                                     </td>
                                     <td><?php echo format_task_status($task['status']); ?></td>
-                                    <td data-order="<?php echo $task['total_files']; ?>">
+                                    <td data-order="<?php echo e($task['total_files']); ?>">
                                         <span class="label label-default" data-toggle="tooltip"
                                             data-title="<?php echo _l('tasks_total_added_attachments'); ?>">
-                                            <i class="fa fa-paperclip"></i>
+                                            <i class="fa fa-paperclip tw-mr-1"></i>
                                             <?php
-                                 if (!is_numeric($staff_id)) {
-                                     echo $task['total_files'];
-                                 } else {
-                                     echo $task['total_files_staff'] . '/' . $task['total_files'];
-                                 }
-                              ?>
+                                                if (!is_numeric($staff_id)) {
+                                                    echo e($task['total_files']);
+                                                } else {
+                                                    echo e($task['total_files_staff'] . '/' . $task['total_files']);
+                                                }
+                                            ?>
                                         </span>
                                     </td>
-                                    <td data-order="<?php echo $task['total_comments']; ?>">
+                                    <td data-order="<?php echo e($task['total_comments']); ?>">
                                         <span class="label label-default" data-toggle="tooltip"
                                             data-title="<?php echo _l('tasks_total_comments'); ?>">
-                                            <i class="fa-regular fa-comments"></i>
+                                            <i class="fa-regular fa-comments tw-mr-1"></i>
                                             <?php
-                                 if (!is_numeric($staff_id)) {
-                                     echo $task['total_comments'];
-                                 } else {
-                                     echo $task['total_comments_staff'] . '/' . $task['total_comments'];
-                                 }
-                              ?>
+                                                if (!is_numeric($staff_id)) {
+                                                    echo e($task['total_comments']);
+                                                } else {
+                                                    echo e($task['total_comments_staff']) . '/' . e($task['total_comments']);
+                                                }
+                                            ?>
                                         </span>
                                     </td>
                                     <td>
@@ -150,14 +153,14 @@
                                   echo 'label-success';
                               } ?> pull-left mright5" data-toggle="tooltip"
                                             data-title="<?php echo _l('tasks_total_checklists_finished'); ?>">
-                                            <?php echo $task['total_finished_checklist_items']; ?>/<?php echo $task['total_checklist_items']; ?>
+                                            <?php echo e($task['total_finished_checklist_items']); ?>/<?php echo e($task['total_checklist_items']); ?>
                                         </span>
                                     </td>
-                                    <td data-order="<?php echo $task['total_logged_time']; ?>">
+                                    <td data-order="<?php echo e($task['total_logged_time']); ?>">
                                         <span class="label label-default pull-left mright5" data-toggle="tooltip"
                                             data-title="<?php echo _l('staff_stats_total_logged_time'); ?>">
-                                            <i class="fa-regular fa-clock"></i>
-                                            <?php echo seconds_to_time_format($task['total_logged_time']); ?>
+                                            <i class="fa-regular fa-clock tw-mr-1"></i>
+                                            <?php echo e(seconds_to_time_format($task['total_logged_time'])); ?>
                                         </span>
                                     </td>
                                     <?php
@@ -174,23 +177,22 @@
                                   $finished_showcase      = '';
                               }
                               ?>
-                                    <td data-order="<?php echo $finishedOrder; ?>">
-                                        <span class="<?php echo $finished_on_time_class; ?>">
-                                            <?php echo $finished_showcase; ?>
+                                    <td data-order="<?php echo e($finishedOrder); ?>">
+                                        <span class="<?php echo e($finished_on_time_class); ?>">
+                                            <?php echo e($finished_showcase); ?>
                                         </span>
                                     </td>
                                     <td>
                                         <?php
-                                 echo format_members_by_ids_and_names($task['assignees_ids'], $task['assignees']);
-                                 ?>
+                                            echo format_members_by_ids_and_names($task['assignees_ids'], $task['assignees']);
+                                        ?>
                                     </td>
                                 </tr>
                                 <?php } ?>
                             </tbody>
                         </table>
                         <hr />
-                        <?php
-                           } ?>
+                        <?php } ?>
                     </div>
                 </div>
             </div>

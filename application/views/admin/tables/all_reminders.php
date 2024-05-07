@@ -60,13 +60,12 @@ foreach ($rResult as $aRow) {
         }
 
         if ($aColumns[$i] == db_prefix() . 'reminders.date') {
-            $_data = _dt($_data);
+            $_data = e(_dt($_data));
         } elseif ($i == 0) {
             // rel type name
             $rel_data   = get_relation_data($aRow['rel_type'], $aRow['rel_id']);
             $rel_values = get_relation_values($rel_data, $aRow['rel_type']);
-            $_data      = '<a href="' . $rel_values['link'] . '">' . $rel_values['name'] . '</a>';
-
+            $_data      = '<a href="' . $rel_values['link'] . '">' . e($rel_values['name']) . '</a>';
 
             if ($aRow['creator'] == get_staff_user_id() || is_admin()) {
                 $_data .= '<div class="row-options">';
@@ -76,12 +75,16 @@ foreach ($rResult as $aRow) {
                 $_data .= '<a href="' . admin_url('misc/delete_reminder/' . $aRow['rel_id'] . '/' . $aRow['id'] . '/' . $aRow['rel_type']) . '" class="text-danger delete-reminder">' . _l('delete') . '</a>';
                 $_data .= '</div>';
             }
+        } elseif ($i == 1) {
+            $_data = process_text_content_for_display($aRow[db_prefix().'reminders.description']);
         } elseif ($aColumns[$i] == 'isnotified') {
             if ($_data == 1) {
                 $_data = _l('reminder_is_notified_boolean_yes');
             } else {
                 $_data = _l('reminder_is_notified_boolean_no');
             }
+        } else {
+            $_data = e($_data);
         }
 
         $row[] = $_data;

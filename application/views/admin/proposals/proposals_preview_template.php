@@ -53,19 +53,19 @@
                     </li>
                     <li role="presentation" class="tab-separator">
                         <a href="#tab_tasks"
-                            onclick="init_rel_tasks_table(<?php echo $proposal->id; ?>,'proposal'); return false;"
+                            onclick="init_rel_tasks_table(<?php echo e($proposal->id); ?>,'proposal'); return false;"
                             aria-controls="tab_tasks" role="tab" data-toggle="tab">
                             <?php echo _l('tasks'); ?>
                         </a>
                     </li>
                     <li role="presentation" class="tab-separator">
                         <a href="#tab_notes"
-                            onclick="get_sales_notes(<?php echo $proposal->id; ?>,'proposals'); return false"
+                            onclick="get_sales_notes(<?php echo e($proposal->id); ?>,'proposals'); return false"
                             aria-controls="tab_notes" role="tab" data-toggle="tab">
                             <?php echo _l('estimate_notes'); ?>
                             <span class="notes-total">
                                 <?php if ($totalNotes > 0) { ?>
-                                <span class="badge"><?php echo $totalNotes; ?></span>
+                                <span class="badge"><?php echo e($totalNotes); ?></span>
                                 <?php } ?>
                             </span>
                         </a>
@@ -188,7 +188,7 @@
                                     if ($proposal->status != $status) { ?>
                         <li>
                             <a
-                                href="<?php echo admin_url() . 'proposals/mark_action_status/' . $status . '/' . $proposal->id; ?>"><?php echo _l('proposal_mark_as', format_proposal_status($status, '', false)); ?></a>
+                                href="<?php echo admin_url() . 'proposals/mark_action_status/' . $status . '/' . $proposal->id; ?>"><?php echo e(_l('proposal_mark_as', format_proposal_status($status, '', false))); ?></a>
                         </li>
                         <?php
                      }
@@ -257,9 +257,9 @@
                 <?php } ?>
                 <?php } else {
                          if ($proposal->estimate_id != null) {
-                             echo '<a href="' . admin_url('estimates/list_estimates/' . $proposal->estimate_id) . '" class="btn btn-primary">' . format_estimate_number($proposal->estimate_id) . '</a>';
+                             echo '<a href="' . admin_url('estimates/list_estimates/' . $proposal->estimate_id) . '" class="btn btn-primary">' . e(format_estimate_number($proposal->estimate_id)) . '</a>';
                          } else {
-                             echo '<a href="' . admin_url('invoices/list_invoices/' . $proposal->invoice_id) . '" class="btn btn-primary">' . format_invoice_number($proposal->invoice_id) . '</a>';
+                             echo '<a href="' . admin_url('invoices/list_invoices/' . $proposal->invoice_id) . '" class="btn btn-primary">' . e(format_invoice_number($proposal->invoice_id)) . '</a>';
                          }
                      } ?>
             </div>
@@ -297,17 +297,17 @@
                                     <?php
                               $tags = get_tags_in($proposal->id, 'proposal');
                               if (count($tags) > 0) {
-                                  echo '<i class="fa fa-tag" aria-hidden="true" data-toggle="tooltip" data-title="' . html_escape(implode(', ', $tags)) . '"></i>';
+                                  echo '<i class="fa fa-tag" aria-hidden="true" data-toggle="tooltip" data-title="' . e(implode(', ', $tags)) . '"></i>';
                               }
                               ?>
                                     <a href="<?php echo admin_url('proposals/proposal/' . $proposal->id); ?>">
                                         <span id="proposal-number">
-                                            <?php echo format_proposal_number($proposal->id); ?>
+                                            <?php echo e(format_proposal_number($proposal->id)); ?>
                                         </span>
                                     </a>
                                 </h4>
                                 <h5 class="bold mbot15 font-medium"><a
-                                        href="<?php echo admin_url('proposals/proposal/' . $proposal->id); ?>"><?php echo $proposal->subject; ?></a>
+                                        href="<?php echo admin_url('proposals/proposal/' . $proposal->id); ?>"><?php echo e($proposal->subject); ?></a>
                                 </h5>
                                 <address class="tw-text-neutral-500">
                                     <?php echo format_organization_info(); ?>
@@ -330,14 +330,14 @@
                          if (!empty($attachment['external'])) {
                              $attachment_url = $attachment['external_link'];
                          } ?>
-                        <div class="mbot15 row" data-attachment-id="<?php echo $attachment['id']; ?>">
+                        <div class="mbot15 row" data-attachment-id="<?php echo e($attachment['id']); ?>">
                             <div class="col-md-8">
                                 <div class="pull-left"><i
                                         class="<?php echo get_mime_class($attachment['filetype']); ?>"></i></div>
-                                <a href="<?php echo $attachment_url; ?>"
-                                    target="_blank"><?php echo $attachment['file_name']; ?></a>
+                                <a href="<?php echo e($attachment_url); ?>"
+                                    target="_blank"><?php echo e($attachment['file_name']); ?></a>
                                 <br />
-                                <small class="text-muted"> <?php echo $attachment['filetype']; ?></small>
+                                <small class="text-muted"> <?php echo e($attachment['filetype']); ?></small>
                             </div>
                             <div class="col-md-4 text-right">
                                 <?php if ($attachment['visible_to_customer'] == 0) {
@@ -348,12 +348,12 @@
                              $tooltip = _l('hide_from_customer');
                          } ?>
                                 <a href="#" data-toggle="tooltip"
-                                    onclick="toggle_file_visibility(<?php echo $attachment['id']; ?>,<?php echo $proposal->id; ?>,this); return false;"
-                                    data-title="<?php echo $tooltip; ?>"><i class="fa <?php echo $icon; ?>"
+                                    onclick="toggle_file_visibility(<?php echo e($attachment['id']); ?>,<?php echo e($proposal->id); ?>,this); return false;"
+                                    data-title="<?php echo e($tooltip); ?>"><i class="fa <?php echo e($icon); ?>"
                                         aria-hidden="true"></i></a>
                                 <?php if ($attachment['staffid'] == get_staff_user_id() || is_admin()) { ?>
                                 <a href="#" class="text-danger"
-                                    onclick="delete_proposal_attachment(<?php echo $attachment['id']; ?>); return false;"><i
+                                    onclick="delete_proposal_attachment(<?php echo e($attachment['id']); ?>); return false;"><i
                                         class="fa fa-times"></i></a>
                                 <?php } ?>
                             </div>
@@ -473,7 +473,7 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="tab_reminders">
                         <a href="#" data-toggle="modal" class="btn btn-primary"
-                            data-target=".reminder-modal-proposal-<?php echo $proposal->id; ?>"><i
+                            data-target=".reminder-modal-proposal-<?php echo e($proposal->id); ?>"><i
                                 class="fa-regular fa-bell"></i> <?php echo _l('proposal_set_reminder_title'); ?></a>
                         <hr />
                         <?php render_datatable([ _l('reminder_description'), _l('reminder_date'), _l('reminder_staff'), _l('reminder_is_notified')], 'reminders'); ?>
@@ -510,6 +510,6 @@ init_selectpicker();
 init_form_reminder();
 init_tabs_scrollable();
 // defined in manage proposals
-proposal_id = '<?php echo $proposal->id; ?>';
+proposal_id = '<?php echo e($proposal->id); ?>';
 init_proposal_editor();
 </script>

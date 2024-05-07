@@ -8,9 +8,9 @@ if (sizeof($_announcements) > 0 && isset($dashboard) && is_staff_member()) { ?>
             <div class="text-info alert-dismissible" role="alert">
                 <h4 class="no-margin pull-left">
                     <?php echo _l('announcement'); ?>! <?php if ($__announcement['showname'] == 1) {
-    echo '<br /><small class="font-medium-xs">' . _l('announcement_from') . ' ' . $__announcement['userid'];
+    echo '<br /><small class="font-medium-xs">' . e(_l('announcement_from') . ' ' . $__announcement['userid']);
 } ?></small><br />
-                    <small><?php echo _l('announcement_date', _dt($__announcement['dateadded'])); ?></small>
+                    <small><?php echo e(_l('announcement_date', _dt($__announcement['dateadded']))); ?></small>
                 </h4>
                 <a href="<?php echo admin_url('misc/dismiss_announcement/' . $__announcement['announcementid']); ?>"
                     class="close">
@@ -24,7 +24,7 @@ if (sizeof($_announcements) > 0 && isset($dashboard) && is_staff_member()) { ?>
                 <div class="clearfix"></div>
             </div>
             <hr class="hr-panel-separator" />
-            <h4 class="tw-mb-0 tw-mt-5 tw-font-semibold"><?php echo $__announcement['name']; ?></h4>
+            <h4 class="tw-mb-0 tw-mt-5 tw-font-semibold"><?php echo e($__announcement['name']); ?></h4>
             <div class="[&>p:last-child]:tw-mb-0">
                 <?php echo check_for_links($__announcement['message']); ?>
             </div>

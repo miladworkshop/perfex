@@ -16,8 +16,8 @@
             $selected = 'selected';
         }
     } ?>
-            <option value="<?php echo $currency['id']; ?>" <?php echo $selected; ?>
-                data-subtext="<?php echo $currency['name']; ?>"><?php echo $currency['symbol']; ?></option>
+            <option value="<?php echo e($currency['id']); ?>" <?php echo e($selected); ?>
+                data-subtext="<?php echo e($currency['name']); ?>"><?php echo e($currency['symbol']); ?></option>
             <?php
 } ?>
         </select>
@@ -29,10 +29,10 @@
         <select data-none-selected-text="<?php echo date('Y'); ?>" data-width="auto" class="selectpicker tw-w-full"
             multiple name="estimates_total_years" onchange="init_estimates_total();">
             <?php foreach ($estimates_years as $year) { ?>
-            <option value="<?php echo $year['year']; ?>" <?php if ($this->input->post('years') && in_array($year['year'], $this->input->post('years')) || !$this->input->post('years') && date('Y') == $year['year']) {
+            <option value="<?php echo e($year['year']); ?>" <?php if ($this->input->post('years') && in_array($year['year'], $this->input->post('years')) || !$this->input->post('years') && date('Y') == $year['year']) {
           echo ' selected';
       } ?>>
-                <?php echo $year['year']; ?>
+                <?php echo e($year['year']); ?>
             </option>
             <?php } ?>
         </select>
@@ -47,10 +47,10 @@ foreach ($totals as $key => $data) {
           $name  = estimate_status_by_id($data['status']); ?>
     <div class="tw-border tw-border-solid tw-border-neutral-200 tw-rounded-md tw-bg-white">
         <div class="tw-px-4 tw-py-5 sm:tw-px-4 sm:tw-py-2">
-            <dt class="tw-font-medium text-<?php echo $class; ?>"><?php echo $name; ?></dt>
+            <dt class="tw-font-medium text-<?php echo e($class); ?>"><?php echo e($name); ?></dt>
             <dd class="tw-mt-1 tw-flex tw-items-baseline tw-justify-between md:tw-block lg:tw-flex">
                 <div class="tw-flex tw-items-baseline tw-text-base tw-font-semibold tw-text-primary-600">
-                    <?php echo app_format_money($data['total'], $data['currency_name']); ?>
+                    <?php echo e(app_format_money($data['total'], $data['currency_name'])); ?>
                 </div>
             </dd>
         </div>

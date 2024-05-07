@@ -33,7 +33,7 @@ class Notifications_merge_fields extends App_merge_fields
 
         $non_billed_tasks_list = '<ol>';
         foreach ($nonBilledTasks as $task) {
-            $non_billed_tasks_list .= '<li><a href="' . admin_url('tasks/view/' . $task['id']) . '">' . $task['name'] . '</a></li>';
+            $non_billed_tasks_list .= '<li><a href="' . admin_url('tasks/view/' . $task['id']) . '">' . e($task['name']) . '</a></li>';
         }
         $non_billed_tasks_list .= '</ol>';
 

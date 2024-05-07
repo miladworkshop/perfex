@@ -49,6 +49,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/user_guide/general/controllers.html
  * @property-read CI_DB_mysqli_driver $db
+ * @property-read CI_Input $input
+ * @property-read CI_URI $uri
  */
 #[AllowDynamicProperties]
 class CI_Controller {

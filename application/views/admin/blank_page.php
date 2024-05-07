@@ -6,7 +6,7 @@
          <div class="col-md-12">
             <div class="panel_s">
                <div class="panel-body">
-                  Something went wrong...
+                  <?php echo _l('something_went_wrong'); ?>
                </div>
             </div>
          </div>

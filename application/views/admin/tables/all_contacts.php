@@ -58,7 +58,7 @@ $rResult = $result['rResult'];
 foreach ($rResult as $aRow) {
     $row = [];
 
-    $rowName = '<img src="' . contact_profile_image_url($aRow['id']) . '" class="client-profile-image-small mright5"><a href="#" onclick="contact(' . $aRow['userid'] . ',' . $aRow['id'] . ');return false;">' . $aRow['firstname'] . '</a>';
+    $rowName = '<img src="' . e(contact_profile_image_url($aRow['id'])) . '" class="client-profile-image-small mright5"><a href="#" onclick="contact(' . $aRow['userid'] . ',' . $aRow['id'] . ');return false;">' . e($aRow['firstname']) . '</a>';
 
     $rowName .= '<div class="row-options tw-ml-9">';
 
@@ -86,24 +86,24 @@ foreach ($rResult as $aRow) {
         $consentHTML = '<p class="bold"><a href="#" onclick="view_contact_consent(' . $aRow['id'] . '); return false;">' . _l('view_consent') . '</a></p>';
         $consents    = $this->ci->gdpr_model->get_consent_purposes($aRow['id'], 'contact');
         foreach ($consents as $consent) {
-            $consentHTML .= '<p style="margin-bottom:0px;">' . $consent['name'] . (!empty($consent['consent_given']) ? '<i class="fa fa-check text-success pull-right"></i>' : '<i class="fa fa-remove text-danger pull-right"></i>') . '</p>';
+            $consentHTML .= '<p style="margin-bottom:0px;">' . e($consent['name']) . (!empty($consent['consent_given']) ? '<i class="fa fa-check text-success pull-right"></i>' : '<i class="fa fa-remove text-danger pull-right"></i>') . '</p>';
         }
         $row[] = $consentHTML;
     }
 
-    $row[] = '<a href="mailto:' . $aRow['email'] . '">' . $aRow['email'] . '</a>';
+    $row[] = '<a href="mailto:' . e($aRow['email']) . '">' . e($aRow['email']) . '</a>';
 
     if (!empty($aRow['company'])) {
-        $row[] = '<a href="' . admin_url('clients/client/' . $aRow['userid']) . '">' . $aRow['company'] . '</a>';
+        $row[] = '<a href="' . admin_url('clients/client/' . $aRow['userid']) . '">' . e($aRow['company']) . '</a>';
     } else {
         $row[] = '';
     }
 
-    $row[] = '<a href="tel:' . $aRow['phonenumber'] . '">' . $aRow['phonenumber'] . '</a>';
+    $row[] = '<a href="tel:' . e($aRow['phonenumber']) . '">' . e($aRow['phonenumber']) . '</a>';
 
     $row[] = $aRow['title'];
 
-    $row[] = (!empty($aRow['last_login']) ? '<span class="text-has-action is-date" data-toggle="tooltip" data-title="' . _dt($aRow['last_login']) . '">' . time_ago($aRow['last_login']) . '</span>' : '');
+    $row[] = (!empty($aRow['last_login']) ? '<span class="text-has-action is-date" data-toggle="tooltip" data-title="' . e(_dt($aRow['last_login'])) . '">' . e(time_ago($aRow['last_login'])) . '</span>' : '');
 
     $outputActive = '<div class="onoffswitch">
                 <input type="checkbox"' . ($aRow['registration_confirmed'] == 0 ? ' disabled' : '') . ' data-switch-url="' . admin_url() . 'clients/change_contact_status" name="onoffswitch" class="onoffswitch-checkbox" id="c_' . $aRow['id'] . '" data-id="' . $aRow['id'] . '"' . ($aRow['active'] == 1 ? ' checked': '') . '>

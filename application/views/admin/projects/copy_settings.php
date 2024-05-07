@@ -42,10 +42,10 @@
                             <p class="bold"><?php echo _l('copy_project_tasks_status'); ?></p>
                             <?php foreach ($task_statuses as $cp_task_status) { ?>
                                 <div class="radio radio-primary">
-                                    <input type="radio" name="copy_project_task_status" value="<?php echo $cp_task_status['id']; ?>" id="cp_task_status_<?php echo $cp_task_status['id']; ?>"<?php if ($cp_task_status['id'] == '1') {
+                                    <input type="radio" name="copy_project_task_status" value="<?php echo e($cp_task_status['id']); ?>" id="cp_task_status_<?php echo e($cp_task_status['id']); ?>"<?php if ($cp_task_status['id'] == '1') {
     echo ' checked';
 } ?>>
-                                    <label for="cp_task_status_<?php echo $cp_task_status['id']; ?>"><?php echo $cp_task_status['name']; ?></label>
+                                    <label for="cp_task_status_<?php echo e($cp_task_status['id']); ?>"><?php echo e($cp_task_status['name']); ?></label>
                                 </div>
                             <?php } ?>
                             <hr />

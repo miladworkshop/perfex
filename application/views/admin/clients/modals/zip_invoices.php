@@ -19,8 +19,8 @@
                             </div>
                             <?php foreach ($invoice_statuses as $status) { ?>
                                  <div class="radio radio-primary">
-                                <input type="radio" value="<?php echo $status; ?>" id="s_<?php echo $status; ?>" name="invoice_zip_status">
-                                <label for="s_<?php echo $status; ?>"><?php echo format_invoice_status($status, '', false); ?></label>
+                                <input type="radio" value="<?php echo e($status); ?>" id="s_<?php echo e($status); ?>" name="invoice_zip_status">
+                                <label for="s_<?php echo e($status); ?>"><?php echo format_invoice_status($status, '', false); ?></label>
                             </div>
                             <?php } ?>
                         </div>

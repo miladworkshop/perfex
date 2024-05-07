@@ -7,7 +7,7 @@
 
             <div class="col-md-8 col-md-offset-2">
                 <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700">
-                    <?php echo $title; ?>
+                    <?php echo e($title); ?>
                 </h4>
                 <div class="panel_s">
                     <div class="panel-body">
@@ -82,7 +82,7 @@
                     }
                     ?>
                                 <label for=""><?php echo _l('project_progress'); ?> <span
-                                        class="label_progress"><?php echo $value; ?>%</span></label>
+                                        class="label_progress"><?php echo e($value); ?>%</span></label>
                                 <?php echo form_hidden('progress', $value); ?>
                                 <div class="project_progress_slider project_progress_slider_horizontal mbot15"></div>
                                 <div class="row">
@@ -118,9 +118,9 @@
                                             <select name="status" id="status" class="selectpicker" data-width="100%"
                                                 data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                                                 <?php foreach ($statuses as $status) { ?>
-                                                <option value="<?php echo $status['id']; ?>" <?php if (!isset($project) && $status['id'] == 2 || (isset($project) && $project->status == $status['id'])) {
+                                                <option value="<?php echo e($status['id']); ?>" <?php if (!isset($project) && $status['id'] == 2 || (isset($project) && $project->status == $status['id'])) {
                                     echo 'selected';
-                                } ?>><?php echo $status['name']; ?></option>
+                                } ?>><?php echo e($status['name']); ?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -168,7 +168,7 @@
                         $input_field_hide_class_total_cost = 'hide';
                     }
                     ?>
-                                <div id="project_cost" class="<?php echo $input_field_hide_class_total_cost; ?>">
+                                <div id="project_cost" class="<?php echo e($input_field_hide_class_total_cost); ?>">
                                     <?php $value = (isset($project) ? $project->project_cost : ''); ?>
                                     <?php echo render_input('project_cost', 'project_total_cost', $value, 'number'); ?>
                                 </div>
@@ -183,7 +183,7 @@
                     }
                     ?>
                                 <div id="project_rate_per_hour"
-                                    class="<?php echo $input_field_hide_class_rate_per_hour; ?>">
+                                    class="<?php echo e($input_field_hide_class_rate_per_hour); ?>">
                                     <?php $value = (isset($project) ? $project->project_rate_per_hour : ''); ?>
                                     <?php
                         $input_disable = [];
@@ -294,9 +294,9 @@
                         ['id' => 0 , 'name' => _l('project_do_not_send_contacts_notifications')],
                     ];
                     foreach ($options as $option) { ?>
-                                            <option value="<?php echo $option['id']; ?>" <?php if ((isset($project) && $project->contact_notification == $option['id'])) {
+                                            <option value="<?php echo e($option['id']); ?>" <?php if ((isset($project) && $project->contact_notification == $option['id'])) {
                         echo ' selected';
-                    } ?>><?php echo $option['name']; ?></option>
+                    } ?>><?php echo e($option['name']); ?></option>
                                             <?php } ?>
                                         </select>
                                     </div>
@@ -341,26 +341,26 @@
                         } ?>
                                     <?php if ($setting != 'available_features') { ?>
                                     <div class="checkbox">
-                                        <input type="checkbox" name="settings[<?php echo $setting; ?>]"
-                                            <?php echo $checked; ?> id="<?php echo $setting; ?>">
-                                        <label for="<?php echo $setting; ?>">
+                                        <input type="checkbox" name="settings[<?php echo e($setting); ?>]"
+                                            <?php echo e($checked); ?> id="<?php echo e($setting); ?>">
+                                        <label for="<?php echo e($setting); ?>">
                                             <?php if ($setting == 'hide_tasks_on_main_tasks_table') { ?>
                                             <?php echo _l('hide_tasks_on_main_tasks_table'); ?>
                                             <?php } else { ?>
-                                            <?php echo _l('project_allow_client_to', _l('project_setting_' . $setting)); ?>
+                                            <?php echo e(_l('project_allow_client_to', _l('project_setting_' . $setting))); ?>
                                             <?php } ?>
                                         </label>
                                     </div>
                                     <?php } else { ?>
                                     <div class="form-group mtop15 select-placeholder project-available-features">
                                         <label for="available_features"><?php echo _l('visible_tabs'); ?></label>
-                                        <select name="settings[<?php echo $setting; ?>][]" id="<?php echo $setting; ?>"
+                                        <select name="settings[<?php echo e($setting); ?>][]" id="<?php echo e($setting); ?>"
                                             multiple="true" class="selectpicker" id="available_features"
                                             data-width="100%" data-actions-box="true" data-hide-disabled="true">
                                             <?php foreach (get_project_tabs_admin() as $tab) {
                             $selected = '';
                             if (isset($tab['collapse'])) { ?>
-                                            <optgroup label="<?php echo $tab['name']; ?>">
+                                            <optgroup label="<?php echo e($tab['name']); ?>">
                                                 <?php foreach ($tab['children'] as $tab_dropdown) {
                                 $selected = '';
                                 if (isset($project) && (
@@ -381,10 +381,10 @@
                                 } elseif (!isset($project)) {
                                     $selected = ' selected';
                                 } ?>
-                                                <option value="<?php echo $tab_dropdown['slug']; ?>"
-                                                    <?php echo $selected; ?><?php if (isset($tab_dropdown['linked_to_customer_option']) && is_array($tab_dropdown['linked_to_customer_option']) && count($tab_dropdown['linked_to_customer_option']) > 0) { ?>
+                                                <option value="<?php echo e($tab_dropdown['slug']); ?>"
+                                                    <?php echo e($selected); ?><?php if (isset($tab_dropdown['linked_to_customer_option']) && is_array($tab_dropdown['linked_to_customer_option']) && count($tab_dropdown['linked_to_customer_option']) > 0) { ?>
                                                     data-linked-customer-option="<?php echo implode(',', $tab_dropdown['linked_to_customer_option']); ?>"
-                                                    <?php } ?>><?php echo $tab_dropdown['name']; ?></option>
+                                                    <?php } ?>><?php echo e($tab_dropdown['name']); ?></option>
                                                 <?php
                             } ?>
                                             </optgroup>
@@ -407,24 +407,21 @@
                                 } elseif (!isset($project)) {
                                     $selected = ' selected';
                                 } ?>
-                                            <option value="<?php echo $tab['slug']; ?>" <?php if ($tab['slug'] == 'project_overview') {
+                                            <option value="<?php echo e($tab['slug']); ?>" <?php if ($tab['slug'] == 'project_overview') {
                                     echo ' disabled selected';
-                                } ?> <?php echo $selected; ?>
+                                } ?> <?php echo e($selected); ?>
                                                 <?php if (isset($tab['linked_to_customer_option']) && is_array($tab['linked_to_customer_option']) && count($tab['linked_to_customer_option']) > 0) { ?>
                                                 data-linked-customer-option="<?php echo implode(',', $tab['linked_to_customer_option']); ?>"
                                                 <?php } ?>>
-                                                <?php echo $tab['name']; ?>
+                                                <?php echo e($tab['name']); ?>
                                             </option>
-                                            <?php
-                            } ?>
-                                            <?php
-                        } ?>
+                                            <?php } ?>
+                                            <?php } ?>
                                         </select>
                                     </div>
                                     <?php } ?>
                                     <hr class="tw-my-3 -tw-mx-8" />
-                                    <?php
-                    } ?>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
@@ -444,7 +441,7 @@
 <?php init_tail(); ?>
 <script>
 <?php if (isset($project)) { ?>
-var original_project_status = '<?php echo $project->status; ?>';
+var original_project_status = '<?php echo e($project->status); ?>';
 <?php } ?>
 
 $(function() {

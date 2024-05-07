@@ -9,7 +9,7 @@
                 </dt>
                 <dd class="tw-mt-1 tw-flex tw-items-baseline tw-justify-between md:tw-block lg:tw-flex">
                     <div class="tw-flex tw-items-baseline tw-text-base tw-font-semibold tw-text-primary-600">
-                        <?php echo seconds_to_time_format($logged_time['total']); ?>
+                        <?php echo e(seconds_to_time_format($logged_time['total'])); ?>
                     </div>
                 </dd>
             </div>
@@ -22,7 +22,7 @@
                 </dt>
                 <dd class="tw-mt-1 tw-flex tw-items-baseline tw-justify-between md:tw-block lg:tw-flex">
                     <div class="tw-flex tw-items-baseline tw-text-base tw-font-semibold tw-text-primary-600">
-                        <?php echo seconds_to_time_format($logged_time['last_month']); ?>
+                        <?php echo e(seconds_to_time_format($logged_time['last_month'])); ?>
                     </div>
                 </dd>
             </div>
@@ -35,7 +35,7 @@
                 </dt>
                 <dd class="tw-mt-1 tw-flex tw-items-baseline tw-justify-between md:tw-block lg:tw-flex">
                     <div class="tw-flex tw-items-baseline tw-text-base tw-font-semibold tw-text-primary-600">
-                        <?php echo seconds_to_time_format($logged_time['this_month']); ?>
+                        <?php echo e(seconds_to_time_format($logged_time['this_month'])); ?>
                     </div>
                 </dd>
             </div>
@@ -48,7 +48,7 @@
                 </dt>
                 <dd class="tw-mt-1 tw-flex tw-items-baseline tw-justify-between md:tw-block lg:tw-flex">
                     <div class="tw-flex tw-items-baseline tw-text-base tw-font-semibold tw-text-primary-600">
-                        <?php echo seconds_to_time_format($logged_time['last_week']); ?>
+                        <?php echo e(seconds_to_time_format($logged_time['last_week'])); ?>
                     </div>
                 </dd>
             </div>
@@ -61,7 +61,7 @@
                 </dt>
                 <dd class="tw-mt-1 tw-flex tw-items-baseline tw-justify-between md:tw-block lg:tw-flex">
                     <div class="tw-flex tw-items-baseline tw-text-base tw-font-semibold tw-text-primary-600">
-                        <?php echo seconds_to_time_format($logged_time['this_week']); ?>
+                        <?php echo e(seconds_to_time_format($logged_time['this_week'])); ?>
                     </div>
                 </dd>
             </div>

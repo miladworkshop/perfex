@@ -178,9 +178,11 @@ function format_invoice_status($status, $classes = '', $label = true)
     if (!class_exists('Invoices_model', false)) {
         get_instance()->load->model('invoices_model');
     }
-
+    
     $id          = $status;
+    
     $label_class = get_invoice_status_label($status);
+
     if ($status == Invoices_model::STATUS_UNPAID) {
         $status = _l('invoice_status_unpaid');
     } elseif ($status == Invoices_model::STATUS_PAID) {
@@ -195,11 +197,12 @@ function format_invoice_status($status, $classes = '', $label = true)
         // status 6
         $status = _l('invoice_status_draft');
     }
+
     if ($label == true) {
-        return '<span class="label label-' . $label_class . ' ' . $classes . ' s-status invoice-status-' . $id . '">' . $status . '</span>';
+        return '<span class="label label-' . $label_class . ' ' . $classes . ' s-status invoice-status-' . e($id) . '">' . e($status) . '</span>';
     }
 
-    return $status;
+    return e($status);
 }
 /**
  * Return invoice status label class baed on twitter bootstrap classses

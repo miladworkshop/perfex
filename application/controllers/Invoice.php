@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Invoice extends ClientsController
 {
-    public function index($id, $hash)
+    public function index($id = '', $hash = '')
     {
         check_invoice_restrictions($id, $hash);
         $invoice = $this->invoices_model->get($id);

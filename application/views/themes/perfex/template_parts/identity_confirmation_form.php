@@ -18,7 +18,7 @@
         </span>
       </label>
       <div class="col-sm-10">
-       <input type="text" name="acceptance_firstname" id="acceptance_firstname" class="form-control" required="true" value="<?php echo (isset($contact) ? $contact->firstname : '') ?>">
+       <input type="text" name="acceptance_firstname" id="acceptance_firstname" class="form-control" required="true" value="<?php echo (isset($contact) ? e($contact->firstname) : '') ?>">
      </div>
    </div>
    <div class="form-group">
@@ -28,7 +28,7 @@
       </span>
     </label>
     <div class="col-sm-10">
-     <input type="text" name="acceptance_lastname" id="acceptance_lastname" class="form-control" required="true" value="<?php echo (isset($contact) ? $contact->lastname : '') ?>">
+     <input type="text" name="acceptance_lastname" id="acceptance_lastname" class="form-control" required="true" value="<?php echo (isset($contact) ? e($contact->lastname) : '') ?>">
    </div>
  </div>
  <div class="form-group">
@@ -38,7 +38,7 @@
     </span>
   </label>
   <div class="col-sm-10">
-   <input type="email" name="acceptance_email" id="acceptance_email" class="form-control" required="true" value="<?php echo (isset($contact) ? $contact->email : '') ?>">
+   <input type="email" name="acceptance_email" id="acceptance_email" class="form-control" required="true" value="<?php echo (isset($contact) ? e($contact->email) : '') ?>">
  </div>
 </div>
 <p class="bold" id="signatureLabel"><?php echo _l('signature'); ?></p>

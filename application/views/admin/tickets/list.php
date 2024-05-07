@@ -11,7 +11,7 @@
                         <i class="fa-regular fa-plus tw-mr-1"></i>
                         <?php echo _l('new_ticket'); ?>
                     </a>
-             
+
                     <a href="#" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" data-placement="bottom"
                         data-title="<?php echo _l('tickets_chart_weekly_opening_stats'); ?>"
                         onclick="slideToggle('.weekly-ticket-opening', init_tickets_weekly_chart); return false;">
@@ -80,7 +80,7 @@
                     <input type="checkbox" name="merge_tickets" id="merge_tickets">
                     <label for="merge_tickets"><?php echo _l('merge_tickets'); ?></label>
                 </div>
-                <?php if (is_admin()) { ?>
+                <?php if (can_staff_delete_ticket()) { ?>
                 <div class="checkbox checkbox-danger mass_delete_checkbox">
                     <input type="checkbox" name="mass_delete" id="mass_delete">
                     <label for="mass_delete"><?php echo _l('mass_delete'); ?></label>
@@ -119,7 +119,7 @@
                             data-width="100%" data-live-search="true"
                             data-none-selected-text="<?php echo _l('dropdown_non_selected_tex') ?>" required>
                             <?php foreach ($statuses as $status) { ?>
-                            <option value="<?php echo $status['ticketstatusid']; ?>"><?php echo $status['name']; ?>
+                            <option value="<?php echo e($status['ticketstatusid']); ?>"><?php echo e($status['name']); ?>
                             </option>
                             <?php } ?>
                         </select>

@@ -24,7 +24,7 @@
                     <?php
                      $custom_fields = get_custom_fields('projects', ['show_on_client_portal' => 1]);
                      foreach ($custom_fields as $field) { ?>
-                    <th><?php echo $field['name']; ?></th>
+                    <th><?php echo e($field['name']); ?></th>
                     <?php } ?>
                     <th><?php echo _l('project_status'); ?></th>
                 </tr>
@@ -33,11 +33,11 @@
                 <?php foreach ($projects as $project) { ?>
                 <tr>
                     <td><a
-                            href="<?php echo site_url('clients/project/' . $project['id']); ?>"><?php echo $project['name']; ?></a>
+                            href="<?php echo site_url('clients/project/' . $project['id']); ?>"><?php echo e($project['name']); ?></a>
                     </td>
-                    <td data-order="<?php echo $project['start_date']; ?>"><?php echo _d($project['start_date']); ?>
+                    <td data-order="<?php echo e($project['start_date']); ?>"><?php echo e(_d($project['start_date'])); ?>
                     </td>
-                    <td data-order="<?php echo $project['deadline']; ?>"><?php echo _d($project['deadline']); ?></td>
+                    <td data-order="<?php echo e($project['deadline']); ?>"><?php echo e(_d($project['deadline'])); ?></td>
                     <td>
                         <?php
                         if ($project['billing_type'] == 1) {
@@ -56,7 +56,7 @@
                     <td>
                         <?php
                         $status = get_project_status_by_id($project['status']);
-                        echo '<span class="label project-status-' . $status['id'] . ' tw-ml-3" style="color:' . $status['color'] . ';border:1px solid ' . adjust_hex_brightness($status['color'], 0.4) . ';background: ' . adjust_hex_brightness($status['color'], 0.04) . ';">' . $status['name'] . '</span>';
+                        echo '<span class="label project-status-' . $status['id'] . ' tw-ml-3" style="color:' . $status['color'] . ';border:1px solid ' . adjust_hex_brightness($status['color'], 0.4) . ';background: ' . adjust_hex_brightness($status['color'], 0.04) . ';">' . e($status['name']) . '</span>';
                         ?>
                     </td>
                 </tr>

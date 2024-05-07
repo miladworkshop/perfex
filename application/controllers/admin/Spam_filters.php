@@ -34,11 +34,11 @@ class Spam_filters extends AdminController
                 $row = [];
                 for ($i = 0; $i < count($aColumns); $i++) {
                     $_data = $aRow[$aColumns[$i]];
-                    $row[] = $_data;
+                    $row[] = e($_data);
                 }
 
                 $options = '<div class="tw-flex tw-items-center tw-space-x-3">';
-                $options .= '<a href="#" class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700" data-type="' . $filter_type . '" data-value="' . $aRow['value'] . '" onclick="edit_spam_filter(this,' . $aRow['id'] . '); return false;">
+                $options .= '<a href="#" class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700" data-type="' . $filter_type . '" data-value="' . e($aRow['value']) . '" onclick="edit_spam_filter(this,' . $aRow['id'] . '); return false;">
                     <i class="fa-regular fa-pen-to-square fa-lg"></i>
                 </a>';
 

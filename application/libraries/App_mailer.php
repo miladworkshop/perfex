@@ -64,6 +64,9 @@ class App_mailer extends CI_Email
 
     protected static $protocols = ['mail', 'sendmail', 'smtp', 'microsoft', 'google'];
 
+    // Codeigniter related
+    protected $_protocols = ['mail', 'sendmail', 'smtp', 'microsoft', 'google'];
+
     protected static $mailtypes = ['html', 'text'];
 
     protected static $encodings_ci = ['8bit', '7bit'];

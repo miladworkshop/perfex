@@ -60,7 +60,7 @@
             <p class="text-danger">Please fix the errors listed below.</p>
             <?php foreach ($update_errors as $error) { ?>
             <div class="alert alert-danger">
-                <?php echo $error; ?>
+                <?php echo e($error); ?>
             </div>
             <?php } ?>
         </div>

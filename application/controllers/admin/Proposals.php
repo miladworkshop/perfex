@@ -224,7 +224,7 @@ class Proposals extends AdminController
             set_alert('danger', _l('sent_expiry_reminder_fail'));
         }
         if ($this->set_proposal_pipeline_autoload($id)) {
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
         } else {
             redirect(admin_url('proposals/list_proposals/' . $id));
         }
@@ -385,7 +385,10 @@ class Proposals extends AdminController
                     'status'     => 3,
                 ]);
                 log_activity('Proposal Converted to Invoice [InvoiceID: ' . $invoice_id . ', ProposalID: ' . $id . ']');
-                hooks()->do_action('proposal_converted_to_invoice', ['proposal_id' => $id, 'invoice_id' => $invoice_id]);
+
+                do_action_deprecated('proposal_converted_to_invoice', ['proposal_id' => $id, 'invoice_id' => $invoice_id], '3.1.6', 'after_proposal_converted_to_invoice');
+                hooks()->do_action('after_proposal_converted_to_invoice', ['proposal_id' => $id, 'invoice_id' => $invoice_id]);
+
                 redirect(admin_url('invoices/invoice/' . $invoice_id));
             } else {
                 set_alert('danger', _l('proposal_converted_to_invoice_fail'));
@@ -528,7 +531,7 @@ class Proposals extends AdminController
             }
 
             if ($this->set_proposal_pipeline_autoload($id)) {
-                redirect($_SERVER['HTTP_REFERER']);
+                redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
             } else {
                 redirect(admin_url('proposals/list_proposals/' . $id));
             }

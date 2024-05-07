@@ -86,9 +86,9 @@ return App_table::find('invoices')
 
             // If is from client area table
             if (is_numeric($clientid) || $project_id) {
-                $numberOutput = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['id']) . '" target="_blank">' . format_invoice_number($aRow['id']) . '</a>';
+                $numberOutput = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['id']) . '" target="_blank">' . e(format_invoice_number($aRow['id'])) . '</a>';
             } else {
-                $numberOutput = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['id']) . '" onclick="init_invoice(' . $aRow['id'] . '); return false;">' . format_invoice_number($aRow['id']) . '</a>';
+                $numberOutput = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['id']) . '" onclick="init_invoice(' . $aRow['id'] . '); return false;">' . e(format_invoice_number($aRow['id'])) . '</a>';
             }
 
             if ($aRow['recurring'] > 0) {
@@ -105,25 +105,25 @@ return App_table::find('invoices')
 
             $row[] = $numberOutput;
 
-            $row[] = app_format_money($aRow['total'], $aRow['currency_name']);
+            $row[] = e(app_format_money($aRow['total'], $aRow['currency_name']));
 
-            $row[] = app_format_money($aRow['total_tax'], $aRow['currency_name']);
+            $row[] = e(app_format_money($aRow['total_tax'], $aRow['currency_name']));
 
-            $row[] = $aRow['year'];
+            $row[] = e($aRow['year']);
 
-            $row[] = _d($aRow['date']);
+            $row[] = e(_d($aRow['date']));
 
             if (empty($aRow['deleted_customer_name'])) {
-                $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . $aRow['company'] . '</a>';
+                $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . e($aRow['company']) . '</a>';
             } else {
-                $row[] = $aRow['deleted_customer_name'];
+                $row[] = e($aRow['deleted_customer_name']);
             }
 
-            $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '">' . $aRow['project_name'] . '</a>';;
+            $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '">' . e($aRow['project_name']) . '</a>';;
 
             $row[] = render_tags($aRow['tags']);
 
-            $row[] = _d($aRow['duedate']);
+            $row[] = e(_d($aRow['duedate']));
 
             $row[] = format_invoice_status($aRow[db_prefix() . 'invoices.status']);
 

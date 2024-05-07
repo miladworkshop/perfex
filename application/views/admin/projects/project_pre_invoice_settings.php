@@ -80,10 +80,10 @@
                                 $not_finished_tasks_found = true;
                             } ?>
                                 <div class="checkbox checkbox-primary mbot15">
-                                    <input type="checkbox" name="tasks[]" value="<?php echo $task['id']; ?>" <?php if ($task['status'] == Tasks_model::STATUS_COMPLETE) {
+                                    <input type="checkbox" name="tasks[]" value="<?php echo e($task['id']); ?>" <?php if ($task['status'] == Tasks_model::STATUS_COMPLETE) {
                                 echo 'checked ';
-                            } ?>id="<?php echo $task['id']; ?>">
-                                    <label class="inline-block full-width" for="<?php echo $task['id']; ?>"><?php echo $task['name']; ?> <?php if (total_rows(db_prefix() . 'taskstimers', ['task_id' => $task['id']]) == 0 && $billing_type != 1) {
+                            } ?>id="<?php echo e($task['id']); ?>">
+                                    <label class="inline-block full-width" for="<?php echo e($task['id']); ?>"><?php echo e($task['name']); ?> <?php if (total_rows(db_prefix() . 'taskstimers', ['task_id' => $task['id']]) == 0 && $billing_type != 1) {
                                 echo '<small class="text-danger">' . _l('project_invoice_task_no_timers_found') . '</small>';
                             }; ?><small class="pull-right valign"><?php echo format_task_status($task['status']); ?></small></label>
                                 </div>
@@ -95,8 +95,8 @@
                                 <p class="text-warning mtop10"><?php echo _l('invoice_project_start_date_tasks_not_passed'); ?></p>
                                 <?php foreach ($not_billable_tasks as $task) { ?>
                                 <div class="checkbox checkbox-primary mbot15">
-                                    <input type="checkbox" name="tasks[]" disabled  value="<?php echo $task['id']; ?>" id="<?php echo $task['id']; ?>">
-                                    <label for="<?php echo $task['id']; ?>"><?php echo $task['name']; ?> <small><?php echo _l('invoice_project_tasks_not_started', _d($task['startdate'])); ?></small></label>
+                                    <input type="checkbox" name="tasks[]" disabled  value="<?php echo e($task['id']); ?>" id="<?php echo e($task['id']); ?>">
+                                    <label for="<?php echo e($task['id']); ?>"><?php echo e($task['name']); ?> <small><?php echo e(_l('invoice_project_tasks_not_started', _d($task['startdate']))); ?></small></label>
                                 </div>
                                 <?php } ?>
                                 <?php } ?>
@@ -131,13 +131,13 @@
                                 $total += ($expense->amount / 100 * $expense->taxrate2);
                             } ?>
                             <div class="checkbox checkbox-primary mbot15 expense-to-bill">
-                             <input type="checkbox" name="expenses[]" checked value="<?php echo $expense->expenseid; ?>" id="expense_<?php echo $expense->expenseid; ?>">
-                             <label for="expense_<?php echo $expense->expenseid; ?>">
-                                <?php echo $expense->category_name; ?>
+                             <input type="checkbox" name="expenses[]" checked value="<?php echo e($expense->expenseid); ?>" id="expense_<?php echo e($expense->expenseid); ?>">
+                             <label for="expense_<?php echo e($expense->expenseid); ?>">
+                                <?php echo e($expense->category_name); ?>
                                 <?php if (!empty($expense->expense_name)) {
-                                echo '(' . $expense->expense_name . ')';
+                                echo '(' . e($expense->expense_name) . ')';
                             } ?>
-                                - <?php echo app_format_money($total, $expense->currency_data); ?>
+                                - <?php echo e(app_format_money($total, $expense->currency_data)); ?>
                             </label>
                         </div>
                         <div class="<?php if (empty($expense->expense_name) && empty($expense->note)) {
@@ -151,16 +151,16 @@
                         <div class="checkbox checkbox-primary checkbox-inline expense-add-note<?php if (empty($expense->expense_name)) {
                                 echo' hide';
                             } ?>">
-                            <input type="checkbox" id="inc_note<?php echo $expense->id; ?>" value="<?php echo $expense->id; ?>" name="expense_inc_note[]">
-                            <label for="inc_note<?php echo $expense->id; ?>"><?php echo _l('expense'); ?> <?php echo _l('expense_add_edit_note'); ?></label>
+                            <input type="checkbox" id="inc_note<?php echo e($expense->id); ?>" value="<?php echo e($expense->id); ?>" name="expense_inc_note[]">
+                            <label for="inc_note<?php echo e($expense->id); ?>"><?php echo _l('expense'); ?> <?php echo _l('expense_add_edit_note'); ?></label>
                         </div>
                         <div class="checkbox checkbox-primary checkbox-inline expense-add-name<?php if (empty($expense->note)) {
                                 echo'  hide';
                             } ?><?php if (empty($expense->expense_name)) {
                                 echo' no-mleft';
                             } ?>">
-                            <input type="checkbox" id="inc_name<?php echo $expense->id; ?>" value="<?php echo $expense->id; ?>" name="expense_inc_name[]">
-                            <label for="inc_name<?php echo $expense->id; ?>"><?php echo _l('expense'); ?> <?php echo _l('expense_name'); ?></label>
+                            <input type="checkbox" id="inc_name<?php echo e($expense->id); ?>" value="<?php echo e($expense->id); ?>" name="expense_inc_name[]">
+                            <label for="inc_name<?php echo e($expense->id); ?>"><?php echo _l('expense'); ?> <?php echo _l('expense_name'); ?></label>
                         </div>
                         </div>
                         <?php if ($i >= 0 && $i != $totalExpenses - 1) { ?>
@@ -195,7 +195,7 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _l('close'); ?></button>
             <?php if (!isset($timers_started)) { ?>
-            <button type="submit" class="btn btn-primary" onclick="invoice_project(<?php echo $project_id; ?>)"><?php echo _l('invoice_project'); ?></button>
+            <button type="submit" class="btn btn-primary" onclick="invoice_project(<?php echo e($project_id); ?>)"><?php echo _l('invoice_project'); ?></button>
             <?php } ?>
         </div>
     </div>

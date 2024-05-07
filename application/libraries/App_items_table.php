@@ -62,7 +62,7 @@ class App_items_table extends App_items_table_template
                     $itemHTML .= '<br />';
                 }
             }
-
+            
             /**
              * Item long description
              */
@@ -82,13 +82,13 @@ class App_items_table extends App_items_table_template
             /**
              * Item quantity
              */
-            $itemHTML .= '<td align="right" width="' . $regularItemWidth . '%">' . floatVal($item['qty']);
+            $itemHTML .= '<td align="right" width="' . $regularItemWidth . '%">' . e(floatVal($item['qty']));
 
             /**
              * Maybe item has added unit?
              */
             if ($item['unit']) {
-                $itemHTML .= ' ' . $item['unit'];
+                $itemHTML .= ' ' . e($item['unit']);
             }
 
             $itemHTML .= '</td>';
@@ -103,7 +103,7 @@ class App_items_table extends App_items_table_template
                 ['item' => $item, 'transaction' => $this->transaction]
             );
 
-            $itemHTML .= '<td align="right" width="' . $regularItemWidth . '%">' . $rate . '</td>';
+            $itemHTML .= '<td align="right" width="' . $regularItemWidth . '%">' . e($rate) . '</td>';
 
             /**
              * Items table taxes HTML custom function because it's too general for all features/options
@@ -123,7 +123,7 @@ class App_items_table extends App_items_table_template
                 $this->exclude_currency()
             );
 
-            $itemHTML .= '<td class="amount" align="right" width="' . $regularItemWidth . '%">' . $item_amount_with_quantity . '</td>';
+            $itemHTML .= '<td class="amount" align="right" width="' . $regularItemWidth . '%">' . e($item_amount_with_quantity) . '</td>';
 
             // Close table row
             $itemHTML .= '</tr>';

@@ -33,8 +33,8 @@
     <?php foreach ($files as $file) {
     $path = get_upload_path_by_type('project') . $project->id . '/' . $file['file_name']; ?>
       <tr>
-       <td data-order="<?php echo $file['file_name']; ?>">
-        <a href="#" onclick="view_project_file(<?php echo $file['id']; ?>,<?php echo $file['project_id']; ?>); return false;">
+       <td data-order="<?php echo e($file['file_name']); ?>">
+        <a href="#" onclick="view_project_file(<?php echo e($file['id']); ?>,<?php echo e($file['project_id']); ?>); return false;">
          <?php if (is_image(PROJECT_ATTACHMENTS_FOLDER . $project->id . '/' . $file['file_name']) || (!empty($file['external']) && !empty($file['thumbnail_link']))) {
         echo '<div class="text-left"><i class="fa fa-spinner fa-spin mtop30"></i></div>';
         echo '<img class="project-file-image img-table-loading" src="#" data-orig="' . project_file_url($file, true) . '" width="100">';
@@ -42,26 +42,28 @@
     }
     echo $file['subject']; ?></a>
       </td>
-      <td data-order="<?php echo $file['filetype']; ?>"><?php echo $file['filetype']; ?></td>
-      <td data-order="<?php echo $file['last_activity']; ?>">
+      <td data-order="<?php echo e($file['filetype']); ?>"><?php echo e($file['filetype']); ?></td>
+      <td data-order="<?php echo e($file['last_activity']); ?>">
         <?php
         if (!is_null($file['last_activity'])) {
-            echo time_ago($file['last_activity']);
+            echo e(time_ago($file['last_activity']));
         } else {
-            echo _l('project_discussion_no_activity');
+            echo e(_l('project_discussion_no_activity'));
         } ?>
       </td>
       <?php $total_file_comments = total_rows(db_prefix() . 'projectdiscussioncomments', ['discussion_id' => $file['id'], 'discussion_type' => 'file']); ?>
-      <td data-order="<?php echo $total_file_comments; ?>">
-        <?php echo $total_file_comments; ?>
+      <td data-order="<?php echo e($total_file_comments); ?>">
+        <?php echo e($total_file_comments); ?>
       </td>
-      <td data-order="<?php echo $file['dateadded']; ?>">
-       <?php echo _dt($file['dateadded']); ?>
+      <td data-order="<?php echo e($file['dateadded']); ?>">
+       <?php echo e(_dt($file['dateadded'])); ?>
      </td>
      <?php if (get_option('allow_contact_to_delete_files') == 1) { ?>
        <td>
         <?php if ($file['contact_id'] == get_contact_user_id()) { ?>
-          <a href="<?php echo site_url('clients/delete_file/' . $file['id'] . '/project'); ?>" class="btn btn-danger btn-icon _delete"><i class="fa fa-remove"></i></a>
+          <a href="<?php echo site_url('clients/delete_file/' . $file['id'] . '/project'); ?>" class="btn btn-danger btn-icon _delete">
+            <i class="fa fa-remove"></i>
+          </a>
         <?php } ?>
       </td>
     <?php } ?>

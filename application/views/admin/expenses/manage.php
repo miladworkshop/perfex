@@ -4,7 +4,6 @@
     <div class="content">
         <div class="row">
             <div class="col-md-12">
-              
                 <div class="tw-mb-2 sm:tw-mb-4">
                     <div class="_buttons">
                         <?php if (staff_can('create',  'expenses')) { ?>
@@ -17,7 +16,6 @@
                             <?php echo _l('import_expenses'); ?>
                         </a>
                         <?php } ?>
-                        
                         <div id="vueApp" class="tw-inline pull-right tw-ml-0 sm:tw-ml-1.5">
                             <app-filters 
                                 id="<?php echo $table->id(); ?>" 

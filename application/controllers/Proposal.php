@@ -2,9 +2,13 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
+/**
+ * @property-read Proposals_model $proposals_model;
+ * @property-read Invoices_model $invoices_model;
+ */
 class Proposal extends ClientsController
 {
-    public function index($id, $hash)
+    public function index($id = '', $hash = '')
     {
         check_proposal_restrictions($id, $hash);
         $proposal = $this->proposals_model->get($id);
@@ -52,9 +56,15 @@ class Proposal extends ClientsController
                     $success = $this->proposals_model->mark_action_status(3, $id, true);
                     if ($success) {
                         process_digital_signature_image($this->input->post('signature', false), PROPOSAL_ATTACHMENTS_FOLDER . $id);
-
                         $this->db->where('id', $id);
                         $this->db->update(db_prefix().'proposals', get_acceptance_info_array());
+
+                        $proposal = $this->proposals_model->get($id);
+                        if ($proposal->invoice_id) {
+                            $invoice = $this->invoices_model->get($proposal->invoice_id);
+                            set_alert('success', _l('clients_proposal_invoiced_successfully'));
+                            redirect(site_url("invoice/{$invoice->id}/{$invoice->hash}"));
+                        }
                         redirect($this->uri->uri_string(), 'refresh');
                     }
 

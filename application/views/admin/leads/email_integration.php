@@ -6,7 +6,7 @@
             <div class="col-md-12">
                 <h4
                     class="tw-font-semibold tw-text-lg tw-text-neutral-700 tw-flex tw-justify-between tw-items-center tw-mt-0">
-                    <?php echo $title; ?>
+                    <?php echo e($title); ?>
                     <a href="<?php echo admin_url('spam_filters/view/leads'); ?>" class="btn btn-primary">
                         <?php echo _l('spam_filters'); ?>
                     </a>
@@ -23,7 +23,7 @@
                         <?php } ?>
                         <?php if ($mail->email != '' && total_rows(db_prefix() . 'departments', ['email' => $mail->email]) > 0) { ?>
                         <div class="alert alert-danger no-mbot">
-                            The email address <b><?php echo $mail->email; ?></b> is used <b>also</b> as a <b>support
+                            The email address <b><?php echo e($mail->email); ?></b> is used <b>also</b> as a <b>support
                                 department</b> email. For leads email integration you must configure unique email if you
                             want everything to work properly.
                         </div>
@@ -90,7 +90,7 @@
                                         </a>
                                     </label>
                                     <select name="folder" class="form-control selectpicker" id="folder">
-                                        <option value="<?php echo $mail->folder; ?>"><?php echo $mail->folder; ?>
+                                        <option value="<?php echo e($mail->folder); ?>"><?php echo e($mail->folder); ?>
                                         </option>
                                     </select>
                                 </div>

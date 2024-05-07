@@ -83,9 +83,9 @@ return App_table::find('credit_notes')
             $numberOutput = '';
             // If is from client area table
             if (is_numeric($clientid) || $project_id) {
-                $numberOutput = '<a href="' . admin_url('credit_notes/list_credit_notes/' . $aRow['id']) . '" target="_blank">' . format_credit_note_number($aRow['id']) . '</a>';
+                $numberOutput = '<a href="' . admin_url('credit_notes/list_credit_notes/' . $aRow['id']) . '" target="_blank">' . e(format_credit_note_number($aRow['id'])) . '</a>';
             } else {
-                $numberOutput = '<a href="' . admin_url('credit_notes/list_credit_notes/' . $aRow['id']) . '" onclick="init_credit_note(' . $aRow['id'] . '); return false;">' . format_credit_note_number($aRow['id']) . '</a>';
+                $numberOutput = '<a href="' . admin_url('credit_notes/list_credit_notes/' . $aRow['id']) . '" onclick="init_credit_note(' . $aRow['id'] . '); return false;">' . e(format_credit_note_number($aRow['id'])) . '</a>';
             }
 
             $numberOutput .= '<div class="row-options">';
@@ -97,23 +97,23 @@ return App_table::find('credit_notes')
 
             $row[] = $numberOutput;
 
-            $row[] = _d($aRow['date']);
+            $row[] = e(_d($aRow['date']));
 
             if (empty($aRow['deleted_customer_name'])) {
-                $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . $aRow['company'] . '</a>';
+                $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . e($aRow['company']) . '</a>';
             } else {
-                $row[] = $aRow['deleted_customer_name'];
+                $row[] = e($aRow['deleted_customer_name']);
             }
 
             $row[] = format_credit_note_status($aRow['status']);
 
-            $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '">' . $aRow['project_name'] . '</a>';
+            $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '">' . e($aRow['project_name']) . '</a>';
 
-            $row[] = $aRow['reference_no'];
+            $row[] = e($aRow['reference_no']);
 
-            $row[] = app_format_money($aRow['total'], $aRow['currency_name']);
+            $row[] = e(app_format_money($aRow['total'], $aRow['currency_name']));
 
-            $row[] = app_format_money($aRow['remaining_amount'], $aRow['currency_name']);
+            $row[] = e(app_format_money($aRow['remaining_amount'], $aRow['currency_name']));
 
             // Custom fields add values
             foreach ($customFieldsColumns as $customFieldColumn) {

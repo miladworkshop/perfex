@@ -9,13 +9,13 @@
         </svg>
         <?php if ($current_user->total_unread_notifications > 0) { ?>
         <span
-            class="tw-leading-none tw-px-1 tw-py-0.5 tw-text-xs bg-warning tw-z-10 tw-absolute tw-rounded-full -tw-right-1.5 -tw-top-2 sm:tw-top-2 tw-min-w-[18px] tw-min-h-[18px] tw-inline-flex tw-items-center tw-justify-center icon-notifications"><?php echo $current_user->total_unread_notifications; ?></span>
+            class="tw-leading-none tw-px-1 tw-py-0.5 tw-text-xs bg-warning tw-z-10 tw-absolute tw-rounded-full -tw-right-1.5 -tw-top-2 sm:tw-top-2 tw-min-w-[18px] tw-min-h-[18px] tw-inline-flex tw-items-center tw-justify-center icon-notifications"><?php echo e($current_user->total_unread_notifications); ?></span>
         <?php } ?>
     </span>
 </a>
 <?php $_notifications = $this->misc_model->get_user_notifications(); ?>
 <ul class="dropdown-menu notifications animated fadeIn width400<?php echo count($_notifications) > 0  ? ' tw-pb-0' : ''; ?>"
-    data-total-unread="<?php echo $current_user->total_unread_notifications; ?>">
+    data-total-unread="<?php echo e($current_user->total_unread_notifications); ?>">
     <div class="tw-py-1 tw-px-3 tw-mb-1.5 tw-text-right">
         <a href="#" class="tw-text-right tw-inline"
             onclick="event.stopPropagation(); mark_all_notifications_as_read_inline(this); return false;">
@@ -24,7 +24,7 @@
     </div>
     <li class="divider"></li>
     <?php foreach ($_notifications as $notification) { ?>
-    <li class="relative notification-wrapper" data-notification-id="<?php echo $notification['id']; ?>">
+    <li class="relative notification-wrapper" data-notification-id="<?php echo e($notification['id']); ?>">
         <a href="<?php echo empty($notification['link']) ? '#' : admin_url($notification['link']); ?>"
             onclick="<?php echo empty($notification['link']) ? 'event.preventDefault();' : ''; ?>"
             class="notification-handler !tw-p-0 <?php echo $notification['isread_inline'] == 0 ? ' unread-notification' : ''; echo empty($notification['link']) ? ' tw-cursor-text' : ' tw-cursor-pointer notification-top notification-link'; ?>">
@@ -34,7 +34,7 @@
                 if ($notification['fromuserid'] != 0) {
                     echo staff_profile_image($notification['fromuserid'], ['staff-profile-image-small', 'img-circle notification-image', 'pull-left']);
                 } else {
-                    echo '<img src="' . contact_profile_image_url($notification['fromclientid']) . '" class="client-profile-image-small img-circle pull-left notification-image">';
+                    echo '<img src="' . e(contact_profile_image_url($notification['fromclientid'])) . '" class="client-profile-image-small img-circle pull-left notification-image">';
                 }
             }
             ?>
@@ -62,16 +62,16 @@
             if (($notification['fromcompany'] == null && $notification['fromuserid'] != 0)
             || ($notification['fromcompany'] == null && $notification['fromclientid'] != 0)) {
                 if ($notification['fromuserid'] != 0) {
-                    $description = $notification['from_fullname'] . ' - ' . $description;
+                    $description = e($notification['from_fullname']) . ' - ' . $description;
                 } else {
-                    $description = $notification['from_fullname'] . ' - ' . $description . '<br /><span class="label inline-block mtop5 label-info">' . _l('is_customer_indicator') . '</span>';
+                    $description = e($notification['from_fullname']) . ' - ' . $description . '<br /><span class="label inline-block mtop5 label-info">' . _l('is_customer_indicator') . '</span>';
                 }
             }
             echo '<span class="notification-title">' . $description . '</span>'; ?><br />
                     <span class="tw-text-sm text-muted">
                         <span class="text-has-action" data-placement="right" data-toggle="tooltip"
-                            data-title="<?php echo _dt($notification['date']); ?>">
-                            <?php echo time_ago($notification['date']); ?>
+                            data-title="<?php echo e(_dt($notification['date'])); ?>">
+                            <?php echo e(time_ago($notification['date'])); ?>
                         </span>
                     </span>
                 </div>
@@ -80,7 +80,7 @@
 
         <?php if ($notification['isread_inline'] == 0) { ?>
         <a href="#" class="text-muted pull-right not-mark-as-read-inline"
-            onclick="set_notification_read_inline(<?php echo $notification['id']; ?>);" data-placement="left"
+            onclick="set_notification_read_inline(<?php echo e($notification['id']); ?>);" data-placement="left"
             data-toggle="tooltip" data-title="<?php echo _l('mark_as_read'); ?>">
             <small>
                 <i class="fa-regular fa-circle"></i>

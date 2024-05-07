@@ -29,7 +29,7 @@ foreach ($milestones as $milestone) {
     } ?>
 <ul class="kan-ban-col milestone-column<?php if (staff_cant('edit_milestones', 'projects') || $milestone['id'] == 0) {
         echo ' milestone-not-sortable';
-    }; ?>" data-col-status-id="<?php echo $milestone['id']; ?>" data-total-pages="<?php echo $total_pages; ?>">
+    }; ?>" data-col-status-id="<?php echo e($milestone['id']); ?>" data-total-pages="<?php echo e($total_pages); ?>">
     <li class="kan-ban-col-wrapper">
         <div class="border-right panel_s">
             <div class="panel-heading <?php if ($milestone_color != '') {
@@ -43,18 +43,18 @@ foreach ($milestones as $milestone) {
                 <i class="fa fa-reorder pointer"></i>&nbsp;
                 <?php } ?>
                 <?php if ($milestone['id'] != 0 && staff_can('edit_milestones', 'projects')) { ?>
-                <a href="#" data-hide-from-customer="<?php echo $milestone['hide_from_customer']; ?>"
-                    data-description-visible-to-customer="<?php echo $milestone['description_visible_to_customer']; ?>"
+                <a href="#" data-hide-from-customer="<?php echo e($milestone['hide_from_customer']); ?>"
+                    data-description-visible-to-customer="<?php echo e($milestone['description_visible_to_customer']); ?>"
                     data-description="<?php echo $milestone['description'] ? htmlspecialchars(clear_textarea_breaks($milestone['description'])) : ''; ?>"
-                    data-name="<?php echo $milestone['name']; ?>"
+                    data-name="<?php echo e($milestone['name']); ?>"
                     data-start_date="<?php echo $milestone['id'] != 0 ? _d($milestone['start_date']) : ''; ?>"
                     data-due_date="<?php echo $milestone['id'] != 0 ? _d($milestone['due_date']) : ''; ?>"
-                    data-order="<?php echo $milestone['milestone_order']; ?>"
-                    onclick="edit_milestone(this,<?php echo $milestone['id']; ?>); return false;" class="edit-milestone-phase <?php if ($milestone['color'] != '') {
+                    data-order="<?php echo e($milestone['milestone_order']); ?>"
+                    onclick="edit_milestone(this,<?php echo e($milestone['id']); ?>); return false;" class="edit-milestone-phase <?php if ($milestone['color'] != '') {
         echo 'color-white';
     } ?>">
                     <?php } ?>
-                    <span class="bold heading"><?php echo $milestone['name']; ?></span>
+                    <span class="bold heading"><?php echo e($milestone['name']); ?></span>
                     <span class="tw-text-sm">
                         <?php echo  $milestone['id'] != 0 ? (' | ' . _d($milestone['start_date']) . ' - ' . _d($milestone['due_date'])) : ''; ?>
                     </span>
@@ -77,9 +77,9 @@ foreach ($milestones as $milestone) {
         echo '<hr />';
     }; ?>
    <div class='kan-ban-settings cpicker-wrapper'>
-     <?php echo $cpicker; ?>
+     <?php echo e($cpicker); ?>
    </div>
-   <a href='#' class='reset_milestone_color <?php if ($milestone_color == '') {
+   <a href='#' class='tw-block reset_milestone_color <?php if ($milestone_color == '') {
         echo 'hide';
     } ?>' data-color=''>
      <?php echo _l('reset_to_default_color'); ?>
@@ -88,22 +88,22 @@ foreach ($milestones as $milestone) {
                 </a>
                 <?php } ?>
                 <?php if (staff_can('create', 'tasks')) { ?>
-                <?php echo '<p class="tw-ml-5 tw-text-sm tw-mb-0">' . _l('milestone_total_logged_time') . ': ' . seconds_to_time_format($milestone['total_logged_time']) . '</p>'; } ?>
+                <?php echo '<p class="tw-text-sm tw-mb-0'.($milestone['id'] !== 0 ? ' tw-ml-5' : '').'">' . e(_l('milestone_total_logged_time') . ': ' . seconds_to_time_format($milestone['total_logged_time'])) . '</p>'; } ?>
             </div>
             <div class="kan-ban-content-wrapper">
                 <div class="kan-ban-content">
                     <ul class="status project-milestone milestone-tasks-wrapper sortable relative"
-                        data-task-status-id="<?php echo $milestone['id']; ?>">
+                        data-task-status-id="<?php echo e($milestone['id']); ?>">
                         <?php
     foreach ($tasks as $task) {
         $this->load->view('admin/projects/_milestone_kanban_card', ['task' => $task, 'milestone' => $milestone['id']]);
     } ?>
                         <?php if ($total_tasks > 0) { ?>
                         <li class="text-center not-sortable kanban-load-more"
-                            data-load-status="<?php echo $milestone['id']; ?>">
+                            data-load-status="<?php echo e($milestone['id']); ?>">
                             <a href="#" class="btn btn-default btn-block<?php if ($total_pages <= 1) {
         echo ' disabled';
-    } ?>" data-page="1" onclick="kanban_load_more(<?php echo $milestone['id']; ?>,this,'projects/milestones_kanban_load_more',320,360); return false;"
+    } ?>" data-page="1" onclick="kanban_load_more(<?php echo e($milestone['id']); ?>,this,'projects/milestones_kanban_load_more',320,360); return false;"
                                 ;>
                                 <?php echo _l('load_more'); ?>
                             </a>
@@ -122,5 +122,4 @@ foreach ($milestones as $milestone) {
             </div>
     </li>
 </ul>
-<?php
-} ?>
+<?php } ?>

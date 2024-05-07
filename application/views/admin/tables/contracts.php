@@ -81,7 +81,7 @@ return App_table::find('contracts')
 
             $row[] = $aRow['id'];
 
-            $subjectOutput = '<a href="' . admin_url('contracts/contract/' . $aRow['id']) . '"' . ($projectId ? ' target="_blank"' : '') . ' class="tw-truncate tw-max-w-sm tw-block tw-w-full">' . $aRow['subject'] . '</a>';
+            $subjectOutput = '<a href="' . admin_url('contracts/contract/' . $aRow['id']) . '"' . ($projectId ? ' target="_blank"' : '') . ' class="tw-truncate tw-max-w-sm tw-block tw-w-full">' . e($aRow['subject']) . '</a>';
             if ($aRow['trash'] == 1) {
                 $subjectOutput .= '<span class="label label-danger pull-right">' . _l('contract_trash') . '</span>';
             }
@@ -101,17 +101,17 @@ return App_table::find('contracts')
             $subjectOutput .= '</div>';
             $row[] = $subjectOutput;
 
-            $row[] = '<a href="' . admin_url('clients/client/' . $aRow['client']) . '">' . $aRow['company'] . '</a>';
+            $row[] = '<a href="' . admin_url('clients/client/' . $aRow['client']) . '">' . e($aRow['company']) . '</a>';
 
-            $row[] = $aRow['type_name'];
+            $row[] = e($aRow['type_name']);
 
-            $row[] = app_format_money($aRow['contract_value'], $base_currency);
+            $row[] = e(app_format_money($aRow['contract_value'], $base_currency));
 
-            $row[] = _d($aRow['datestart']);
+            $row[] = e(_d($aRow['datestart']));
 
-            $row[] = _d($aRow['dateend']);
+            $row[] = e(_d($aRow['dateend']));
 
-            $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '">' . $aRow['project_name'] . '</a>';
+            $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '">' . e($aRow['project_name']) . '</a>';
 
             if ($aRow['marked_as_signed'] == 1) {
                 $row[] = '<span class="text-success">' . _l('marked_as_signed') . '</span>';

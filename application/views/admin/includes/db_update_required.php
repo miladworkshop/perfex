@@ -94,7 +94,7 @@
             <p style="line-height:20px;">
                 First make sure that you re-check all your custom files, including <b>my_functions_helper.php</b>, <b>my_ prefixed files</b>, <b>custom hooks</b>, <b>custom clients area themes</b> and any <b>third party modules</b>.
             </p>
-            <p style="line-height:20px;"><b>Sometimes can happen not all files to be extracted while extracting the files from the upgrade</b> .zip (mostly caused by wrong files permissions), the upgrade files are copied to <b><?php echo $copyData->path; ?></b>,
+            <p style="line-height:20px;"><b>Sometimes can happen not all files to be extracted while extracting the files from the upgrade</b> .zip (mostly caused by wrong files permissions), the upgrade files are copied to <b><?php echo e($copyData->path); ?></b>,
                 you can try to <b>extract them manually</b> for all cases to re-replace the files e.q. via cPanel or command line, use the best method that is suitable for you. <br /></p>
 
                 The copied upgrade zip file will be <b> available for the next <?php echo _delete_temporary_files_older_then() / 60; ?> minutes</b>.

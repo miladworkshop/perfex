@@ -65,30 +65,30 @@
           if ($value == '') {
               continue;
           } ?>
-                <p class="bold text-info"><?php echo $field['name']; ?> (<?php echo $value; ?>)</p>
+                <p class="bold text-info"><?php echo e($field['name']); ?> (<?php echo $value; ?>)</p>
                 <hr />
                 <p class="bold no-margin"><?php echo _l('leads_merge_customer'); ?></p>
                 <div class="radio radio-primary">
-                    <input type="radio" data-field-id="<?php echo $field['id']; ?>" id="m_1_<?php echo $field['id']; ?>"
+                    <input type="radio" data-field-id="<?php echo e($field['id']); ?>" id="m_1_<?php echo e($field['id']); ?>"
                         class="include_leads_custom_fields" checked
-                        name="include_leads_custom_fields[<?php echo $field['id']; ?>]" value="1">
-                    <label for="m_1_<?php echo $field['id']; ?>" class="bold">
+                        name="include_leads_custom_fields[<?php echo e($field['id']); ?>]" value="1">
+                    <label for="m_1_<?php echo e($field['id']); ?>" class="bold">
                         <span data-toggle="tooltip"
                             data-title="<?php echo _l('copy_custom_fields_convert_to_customer_help'); ?>"><i
                                 class="fa fa-info-circle"></i></span> <?php echo _l('lead_merge_custom_field'); ?>
                     </label>
                 </div>
                 <div class="radio radio-primary">
-                    <input type="radio" data-field-id="<?php echo $field['id']; ?>" id="m_2_<?php echo $field['id']; ?>"
+                    <input type="radio" data-field-id="<?php echo e($field['id']); ?>" id="m_2_<?php echo e($field['id']); ?>"
                         class="include_leads_custom_fields"
-                        name="include_leads_custom_fields[<?php echo $field['id']; ?>]" value="2">
-                    <label for="m_2_<?php echo $field['id']; ?>" class="bold">
+                        name="include_leads_custom_fields[<?php echo e($field['id']); ?>]" value="2">
+                    <label for="m_2_<?php echo e($field['id']); ?>" class="bold">
                         <?php echo _l('lead_merge_custom_field_existing'); ?>
                     </label>
                 </div>
-                <div class="hide" id="merge_db_field_<?php echo $field['id']; ?>">
+                <div class="hide" id="merge_db_field_<?php echo e($field['id']); ?>">
                     <hr />
-                    <select name="merge_db_fields[<?php echo $field['id']; ?>]" class="selectpicker" data-width="100%"
+                    <select name="merge_db_fields[<?php echo e($field['id']); ?>]" class="selectpicker" data-width="100%"
                         data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                         <option value=""></option>
                         <?php foreach ($customer_fields as $c_field) {
@@ -101,27 +101,27 @@
                 </div>
                 <p class="bold"><?php echo _l('leads_merge_contact'); ?></p>
                 <div class="radio radio-primary">
-                    <input type="radio" data-field-id="<?php echo $field['id']; ?>" id="m_3_<?php echo $field['id']; ?>"
+                    <input type="radio" data-field-id="<?php echo e($field['id']); ?>" id="m_3_<?php echo e($field['id']); ?>"
                         class="include_leads_custom_fields"
-                        name="include_leads_custom_fields[<?php echo $field['id']; ?>]" value="3">
-                    <label for="m_3_<?php echo $field['id']; ?>" class="bold">
+                        name="include_leads_custom_fields[<?php echo e($field['id']); ?>]" value="3">
+                    <label for="m_3_<?php echo e($field['id']); ?>" class="bold">
                         <?php echo _l('leads_merge_as_contact_field'); ?>
                     </label>
                 </div>
                 <div class="radio radio-primary">
-                    <input type="radio" data-field-id="<?php echo $field['id']; ?>" id="m_4_<?php echo $field['id']; ?>"
+                    <input type="radio" data-field-id="<?php echo e($field['id']); ?>" id="m_4_<?php echo e($field['id']); ?>"
                         class="include_leads_custom_fields"
-                        name="include_leads_custom_fields[<?php echo $field['id']; ?>]" value="4">
-                    <label for="m_4_<?php echo $field['id']; ?>" class="bold">
+                        name="include_leads_custom_fields[<?php echo e($field['id']); ?>]" value="4">
+                    <label for="m_4_<?php echo e($field['id']); ?>" class="bold">
                         <span data-toggle="tooltip"
                             data-title="<?php echo _l('copy_custom_fields_convert_to_customer_help'); ?>"><i
                                 class="fa fa-info-circle"></i></span>
                         <?php echo _l('lead_merge_custom_field'); ?>
                     </label>
                 </div>
-                <div class="hide" id="merge_db_contact_field_<?php echo $field['id']; ?>">
+                <div class="hide" id="merge_db_contact_field_<?php echo e($field['id']); ?>">
                     <hr />
-                    <select name="merge_db_contact_fields[<?php echo $field['id']; ?>]" class="selectpicker"
+                    <select name="merge_db_contact_fields[<?php echo e($field['id']); ?>]" class="selectpicker"
                         data-width="100%" data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                         <option value=""></option>
                         <?php foreach ($contact_fields as $c_field) {
@@ -133,10 +133,10 @@
                 </div>
                 <hr />
                 <div class="radio radio-primary">
-                    <input type="radio" data-field-id="<?php echo $field['id']; ?>" id="m_5_<?php echo $field['id']; ?>"
+                    <input type="radio" data-field-id="<?php echo e($field['id']); ?>" id="m_5_<?php echo e($field['id']); ?>"
                         class="include_leads_custom_fields"
-                        name="include_leads_custom_fields[<?php echo $field['id']; ?>]" value="5">
-                    <label for="m_5_<?php echo $field['id']; ?>" class="bold">
+                        name="include_leads_custom_fields[<?php echo e($field['id']); ?>]" value="5">
+                    <label for="m_5_<?php echo e($field['id']); ?>" class="bold">
                         <?php echo _l('lead_dont_merge_custom_field'); ?>
                     </label>
                 </div>
@@ -193,7 +193,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default"
-                    onclick="init_lead(<?php echo $lead->id; ?>); return false;"
+                    onclick="init_lead(<?php echo e($lead->id); ?>); return false;"
                     data-dismiss="modal"><?php echo _l('back_to_lead'); ?></button>
                 <button type="submit" data-form="#lead_to_client_form" autocomplete="off"
                     data-loading-text="<?php echo _l('wait_text'); ?>"

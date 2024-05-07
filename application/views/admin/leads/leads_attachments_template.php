@@ -7,9 +7,9 @@ foreach($attachments as $attachment) {
     }
     $data .= '<div class="display-block lead-attachment-wrapper">';
     $data .= '<div class="col-md-10">';
-    $data .= '<div class="pull-left"><i class="'.get_mime_class($attachment['filetype']).'"></i></div>';
-    $data .= '<a href="'.$attachment_url.'" target="_blank">'.$attachment['file_name'].'</a>';
-    $data .= '<p class="text-muted">'.$attachment["filetype"].'</p>';
+    $data .= '<div class="pull-left"><i class="'.e(get_mime_class($attachment['filetype'])).'"></i></div>';
+    $data .= '<a href="'.e($attachment_url).'" target="_blank">'.e($attachment['file_name']).'</a>';
+    $data .= '<p class="text-muted">'.e($attachment["filetype"]).'</p>';
     $data .= '</div>';
     $data .= '<div class="col-md-2 text-right">';
     if($attachment['staffid'] == get_staff_user_id() || is_admin()){

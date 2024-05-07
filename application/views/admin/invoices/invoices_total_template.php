@@ -16,9 +16,9 @@
             $selected = 'selected';
         }
     } ?>
-            <option value="<?php echo $currency['id']; ?>" <?php echo $selected; ?>
-                data-subtext="<?php echo $currency['name']; ?>">
-                <?php echo $currency['symbol']; ?>
+            <option value="<?php echo e($currency['id']); ?>" <?php echo e($selected); ?>
+                data-subtext="<?php echo e($currency['name']); ?>">
+                <?php echo e($currency['symbol']); ?>
             </option>
             <?php
 } ?>
@@ -30,10 +30,10 @@
         <select data-none-selected-text="<?php echo date('Y'); ?>" data-width="auto" class="selectpicker tw-w-full"
             name="invoices_total_years" onchange="init_invoices_total();" multiple="true" id="invoices_total_years">
             <?php foreach ($invoices_years as $year) { ?>
-            <option value="<?php echo $year['year']; ?>" <?php if ($this->input->post('years') && in_array($year['year'], $this->input->post('years')) || !$this->input->post('years') && date('Y') == $year['year']) {
+            <option value="<?php echo e($year['year']); ?>" <?php if ($this->input->post('years') && in_array($year['year'], $this->input->post('years')) || !$this->input->post('years') && date('Y') == $year['year']) {
         echo ' selected';
     } ?>>
-                <?php echo $year['year']; ?>
+                <?php echo e($year['year']); ?>
             </option>
             <?php } ?>
         </select>
@@ -47,7 +47,7 @@
             <dt class="tw-font-medium text-warning"><?php echo _l('outstanding_invoices'); ?></dt>
             <dd class="tw-mt-1 tw-flex tw-items-baseline tw-justify-between md:tw-block lg:tw-flex">
                 <div class="tw-flex tw-items-baseline tw-text-base tw-font-semibold tw-text-primary-600">
-                    <?php echo app_format_money($total_result['due'], $total_result['currency']); ?>
+                    <?php echo e(app_format_money($total_result['due'], $total_result['currency'])); ?>
                 </div>
             </dd>
         </div>
@@ -57,7 +57,7 @@
             <dt class="tw-font-medium text-muted"><?php echo _l('past_due_invoices'); ?></dt>
             <dd class="tw-mt-1 tw-flex tw-items-baseline tw-justify-between md:tw-block lg:tw-flex">
                 <div class="tw-flex tw-items-baseline tw-text-base tw-font-semibold tw-text-primary-600">
-                    <?php echo app_format_money($total_result['overdue'], $total_result['currency']); ?>
+                    <?php echo e(app_format_money($total_result['overdue'], $total_result['currency'])); ?>
                 </div>
             </dd>
         </div>
@@ -68,7 +68,7 @@
             <dt class="tw-font-medium text-success"><?php echo _l('paid_invoices'); ?></dt>
             <dd class="tw-mt-1 tw-flex tw-items-baseline tw-justify-between md:tw-block lg:tw-flex">
                 <div class="tw-flex tw-items-baseline tw-text-base tw-font-semibold tw-text-primary-600">
-                    <?php echo app_format_money($total_result['paid'], $total_result['currency']); ?>
+                    <?php echo e(app_format_money($total_result['paid'], $total_result['currency'])); ?>
                 </div>
             </dd>
         </div>

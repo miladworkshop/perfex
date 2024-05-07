@@ -37,10 +37,10 @@
             <select class="selectpicker" name="gantt_task_status" onchange="gantt_filter(this);" data-none-selected-text="<?php echo _l('task_status'); ?>">
                 <option value=""><?php echo _l('task_list_all'); ?></option>
                 <?php foreach ($task_statuses as $status) { ?>
-                    <option value="<?php echo $status['id']; ?>" <?php if ($this->input->get('gantt_task_status') == $status['id']) {
+                    <option value="<?php echo e($status['id']); ?>" <?php if ($this->input->get('gantt_task_status') == $status['id']) {
                                                                         echo ' selected';
                                                                     } ?>>
-                        <?php echo $status['name']; ?>
+                        <?php echo e($status['name']); ?>
                     </option>
                 <?php } ?>
             </select>

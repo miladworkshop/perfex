@@ -24,14 +24,14 @@ foreach ($rResult as $aRow) {
             $ps = $this->ci->encryption->decrypt($aRow['password']);
         }
         if ($aColumns[$i] == 'name') {
-            $_data = '<a href="#" onclick="edit_department(this,' . $aRow['departmentid'] . '); return false" data-name="' . $aRow['name'] . '" data-calendar-id="' . $aRow['calendar_id'] . '" data-email="' . $aRow['email'] . '" data-hide-from-client="' . $aRow['hidefromclient'] . '" data-host="' . $aRow['host'] . '" data-password="' . $ps . '" data-folder="' . $aRow['folder'] . '" data-imap_username="' . $aRow['imap_username'] . '" data-encryption="' . $aRow['encryption'] . '" data-delete-after-import="' . $aRow['delete_after_import'] . '">' . $_data . '</a>';
+            $_data = '<a href="#" onclick="edit_department(this,' . e($aRow['departmentid']) . '); return false" data-name="' . e($aRow['name']) . '" data-calendar-id="' . e($aRow['calendar_id']) . '" data-email="' . e($aRow['email']) . '" data-hide-from-client="' . e($aRow['hidefromclient']) . '" data-host="' . e($aRow['host']) . '" data-password="' . $ps . '" data-folder="' . e($aRow['folder']) . '" data-imap_username="' . e($aRow['imap_username']) . '" data-encryption="' . e($aRow['encryption']) . '" data-delete-after-import="' . e($aRow['delete_after_import']) . '">' . e($_data) . '</a>';
         }
         $row[] = $_data;
     }
 
     $options = '<div class="tw-flex tw-items-center tw-space-x-3">';
     $options .= '<a href="' . admin_url('departments/department/' . $aRow['departmentid']) . '" class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700" ' . _attributes_to_string([
-        'onclick' => 'edit_department(this,' . $aRow['departmentid'] . '); return false', 'data-name' => $aRow['name'], 'data-calendar-id' => $aRow['calendar_id'], 'data-email' => $aRow['email'], 'data-hide-from-client' => $aRow['hidefromclient'], 'data-host' => $aRow['host'], 'data-password' => $ps, 'data-encryption' => $aRow['encryption'], 'data-folder' => $aRow['folder'], 'data-imap_username' => $aRow['imap_username'], 'data-delete-after-import' => $aRow['delete_after_import'],
+        'onclick' => 'edit_department(this,' . e($aRow['departmentid']) . '); return false', 'data-name' => e($aRow['name']), 'data-calendar-id' => e($aRow['calendar_id']), 'data-email' => e($aRow['email']), 'data-hide-from-client' => e($aRow['hidefromclient']), 'data-host' => e($aRow['host']), 'data-password' => $ps, 'data-encryption' => e($aRow['encryption']), 'data-folder' => e($aRow['folder']), 'data-imap_username' => e($aRow['imap_username']), 'data-delete-after-import' => e($aRow['delete_after_import']),
         ]) . '>
         <i class="fa-regular fa-pen-to-square fa-lg"></i>
     </a>';

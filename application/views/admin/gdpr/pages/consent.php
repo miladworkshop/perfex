@@ -36,14 +36,14 @@
         <?php
         foreach ($consent_purposes as $purpose) { ?>
         <tr>
-            <td><?php echo $purpose['name']; ?></td>
-            <td><?php echo $purpose['description']; ?></td>
-            <td data-order="<?php echo $purpose['date_created']; ?>"><?php echo _dt($purpose['date_created']); ?></td>
-            <td data-order="<?php echo $purpose['last_updated']; ?>"><?php echo _dt($purpose['last_updated']); ?></td>
+            <td><?php echo e($purpose['name']); ?></td>
+            <td><?php echo e($purpose['description']); ?></td>
+            <td data-order="<?php echo e($purpose['date_created']); ?>"><?php echo e(_dt($purpose['date_created'])); ?></td>
+            <td data-order="<?php echo e($purpose['last_updated']); ?>"><?php echo e(_dt($purpose['last_updated'])); ?></td>
             <td>
                 <div class="tw-flex tw-items-center tw-space-x-3">
-                    <a href="<?php echo $purpose['id']; ?>"
-                        onclick="conset_purpose(<?php echo $purpose['id']; ?>); return false;"
+                    <a href="<?php echo e($purpose['id']); ?>"
+                        onclick="conset_purpose(<?php echo e($purpose['id']); ?>); return false;"
                         class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700">
                         <i class="fa-regular fa-pen-to-square fa-lg"></i>
                     </a>

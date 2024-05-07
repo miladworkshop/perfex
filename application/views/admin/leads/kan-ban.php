@@ -20,8 +20,8 @@ foreach ($statuses as $status) {
         }
         $settings .= "<div class='kanban-cpicker cpicker " . $color_selected_class . "' data-color='" . $color . "' style='background:" . $color . ';border:1px solid ' . $color . "'></div>";
     } ?>
-<ul class="kan-ban-col" data-col-status-id="<?php echo $status['id']; ?>" data-total-pages="<?php echo $total_pages; ?>"
-    data-total="<?php echo $total_leads; ?>">
+<ul class="kan-ban-col" data-col-status-id="<?php echo e($status['id']); ?>" data-total-pages="<?php echo e($total_pages); ?>"
+    data-total="<?php echo e($total_leads); ?>">
     <li class="kan-ban-col-wrapper">
         <div class="border-right panel_s">
             <?php
@@ -32,13 +32,13 @@ foreach ($statuses as $status) {
             <div class="panel-heading tw-bg-neutral-700 tw-text-white"
                 <?php if ($status['isdefault'] == 1) { ?>data-toggle="tooltip"
                 data-title="<?php echo _l('leads_converted_to_client') . ' - ' . _l('client'); ?>" <?php } ?>
-                <?php echo $status_color; ?> data-status-id="<?php echo $status['id']; ?>">
+                <?php echo $status_color; ?> data-status-id="<?php echo e($status['id']); ?>">
                 <i class="fa fa-reorder pointer"></i>
                 <span class="heading pointer tw-ml-1" <?php if ($is_admin) { ?>
-                    data-order="<?php echo $status['statusorder']; ?>" data-color="<?php echo $status['color']; ?>"
-                    data-name="<?php echo $status['name']; ?>"
-                    onclick="edit_status(this,<?php echo $status['id']; ?>); return false;"
-                    <?php } ?>><?php echo $status['name']; ?>
+                    data-order="<?php echo e($status['statusorder']); ?>" data-color="<?php echo e($status['color']); ?>"
+                    data-name="<?php echo e($status['name']); ?>"
+                    onclick="edit_status(this,<?php echo e($status['id']); ?>); return false;"
+                    <?php } ?>><?php echo e($status['name']); ?>
                 </span> -
                 <?php echo app_format_money(
         $summary[$statusSummaryIndex = array_search($status['id'], array_column($summary, 'id'))]['value'],
@@ -62,18 +62,18 @@ foreach ($statuses as $status) {
             </div>
             <div class="kan-ban-content-wrapper">
                 <div class="kan-ban-content">
-                    <ul class="status leads-status sortable" data-lead-status-id="<?php echo $status['id']; ?>">
+                    <ul class="status leads-status sortable" data-lead-status-id="<?php echo e($status['id']); ?>">
                         <?php
                 foreach ($leads as $lead) {
                     $this->load->view('admin/leads/_kan_ban_card', ['lead' => $lead, 'status' => $status, 'base_currency' => $base_currency]);
                 } ?>
                         <?php if ($total_leads > 0) { ?>
                         <li class="text-center not-sortable kanban-load-more"
-                            data-load-status="<?php echo $status['id']; ?>">
+                            data-load-status="<?php echo e($status['id']); ?>">
                             <a href="#" class="btn btn-default btn-block<?php if ($total_pages <= 1 || $kanBan->getPage() === $total_pages) {
                     echo ' disabled';
                 } ?>" data-page="<?php echo $kanBan->getPage(); ?>"
-                                onclick="kanban_load_more(<?php echo $status['id']; ?>, this, 'leads/leads_kanban_load_more', 315, 360); return false;"
+                                onclick="kanban_load_more(<?php echo e($status['id']); ?>, this, 'leads/leads_kanban_load_more', 315, 360); return false;"
                                 ;>
                                 <?php echo _l('load_more'); ?>
                             </a>

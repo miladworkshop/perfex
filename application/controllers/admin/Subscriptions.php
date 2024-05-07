@@ -300,10 +300,6 @@ class Subscriptions extends AdminController
             set_alert('warning', _l('problem_deleting', _l('subscription')));
         }
 
-        if (strpos($_SERVER['HTTP_REFERER'], 'clients/') !== false) {
-            redirect($_SERVER['HTTP_REFERER']);
-        } else {
-            redirect(admin_url('subscriptions'));
-        }
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 }

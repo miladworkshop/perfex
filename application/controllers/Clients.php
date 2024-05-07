@@ -850,11 +850,16 @@ class Clients extends ClientsController
         }
 
         $data = [];
+        
         // Default to this month
         $from = _d(date('Y-m-01'));
         $to   = _d(date('Y-m-t'));
 
         if ($this->input->get('from') && $this->input->get('to')) {
+            if(!is_string($this->input->get('from')) || !is_string($this->input->get('from'))) {
+                redirect(site_url('clients/statement'));
+            }
+
             $from = $this->input->get('from');
             $to   = $this->input->get('to');
         }
@@ -922,6 +927,10 @@ class Clients extends ClientsController
 
         $from = $this->input->get('from');
         $to   = $this->input->get('to');
+
+        if(!is_string($from) && !is_string($to)) {
+            show_404();
+        }
 
         $data['statement'] = $this->clients_model->get_statement(
             get_client_user_id(),
@@ -1183,7 +1192,7 @@ class Clients extends ClientsController
     public function dismiss_announcement($id)
     {
         $this->misc_model->dismiss_announcement($id, false);
-        redirect($_SERVER['HTTP_REFERER']);
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     public function update_credit_card()
@@ -1382,7 +1391,7 @@ class Clients extends ClientsController
             set_alert('danger', $e->getMessage());
         }
 
-        redirect($_SERVER['HTTP_REFERER']);
+        redirect(site_url('clients/subscriptions'));
     }
 
     public function gdpr()
@@ -1419,11 +1428,7 @@ class Clients extends ClientsController
 
         set_contact_language($lang);
 
-        if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
-            redirect($_SERVER['HTTP_REFERER']);
-        } else {
-            redirect(site_url());
-        }
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     public function export()

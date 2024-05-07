@@ -62,10 +62,10 @@ class Event_merge_fields extends App_merge_fields
      */
     public function format($event)
     {
-        $fields['{event_title}']       = $event->title;
+        $fields['{event_title}']       = e($event->title);
         $fields['{event_description}'] = $event->description;
-        $fields['{event_start_date}']  = _dt($event->start);
-        $fields['{event_end_date}']    = $event->end ? _dt($event->end) : '';
+        $fields['{event_start_date}']  = e(_dt($event->start));
+        $fields['{event_end_date}']    = $event->end ? e(_dt($event->end)) : '';
         $fields['{event_link}']        = admin_url('utilities/calendar?eventid=' . $event->eventid);
 
         return hooks()->apply_filters('event_merge_fields', $fields, [

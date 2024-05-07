@@ -1264,6 +1264,13 @@ form.dropzone {
   }
 }
 
+.tasks-phases .kan-ban-col .panel-heading {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
 .tasks-phases .panel-body {
   background: #fbfbfb;
   padding: 10px;
@@ -1443,6 +1450,11 @@ form.dropzone {
 
 .tc-content em {
   font-style: italic;
+}
+
+.tc-content p:empty:before {
+  content: ' ';
+  white-space: pre;
 }
 
 .proposal-view .tc-content ul,

@@ -7,7 +7,7 @@
                 <div class="panel_s">
                     <div class="panel-body">
                         <h4 class="no-margin">
-                            <?php echo $title; ?>
+                            <?php echo e($title); ?>
                             <?php if (!is_admin()) { ?><br />
                             <small><?php echo _l('reminders_view_none_admin'); ?></small>
                             <?php } ?>

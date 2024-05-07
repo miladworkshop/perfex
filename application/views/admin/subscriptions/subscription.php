@@ -6,21 +6,20 @@
             <div class="col-md-5">
                 <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700">
                     <span>
-                        <?php echo isset($subscription) ? $subscription->name : _l('new_subscription'); ?>
+                        <?php echo e(isset($subscription) ? $subscription->name : _l('new_subscription')); ?>
                     </span>
                 </h4>
                 <div class="panel_s">
                     <div class="panel-body accounting-template">
                         <?php if (isset($subscription)) {
-    if (!empty($subscription->stripe_subscription_id)
-        && $subscription->status != 'canceled' && $subscription->status != 'incomplete_expired' && $subscription->status != 'incomplete') {
-        ?>
+                        if (!empty($subscription->stripe_subscription_id)
+                            && $subscription->status != 'canceled' && $subscription->status != 'incomplete_expired' && $subscription->status != 'incomplete') {
+                            ?>
                         <div class="alert alert-success">
                             <b><?php echo _l('customer_is_subscribed_to_subscription_info'); ?></b><br />
-                            Subscription ID: <?php echo $subscription->stripe_subscription_id; ?>
+                            Subscription ID: <?php echo e($subscription->stripe_subscription_id); ?>
                         </div>
-                        <?php
-    } ?>
+                        <?php } ?>
                         <input type="hidden" name="isedit">
                         <?php if (isset($subscription)) { ?>
                         <a href="#" class="btn btn-default" data-target="#subscription_send_to_client_modal"
@@ -34,8 +33,7 @@
                             <?php echo _l('view_subscription'); ?>
                         </a>
                         <?php } ?>
-                        <?php
-            if (!empty($subscription->stripe_subscription_id) && $subscription->status != 'canceled' && $subscription->status != 'incomplete_expired' && empty($subscription->ends_at)) { ?>
+                        <?php if (!empty($subscription->stripe_subscription_id) && $subscription->status != 'canceled' && $subscription->status != 'incomplete_expired' && empty($subscription->ends_at)) { ?>
                         <?php if (staff_can('edit',  'subscriptions')) { ?>
                         <div class="btn-group">
                             <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
@@ -54,8 +52,7 @@
                         <?php } ?>
                         <?php } ?>
                         <hr />
-                        <?php
-} ?>
+                        <?php } ?>
                         <?php $this->load->view('admin/subscriptions/form'); ?>
                     </div>
                 </div>
@@ -135,16 +132,15 @@
                                 </div>
                                 <?php } ?>
                                 <?php if (!empty($subscription->stripe_subscription_id) && isset($upcoming_invoice)) {
-                if (!empty($subscription->stripe_subscription_id) && $subscription->status != 'canceled' && !empty($subscription->ends_at) && $upcoming_invoice->total == 0) {
-                } else {
-                    $upcoming_invoice->date = to_sql_date($upcoming_invoice->date);
-                    if (property_exists($upcoming_invoice, 'duedate') && $upcoming_invoice->duedate) {
-                        $upcoming_invoice->duedate = to_sql_date($upcoming_invoice->duedate);
-                    }
-                    $this->load->view('admin/invoices/invoice_preview_html', ['invoice' => $upcoming_invoice]);
-                } ?>
-                                <?php
-            } ?>
+                                    if (!empty($subscription->stripe_subscription_id) && $subscription->status != 'canceled' && !empty($subscription->ends_at) && $upcoming_invoice->total == 0) {
+                                    } else {
+                                        $upcoming_invoice->date = to_sql_date($upcoming_invoice->date);
+                                        if (property_exists($upcoming_invoice, 'duedate') && $upcoming_invoice->duedate) {
+                                            $upcoming_invoice->duedate = to_sql_date($upcoming_invoice->duedate);
+                                        }
+                                        $this->load->view('admin/invoices/invoice_preview_html', ['invoice' => $upcoming_invoice]);
+                                    } ?>
+                                <?php } ?>
                             </div>
                             <div role="tabpanel" class="tab-pane" id="child_invoices">
                                 <?php if (count($child_invoices)) { ?>
@@ -154,33 +150,33 @@
                                     <?php foreach ($child_invoices as $invoice) { ?>
                                     <li class="list-group-item">
                                         <a href="<?php echo admin_url('invoices/list_invoices/' . $invoice->id); ?>"
-                                            target="_blank"><?php echo format_invoice_number($invoice->id); ?>
+                                            target="_blank"><?php echo e(format_invoice_number($invoice->id)); ?>
                                             <span class="pull-right bold">
-                                                <?php echo app_format_money($invoice->total, $invoice->currency_name); ?>
+                                                <?php echo e(app_format_money($invoice->total, $invoice->currency_name)); ?>
                                             </span>
                                         </a>
                                         <br />
                                         <span class="inline-block mtop10">
-                                            <?php echo '<span class="bold">' . _d($invoice->date) . '</span>'; ?><br />
-                                            <?php echo format_invoice_status($invoice->status, '', false); ?>
+                                            <?php echo '<span class="bold">' . e(_d($invoice->date)) . '</span>'; ?><br />
+                                            <?php echo e(format_invoice_status($invoice->status, '', false)); ?>
                                         </span>
                                     </li>
                                     <?php } ?>
                                 </ul>
                                 <?php } else { ?>
                                 <div class="alert alert-info no-mbot mtop15">
-                                    <?php echo _l('no_child_found', _l('invoices')); ?>
+                                    <?php echo e(_l('no_child_found', _l('invoices'))); ?>
                                 </div>
                                 <?php } ?>
                             </div>
                             <div role="tabpanel" class="tab-pane ptop10" id="tab_emails_tracking">
                                 <?php
-                    $this->load->view(
-                    'admin/includes/emails_tracking',
-                    [
-                      'tracked_emails' => get_tracked_emails($subscription->id, 'subscription'), ]
-                );
-                  ?>
+                                    $this->load->view(
+                                        'admin/includes/emails_tracking',
+                                        [
+                                        'tracked_emails' => get_tracked_emails($subscription->id, 'subscription'), ]
+                                    );
+                                ?>
                             </div>
                         </div>
                     </div>

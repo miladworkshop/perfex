@@ -190,7 +190,7 @@
                             scrollTop: $("#online_payment_form").offset().top
                         }, 'slow');
                     } else {
-                        $('#response').html('Something went wrong...');
+                        $('#response').html("<?php echo _l('something_went_wrong'); ?>");
                     }
                     if (typeof(grecaptcha) != 'undefined') {
                         grecaptcha.reset();

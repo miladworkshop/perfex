@@ -4,7 +4,7 @@
     <div class="content">
         <div class="row">
             <div class="col-md-7">
-                <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700"><?php echo $announcement->name; ?>
+                <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700"><?php echo e($announcement->name); ?>
                     <?php if (is_admin()) { ?>
                     <a href="<?php echo admin_url('announcements/announcement/' . $announcement->announcementid); ?>"
                         class="pull-right tw-font-normal">
@@ -15,12 +15,14 @@
                 <div class="panel_s">
                     <div class="panel-body tc-content">
                         <p class="tw-text-neutral-500 tw-mb-0">
-                            <?php echo _l('announcement_date', _dt($announcement->dateadded)); ?></p>
+                            <?php echo e(_l('announcement_date', _dt($announcement->dateadded))); ?></p>
                         <?php if ($announcement->showname == 1) { ?>
                         <p class="tw-text-neutral-500">
-                            <?php echo _l('announcement_from') . ' ' . $announcement->userid; ?></p>
+                            <?php echo e(_l('announcement_from') . ' ' . $announcement->userid); ?></p>
                         <?php } ?>
-                        <?php echo $announcement->message; ?>
+                        <div class="tw-mt-4">
+                            <?php echo $announcement->message; ?>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -33,9 +35,9 @@
                         <?php foreach ($recent_announcements as $announcement) { ?>
                         <a class="bold"
                             href="<?php echo admin_url('announcements/view/' . $announcement['announcementid']); ?>">
-                            <?php echo $announcement['name']; ?></a>
+                            <?php echo e($announcement['name']); ?></a>
                         <p class="text-muted no-margin">
-                            <?php echo _l('announcement_date', _dt($announcement['dateadded'])); ?></p>
+                            <?php echo e(_l('announcement_date', _dt($announcement['dateadded']))); ?></p>
                         <?php if ($announcement['showname'] == 1) { ?>
                         <p class="text-muted no-margin">
                             <?php echo _l('announcement_from') . ' ' . $announcement['userid']; ?></p>

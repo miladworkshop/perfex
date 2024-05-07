@@ -2,7 +2,7 @@
 <?php if (isset($client)) { ?>
 <h4 class="customer-profile-group-heading"><?php echo _l('credit_notes'); ?></h4>
 <div class="alert alert-warning">
-    <?php echo _l('x_credits_available', app_format_money($credits_available, $customer_currency)); ?>
+    <?php echo e(_l('x_credits_available', app_format_money($credits_available, $customer_currency))); ?>
 </div>
 <?php if (staff_can('create',  'credit_notes')) { ?>
 <a href="<?php echo admin_url('credit_notes/credit_note?customer_id=' . $client->userid); ?>"

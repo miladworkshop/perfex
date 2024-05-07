@@ -52,10 +52,10 @@
                                     <select name="staff_id" id="staff_id" class="selectpicker" data-width="100%">
                                         <option value=""><?php echo _l('all_staff_members'); ?></option>
                                         <option value="<?php echo get_staff_user_id(); ?>">
-                                            <?php echo get_staff_full_name(get_staff_user_id()); ?></option>
+                                            <?php echo e(get_staff_full_name(get_staff_user_id())); ?></option>
                                         <?php foreach ($staff_members_with_timesheets as $staff) { ?>
-                                        <option value="<?php echo $staff['staff_id']; ?>">
-                                            <?php echo get_staff_full_name($staff['staff_id']); ?></option>
+                                        <option value="<?php echo e($staff['staff_id']); ?>">
+                                            <?php echo e(get_staff_full_name($staff['staff_id'])); ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>

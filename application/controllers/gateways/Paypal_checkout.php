@@ -95,21 +95,21 @@ class Paypal_checkout extends App_Controller
                     <div class="panel-heading">
                         <div class="panel-title">
                             <?php echo _l('payment_for_invoice'); ?> -
-                            <?php echo _l('payment_total', app_format_money($data['total'], $data['invoice']->currency_name)); ?>
+                            <?php echo e(_l('payment_total', app_format_money($data['total'], $data['invoice']->currency_name))); ?>
                         </div>
                         <a
                             href="<?php echo site_url('invoice/' . $data['invoice']->id . '/' . $data['invoice']->hash); ?>">
-                            <?php echo format_invoice_number($data['invoice']->id); ?>
+                            <?php echo e(format_invoice_number($data['invoice']->id)); ?>
                         </a>
                     </div>
                     <div class="panel-body">
                         <div>
                             </h3>
                             <?php if ($this->paypal_checkout_gateway->processingFees) { ?>
-                                <h4><?php echo _l('payment_attempt_amount') . ": " . app_format_money($data['attempt_amount'], $data['invoice']->currency_name); ?></h4>
-                                <h4><?php echo _l('payment_attempt_fee') . ": " . app_format_money($data['attempt_fee'], $data['invoice']->currency_name); ?></h4>
+                                <h4><?php echo _l('payment_attempt_amount') . ": " . e(app_format_money($data['attempt_amount'], $data['invoice']->currency_name)); ?></h4>
+                                <h4><?php echo _l('payment_attempt_fee') . ": " . e(app_format_money($data['attempt_fee'], $data['invoice']->currency_name)); ?></h4>
                             <?php } ?>
-                            <h4><?php echo _l('payment_total', app_format_money($data['total'], $data['invoice']->currency_name)); ?></h4>
+                            <h4><?php echo e(_l('payment_total', app_format_money($data['total'], $data['invoice']->currency_name))); ?></h4>
                             <hr />
                         </div>
                         <div class="row">

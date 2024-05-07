@@ -14,8 +14,8 @@
         <h4><?php echo _l('credit_card_update_info'); ?></h4>
 
         <a href="<?php echo site_url('clients/update_credit_card'); ?>" class="btn btn-primary">
-            <?php echo _l('update_card_btn'); ?> (<?php echo $payment_method->card->brand; ?>
-            <?php echo $payment_method->card->last4; ?>
+            <?php echo _l('update_card_btn'); ?> (<?php echo e($payment_method->card->brand); ?>
+            <?php echo e($payment_method->card->last4); ?>
         </a>
 
         <div<?php if (!customer_can_delete_credit_card()) { ?> data-toggle="tooltip"

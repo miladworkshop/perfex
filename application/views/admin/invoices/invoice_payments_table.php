@@ -13,10 +13,10 @@
         <tbody>
             <?php foreach ($invoice->payments as $payment) { ?>
             <tr class="payment">
-                <td><?php echo $payment['paymentid']; ?>
+                <td><?php echo e($payment['paymentid']); ?>
                     <?php echo icon_btn('payments/pdf/' . $payment['paymentid'], 'fa-regular fa-file-pdf', 'btn-default pull-right'); ?>
                 </td>
-                <td><?php echo $payment['name']; ?>
+                <td><?php echo e($payment['name']); ?>
                     <?php if (!empty($payment['paymentmethod'])) {
     echo ' - ' . $payment['paymentmethod'];
 }
@@ -25,8 +25,8 @@
                     }
                     ?>
                 </td>
-                <td><?php echo _d($payment['date']); ?></td>
-                <td><?php echo app_format_money($payment['amount'], $invoice->currency_name); ?></td>
+                <td><?php echo e(_d($payment['date'])); ?></td>
+                <td><?php echo e(app_format_money($payment['amount'], $invoice->currency_name)); ?></td>
                 <td>
                     <div class="tw-flex tw-items-center tw-space-x-3">
                         <a href="<?php echo admin_url('payments/payment/' . $payment['paymentid']); ?>"

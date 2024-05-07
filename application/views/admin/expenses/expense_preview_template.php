@@ -22,7 +22,7 @@
                         <?php } ?>
                         <li role="presentation">
                             <a href="#tab_tasks"
-                                onclick="init_rel_tasks_table(<?php echo $expense->expenseid; ?>,'expense'); return false;"
+                                onclick="init_rel_tasks_table(<?php echo e($expense->expenseid); ?>,'expense'); return false;"
                                 aria-controls="tab_tasks" role="tab" data-toggle="tab">
                                 <?php echo _l('tasks'); ?>
                             </a>
@@ -59,17 +59,17 @@
             <div class="row mtop20">
                 <div class="col-md-6" id="expenseHeadings">
                     <h3 class="tw-font-semibold tw-text-lg tw-text-neutral-700 tw-mt-0 tw-mb-1" id="expenseCategory">
-                        <?php echo $expense->category_name; ?>
+                        <?php echo e($expense->category_name); ?>
                     </h3>
                     <?php if (!empty($expense->expense_name)) { ?>
                     <h4 class="tw-text-sm tw-m-0 tw-text-neutral-500" id="expenseName">
-                        <?php echo $expense->expense_name; ?>
+                        <?php echo e($expense->expense_name); ?>
                     </h4>
                     <?php } ?>
                     <h4 class="tw-text-sm tw-m-0 tw-text-neutral-500" id="expenserCreator">
                         <?php echo _l('created_by'); ?>: <a
                             href="<?php echo admin_url('staff/profile/' . $expense->addedfrom) ?>">
-                            <?php echo get_staff_full_name($expense->addedfrom); ?>
+                            <?php echo e(get_staff_full_name($expense->addedfrom)); ?>
                         </a>
                     </h4>
                 </div>
@@ -80,14 +80,14 @@
                     <?php if ($expense->billable == 1 && $expense->invoiceid == null) { ?>
                     <?php if (staff_can('create',  'invoices')) { ?>
                     <button type="button" class="btn btn-success pull-right mleft5 expense_convert_btn"
-                        data-id="<?php echo $expense->expenseid; ?>" data-toggle="modal"
+                        data-id="<?php echo e($expense->expenseid); ?>" data-toggle="modal"
                         data-target="#expense_convert_helper_modal">
                         <?php echo _l('expense_convert_to_invoice'); ?>
                     </button>
                     <?php } ?>
                     <?php } elseif ($expense->invoiceid != null) { ?>
                     <a href="<?php echo admin_url('invoices/list_invoices/' . $expense->invoiceid); ?>"
-                        class="btn btn-primary mleft10 pull-right"><?php echo format_invoice_number($invoice->id); ?></a>
+                        class="btn btn-primary mleft10 pull-right"><?php echo e(format_invoice_number($invoice->id)); ?></a>
                     <?php } ?>
                     <div class="pull-right">
                         <?php if (staff_can('edit',  'expenses')) { ?>
@@ -149,23 +149,23 @@
                     } ?>
                         <?php if ($expense->recurring_from == null && $recurring_expense->cycles > 0 && $recurring_expense->cycles == $recurring_expense->total_cycles) { ?>
                         <div class="alert alert-info mbot15">
-                            <?php echo _l('recurring_has_ended', _l('expense_lowercase')); ?>
+                            <?php echo e(_l('recurring_has_ended', _l('expense_lowercase'))); ?>
                         </div>
                         <?php } elseif ($show_recurring_expense_info) { ?>
                         <span class="label label-info">
                             <?php echo _l('cycles_remaining'); ?>:
-                            <b>
+                            <b class="tw-ml-2">
                                 <?php
-                     echo $recurring_expense->cycles == 0 ? _l('cycles_infinity') : $recurring_expense->cycles - $recurring_expense->total_cycles;
-                   ?>
+                                    echo e($recurring_expense->cycles == 0 ? _l('cycles_infinity') : $recurring_expense->cycles - $recurring_expense->total_cycles);
+                                ?>
                             </b>
                         </span>
                         <?php if ($recurring_expense->cycles == 0 || $recurring_expense->cycles != $recurring_expense->total_cycles) {
-                       echo '<span class="label label-info tw-ml-3"><i class="fa-regular fa-circle-question fa-fw" data-toggle="tooltip" data-title="' . _l('recurring_recreate_hour_notice', _l('expense')) . '"></i> ' . _l('next_expense_date', '<b>' . _d($next_date) . '</b>') . '</span>';
+                       echo '<span class="label label-info tw-ml-1"><i class="fa-regular fa-circle-question fa-fw" data-toggle="tooltip" data-title="' . _l('recurring_recreate_hour_notice', _l('expense')) . '"></i> ' . _l('next_expense_date', '<b class="tw-ml-1">' . e(_d($next_date)) . '</b>') . '</span>';
                    }
             }
                     if ($expense->recurring_from != null) { ?>
-                        <?php echo '<p class="text-muted no-mbot' . ($show_recurring_expense_info ? ' mtop15': '') . '">' . _l('expense_recurring_from', '<a href="' . admin_url('expenses/list_expenses/' . $expense->recurring_from) . '" onclick="init_expense(' . $expense->recurring_from . ');return false;">' . $recurring_expense->category_name . (!empty($recurring_expense->expense_name) ? ' (' . $recurring_expense->expense_name . ')' : '') . '</a></p>'); ?>
+                        <?php echo '<p class="text-muted no-mbot' . ($show_recurring_expense_info ? ' mtop15': '') . '">' . _l('expense_recurring_from', '<a href="' . admin_url('expenses/list_expenses/' . $expense->recurring_from) . '" onclick="init_expense(' . $expense->recurring_from . ');return false;">' . e($recurring_expense->category_name) . (!empty($recurring_expense->expense_name) ? ' (' . e($recurring_expense->expense_name) . ')' : '') . '</a></p>'); ?>
                         <?php } ?>
                     </div>
                     <div class="clearfix"></div>
@@ -177,36 +177,38 @@
                         <div id="amountWrapper">
                             <span class="bold font-medium"><?php echo _l('expense_amount'); ?></span>
                             <span
-                                class="text-danger bold font-medium"><?php echo app_format_money($expense->amount, $expense->currency_data); ?></span>
+                                class="text-danger bold font-medium">
+                                <?php echo e(app_format_money($expense->amount, $expense->currency_data)); ?>
+                            </span>
                         </div>
                         <?php if ($expense->paymentmode != '0' && !empty($expense->paymentmode)) {
                     ?>
                         <span class="text-muted text-sm">
-                            <?php echo _l('expense_paid_via', $expense->payment_mode_name); ?>
+                            <?php echo e(_l('expense_paid_via', $expense->payment_mode_name)); ?>
                         </span><br />
                         <?php
                 } ?>
                         <?php
                         if ($expense->tax != 0) {
-                            echo '<br /><span class="bold">' . _l('tax_1') . ':</span> ' . $expense->taxrate . '% (' . $expense->tax_name . ')';
+                            echo '<br /><span class="bold">' . _l('tax_1') . ':</span> ' . e($expense->taxrate) . '% (' . e($expense->tax_name ). ')';
                             $total = $expense->amount;
                             $total += ($total / 100 * $expense->taxrate);
                         }
                         if ($expense->tax2 != 0) {
-                            echo '<br /><span class="bold">' . _l('tax_2') . ':</span> ' . $expense->taxrate2 . '% (' . $expense->tax_name2 . ')';
+                            echo '<br /><span class="bold">' . _l('tax_2') . ':</span> ' . e($expense->taxrate2) . '% (' . e($expense->tax_name2) . ')';
                             $total += ($expense->amount / 100 * $expense->taxrate2);
                         }
                         if ($expense->tax != 0 || $expense->tax2 != 0) {
-                            echo '<p class="font-medium bold text-danger">' . _l('total_with_tax') . ': ' . app_format_money($total, $expense->currency_data) . '</p>';
+                            echo '<p class="font-medium bold text-danger">' . _l('total_with_tax') . ': ' . e(app_format_money($total, $expense->currency_data)) . '</p>';
                         }
                         ?>
                         <p><span class="bold"><?php echo _l('expense_date'); ?></span> <span
-                                class="text-muted"><?php echo _d($expense->date); ?></span></p>
+                                class="text-muted"><?php echo e(_d($expense->date)); ?></span></p>
                         <?php if ($expense->billable == 1) {
                             if ($expense->invoiceid == null) {
                                 echo '<span class="text-danger">' . _l('expense_invoice_not_created') . '</span>';
                             } else {
-                                echo '<span class="bold">' . format_invoice_number($invoice->id) . ' - </span>';
+                                echo '<span class="bold">' . e(format_invoice_number($invoice->id)) . ' - </span>';
                                 if ($invoice->status == 2) {
                                     echo '<span class="text-success">' . _l('expense_billed') . '</span>';
                                 } else {
@@ -216,19 +218,28 @@
                         } ?>
                         </p>
                         <?php if (!empty($expense->reference_no)) { ?>
-                        <p class="bold mbot15"><?php echo _l('expense_ref_noe'); ?> <span
-                                class="text-muted"><?php echo $expense->reference_no; ?></span></p>
+                            <p class="bold mbot15"><?php echo _l('expense_ref_noe'); ?> 
+                                <span class="text-muted">
+                                    <?php echo e($expense->reference_no); ?>
+                                </span>
+                            </p>
                         <?php } ?>
                         <?php if ($expense->clientid) { ?>
                         <p class="bold mbot5"><?php echo _l('expense_customer'); ?></p>
-                        <p class="mbot15"><a
-                                href="<?php echo admin_url('clients/client/' . $expense->clientid); ?>"><?php echo $expense->company; ?></a>
+                        <p class="mbot15">
+                            <a
+                                href="<?php echo admin_url('clients/client/' . $expense->clientid); ?>">
+                                <?php echo e($expense->company); ?>
+                            </a>
                         </p>
                         <?php } ?>
                         <?php if ($expense->project_id) { ?>
                         <p class="bold mbot5"><?php echo _l('project'); ?></p>
-                        <p class="mbot15"><a
-                                href="<?php echo admin_url('projects/view/' . $expense->project_id); ?>"><?php echo $expense->project_data->name; ?></a>
+                        <p class="mbot15">
+                            <a
+                                href="<?php echo admin_url('projects/view/' . $expense->project_id); ?>">
+                                <?php echo e($expense->project_data->name); ?>
+                            </a>
                         </p>
                         <?php } ?>
                         <?php
@@ -241,7 +252,7 @@
                         <div class="row mbot10">
                             <div class="col-md-12 mtop5">
                                 <p class="mbot5">
-                                    <span class="bold"><?php echo ucfirst($field['name']); ?></span>
+                                    <span class="bold"><?php echo e(ucfirst($field['name'])); ?></span>
                                 </p>
                                 <div class="text-left">
                                     <?php echo $value; ?>
@@ -250,9 +261,12 @@
                         </div>
                         <?php } ?>
                         <?php if ($expense->note != '') { ?>
-                        <p class="bold mbot5"><?php echo _l('expense_note'); ?></p>
-                        <p class="text-muted mbot15"><?php echo $expense->note; ?></p>
+                            <p class="bold mbot5"><?php echo _l('expense_note'); ?></p>
+                            <div class="text-muted mbot15">
+                                <?php echo process_text_content_for_display($expense->note); ?>
+                            </div>
                         <?php } ?>
+                        <?php hooks()->do_action('after_left_panel_expense_preview_template', $expense); ?>
                     </div>
                     <div class="col-md-6" id="expenseReceipt">
 
@@ -272,19 +286,24 @@
                         <?php } else { ?>
                         <div class="row">
                             <div class="col-md-10">
-                                <i class="<?php echo get_mime_class($expense->filetype); ?>"></i> <a
+                                <i class="<?php echo get_mime_class($expense->filetype); ?>"></i> 
+                                <a
                                     href="<?php echo site_url('download/file/expense/' . $expense->expenseid); ?>">
-                                    <?php echo $expense->attachment; ?></a>
+                                    <?php echo e($expense->attachment); ?>
+                                </a>
                             </div>
                             <?php if ($expense->attachment_added_from == get_staff_user_id() || is_admin()) { ?>
                             <div class="col-md-2 text-right">
                                 <a class="_delete text-danger"
                                     href="<?php echo admin_url('expenses/delete_expense_attachment/' . $expense->expenseid . '/' . 'preview'); ?>"
-                                    class="text-danger"><i class="fa fa fa-times"></i></a>
+                                    class="text-danger">
+                                    <i class="fa fa fa-times"></i>
+                                </a>
                             </div>
                             <?php } ?>
                         </div>
                         <?php } ?>
+                        <?php hooks()->do_action('after_right_panel_expense_preview_template', $expense); ?>
                     </div>
                 </div>
             </div>
@@ -296,27 +315,29 @@
                     <?php foreach ($child_expenses as $recurring) { ?>
                     <li class="list-group-item">
                         <a href="<?php echo admin_url('expenses/list_expenses/' . $recurring->expenseid); ?>"
-                            onclick="init_expense(<?php echo $recurring->expenseid; ?>); return false;"
-                            target="_blank"><?php echo $recurring->category_name . (!empty($recurring->expense_name) ? ' (' . $recurring->expense_name . ')' : ''); ?>
+                            onclick="init_expense(<?php echo e($recurring->expenseid); ?>); return false;"
+                            target="_blank"><?php echo e($recurring->category_name . (!empty($recurring->expense_name) ? ' (' . e($recurring->expense_name) . ')' : '')); ?>
                         </a>
                         <br />
                         <span class="inline-block mtop10">
-                            <?php echo '<span class="bold">' . _d($recurring->date) . '</span>'; ?><br />
+                            <?php echo '<span class="bold">' . e(_d($recurring->date)) . '</span>'; ?><br />
                             <p><span class="bold font-medium"><?php echo _l('expense_amount'); ?></span>
                                 <span
-                                    class="text-danger bold font-medium"><?php echo app_format_money($recurring->amount, $recurring->currency_data); ?></span>
+                                    class="text-danger bold font-medium">
+                                    <?php echo e(app_format_money($recurring->amount, $recurring->currency_data)); ?>
+                                </span>
                                 <?php
                            if ($recurring->tax != 0) {
-                               echo '<br /><span class="bold">' . _l('tax_1') . ':</span> ' . $recurring->taxrate . '% (' . $recurring->tax_name . ')';
+                               echo '<br /><span class="bold">' . _l('tax_1') . ':</span> ' . e($recurring->taxrate) . '% (' . e($recurring->tax_name) . ')';
                                $total = $recurring->amount;
                                $total += ($total / 100 * $recurring->taxrate);
                            }
                            if ($recurring->tax2 != 0) {
-                               echo '<br /><span class="bold">' . _l('tax_2') . ':</span> ' . $recurring->taxrate2 . '% (' . $recurring->tax_name2 . ')';
+                               echo '<br /><span class="bold">' . _l('tax_2') . ':</span> ' . e($recurring->taxrate2) . '% (' . e($recurring->tax_name2) . ')';
                                $total += ($recurring->amount / 100 * $recurring->taxrate2);
                            }
                            if ($recurring->tax != 0 || $recurring->tax2 != 0) {
-                               echo '<p class="font-medium bold text-danger">' . _l('total_with_tax') . ': ' . app_format_money($total, $recurring->currency_data) . '</p>';
+                               echo '<p class="font-medium bold text-danger">' . _l('total_with_tax') . ': ' . e(app_format_money($total, $recurring->currency_data)) . '</p>';
                            }
                            ?>
                         </span>
@@ -324,7 +345,7 @@
                     <?php } ?>
                 </ul>
                 <?php } else { ?>
-                <p class="bold"><?php echo _l('no_child_found', _l('expenses')); ?></p>
+                    <p class="bold"><?php echo e(_l('no_child_found', _l('expenses'))); ?></p>
                 <?php } ?>
             </div>
             <?php } ?>
@@ -333,7 +354,7 @@
             </div>
             <div role="tabpanel" class="tab-pane" id="tab_reminders">
                 <a href="#" data-toggle="modal" class="btn btn-default"
-                    data-target=".reminder-modal-expense-<?php echo $expense->id; ?>"><i class="fa-regular fa-bell"></i>
+                    data-target=".reminder-modal-expense-<?php echo e($expense->id); ?>"><i class="fa-regular fa-bell"></i>
                     <?php echo _l('expense_set_reminder_title'); ?></a>
                 <hr />
                 <?php render_datatable([ _l('reminder_description'), _l('reminder_date'), _l('reminder_staff'), _l('reminder_is_notified')], 'reminders'); ?>
@@ -358,7 +379,7 @@ if ($('#dropzoneDragArea').length > 0) {
         clickable: '#dropzoneDragArea',
         maxFiles: 1,
         success: function(file, response) {
-            init_expense(<?php echo $expense->expenseid; ?>);
+            init_expense(<?php echo e($expense->expenseid); ?>);
         }
     }));
 }

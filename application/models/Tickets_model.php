@@ -460,11 +460,16 @@ class Tickets_model extends App_Model
         $data['message']  = trim($data['message']);
 
         if ($this->piping == true) {
-            $data['message'] = preg_replace('/\v+/u', '<br>', $data['message']);
+            // $data['message'] = preg_replace('/\v+/u', '<br>', $data['message']);
         }
 
+        $is_html_stripped = $this->piping === true;
+
         // admin can have html
-        if ($admin == null && hooks()->apply_filters('ticket_message_without_html_for_non_admin', true)) {
+        if (!$is_html_stripped && 
+            $admin == null && 
+            hooks()->apply_filters('ticket_message_without_html_for_non_admin', true)
+        ) {
             $data['message'] = _strip_tags($data['message']);
             $data['message'] = nl2br_save_html($data['message']);
         }
@@ -473,7 +478,7 @@ class Tickets_model extends App_Model
             $data['userid'] = 0;
         }
 
-        $data['message'] = remove_emojis($data['message']);
+        // $data['message'] = remove_emojis($data['message']);
         $data            = hooks()->apply_filters('before_ticket_reply_add', $data, $id, $admin);
 
         $this->db->insert(db_prefix() . 'ticket_replies', $data);
@@ -802,12 +807,17 @@ class Tickets_model extends App_Model
         $data['status']    = 1;
         $data['message']   = trim($data['message']);
         $data['subject']   = trim($data['subject']);
-        if ($this->piping == true) {
-            $data['message'] = preg_replace('/\v+/u', '<br>', $data['message']);
-        }
+        // if ($this->piping == true) {
+        //     $data['message'] = preg_replace('/\v+/u', '<br>', $data['message']);
+        // }
 
+        $is_html_stripped = $this->piping === true;
+      
         // Admin can have html
-        if ($admin == null && hooks()->apply_filters('ticket_message_without_html_for_non_admin', true)) {
+        if (!$is_html_stripped && 
+            $admin == null && 
+            hooks()->apply_filters('ticket_message_without_html_for_non_admin', true)
+        ) {
             $data['message'] = _strip_tags($data['message']);
             $data['subject'] = _strip_tags($data['subject']);
             $data['message'] = nl2br_save_html($data['message']);
@@ -816,6 +826,7 @@ class Tickets_model extends App_Model
         if (!isset($data['userid'])) {
             $data['userid'] = 0;
         }
+
         if (isset($data['priority']) && $data['priority'] == '' || !isset($data['priority'])) {
             $data['priority'] = 0;
         }
@@ -826,7 +837,7 @@ class Tickets_model extends App_Model
             unset($data['tags']);
         }
 
-        $data['message'] = remove_emojis($data['message']);
+        // $data['message'] = remove_emojis($data['message']);
         $data            = hooks()->apply_filters('before_ticket_created', $data, $admin);
 
         $this->db->insert(db_prefix() . 'tickets', $data);

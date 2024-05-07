@@ -22,14 +22,14 @@
                     <?php
                     $custom_fields = get_custom_fields('contact', ['show_on_client_portal' => 1]);
                     foreach ($custom_fields as $field) { ?>
-                    <th><?php echo $field['name']; ?></th>
+                    <th><?php echo e($field['name']); ?></th>
                     <?php } ?>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 foreach ($contacts as $contact) {
-                    $rowName = '<img src="' . contact_profile_image_url($contact['id']) . '" class="client-profile-image-small mright5">' . get_contact_full_name($contact['id']);
+                    $rowName = '<img src="' . e(contact_profile_image_url($contact['id'])) . '" class="client-profile-image-small mright5">' . e(get_contact_full_name($contact['id']));
                     $rowName .= '<div class="mleft25 pleft5 row-options">';
                     $rowName .= '<a href="' . site_url('contacts/contact/' . $contact['id']) . '">' . _l('edit') . '</a>';
                     if ($contact['is_primary'] == 0 || ($contact['is_primary'] == 1)) {
@@ -37,15 +37,15 @@
                     }
                     $rowName .= '</div> '; ?>
                 <tr>
-                    <td data-order="<?php echo get_contact_full_name($contact['id']); ?>"><?php echo $rowName; ?></td>
-                    <td data-order="<?php echo $contact['email']; ?>"><?php echo $contact['email']; ?></td>
-                    <td data-order="<?php echo $contact['title']; ?>"><?php echo $contact['title']; ?></td>
-                    <td data-order="<?php echo $contact['phonenumber']; ?>"><a
-                            href="tel:+<?php echo $contact['phonenumber']; ?>"><?php echo $contact['phonenumber']; ?></a>
+                    <td data-order="<?php echo e(get_contact_full_name($contact['id'])); ?>"><?php echo $rowName; ?></td>
+                    <td data-order="<?php echo e($contact['email']); ?>"><?php echo e($contact['email']); ?></td>
+                    <td data-order="<?php echo e($contact['title']); ?>"><?php echo e($contact['title']); ?></td>
+                    <td data-order="<?php echo e($contact['phonenumber']); ?>"><a
+                            href="tel:+<?php echo e($contact['phonenumber']); ?>"><?php echo e($contact['phonenumber']); ?></a>
                     </td>
                     <td data-order="<?php echo $contact['last_login'] ?>">
                         <?php
-                            echo(!empty($aRow['last_login']) ? '<span class="text-has-action is-date" data-toggle="tooltip" data-title="' . _dt($aRow['last_login']) . '">' . time_ago($aRow['last_login']) . '</span>' : ''); ?>
+                            echo(!empty($aRow['last_login']) ? '<span class="text-has-action is-date" data-toggle="tooltip" data-title="' . e(_dt($aRow['last_login'])) . '">' . e(time_ago($aRow['last_login'])) . '</span>' : ''); ?>
                     </td>
                 </tr>
                 <?php

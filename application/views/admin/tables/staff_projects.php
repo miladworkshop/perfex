@@ -32,12 +32,12 @@ foreach ($rResult as $aRow) {
         $_data = $aRow[ $aColumns[$i] ];
 
         if ($aColumns[$i] == 'start_date' || $aColumns[$i] == 'deadline') {
-            $_data = _d($_data);
+            $_data = e(_d($_data));
         } elseif ($aColumns[$i] == 'name') {
-            $_data = '<a href="' . admin_url('projects/view/' . $aRow['id']) . '">' . $_data . '</a>';
+            $_data = '<a href="' . admin_url('projects/view/' . $aRow['id']) . '">' . e($_data) . '</a>';
         } elseif ($aColumns[$i] == 'status') {
             $status = get_project_status_by_id($_data);
-            $status = '<span class="label label project-status-' . $_data . '" style="color:' . $status['color'] . ';border:1px solid ' . $status['color'] . '">' . $status['name'] . '</span>';
+            $status = '<span class="label label project-status-' . $_data . '" style="color:' . $status['color'] . ';border:1px solid ' . $status['color'] . '">' . e($status['name']) . '</span>';
             $_data  = $status;
         }
 

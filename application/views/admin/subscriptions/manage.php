@@ -37,9 +37,9 @@
                             <div
                                 class="md:tw-border-r md:tw-border-solid md:tw-border-neutral-300 tw-flex-1 tw-flex tw-items-center lg:last:tw-border-r-0">
                                 <span class="tw-font-semibold tw-mr-3 tw-text-lg">
-                                    <?php echo $summary['total']; ?>
+                                    <?php echo e($summary['total']); ?>
                                 </span>
-                                <span style="color:<?php echo $summary['color']; ?>">
+                                <span style="color:<?php echo e($summary['color']); ?>">
                                     <?php echo _l('subscription_' . $summary['id']); ?>
                                 </span>
                             </div>

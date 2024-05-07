@@ -9,6 +9,6 @@
         <?php } else { ?>
         <h5 class="bold mtop15 pull-left"><?php echo _l('no_payments_found'); ?></h5>
         <?php } ?>
-        <a href="#" class="btn btn-default pull-right" onclick="init_invoice(<?php echo $invoiceid; ?>); return false;"><?php echo _l('go_back'); ?></a>
+        <a href="#" class="btn btn-default pull-right" onclick="init_invoice(<?php echo e($invoiceid); ?>); return false;"><?php echo _l('go_back'); ?></a>
     </div>
 </div>

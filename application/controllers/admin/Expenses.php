@@ -262,11 +262,7 @@ class Expenses extends AdminController
             }
         }
 
-        if (strpos($_SERVER['HTTP_REFERER'], 'expenses/') !== false) {
-            redirect(admin_url('expenses/list_expenses'));
-        } else {
-            redirect($_SERVER['HTTP_REFERER']);
-        }
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     public function copy($id)

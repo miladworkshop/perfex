@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
-    <title><?php echo $form->name; ?></title>
+    <title><?php echo e($form->name); ?></title>
     <?php app_external_form_header($form); ?>
     <?php hooks()->do_action('app_web_to_lead_form_head'); ?>
     <style>
@@ -60,7 +60,7 @@
                                 <button class="btn" id="form_submit" type="submit"
                                     style="color: <?php echo $form->submit_btn_text_color ?>;background-color: <?php echo $form->submit_btn_bg_color ?>;">
                                     <i class="fa fa-spinner fa-spin hide" style="margin-right: 2px;"></i>
-                                    <?php echo $form->submit_btn_name; ?></button>
+                                    <?php echo e($form->submit_btn_name); ?></button>
                             </div>
                         </div>
 
@@ -72,7 +72,7 @@
         </div>
         <?php app_external_form_footer($form); ?>
         <script>
-        var form_id = '#<?php echo $form->form_key; ?>';
+        var form_id = '#<?php echo e($form->form_key); ?>';
         var form_redirect_url = '<?php echo $form->submit_action == 1 ? $form->submit_redirect_url : 0; ?>';
         $(function() {
             $(form_id).appFormValidator({
@@ -129,7 +129,7 @@
                                 scrollTop: $("#online_payment_form").offset().top
                             }, 'slow');
                         } else {
-                            $('#response').html('Something went wrong...');
+                            $('#response').html("<?php echo _l('something_went_wrong'); ?>");
                         }
                         if (typeof(grecaptcha) != 'undefined') {
                             grecaptcha.reset();

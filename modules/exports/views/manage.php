@@ -9,7 +9,7 @@ init_head();
     <div class="content">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
-                <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700"><?php echo $title; ?></h4>
+                <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700"><?php echo e($title); ?></h4>
                 <?php echo form_open($this->uri->uri_string(), ['id' => 'export-form']); ?>
                 <div class="panel_s">
                     <div class="panel-body">
@@ -22,8 +22,8 @@ init_head();
                                         data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                                         <option value=""></option>
                                         <?php foreach ($features as $feature) { ?>
-                                        <option value="<?php echo $feature['feature']; ?>">
-                                            <?php echo $feature['name']; ?></option>
+                                        <option value="<?php echo e($feature['feature']); ?>">
+                                            <?php echo e($feature['name']); ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>

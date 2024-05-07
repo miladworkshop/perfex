@@ -81,6 +81,8 @@ class Authentication extends ClientsController
             redirect(site_url());
         }
 
+        $requiredFields = get_required_fields_for_registration();
+       
         $honeypot = get_option('enable_honeypot_spam_validation') == 1;
 
         $fields = [
@@ -94,6 +96,30 @@ class Authentication extends ClientsController
             $this->form_validation->set_rules($fields['company'], _l('client_company'), 'required');
         }
 
+        $emailRules = 'trim|is_unique[' . db_prefix() . 'contacts.email]|valid_email';
+
+        foreach(['contact', 'company'] as $fieldsKey) {
+            foreach($requiredFields[$fieldsKey] as $key => $field) {
+                $formKey = strafter($key, '_');
+
+                if(isset($fields[$formKey])) {
+                    $formKey = $fields[$formKey];
+                }
+                
+                if($key !== 'contact_email'){
+                    if($field['is_required']) {
+                        $this->form_validation->set_rules($formKey, $field['label'], 'required');
+                    }
+                } else {
+                    if($field['is_required']) {
+                        $emailRules .= '|required';
+                    }
+
+                    $this->form_validation->set_rules($formKey, $field['label'], $emailRules);
+                }
+            }
+        }
+
         if (is_gdpr() && get_option('gdpr_enable_terms_and_conditions') == 1) {
             $this->form_validation->set_rules(
                 'accept_terms_and_conditions',
@@ -102,10 +128,7 @@ class Authentication extends ClientsController
                 ['required' => _l('terms_and_conditions_validation')]
             );
         }
-
-        $this->form_validation->set_rules($fields['firstname'], _l('client_firstname'), 'required');
-        $this->form_validation->set_rules($fields['lastname'], _l('client_lastname'), 'required');
-        $this->form_validation->set_rules($fields['email'], _l('client_email'), 'trim|required|is_unique[' . db_prefix() . 'contacts.email]|valid_email');
+       
         $this->form_validation->set_rules('password', _l('clients_register_password'), 'required');
         $this->form_validation->set_rules('passwordr', _l('clients_register_password_repeat'), 'required|matches[password]');
 
@@ -226,6 +249,7 @@ class Authentication extends ClientsController
             }
         }
 
+        $data['requiredFields'] = $requiredFields;
         $data['title']     = _l('clients_register_heading');
         $data['bodyclass'] = 'register';
         $data['honeypot']  = $honeypot;
@@ -345,10 +369,6 @@ class Authentication extends ClientsController
 
         set_contact_language($lang);
 
-        if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
-            redirect($_SERVER['HTTP_REFERER']);
-        } else {
-            redirect(site_url());
-        }
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 }

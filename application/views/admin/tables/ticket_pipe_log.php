@@ -27,7 +27,7 @@ foreach ($rResult as $aRow) {
     for ($i = 0; $i < count($aColumns); $i++) {
         $_data = $aRow[$aColumns[$i]];
         if ($aColumns[$i] == 'date') {
-            $_data = _dt($_data);
+            $_data = e(_dt($_data));
         } elseif ($aColumns[$i] == 'message') {
             $_data = mb_substr($_data, 0, 800);
         }

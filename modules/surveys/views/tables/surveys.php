@@ -21,7 +21,7 @@ foreach ($rResult as $aRow) {
     for ($i = 0; $i < count($aColumns); $i++) {
         $_data = $aRow[$aColumns[$i]];
         if ($aColumns[$i] == 'subject') {
-            $_data = '<a href="' . admin_url('surveys/survey/' . $aRow['surveyid']) . '">' . $_data . '</a>';
+            $_data = '<a href="' . admin_url('surveys/survey/' . $aRow['surveyid']) . '">' . e($_data) . '</a>';
 
             $_data .= '<div class="row-options">';
 
@@ -39,7 +39,7 @@ foreach ($rResult as $aRow) {
 
             $_data .= '</div>';
         } elseif ($aColumns[$i] == 'datecreated') {
-            $_data = _dt($_data);
+            $_data = e(_dt($_data));
         } elseif ($aColumns[$i] == 'active') {
             $checked = '';
             if ($aRow['active'] == 1) {

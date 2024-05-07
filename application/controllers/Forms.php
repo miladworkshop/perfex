@@ -15,8 +15,12 @@ class Forms extends ClientsController
      * @param  string $key Estimate request form key identifier
      * @return mixed
      */
-    public function quote($key)
+    public function quote($key = '')
     {
+        if (!$key) {
+            show_404();
+        }
+
         $this->load->model('estimate_request_model');
         $form = $this->estimate_request_model->get_form([
             'form_key' => $key,
@@ -261,8 +265,12 @@ class Forms extends ClientsController
      * @param  string $key web to lead form key identifier
      * @return mixed
      */
-    public function wtl($key)
+    public function wtl($key = '')
     {
+        if (!$key) {
+            show_404();
+        }
+
         $this->load->model('leads_model');
         $form = $this->leads_model->get_form([
             'form_key' => $key,
@@ -584,8 +592,12 @@ class Forms extends ClientsController
      * @param  string $hash lead unique identifier
      * @return mixed
      */
-    public function l($hash)
+    public function l($hash = '')
     {
+        if (!$hash) {
+            show_404();
+        }
+
         if (get_option('gdpr_enable_lead_public_form') == '0') {
             show_404();
         }
@@ -604,7 +616,7 @@ class Forms extends ClientsController
             $data = $this->input->post();
             unset($data['update']);
             $this->leads_model->update($data, $lead->id);
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect(site_url('forms/l/' . $hash));
         } elseif ($this->input->post('export') && get_option('gdpr_data_portability_leads') == '1') {
             $this->load->library('gdpr/gdpr_lead');
             $this->gdpr_lead->export($lead->id);
@@ -618,7 +630,7 @@ class Forms extends ClientsController
                 send_gdpr_email_template('gdpr_removal_request_by_lead', $lead->id);
                 set_alert('success', _l('data_removal_request_sent'));
             }
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect(site_url('forms/l/' . $hash));
         }
 
         $lead->attachments = $this->leads_model->get_lead_attachments($lead->id);
@@ -631,8 +643,12 @@ class Forms extends ClientsController
         $this->layout(true);
     }
 
-    public function public_ticket($key)
+    public function public_ticket($key = '')
     {
+        if (!$key) {
+            show_404();
+        }
+
         $this->load->model('tickets_model');
 
         if (strlen($key) != 32) {
@@ -644,6 +660,8 @@ class Forms extends ClientsController
         if (!$ticket) {
             show_404();
         }
+
+        hooks()->do_action('view_public_ticket', $ticket);
 
         if (!empty($ticket->merged_ticket_id)) {
             redirect(site_url('forms/tickets/' . $this->tickets_model->get($ticket->merged_ticket_id)->ticketkey));

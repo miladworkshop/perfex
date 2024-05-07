@@ -4,7 +4,7 @@
     <div class="content">
         <div class="row">
             <div class="col-md-<?php echo !isset($goal) ? '8 col-md-offset-2' : 6; ?>">
-                <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700"><?php echo $title; ?></h4>
+                <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700"><?php echo e($title); ?></h4>
                 <?php echo form_open($this->uri->uri_string()); ?>
                 <div class="panel_s">
                     <div class="panel-body">
@@ -18,7 +18,7 @@
                                 data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                                 <option value=""></option>
                                 <?php foreach (get_goal_types() as $type) { ?>
-                                <option value="<?php echo $type['key']; ?>" data-subtext="<?php if (isset($type['subtext'])) {
+                                <option value="<?php echo e($type['key']); ?>" data-subtext="<?php if (isset($type['subtext'])) {
     echo _l($type['subtext']);
 } ?>" <?php if (isset($goal) && $goal->goal_type == $type['key']) {
     echo 'selected';
@@ -159,7 +159,7 @@ $(function() {
     });
     <?php if (isset($goal)) { ?>
     var circle = $('.goal-progress').circleProgress({
-        value: '<?php echo $achievement['progress_bar_percent']; ?>',
+        value: '<?php echo e($achievement['progress_bar_percent']); ?>',
         size: 250,
         fill: {
             gradient: ["#28b8da", "#059DC1"]

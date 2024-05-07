@@ -34,12 +34,11 @@ class Invoice_payment_recorded_to_staff extends App_mail_template
     public function build()
     {
         $this->add_attachment([
-                        'attachment' => $this->payment_pdf,
-                        'filename'   => _l('payment') . '-' . $this->payment_id . '.pdf',
-                        'type'       => 'application/pdf',
-                    ]);
-
-
+            'attachment' => $this->payment_pdf,
+            'filename'   => mb_strtoupper(slug_it(_l('payment') . '-' . $this->payment_id), 'UTF-8') . '.pdf',
+            'type'       => 'application/pdf',
+        ]);
+        
         $this->to($this->staff_email)
         ->set_rel_id($this->staffid)
         ->set_merge_fields('client_merge_fields',

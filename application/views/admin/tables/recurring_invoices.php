@@ -88,7 +88,7 @@ foreach ($rResult as $aRow) {
 
     $numberOutput = '';
 
-    $numberOutput = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['id']) . '" onclick="init_invoice(' . $aRow['id'] . '); return false;">' . format_invoice_number($aRow['id']) . '</a>';
+    $numberOutput = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['id']) . '" onclick="init_invoice(' . $aRow['id'] . '); return false;">' . e(format_invoice_number($aRow['id'])) . '</a>';
 
     $numberOutput .= '<div class="row-options">';
 
@@ -102,14 +102,14 @@ foreach ($rResult as $aRow) {
 
     $row[] = $numberOutput;
 
-    $row[] = app_format_money($aRow['total'], $aRow['currency_name']);
+    $row[] = e(app_format_money($aRow['total'], $aRow['currency_name']));
 
-    $row[] = $aRow['year'];
+    $row[] = e($aRow['year']);
 
     if (empty($aRow['deleted_customer_name'])) {
-        $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . $aRow['company'] . '</a>';
+        $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . e($aRow['company']) . '</a>';
     } else {
-        $row[] = $aRow['deleted_customer_name'];
+        $row[] = e($aRow['deleted_customer_name']);
     }
 
     $frequency = '';
@@ -126,11 +126,11 @@ foreach ($rResult as $aRow) {
             $frequency = _l('frequency_every', $aRow['recurring'] . ' ' . _l('invoice_recurring_years'));
         }
     }
-    $row[] = $frequency;
+    $row[] = e($frequency);
 
     $row[] = $aRow['cycles_remaining'] == null ? _l('cycles_infinity') : $aRow['cycles_remaining'];
 
-    $row[] = $aRow['last_date'] ? _d($aRow['last_date']) : '-';
+    $row[] = e($aRow['last_date'] ? _d($aRow['last_date']) : '-');
 
     $compareRecurring = $aRow['recurring_type'];
 
@@ -141,7 +141,7 @@ foreach ($rResult as $aRow) {
     $next_date = date('Y-m-d', strtotime('+' . $aRow['recurring'] . ' ' . strtoupper($compareRecurring), strtotime($aRow['helper_next_date'])));
 
     if ($aRow['cycles'] == 0 || $aRow['cycles'] != $aRow['total_cycles']) {
-        $row[] = _d($next_date);
+        $row[] = e(_d($next_date));
     } elseif ($aRow['cycles'] > 0 && $aRow['cycles'] == $aRow['total_cycles']) {
         $row[] = '<span class="badge">' . _l('recurring_has_ended', _l('invoice_lowercase')) . '</span>';
     } else {

@@ -18,8 +18,8 @@
     <?php foreach ($project_statuses as $status) { ?>
     <div class="tw-border tw-border-solid tw-border-neutral-200 tw-rounded-md tw-bg-white">
         <div class="tw-px-4 tw-py-5 sm:tw-px-4 sm:tw-py-2">
-            <dt class="tw-text-base tw-font-normal" style="color:<?php echo $status['color']; ?>">
-                <?php echo $status['name']; ?>
+            <dt class="tw-text-base tw-font-normal" style="color:<?php echo e($status['color']); ?>">
+                <?php echo e($status['name']); ?>
             </dt>
             <dd class="tw-mt-1 tw-flex tw-items-baseline tw-justify-between md:tw-block lg:tw-flex">
                 <div class="tw-flex tw-items-baseline tw-text-lg tw-font-semibold tw-text-primary-600">

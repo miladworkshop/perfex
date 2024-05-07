@@ -115,11 +115,11 @@ class Ticket_merge_fields extends App_merge_fields
         // Replace contact firstname with the ticket name in case the ticket is not linked to any contact.
         // eq email or form imported.
         if (!empty($ticket->name)) {
-            $fields['{contact_firstname}'] = $ticket->name;
+            $fields['{contact_firstname}'] = e($ticket->name);
         }
 
         if (!empty($ticket->email)) {
-            $fields['{contact_email}'] = $ticket->email;
+            $fields['{contact_email}'] = e($ticket->email);
         }
 
         $fields['{ticket_priority}'] = '';
@@ -130,8 +130,8 @@ class Ticket_merge_fields extends App_merge_fields
         $department = $this->ci->db->get(db_prefix() . 'departments')->row();
 
         if ($department) {
-            $fields['{ticket_department}']       = $department->name;
-            $fields['{ticket_department_email}'] = $department->email;
+            $fields['{ticket_department}']       = e($department->name);
+            $fields['{ticket_department_email}'] = e($department->email);
         }
 
         $languageChanged = false;
@@ -152,8 +152,8 @@ class Ticket_merge_fields extends App_merge_fields
             }
         }
 
-        $fields['{ticket_status}']   = ticket_status_translate($ticket->status);
-        $fields['{ticket_priority}'] = ticket_priority_translate($ticket->priority);
+        $fields['{ticket_status}']   = e(ticket_status_translate($ticket->status));
+        $fields['{ticket_priority}'] = e(ticket_priority_translate($ticket->priority));
 
         $custom_fields = get_custom_fields('tickets');
         foreach ($custom_fields as $field) {
@@ -170,17 +170,17 @@ class Ticket_merge_fields extends App_merge_fields
         $service = $this->ci->db->get(db_prefix() . 'services')->row();
 
         if ($service) {
-            $fields['{ticket_service}'] = $service->name;
+            $fields['{ticket_service}'] = e($service->name);
         }
 
         $fields['{ticket_id}'] = $ticket_id;
 
         $customerTemplates = [
-        'new-ticket-opened-admin',
-        'ticket-reply',
-        'ticket-autoresponse',
-        'auto-close-ticket',
-    ];
+            'new-ticket-opened-admin',
+            'ticket-reply',
+            'ticket-autoresponse',
+            'auto-close-ticket',
+        ];
 
         if (in_array($template, $customerTemplates)) {
             $fields['{ticket_url}'] = site_url('clients/ticket/' . $ticket_id);
@@ -199,18 +199,18 @@ class Ticket_merge_fields extends App_merge_fields
             $fields['{ticket_message}'] = $ticket->message;
         }
 
-        $fields['{ticket_date}']       = _dt($ticket->date);
-        $fields['{ticket_subject}']    = $ticket->subject;
+        $fields['{ticket_date}']       = e(_dt($ticket->date));
+        $fields['{ticket_subject}']    = e($ticket->subject);
         $fields['{ticket_public_url}'] = get_ticket_public_url($ticket);
-        $fields['{project_name}']      = get_project_name_by_id($ticket->project_id);
+        $fields['{project_name}']      = e(get_project_name_by_id($ticket->project_id));
 
 
         return hooks()->apply_filters('ticket_merge_fields', $fields, [
-        'id'       => $ticket_id,
-        'reply_id' => $reply_id,
-        'template' => $template,
-        'ticket'   => $ticket,
-        'reply'    => $reply,
-     ]);
+            'id'       => $ticket_id,
+            'reply_id' => $reply_id,
+            'template' => $template,
+            'ticket'   => $ticket,
+            'reply'    => $reply,
+        ]);
     }
 }

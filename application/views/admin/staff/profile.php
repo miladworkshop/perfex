@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-7">
                 <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700">
-                    <?php echo $title; ?>
+                    <?php echo e($title); ?>
                 </h4>
                 <?php echo form_open_multipart($this->uri->uri_string(), ['id' => 'staff_profile_table', 'autocomplete' => 'off']); ?>
 
@@ -35,21 +35,21 @@
                             <label for="firstname"
                                 class="control-label"><?php echo _l('staff_add_edit_firstname'); ?></label>
                             <input type="text" class="form-control" name="firstname" value="<?php if (isset($member)) {
-    echo $member->firstname;
+    echo e($member->firstname);
 } ?>">
                         </div>
                         <div class="form-group">
                             <label for="lastname"
                                 class="control-label"><?php echo _l('staff_add_edit_lastname'); ?></label>
                             <input type="text" class="form-control" name="lastname" value="<?php if (isset($member)) {
-    echo $member->lastname;
+    echo e($member->lastname);
 } ?>">
                         </div>
                         <div class="form-group">
                             <label for="email" class="control-label"><?php echo _l('staff_add_edit_email'); ?></label>
                             <input type="email" <?php if (staff_can('edit',  'staff')) { ?> name="email"
                                 <?php } else { ?> disabled="true" <?php } ?> class="form-control"
-                                value="<?php echo $member->email; ?>" id="email">
+                                value="<?php echo e($member->email); ?>" id="email">
                         </div>
                         <?php $value = (isset($member) ? $member->phonenumber : ''); ?>
                         <?php echo render_input('phonenumber', 'staff_add_edit_phonenumber', $value); ?>
@@ -68,8 +68,8 @@
             $selected = 'selected';
         }
     } ?>
-                                <option value="<?php echo $availableLanguage; ?>" <?php echo $selected; ?>>
-                                    <?php echo ucfirst($availableLanguage); ?></option>
+                                <option value="<?php echo e($availableLanguage); ?>" <?php echo e($selected); ?>>
+                                    <?php echo e(ucfirst($availableLanguage)); ?></option>
                                 <?php
 } ?>
                             </select>
@@ -95,21 +95,21 @@
                             <label for="facebook" class="control-label"><i class="fa-brands fa-facebook-f"></i>
                                 <?php echo _l('staff_add_edit_facebook'); ?></label>
                             <input type="text" class="form-control" name="facebook" value="<?php if (isset($member)) {
-        echo $member->facebook;
+        echo e($member->facebook);
     } ?>">
                         </div>
                         <div class="form-group">
                             <label for="linkedin" class="control-label"><i class="fa-brands fa-linkedin-in"></i>
                                 <?php echo _l('staff_add_edit_linkedin'); ?></label>
                             <input type="text" class="form-control" name="linkedin" value="<?php if (isset($member)) {
-        echo $member->linkedin;
+        echo e($member->linkedin);
     } ?>">
                         </div>
                         <div class="form-group">
                             <label for="skype" class="control-label"><i class="fa-brands fa-skype"></i>
                                 <?php echo _l('staff_add_edit_skype'); ?></label>
                             <input type="text" class="form-control" name="skype" value="<?php if (isset($member)) {
-        echo $member->skype;
+        echo e($member->skype);
     } ?>">
                         </div>
                         <i class="fa-regular fa-circle-question" data-toggle="tooltip"
@@ -125,7 +125,7 @@
                             <?php
                     foreach ($staff_departments as $staff_department) {
                         if ($staff_department['departmentid'] == $department['departmentid']) { ?>
-                            <div class="label label-primary"><?php echo $staff_department['name']; ?></div>
+                            <div class="label label-primary"><?php echo e($staff_department['name']); ?></div>
                             <?php }
                     }
 
@@ -174,8 +174,8 @@
                                 <?php if ($member->last_password_change != null) { ?>
                                 <?php echo _l('staff_add_edit_password_last_changed'); ?>:
                                 <span class="text-has-action" data-toggle="tooltip"
-                                    data-title="<?php echo _dt($member->last_password_change); ?>">
-                                    <?php echo time_ago($member->last_password_change); ?>
+                                    data-title="<?php echo e(_dt($member->last_password_change)); ?>">
+                                    <?php echo e(time_ago($member->last_password_change)); ?>
                                 </span>
                                 <?php } ?>
                             </span>

@@ -6,7 +6,7 @@
                 <div class="panel-body">
                     <h1
                         class="tw-mt-0 tw-mb-4 kb-article-single-heading tw-font-semibold tw-text-xl tw-text-neutral-700">
-                        <?php echo $article->subject; ?>
+                        <?php echo e($article->subject); ?>
                     </h1>
                     <div class="tc-content kb-article-content tw-text-neutral-700">
                         <?php echo $article->description; ?>
@@ -19,7 +19,7 @@
                         <button type="button" data-answer="1" class="btn btn-success">
                             <?php echo _l('clients_knowledge_base_find_useful_yes'); ?>
                         </button>
-                        <input type="hidden" name="articleid" value="<?php echo $article->articleid; ?>">
+                        <input type="hidden" name="articleid" value="<?php echo e($article->articleid); ?>">
                         <button type="button" data-answer="0" class="btn btn-danger">
                             <?php echo _l('clients_knowledge_base_find_useful_no'); ?>
                         </button>
@@ -39,7 +39,7 @@
                     <h4 class="article-heading article-related-heading tw-text-normal tw-font-medium tw-my-0">
                         <a href="<?php echo site_url('knowledge-base/article/' . $relatedArticle['slug']); ?>"
                             class="tw-text-neutral-700 hover:tw-text-neutral-900 active:tw-text-neutral-900">
-                            <?php echo $relatedArticle['subject']; ?>
+                            <?php echo e($relatedArticle['subject']); ?>
                         </a>
                     </h4>
                     <div class="tw-text-neutral-500">

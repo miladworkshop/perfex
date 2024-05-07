@@ -4,9 +4,9 @@ foreach ($purposes as $purpose) { ?>
         <div class="gdpr-purpose">
             <div class="row">
                 <div class="col-md-9">
-                    <h3 class="gdpr-purpose-heading"><?php echo $purpose['name']; ?>
+                    <h3 class="gdpr-purpose-heading"><?php echo e($purpose['name']); ?>
                     <small>
-                        <a href="#" onclick="slideToggle('#purposeActionForm-<?php echo $purpose['id']; ?>'); return false;">
+                        <a href="#" onclick="slideToggle('#purposeActionForm-<?php echo e($purpose['id']); ?>'); return false;">
                             <?php if (!empty($purpose['consent_given'])) {
     echo _l('gdpr_consent_opt_out');
 } else {
@@ -27,23 +27,23 @@ foreach ($purposes as $purpose) { ?>
             <?php
             if (!empty($purpose['opt_in_purpose_description']) && !empty($purpose['consent_given'])) { ?>
                 <p class="no-mbot mtop10">
-                    <?php echo $purpose['opt_in_purpose_description']; ?>
+                    <?php echo e($purpose['opt_in_purpose_description']); ?>
                 </p>
             <?php } elseif (!empty($purpose['description']) && empty($purpose['consent_given'])) { ?>
                 <p class="no-mbot mtop10">
-                    <?php echo $purpose['description']; ?>
+                    <?php echo e($purpose['description']); ?>
                 </p>
             <?php } ?>
         </div>
-        <div class="col-md-12 opt-action hide" id="purposeActionForm-<?php echo $purpose['id']; ?>">
+        <div class="col-md-12 opt-action hide" id="purposeActionForm-<?php echo e($purpose['id']); ?>">
             <hr />
             <?php echo form_open(admin_url($form_url), ['class' => 'consent-form']); ?>
             <input type="hidden" name="action" value="<?php echo !empty($purpose['consent_given']) ? 'opt-out' : 'opt-in'; ?>">
-            <input type="hidden" name="purpose_id" value="<?php echo $purpose['id']; ?>">
+            <input type="hidden" name="purpose_id" value="<?php echo e($purpose['id']); ?>">
             <?php if (isset($contact_id)) { ?>
-                <input type="hidden" name="contact_id" value="<?php echo $contact_id; ?>">
+                <input type="hidden" name="contact_id" value="<?php echo e($contact_id); ?>">
             <?php } elseif (isset($lead_id)) { ?>
-                <input type="hidden" name="lead_id" value="<?php echo $lead_id; ?>">
+                <input type="hidden" name="lead_id" value="<?php echo e($lead_id); ?>">
             <?php } ?>
             <?php echo render_textarea('description', 'Additional Description'); ?>
             <?php if ($purpose['consent_given'] != '1') { ?>
@@ -80,13 +80,13 @@ foreach ($purposes as $purpose) { ?>
             foreach ($consents as $consent) { ?>
                 <tr>
                     <td>
-                        <b><?php echo $consent['purpose_name']; ?></b>
+                        <b><?php echo e($consent['purpose_name']); ?></b>
                     </td>
-                    <td><?php echo _dt($consent['date']); ?></td>
+                    <td><?php echo e(_dt($consent['date'])); ?></td>
                     <td><?php echo $consent['action'] == 'opt-in' ? _l('gdpr_consent_opt_in') : _l('gdpr_consent_opt_out'); ?></td>
-                    <td><?php echo $consent['ip']; ?></td>
-                    <td><?php echo $consent['staff_name']; ?></td>
-                    <td><?php echo $consent['description']; ?></td>
+                    <td><?php echo e($consent['ip']); ?></td>
+                    <td><?php echo e($consent['staff_name']); ?></td>
+                    <td><?php echo e($consent['description']); ?></td>
                 </tr>
             <?php } ?>
         </tbody>

@@ -15,18 +15,19 @@
     <tbody>
         <?php foreach($milestones as $milestone){ ?>
             <tr>
-                <td class="hide" data-order="<?php echo $milestone['milestone_order']; ?>"></td>
-                <td><?php echo $milestone['name']; ?></td>
+                <td class="hide" data-order="<?php echo e($milestone['milestone_order']); ?>"></td>
+                <td><?php echo e($milestone['name']); ?></td>
                 <td>
-                    <?php if($milestone['description_visible_to_customer'] == 1){
-                        echo $milestone['description'];
-                    }
+                    <?php 
+                        if($milestone['description_visible_to_customer'] == 1){
+                            echo process_text_content_for_display($milestone['description']);
+                        }
                     ?>
                 </td>
-                <td data-order="<?php echo $milestone['start_date']; ?>"><?php echo _d($milestone['start_date']); ?></td>
-                <td data-order="<?php echo $milestone['due_date']; ?>"><?php echo _d($milestone['due_date']); ?></td>
+                <td data-order="<?php echo e($milestone['start_date']); ?>"><?php echo e(_d($milestone['start_date'])); ?></td>
+                <td data-order="<?php echo e($milestone['due_date']); ?>"><?php echo e(_d($milestone['due_date'])); ?></td>
                 <?php if($project->settings->view_task_total_logged_time == 1){ ?>
-                    <td><?php echo seconds_to_time_format($milestone['total_logged_time']); ?></td>
+                    <td><?php echo e(seconds_to_time_format($milestone['total_logged_time'])); ?></td>
                 <?php } ?>
             </tr>
         <?php } ?>

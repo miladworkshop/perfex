@@ -31,7 +31,7 @@
                 <h4
                     class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700 tw-flex tw-items-center tw-space-x-2">
                     <span>
-                        <?php echo isset($proposal) ? format_proposal_number($proposal->id) : _l('new_proposal'); ?>
+                        <?php echo e(isset($proposal) ? format_proposal_number($proposal->id) : _l('new_proposal')); ?>
                     </span>
                     <?php echo isset($proposal) ? format_proposal_status($proposal->status) : ''; ?>
                 </h4>
@@ -86,7 +86,7 @@
                                             <?php
 
                                      if (isset($proposal) && $proposal->project_id) {
-                                         echo '<option value="' . $proposal->project_id . '" selected>' . get_project_name_by_id($proposal->project_id) . '</option>';
+                                         echo '<option value="' . $proposal->project_id . '" selected>' . e(get_project_name_by_id($proposal->project_id)) . '</option>';
                                      }
                                      ?>
                                         </select>
@@ -208,10 +208,10 @@
                                     }
                                     ?>
                                             <select name="status" class="selectpicker" data-width="100%"
-                                                <?php echo $disabled; ?>
+                                                <?php echo e($disabled); ?>
                                                 data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                                                 <?php foreach ($statuses as $status) { ?>
-                                                <option value="<?php echo $status; ?>" <?php if ((isset($proposal) && $proposal->status == $status) || (!isset($proposal) && $status == 0)) {
+                                                <option value="<?php echo e($status); ?>" <?php if ((isset($proposal) && $proposal->status == $status) || (!isset($proposal) && $status == 0)) {
                                         echo 'selected';
                                     } ?>><?php echo format_proposal_status($status, '', false); ?></option>
                                                 <?php } ?>

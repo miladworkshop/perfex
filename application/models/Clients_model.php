@@ -1149,11 +1149,13 @@ class Clients_model extends App_Model
 
             $this->db->where('(email="' . $result->email . '" OR bcc LIKE "%' . $result->email . '%" OR cc LIKE "%' . $result->email . '%")');
             $this->db->delete(db_prefix() . 'mail_queue');
-
+           
             if (is_gdpr()) {
-                $this->db->where('email', $result->email);
-                $this->db->delete(db_prefix() . 'listemails');
-
+                if(table_exists('listemails')) {
+                    $this->db->where('email', $result->email);
+                    $this->db->delete(db_prefix() . 'listemails');
+                }
+                
                 if (!empty($result->last_ip)) {
                     $this->db->where('ip', $result->last_ip);
                     $this->db->delete(db_prefix() . 'knowedge_base_article_feedback');

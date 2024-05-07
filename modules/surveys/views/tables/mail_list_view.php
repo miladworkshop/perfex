@@ -18,16 +18,20 @@ if (is_numeric($id)) {
         'WHERE listid =' . $id,
         ], [
         'emailid',
-        ]);
+    ]);
     $output  = $result['output'];
     $rResult = $result['rResult'];
     foreach ($rResult as $aRow) {
         $row = [];
         for ($i = 0; $i < count($aColumns); $i++) {
             $_data = $aRow[$aColumns[$i]];
+
             if ($aColumns[$i] == 'dateadded') {
-                $_data = _dt($_data);
+                $_data = e(_dt($_data));
+            } else {
+                $_data = e($_data);
             }
+
             $row[] = $_data;
         }
         if (staff_can('delete',  'surveys')) {
@@ -125,7 +129,9 @@ if (is_numeric($id)) {
         for ($i = 0; $i < count($aColumns); $i++) {
             $_data = $aRow[$aColumns[$i]];
             if ($aColumns[$i] == 'datecreated' || $aColumns[$i] == 'dateadded') {
-                $_data = _dt($_data);
+                $_data = e(_dt($_data));
+            } else {
+                $_data = e($_data);
             }
             // No delete option
             $row[] = $_data;

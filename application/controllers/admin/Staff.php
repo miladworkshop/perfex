@@ -158,11 +158,8 @@ class Staff extends AdminController
 
         $this->db->where('staffid', get_staff_user_id());
         $this->db->update(db_prefix() . 'staff', ['default_language' => $lang]);
-        if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
-            redirect($_SERVER['HTTP_REFERER']);
-        } else {
-            redirect(admin_url());
-        }
+        
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     public function timesheets()
@@ -363,7 +360,7 @@ class Staff extends AdminController
                 }
                 $notifications[$i]['description'] = _l($notification['description'], $additional_data);
                 $notifications[$i]['date']        = time_ago($notification['date']);
-                $notifications[$i]['full_date']   = $notification['date'];
+                $notifications[$i]['full_date']   = _dt($notification['date']);
                 $i++;
             } //$notifications as $notification
             echo json_encode($notifications);

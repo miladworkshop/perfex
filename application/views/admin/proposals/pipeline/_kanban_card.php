@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <?php if ($proposal['status'] == $status) { ?>
-<li data-proposal-id="<?php echo $proposal['id']; ?>" class="<?php if ($proposal['invoice_id'] != null || $proposal['estimate_id'] != null) {
+<li data-proposal-id="<?php echo e($proposal['id']); ?>" class="<?php if ($proposal['invoice_id'] != null || $proposal['estimate_id'] != null) {
     echo 'not-sortable';
 } ?>">
     <div class="panel-body">
@@ -8,10 +8,10 @@
             <div class="col-md-12">
                 <h4 class="tw-font-semibold  tw-text-base pipeline-heading tw-mb-0.5">
                     <a href="<?php echo admin_url('proposals/list_proposals/' . $proposal['id']); ?>"
-                        data-toggle="tooltip" data-title="<?php echo $proposal['subject']; ?>"
+                        data-toggle="tooltip" data-title="<?php echo e($proposal['subject']); ?>"
                         class="tw-text-neutral-700 hover:tw-text-neutral-900 active:tw-text-neutral-900"
-                        onclick="proposal_pipeline_open(<?php echo $proposal['id']; ?>); return false;">
-                        <?php echo format_proposal_number($proposal['id']); ?>
+                        onclick="proposal_pipeline_open(<?php echo e($proposal['id']); ?>); return false;">
+                        <?php echo e(format_proposal_number($proposal['id'])); ?>
                     </a>
                     <?php if (staff_can('edit',  'estimates')) { ?>
                     <a href="<?php echo admin_url('proposals/proposal/' . $proposal['id']); ?>" target="_blank"
@@ -25,9 +25,9 @@
                 <span class="tw-inline-block tw-w-full tw-mb-2">
                     <?php
                if ($proposal['rel_type'] == 'lead') {
-                   echo '<a href="' . admin_url('leads/index/' . $proposal['rel_id']) . '" onclick="init_lead(' . $proposal['rel_id'] . '); return false;" data-toggle="tooltip" data-title="' . _l('lead') . '">' . $proposal['proposal_to'] . '</a><br />';
+                   echo '<a href="' . admin_url('leads/index/' . $proposal['rel_id']) . '" onclick="init_lead(' . $proposal['rel_id'] . '); return false;" data-toggle="tooltip" data-title="' . _l('lead') . '">' . e($proposal['proposal_to']) . '</a><br />';
                } elseif ($proposal['rel_type'] == 'customer') {
-                   echo '<a href="' . admin_url('clients/client/' . $proposal['rel_id']) . '" data-toggle="tooltip" data-title="' . _l('client') . '">' . $proposal['proposal_to'] . '</a><br />';
+                   echo '<a href="' . admin_url('clients/client/' . $proposal['rel_id']) . '" data-toggle="tooltip" data-title="' . _l('client') . '">' . e($proposal['proposal_to']) . '</a><br />';
                }
                ?>
                 </span>
@@ -41,21 +41,21 @@
                             <span class="tw-text-neutral-500">
                                 <?php echo _l('proposal_total'); ?>:
                             </span>
-                            <?php echo app_format_money($proposal['total'], get_currency($proposal['currency'])); ?>
+                            <?php echo e(app_format_money($proposal['total'], get_currency($proposal['currency']))); ?>
                         </p>
                         <?php } ?>
                         <p class="tw-mb-0 tw-text-sm tw-text-neutral-700">
                             <span class="tw-text-neutral-500">
                                 <?php echo _l('proposal_date'); ?>:
                             </span>
-                            <?php echo _d($proposal['date']); ?>
+                            <?php echo e(_d($proposal['date'])); ?>
                         </p>
                         <?php if (is_date($proposal['open_till'])) { ?>
                         <p class="tw-mb-0 tw-text-sm tw-text-neutral-700">
                             <span class="tw-text-neutral-500">
                                 <?php echo _l('proposal_open_till'); ?>:
                             </span>
-                            <?php echo _d($proposal['open_till']); ?>
+                            <?php echo e(_d($proposal['open_till'])); ?>
                         </p>
                         <?php } ?>
                     </div>

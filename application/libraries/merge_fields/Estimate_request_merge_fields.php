@@ -93,35 +93,36 @@ class Estimate_request_merge_fields extends App_merge_fields
             return $fields;
         }
 
-        $fields['{estimate_request_form_name}']      = $request->form_data->name;
-        $fields['{estimate_request_id}']             = $request->id;
-        $fields['{estimate_request_date_submitted}'] = _dt($request->date_added);
+        $fields['{estimate_request_form_name}']      = e($request->form_data->name);
+        $fields['{estimate_request_id}']             = e($request->id);
+        $fields['{estimate_request_date_submitted}'] = e(_dt($request->date_added));
 
         $fields['{estimate_request_link}']  = admin_url('estimate_request/view/' . $request->id);
-        $fields['{estimate_request_email}'] = $request->email;
+        $fields['{estimate_request_email}'] = e($request->email);
 
         if ($request->assigned != 0) {
-            $fields['{estimate_request_assigned}'] = get_staff_full_name($request->assigned);
+            $fields['{estimate_request_assigned}'] = e(get_staff_full_name($request->assigned));
         }
 
         $status = $this->ci->estimate_request_model->get_status($request->status);
 
         if ($status) {
-            $fields['{estimate_request_status}'] = $status->name;
+            $fields['{estimate_request_status}'] = e($status->name);
         }
 
         $submissions    = json_decode($request->submission);
         $submitted_data = '';
 
         foreach ($submissions as $data) {
-            $submitted_data .= $data->label . ': ';
+            $submitted_data .= e($data->label) . ': ';
 
             if (is_string($data->value)) {
-                $submitted_data .= $data->value;
+                $submitted_data .= e($data->value);
             } elseif (is_array($data->value)) {
-                $submitted_data .= implode('<br>', $data->value);
+                $submitted_data .= e(implode(",", $data->value));
             }
-            $submitted_data .= '<br>';
+
+            $submitted_data .= "\n";
         }
 
         $fields['{estimate_request_submitted_data}'] = $submitted_data;

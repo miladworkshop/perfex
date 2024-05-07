@@ -306,21 +306,16 @@ function get_company_logo($uri = '', $href_class = '', $type = '')
 {
     $company_logo = get_option('company_logo' . ($type == 'dark' ? '_dark' : ''));
     $company_name = get_option('companyname');
-
-    if ($uri == '') {
-        $logoURL = site_url();
-    } else {
-        $logoURL = site_url($uri);
-    }
+    $logoURL = site_url($uri);
 
     $logoURL = hooks()->apply_filters('logo_href', $logoURL);
 
     if ($company_logo != '') {
         $logo = '<a href="' . $logoURL . '" class="logo img-responsive' . ($href_class != '' ? ' ' . $href_class : '') . '">
-        <img src="' . base_url('uploads/company/' . $company_logo) . '" class="img-responsive" alt="' . html_escape($company_name) . '">
+        <img src="' . base_url('uploads/company/' . $company_logo) . '" class="img-responsive" alt="' . e($company_name) . '">
         </a>';
     } elseif ($company_name != '') {
-        $logo = '<a href="' . $logoURL . '" class="' . $href_class . ' logo logo-text">' . $company_name . '</a>';
+        $logo = '<a href="' . $logoURL . '" class="' . $href_class . ' logo logo-text">' . e($company_name) . '</a>';
     } else {
         $logo = '';
     }
@@ -344,14 +339,41 @@ function get_dark_company_logo($uri = '', $href_class = '')
 
     return get_company_logo($uri, $href_class, 'dark');
 }
+
 /**
  * Strip tags
+ * 
  * @param  string $html string to strip tags
+ * 
  * @return string
  */
 function _strip_tags($html)
 {
-    return strip_tags($html, '<br>,<em>,<p>,<ul>,<ol>,<li>,<h4><h3><h2><h1>,<pre>,<code>,<a>,<img>,<strong>,<b>,<blockquote>,<table>,<thead>,<th>,<tr>,<td>,<tbody>,<tfoot>');
+    return strip_tags($html, implode(',', array_keys(common_allowed_html_tags())));
+}
+
+/**
+ * @since 3.1.5
+ * 
+ * Get the common allowed tags for HTML text.
+ * 
+ * @return string[][]
+ */
+function common_allowed_html_tags()
+{
+    return [
+        'a' => ['href', 'target', 'rel'],
+        'br' => [], 'em' => [], 'p' => [], 'ul' => [], 'ol' => [], 'li' => [],
+        'h1' => [], 'h2' => [], 'h3' => [], 'h4' => [], 'h5' => [], 'pre' => [], 'code' => [],
+        'img' => ['src', 'alt'], 'strong' => [], 'b' => [], 'blockquote' => [], 'strong'=> [], 
+        'table' => ['cellspacing', 'cellpadding', 'border', 'width'], 
+        'thead' => ['align'],
+        'th' => ['colspan', 'rowspan'], 
+        'tr' => ['align'], 
+        'td' => ['colspan', 'rowspan'],
+        'tbody' => ['align'], 
+        'tfoot' => ['align']
+    ];
 }
 
 function _inject_no_index()
@@ -391,11 +413,14 @@ if (!function_exists('remove_emojis')) {
 /**
  * Replace merge fields in string with values such that it can be reverted using   {@sew restore_merge_fields()}
  * @param array<string, string> $mergeFields
- * @param string $content
- * @return mixed
+ * @param string|null $content
+ * @return string|null
  */
-function override_merge_fields(array $mergeFields, string $content): string
+function override_merge_fields(array $mergeFields, ?string $content): ?string
 {
+    if (!is_string($content)) {
+        return null;
+    }
     foreach ($mergeFields as $key => $val) {
         $replacement = stripos($content, $key) !== false ? $val : '';
         $replacement = sprintf(
@@ -411,11 +436,14 @@ function override_merge_fields(array $mergeFields, string $content): string
 /**
  *  Restore merge fields in string from replacements set using {@sew override_merge_fields()}
  *
- * @param string $content
- * @return string
+ * @param string|null $content
+ * @return string|null
  */
-function restore_merge_fields(string $content): string
+function restore_merge_fields(?string $content): ?string
 {
+    if (!is_string($content)) {
+        return null;
+    }
     $pattern = '/<span data-merge-field="([^"]+)">(.+?)<\/span>/';
     return preg_replace_callback($pattern, fn($matches) => '{' . $matches[1] . '}', $content);
 }

@@ -22,12 +22,8 @@
         var FileBrowserDialogue = {
             init: function() {},
             mySubmit: function(URL) {
-                // pass selected file path to TinyMCE
-                parent.tinymce.activeEditor.windowManager.getParams().setUrl(URL.url);
-                // force the TinyMCE dialog to refresh and fill in the image dimensions
-                var t = parent.tinymce.activeEditor.windowManager.windows[0];
-                t.find('#src').fire('change');
-                // close popup window
+                parent.tinymce.activeEditor.windowManager.elfinderCallback(URL.url)
+                
                 parent.tinymce.activeEditor.windowManager.close();
             }
         }
@@ -158,7 +154,7 @@
                          $('#' + id).elfinder(
                              // 1st Arg - options
                              $.extend(true, {
-                                 lang: '<?php echo $mediaLocale; ?>'
+                                 lang: '<?php echo e($mediaLocale); ?>'
                              }, opts, mOpts || {}),
                              // 2nd Arg - before boot up function
                              function(fm, extraObj) {

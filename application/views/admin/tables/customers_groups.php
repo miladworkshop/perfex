@@ -14,7 +14,7 @@ $rResult = $result['rResult'];
 foreach ($rResult as $aRow) {
     $row = [];
     for ($i = 0; $i < count($aColumns) ; $i++) {
-        $_data = '<a href="#" data-toggle="modal" data-target="#customer_group_modal" data-id="' . $aRow['id'] . '">' . $aRow[$aColumns[$i]] . '</a>';
+        $_data = '<a href="#" data-toggle="modal" data-target="#customer_group_modal" data-id="' . $aRow['id'] . '">' . e($aRow[$aColumns[$i]]) . '</a>';
 
         $row[] = $_data;
     }

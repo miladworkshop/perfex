@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <?php if ((credits_can_be_applied_to_invoice($invoice->status) && $credits_available > 0)) { ?>
 <div class="alert alert-warning mbot5">
-    <?php echo _l('x_credits_available', app_format_money($credits_available, $customer_currency->name)); ?>
+    <?php echo e(_l('x_credits_available', app_format_money($credits_available, $customer_currency->name))); ?>
     <br />
     <a href="#" data-toggle="modal" data-target="#apply_credits"><?php echo _l('apply_credits'); ?></a>
 </div>
@@ -18,9 +18,9 @@
         <div class="tw-flex tw-justify-between tw-items-center tw-mb-2 last:tw-mb-0">
             <div>
                 <a href="<?php echo admin_url('invoices/list_invoices/' . $_inv->id); ?>" target="_blank"
-                    class="tw-font-medium"><?php echo format_invoice_number($_inv->id); ?></a> -
+                    class="tw-font-medium"><?php echo e(format_invoice_number($_inv->id)); ?></a> -
                 <span class="tw-text-neutral-500">
-                    <?php echo app_format_money($_inv->total, $_inv->currency_name); ?>
+                    <?php echo e(app_format_money($_inv->total, $_inv->currency_name)); ?>
                 </span>
             </div>
             <?php echo format_invoice_status($_inv->status); ?>
@@ -73,7 +73,7 @@
                         <?php } ?>
                         <li role="presentation">
                             <a href="#tab_tasks"
-                                onclick="init_rel_tasks_table(<?php echo $invoice->id; ?>,'invoice'); return false;"
+                                onclick="init_rel_tasks_table(<?php echo e($invoice->id); ?>,'invoice'); return false;"
                                 aria-controls="tab_tasks" role="tab" data-toggle="tab">
                                 <?php echo _l('tasks'); ?>
                             </a>
@@ -106,11 +106,11 @@
                         </li>
                         <li role="presentation" class="tab-separator">
                             <a href="#tab_notes"
-                                onclick="get_sales_notes(<?php echo $invoice->id; ?>,'invoices'); return false"
+                                onclick="get_sales_notes(<?php echo e($invoice->id); ?>,'invoices'); return false"
                                 aria-controls="tab_notes" role="tab" data-toggle="tab">
                                 <?php echo _l('estimate_notes'); ?> <span class="notes-total">
                                     <?php if ($totalNotes > 0) { ?>
-                                    <span class="badge"><?php echo $totalNotes; ?></span>
+                                    <span class="badge"><?php echo e($totalNotes); ?></span>
                                     <?php } ?>
                                 </span>
                             </a>
@@ -194,8 +194,8 @@
                             data-title="<?php echo _l('invoice_cancelled_email_disabled'); ?>" <?php } ?>>
                             <a href="#" class="invoice-send-to-client btn-with-tooltip btn btn-default<?php if ($invoice->status == Invoices_model::STATUS_CANCELLED) {
                          echo ' disabled';
-                     } ?>" data-toggle="tooltip" title="<?php echo $_tooltip; ?>" data-placement="bottom"><span
-                                    data-toggle="tooltip" data-title="<?php echo $_tooltip_already_send; ?>"><i
+                     } ?>" data-toggle="tooltip" title="<?php echo e($_tooltip); ?>" data-placement="bottom"><span
+                                    data-toggle="tooltip" data-title="<?php echo e($_tooltip_already_send); ?>"><i
                                         class="fa-regular fa-envelope"></i></span></a>
                             </span>
                             <?php } ?>
@@ -224,7 +224,7 @@
                                     <li>
                                         <a href="<?php echo admin_url('credit_notes/credit_note_from_invoice/' . $invoice->id); ?>"
                                             id="invoice_create_credit_note"
-                                            data-status="<?php echo $invoice->status; ?>"><?php echo _l('create_credit_note'); ?></a>
+                                            data-status="<?php echo e($invoice->status); ?>"><?php echo _l('create_credit_note'); ?></a>
                                     </li>
                                     <?php } ?>
                                     <li>
@@ -249,10 +249,10 @@
                               && $invoice->status != Invoices_model::STATUS_PAID
                               && $invoice->status != Invoices_model::STATUS_PARTIALLY) { ?>
                                         <a
-                                            href="<?php echo admin_url('invoices/mark_as_cancelled/' . $invoice->id); ?>"><?php echo _l('invoice_mark_as', _l('invoice_status_cancelled')); ?></a>
+                                            href="<?php echo admin_url('invoices/mark_as_cancelled/' . $invoice->id); ?>"><?php echo e(_l('invoice_mark_as', _l('invoice_status_cancelled'))); ?></a>
                                         <?php } elseif ($invoice->status == Invoices_model::STATUS_CANCELLED) { ?>
                                         <a
-                                            href="<?php echo admin_url('invoices/unmark_as_cancelled/' . $invoice->id); ?>"><?php echo _l('invoice_unmark_as', _l('invoice_status_cancelled')); ?></a>
+                                            href="<?php echo admin_url('invoices/unmark_as_cancelled/' . $invoice->id); ?>"><?php echo e(_l('invoice_unmark_as', _l('invoice_status_cancelled'))); ?></a>
                                         <?php } ?>
                                     </li>
                                     <?php } ?>
@@ -283,7 +283,7 @@
                                 </ul>
                             </div>
                             <?php if (staff_can('create',  'payments') && abs($invoice->total) > 0) { ?>
-                            <a href="#" onclick="record_payment(<?php echo $invoice->id; ?>); return false;" class="mleft10 pull-right btn btn-success<?php if ($invoice->status == Invoices_model::STATUS_PAID || $invoice->status == Invoices_model::STATUS_CANCELLED) {
+                            <a href="#" onclick="record_payment(<?php echo e($invoice->id); ?>); return false;" class="mleft10 pull-right btn btn-success<?php if ($invoice->status == Invoices_model::STATUS_PAID || $invoice->status == Invoices_model::STATUS_CANCELLED) {
                                echo ' disabled';
                            } ?>">
                                 <i class="fa fa-plus-square"></i> <?php echo _l('payment'); ?></a>
@@ -294,7 +294,7 @@
                   if (is_invoice_overdue($invoice)) { ?>
                 <div class="col-md-12">
                     <p class="text-danger tw-mt-2.5 tw-mb-0">
-                        <?php echo _l('invoice_is_overdue', get_total_days_overdue($invoice->duedate)); ?>
+                        <?php echo e(_l('invoice_is_overdue', get_total_days_overdue($invoice->duedate))); ?>
                     </p>
                 </div>
                 <?php } ?>
@@ -330,9 +330,9 @@
                                 <tr>
                                     <td>
                                         <a
-                                            href="<?php echo admin_url('credit_notes/list_credit_notes/' . $credit['credit_id']); ?>"><?php echo format_credit_note_number($credit['credit_id']); ?></a>
+                                            href="<?php echo admin_url('credit_notes/list_credit_notes/' . $credit['credit_id']); ?>"><?php echo e(format_credit_note_number($credit['credit_id'])); ?></a>
                                     </td>
-                                    <td><?php echo _d($credit['date']); ?></td>
+                                    <td><?php echo e(_d($credit['date'])); ?></td>
                                     <td><?php echo app_format_money($credit['amount'], $invoice->currency_name) ?>
                                         <?php if (staff_can('delete',  'credit_notes')) { ?>
                                         <a href="<?php echo admin_url('credit_notes/delete_invoice_applied_credit/' . $credit['id'] . '/' . $credit['credit_id'] . '/' . $invoice->id); ?>"
@@ -351,7 +351,7 @@
                 </div>
                 <div role="tabpanel" class="tab-pane" id="tab_reminders">
                     <a href="#" class="btn btn-default" data-toggle="modal"
-                        data-target=".reminder-modal-invoice-<?php echo $invoice->id; ?>"><i
+                        data-target=".reminder-modal-invoice-<?php echo e($invoice->id); ?>"><i
                             class="fa-regular fa-bell"></i>
                         <?php echo _l('invoice_set_reminder_title'); ?></a>
                     <hr />
@@ -368,21 +368,21 @@
                         <li class="list-group-item">
                             <a href="<?php echo admin_url('invoices/list_invoices/' . $recurring->id); ?>"
                                 class="tw-font-semibold"
-                                onclick="init_invoice(<?php echo $recurring->id; ?>); return false;"
-                                target="_blank"><?php echo format_invoice_number($recurring->id); ?>
+                                onclick="init_invoice(<?php echo e($recurring->id); ?>); return false;"
+                                target="_blank"><?php echo e(format_invoice_number($recurring->id)); ?>
                                 <span
-                                    class="pull-right bold"><?php echo app_format_money($recurring->total, $recurring->currency_name); ?></span>
+                                    class="pull-right bold"><?php echo e(app_format_money($recurring->total, $recurring->currency_name)); ?></span>
                             </a>
                             <br />
                             <span class="inline-block tw-mt-1">
-                                <?php echo '<span class="bold">' . _d($recurring->date) . '</span>'; ?><br />
+                                <?php echo '<span class="bold">' . e(_d($recurring->date)) . '</span>'; ?><br />
                                 <?php echo format_invoice_status($recurring->status, '', false); ?>
                             </span>
                         </li>
                         <?php } ?>
                     </ul>
                     <?php } else { ?>
-                    <p class="bold"><?php echo _l('no_child_found', _l('invoices')); ?></p>
+                    <p class="bold"><?php echo e(_l('no_child_found', _l('invoices'))); ?></p>
                     <?php } ?>
                 </div>
                 <?php } ?>
@@ -412,11 +412,11 @@
                             <div class="activity-feed">
                                 <?php foreach ($activity as $activity) {
                       $_custom_data = false; ?>
-                                <div class="feed-item" data-sale-activity-id="<?php echo $activity['id']; ?>">
+                                <div class="feed-item" data-sale-activity-id="<?php echo e($activity['id']); ?>">
                                     <div class="date">
                                         <span class="text-has-action" data-toggle="tooltip"
-                                            data-title="<?php echo _dt($activity['date']); ?>">
-                                            <?php echo time_ago($activity['date']); ?>
+                                            data-title="<?php echo e(_dt($activity['date'])); ?>">
+                                            <?php echo e(time_ago($activity['date'])); ?>
                                         </span>
                                     </div>
                                     <div class="text">
@@ -444,21 +444,25 @@
                               $i++;
                           }
                       }
+
                       $_formatted_activity = _l($activity['description'], $additional_data);
+
                       if ($_custom_data !== false) {
                           $_formatted_activity .= ' - ' . $_custom_data;
                       }
+
                       if (!empty($activity['full_name'])) {
-                          $_formatted_activity = $activity['full_name'] . ' - ' . $_formatted_activity;
+                          $_formatted_activity = e($activity['full_name']) . ' - ' . $_formatted_activity;
                       }
+
                       echo $_formatted_activity;
+
                       if (is_admin()) {
                           echo '<a href="#" class="pull-right text-danger" onclick="delete_sale_activity(' . $activity['id'] . '); return false;"><i class="fa fa-remove"></i></a>';
                       } ?>
                                     </div>
                                 </div>
-                                <?php
-                  } ?>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
@@ -496,9 +500,9 @@ init_selectpicker();
 init_form_reminder();
 init_tabs_scrollable();
 <?php if ($record_payment) { ?>
-record_payment(<?php echo $invoice->id; ?>);
+record_payment(<?php echo e($invoice->id); ?>);
 <?php } elseif ($send_later) { ?>
-schedule_invoice_send(<?php echo $invoice->id; ?>);
+schedule_invoice_send(<?php echo e($invoice->id); ?>);
 <?php } ?>
 </script>
 <?php hooks()->do_action('after_invoice_preview_template_rendered', $invoice); ?>

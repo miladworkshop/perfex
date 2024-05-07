@@ -2,6 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
+$this->ci->load->model('tickets_model');
 $statuses = $this->ci->tickets_model->get_ticket_status();
 $this->ci->load->model('departments_model');
 
@@ -123,7 +124,7 @@ return App_table::find('tickets')
         if ($project_id = $this->ci->input->post('project_id')) {
             array_push($where, 'AND project_id = ' . $this->ci->db->escape_str($project_id));
         }
-        
+
         // If userid is set, the the view is in client profile, should be shown all tickets
         if (!is_admin()) {
             if (get_option('staff_access_only_assigned_departments') == 1) {
@@ -171,17 +172,22 @@ return App_table::find('tickets')
                     if ($aRow[$aColumns[$i]] == null) {
                         $_data = _l('ticket_no_reply_yet');
                     } else {
-                        $_data = _dt($aRow[$aColumns[$i]]);
+                        $_data = e(_dt($aRow[$aColumns[$i]]));
                     }
                 } elseif ($aColumns[$i] == 'subject' || $aColumns[$i] == 'ticketid') {
                     // Ticket is assigned
                     if ($aRow['assigned'] != 0) {
                         if ($aColumns[$i] != 'ticketid') {
-                            $_data .= '<a href="' . admin_url('profile/' . $aRow['assigned']) . '" data-toggle="tooltip" title="' . get_staff_full_name($aRow['assigned']) . '" class="pull-left mright5">' . staff_profile_image($aRow['assigned'], [
+                            $_data .= '<a href="' . admin_url('profile/' . $aRow['assigned']) . '" data-toggle="tooltip" title="' . e(get_staff_full_name($aRow['assigned'])) . '" class="pull-left mright5">' . staff_profile_image($aRow['assigned'], [
                                 'staff-profile-image-xs',
                             ]) . '</a>';
+                        } else {
+                            $_data = e($_data);
                         }
+                    } else {
+                        $_data = e($_data);
                     }
+
                     $url   = admin_url('tickets/ticket/' . $aRow['ticketid']);
                     $_data = '<a href="' . $url . '" class="valign">' . $_data . '</a>';
                     if ($aColumns[$i] == 'subject') {
@@ -189,27 +195,31 @@ return App_table::find('tickets')
                         $_data .= '<a href="' . $url . '">' . _l('view') . '</a>';
                         $_data .= ' | <a href="' . $url . '?tab=settings">' . _l('edit') . '</a>';
                         $_data .= ' | <a href="' . get_ticket_public_url($aRow) . '" target="_blank">' . _l('view_public_form') . '</a>';
-                        $_data .= ' | <a href="' . admin_url('tickets/delete/' . $aRow['ticketid']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+                        if (can_staff_delete_ticket()) {
+                            $_data .= ' | <a href="' . admin_url('tickets/delete/' . $aRow['ticketid']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+                        }
                         $_data .= '</div>';
                     }
                 } elseif ($i == $tagsColumns) {
                     $_data = render_tags($_data);
                 } elseif ($i == $contactColumn) {
                     if ($aRow['userid'] != 0) {
-                        $_data = '<a href="' . admin_url('clients/client/' . $aRow['userid'] . '?group=contacts') . '">' . $aRow['contact_full_name'];
+                        $_data = '<a href="' . admin_url('clients/client/' . $aRow['userid'] . '?group=contacts') . '">' . e($aRow['contact_full_name']);
                         if (!empty($aRow['company'])) {
-                            $_data .= ' (' . $aRow['company'] . ')';
+                            $_data .= ' (' . e($aRow['company']) . ')';
                         }
                         $_data .= '</a>';
                     } else {
-                        $_data = $aRow['ticket_opened_by_name'];
+                        $_data = e($aRow['ticket_opened_by_name']);
                     }
                 } elseif ($aColumns[$i] == 'status') {
-                    $_data = '<span class="label ticket-status-' . $aRow['status'] . '" style="border:1px solid ' . adjust_hex_brightness($aRow['statuscolor'], 0.4) . '; color:' . $aRow['statuscolor'] . ';background: ' . adjust_hex_brightness($aRow['statuscolor'], 0.04) . ';">' . ticket_status_translate($aRow['status']) . '</span>';
+                    $_data = '<span class="label ticket-status-' . $aRow['status'] . '" style="border:1px solid ' . adjust_hex_brightness($aRow['statuscolor'], 0.4) . '; color:' . $aRow['statuscolor'] . ';background: ' . adjust_hex_brightness($aRow['statuscolor'], 0.04) . ';">' . e(ticket_status_translate($aRow['status'])) . '</span>';
                 } elseif ($aColumns[$i] == db_prefix() . 'tickets.date') {
-                    $_data = _dt($_data);
+                    $_data = e(_dt($_data));
+                } elseif (strpos($aColumns[$i],'service_name') !== false) {
+                    $_data = e($_data);
                 } elseif ($aColumns[$i] == 'priority') {
-                    $_data = ticket_priority_translate($aRow['priority']);
+                    $_data = e(ticket_priority_translate($aRow['priority']));
                 } else {
                     if (strpos($aColumns[$i], 'date_picker_') !== false) {
                         $_data = (strpos($_data, ' ') !== false ? _dt($_data) : _d($_data));

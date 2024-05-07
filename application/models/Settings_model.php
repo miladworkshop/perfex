@@ -62,8 +62,7 @@ class Settings_model extends App_Model
         }
         $all_settings_looped = [];
         foreach ($data['settings'] as $name => $val) {
-
-                // Do not trim thousand separator option
+            // Do not trim thousand separator option
             // There is an option of white space there and if will be trimmed wont work as configured
             if (is_string($val) && $name != 'thousand_separator') {
                 $val = trim($val);
@@ -80,6 +79,8 @@ class Settings_model extends App_Model
             if ($name == 'default_contact_permissions') {
                 $val = serialize($val);
             } elseif ($name == 'lead_unique_validation') {
+                $val = json_encode($val);
+            } elseif ($name == 'required_register_fields') {
                 $val = json_encode($val);
             } elseif ($name == 'visible_customer_profile_tabs') {
                 if ($val == '') {
@@ -145,7 +146,21 @@ class Settings_model extends App_Model
             if ($this->db->affected_rows() > 0) {
                 $affectedRows++;
             }
-        } elseif (!in_array('visible_customer_profile_tabs', $all_settings_looped)
+        } 
+        
+        // Required register fields, nothing selected
+        if (!in_array('required_register_fields', $all_settings_looped)
+                && in_array('customer_settings', $all_settings_looped)) {
+            $this->db->where('name', 'required_register_fields');
+            $this->db->update(db_prefix() . 'options', [
+                'value' => json_encode([]),
+            ]);
+            if ($this->db->affected_rows() > 0) {
+                $affectedRows++;
+            }
+        } 
+        
+        if (!in_array('visible_customer_profile_tabs', $all_settings_looped)
                 && in_array('customer_settings', $all_settings_looped)) {
             $this->db->where('name', 'visible_customer_profile_tabs');
             $this->db->update(db_prefix() . 'options', [
@@ -154,7 +169,9 @@ class Settings_model extends App_Model
             if ($this->db->affected_rows() > 0) {
                 $affectedRows++;
             }
-        } elseif (!in_array('lead_unique_validation', $all_settings_looped)
+        } 
+        
+        if (!in_array('lead_unique_validation', $all_settings_looped)
                 && in_array('_leads_settings', $all_settings_looped)) {
             $this->db->where('name', 'lead_unique_validation');
             $this->db->update(db_prefix() . 'options', [
@@ -170,8 +187,6 @@ class Settings_model extends App_Model
                 $affectedRows++;
             }
         }
-
-
 
         return $affectedRows;
     }

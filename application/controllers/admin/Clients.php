@@ -446,7 +446,7 @@ class Clients extends AdminController
         }
         $this->clients_model->confirm_registration($client_id);
         set_alert('success', _l('customer_registration_successfully_confirmed'));
-        redirect($_SERVER['HTTP_REFERER']);
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     public function update_file_share_visibility()
@@ -613,7 +613,7 @@ class Clients extends AdminController
         if (staff_can('delete',  'customers') || is_customer_admin($customer_id)) {
             $this->clients_model->delete_attachment($id);
         }
-        redirect($_SERVER['HTTP_REFERER']);
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     /* Delete client */
@@ -921,7 +921,7 @@ class Clients extends AdminController
 
         $this->clients_model->vault_entry_create($data, $customer_id);
         set_alert('success', _l('added_successfully', _l('vault_entry')));
-        redirect($_SERVER['HTTP_REFERER']);
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     public function vault_entry_update($entry_id)
@@ -954,7 +954,7 @@ class Clients extends AdminController
             $this->clients_model->vault_entry_update($entry_id, $data);
             set_alert('success', _l('updated_successfully', _l('vault_entry')));
         }
-        redirect($_SERVER['HTTP_REFERER']);
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     public function vault_entry_delete($id)
@@ -963,7 +963,7 @@ class Clients extends AdminController
         if ($entry->creator == get_staff_user_id() || is_admin()) {
             $this->clients_model->vault_entry_delete($id);
         }
-        redirect($_SERVER['HTTP_REFERER']);
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     public function vault_encrypt_password()

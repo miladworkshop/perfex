@@ -17,20 +17,26 @@ if ($total_gateways > 1) { ?>
         <div class="panel-heading" role="tab" id="<?php echo 'heading' . $gateway['id']; ?>">
             <h4 class="panel-title">
                 <a role="button" data-toggle="collapse" data-parent="#sms_gateways_options"
-                    href="#sms_<?php echo $gateway['id']; ?>" aria-expanded="true"
-                    aria-controls="sms_<?php echo $gateway['id']; ?>">
-                    <?php echo $gateway['name']; ?> <span class="pull-right"><i class="fa fa-sort-down"></i></span>
+                    href="#sms_<?php echo e($gateway['id']); ?>" aria-expanded="true"
+                    aria-controls="sms_<?php echo e($gateway['id']); ?>">
+                    <?php echo e($gateway['name']); ?> <span class="pull-right"><i class="fa fa-sort-down"></i></span>
                 </a>
             </h4>
         </div>
-        <div id="sms_<?php echo $gateway['id']; ?>" class="panel-collapse collapse<?php if ($this->app_sms->get_option($gateway['id'], 'active') == 1 || $total_gateways == 1) {
+        <div id="sms_<?php echo e($gateway['id']); ?>" class="panel-collapse collapse<?php if ($this->app_sms->get_option($gateway['id'], 'active') == 1 || $total_gateways == 1) {
     echo ' in';
 } ?>" role="tabpanel" aria-labelledby="<?php echo 'heading' . $gateway['id']; ?>">
             <div class="panel-body">
-                <?php
+        <?php
         if (isset($gateway['info']) && $gateway['info'] != '') {
             echo $gateway['info'];
         }
+
+       if (isset($gateway['deprecated'])) { ?>
+            <div class="alert alert-warning">
+                This SMS gateway is deprecated and may be removed in future updates.
+            </div>
+        <?php }
 
         foreach ($gateway['options'] as $g_option) {
             $type = isset($g_option['field_type']) ? $g_option['field_type'] : 'text';
@@ -47,19 +53,19 @@ if ($total_gateways > 1) { ?>
             } elseif ($type == 'radio') {
                 ?>
                 <div class="form-group">
-                    <p><?php echo $g_option['label']; ?></p>
+                    <p><?php echo e($g_option['label']); ?></p>
                     <?php
                 foreach ($g_option['options'] as $option) {
                     ?>
                     <div class="radio radio-info radio-inline">
                         <input type="radio"
                             name="settings[<?php echo $optionName = $this->app_sms->option_name($gateway['id'], $g_option['name']); ?>]"
-                            value="<?php echo $option['value']; ?>"
+                            value="<?php echo e($option['value']); ?>"
                             id="<?php echo $option['value'] . '-' . $optionName; ?>" <?php if ($this->app_sms->get_option($gateway['id'], $g_option['name']) == $option['value']) {
                         echo ' checked';
                     } ?>>
                         <label
-                            for="<?php echo $option['value'] . '-' . $optionName; ?>"><?php echo $option['label']; ?></label>
+                            for="<?php echo $option['value'] . '-' . $optionName; ?>"><?php echo e($option['label']); ?></label>
                     </div>
                     <?php
                 } ?>

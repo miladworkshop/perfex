@@ -66,16 +66,16 @@ $rResult = $result['rResult'];
 foreach ($rResult as $aRow) {
     $row = [];
 
-    $hrefAttr = 'href="' . admin_url('estimate_request/view/' . $aRow['id']) . '"';
-    $row[]    = '<a ' . $hrefAttr . '>' . $aRow['id'] . '</a>';
+    $hrefAttr = 'href="' . admin_url('estimate_request/view/' . e($aRow['id'])) . '"';
+    $row[]    = '<a ' . $hrefAttr . '>' . e($aRow['id']) . '</a>';
 
-    $nameRow = '<a ' . $hrefAttr . '>' . $aRow['email'] . '</a>';
+    $nameRow = '<a ' . $hrefAttr . '>' . e($aRow['email']) . '</a>';
 
     $nameRow .= '<div class="row-options">';
     $nameRow .= '<a ' . $hrefAttr . '>' . _l('view') . '</a>';
 
     if ($has_permission_delete) {
-        $nameRow .= ' | <a href="' . admin_url('estimate_request/delete/' . $aRow['id']) . '" class="_delete text-danger">' . _l('delete') . '</a>';
+        $nameRow .= ' | <a href="' . admin_url('estimate_request/delete/' . e($aRow['id'])) . '" class="_delete text-danger">' . _l('delete') . '</a>';
     }
     $nameRow .= '</div>';
 
@@ -86,7 +86,7 @@ foreach ($rResult as $aRow) {
 
     $assignedOutput = '';
     if ($aRow['assigned'] != 0) {
-        $full_name = $aRow['assigned_firstname'] . ' ' . $aRow['assigned_lastname'];
+        $full_name = e($aRow['assigned_firstname'] . ' ' . $aRow['assigned_lastname']);
 
         $assignedOutput = '<a data-toggle="tooltip" data-title="' . $full_name . '" href="' . admin_url('profile/' . $aRow['assigned']) . '">' . staff_profile_image($aRow['assigned'], [
             'staff-profile-image-small',
@@ -98,7 +98,7 @@ foreach ($rResult as $aRow) {
 
     $row[] = $assignedOutput;
     if (!$has_permission_edit) {
-        $outputStatus = '<span class="label estimate_request-status-' . $aRow['status'] . '" style="color:' . $aRow['color'] . ';border:1px solid ' . adjust_hex_brightness($aRow['color'], 0.4) . ';background: ' . adjust_hex_brightness($aRow['color'], 0.04) . ';">' . $aRow['status_name'];
+        $outputStatus = '<span class="label estimate_request-status-' . $aRow['status'] . '" style="color:' . $aRow['color'] . ';border:1px solid ' . adjust_hex_brightness($aRow['color'], 0.4) . ';background: ' . adjust_hex_brightness($aRow['color'], 0.04) . ';">' . e($aRow['status_name']);
 
         $outputStatus .= '<div class="dropdown inline-block mleft5 table-export-exclude">';
         $outputStatus .= '<a href="#" style="font-size:14px;vertical-align:middle;" class="dropdown-toggle text-dark" id="tableestimate_requestsStatus-' . $aRow['id'] . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
@@ -110,7 +110,7 @@ foreach ($rResult as $aRow) {
             if ($aRow['status'] != $_status['id']) {
                 $outputStatus .= '<li>
                     <a href="#" onclick="mark_estimate_request_as(' . $_status['id'] . ',' . $aRow['id'] . '); return false;">
-                        ' . $_status['name'] . '
+                        ' . e($_status['name']) . '
                     </a>
                 </li>';
             }
@@ -119,12 +119,12 @@ foreach ($rResult as $aRow) {
         $outputStatus .= '</div>';
         $outputStatus .= '</span>';
     } else {
-        $outputStatus = '<span class="label estimate_request-status-' . $aRow['status'] . '" style="color:' . $aRow['color'] . ';border:1px solid ' . adjust_hex_brightness($aRow['color'], 0.4) . ';background: ' . adjust_hex_brightness($aRow['color'], 0.04) . ';">' . $aRow['status_name'] . '</span>';
+        $outputStatus = '<span class="label estimate_request-status-' . $aRow['status'] . '" style="color:' . $aRow['color'] . ';border:1px solid ' . adjust_hex_brightness($aRow['color'], 0.4) . ';background: ' . adjust_hex_brightness($aRow['color'], 0.04) . ';">' . e($aRow['status_name']) . '</span>';
     }
     $row[] = $outputStatus;
 
 
-    $row[] = '<span data-toggle="tooltip" data-title="' . _dt($aRow['date_added']) . '" class="text-has-action is-date">' . time_ago($aRow['date_added']) . '</span>';
+    $row[] = '<span data-toggle="tooltip" data-title="' . e(_dt($aRow['date_added'])) . '" class="text-has-action is-date">' . e(time_ago($aRow['date_added'])) . '</span>';
 
     $row['DT_RowId'] = 'lead_' . $aRow['id'];
 

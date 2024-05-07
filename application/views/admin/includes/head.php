@@ -2,7 +2,7 @@
 <?php $isRTL = (is_rtl() ? 'true' : 'false'); ?>
 
 <!DOCTYPE html>
-<html lang="<?php echo $locale; ?>" dir="<?php echo ($isRTL == 'true') ? 'rtl' : 'ltr' ?>">
+<html lang="<?php echo e($locale); ?>" dir="<?php echo ($isRTL == 'true') ? 'rtl' : 'ltr' ?>">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -15,13 +15,13 @@
     <?php render_admin_js_variables(); ?>
 
     <script>
-    var totalUnreadNotifications = <?php echo $current_user->total_unread_notifications; ?>,
+    var totalUnreadNotifications = <?php echo e($current_user->total_unread_notifications); ?>,
         proposalsTemplates = <?php echo json_encode(get_proposal_templates()); ?>,
         contractsTemplates = <?php echo json_encode(get_contract_templates()); ?>,
         billingAndShippingFields = ['billing_street', 'billing_city', 'billing_state', 'billing_zip', 'billing_country',
             'shipping_street', 'shipping_city', 'shipping_state', 'shipping_zip', 'shipping_country'
         ],
-        isRTL = '<?php echo $isRTL; ?>',
+        isRTL = '<?php echo e($isRTL); ?>',
         taskid, taskTrackingStatsData, taskAttachmentDropzone, taskCommentAttachmentDropzone, newsFeedDropzone,
         expensePreviewDropzone, taskTrackingChart, cfh_popover_templates = {},
         _table_api;

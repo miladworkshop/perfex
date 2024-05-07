@@ -7,7 +7,7 @@
             <div class="col-md-8 col-md-offset-2">
                 <div class="tw-flex tw-justify-between tw-mb-2">
                     <h4 class="tw-mt-0 tw-font-semibold tw-text-neutral-700">
-                        <span class="tw-text-lg"><?php echo $title; ?></span>
+                        <span class="tw-text-lg"><?php echo e($title); ?></span>
                         <?php if (isset($article)) { ?>
                         <br />
                         <small>
@@ -30,7 +30,6 @@
                     <div>
                         <?php if (isset($article)) { ?>
                         <p>
-
                             <?php if (staff_can('create',  'knowledge_base')) { ?>
                             <a href="<?php echo admin_url('knowledge_base/article'); ?>"
                                 class="btn btn-success pull-right"><?php echo _l('kb_article_new_article'); ?></a>
@@ -97,8 +96,9 @@
 <script>
 $(function() {
     init_editor('#description', {
-        append_plugins: 'stickytoolbar'
+        toolbar_sticky : true,
     });
+    
     appValidateForm($('#article-form'), {
         subject: 'required',
         articlegroup: 'required'

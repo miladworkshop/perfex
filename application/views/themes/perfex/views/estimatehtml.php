@@ -16,7 +16,7 @@
                 <div class="sm:tw-self-end">
                     <h3 class="bold tw-my-0 estimate-html-number">
                         <span class="sticky-visible hide tw-mb-2">
-                            <?php echo format_estimate_number($estimate->id); ?>
+                            <?php echo e(format_estimate_number($estimate->id)); ?>
                         </span>
                     </h3>
                     <span class="estimate-html-status">
@@ -81,7 +81,7 @@
             <div class="col-md-10 col-md-offset-1">
                 <div class="row mtop20">
                     <div class="col-md-6 col-sm-6 transaction-html-info-col-left">
-                        <h4 class="bold estimate-html-number"><?php echo format_estimate_number($estimate->id); ?></h4>
+                        <h4 class="bold estimate-html-number"><?php echo e(format_estimate_number($estimate->id)); ?></h4>
                         <address class="estimate-html-company-info tw-text-neutral-500 tw-text-normal">
                             <?php echo format_organization_info(); ?>
                         </address>
@@ -106,33 +106,33 @@
                             <span class="tw-font-medium tw-text-neutral-700">
                                 <?php echo _l('estimate_data_date'); ?>:
                             </span>
-                            <?php echo _d($estimate->date); ?>
+                            <?php echo e(_d($estimate->date)); ?>
                         </p>
                         <?php if (!empty($estimate->expirydate)) { ?>
                         <p class="estimate-html-expiry-date tw-mb-0 tw-text-normal">
                             <span class="tw-font-medium tw-text-neutral-700">
                                 <?php echo _l('estimate_data_expiry_date'); ?>:
                             </span>
-                            <?php echo _d($estimate->expirydate); ?>
+                            <?php echo e(_d($estimate->expirydate)); ?>
                         </p>
                         <?php } ?>
                         <?php if (!empty($estimate->reference_no)) { ?>
                         <p class="estimate-html-reference-no tw-mb-0 tw-text-normal">
                             <span class="tw-font-medium tw-text-neutral-700"><?php echo _l('reference_no'); ?>:</span>
-                            <?php echo $estimate->reference_no; ?>
+                            <?php echo e($estimate->reference_no); ?>
                         </p>
                         <?php } ?>
                         <?php if ($estimate->sale_agent && get_option('show_sale_agent_on_estimates') == 1) { ?>
                         <p class="estimate-html-sale-agent tw-mb-0 tw-text-normal">
                             <span
                                 class="tw-font-medium tw-text-neutral-700"><?php echo _l('sale_agent_string'); ?>:</span>
-                            <?php echo get_staff_full_name($estimate->sale_agent); ?>
+                            <?php echo e(get_staff_full_name($estimate->sale_agent)); ?>
                         </p>
                         <?php } ?>
                         <?php if ($estimate->project_id && get_option('show_project_on_estimate') == 1) { ?>
                         <p class="estimate-html-project tw-mb-0 tw-text-normal">
                             <span class="tw-font-medium tw-text-neutral-700"><?php echo _l('project'); ?>:</span>
-                            <?php echo get_project_name_by_id($estimate->project_id); ?>
+                            <?php echo e(get_project_name_by_id($estimate->project_id)); ?>
                         </p>
                         <?php } ?>
                         <?php $pdf_custom_fields = get_custom_fields('estimate', ['show_on_pdf' => 1, 'show_on_client_portal' => 1]);
@@ -143,7 +143,7 @@
                       } ?>
                         <p class="tw-mb-0 tw-text-normal">
                             <span class="tw-font-medium tw-text-neutral-700">
-                                <?php echo $field['name']; ?>:
+                                <?php echo e($field['name']); ?>:
                             </span>
                             <?php echo $value; ?>
                         </p>
@@ -170,7 +170,7 @@
                                         </span>
                                     </td>
                                     <td class="subtotal">
-                                        <?php echo app_format_money($estimate->subtotal, $estimate->currency_name); ?>
+                                        <?php echo e(app_format_money($estimate->subtotal, $estimate->currency_name)); ?>
                                     </td>
                                 </tr>
                                 <?php if (is_sale_discount_applied($estimate)) { ?>
@@ -178,18 +178,18 @@
                                     <td>
                                         <span class="bold tw-text-neutral-700"><?php echo _l('estimate_discount'); ?>
                                             <?php if (is_sale_discount($estimate, 'percent')) { ?>
-                                            (<?php echo app_format_number($estimate->discount_percent, true); ?>%)
+                                            (<?php echo e(app_format_number($estimate->discount_percent, true)); ?>%)
                                             <?php } ?>
                                         </span>
                                     </td>
                                     <td class="discount">
-                                        <?php echo '-' . app_format_money($estimate->discount_total, $estimate->currency_name); ?>
+                                        <?php echo e('-' . app_format_money($estimate->discount_total, $estimate->currency_name)); ?>
                                     </td>
                                 </tr>
                                 <?php } ?>
                                 <?php
                                     foreach ($items->taxes() as $tax) {
-                                        echo '<tr class="tax-area"><td class="bold !tw-text-neutral-700">' . $tax['taxname'] . ' (' . app_format_number($tax['taxrate']) . '%)</td><td>' . app_format_money($tax['total_tax'], $estimate->currency_name) . '</td></tr>';
+                                        echo '<tr class="tax-area"><td class="bold !tw-text-neutral-700">' . e($tax['taxname']) . ' (' . e(app_format_number($tax['taxrate'])) . '%)</td><td>' . e(app_format_money($tax['total_tax'], $estimate->currency_name)) . '</td></tr>';
                                     }
                                 ?>
                                 <?php if ((int)$estimate->adjustment != 0) { ?>
@@ -200,7 +200,7 @@
                                         </span>
                                     </td>
                                     <td class="adjustment">
-                                        <?php echo app_format_money($estimate->adjustment, $estimate->currency_name); ?>
+                                        <?php echo e(app_format_money($estimate->adjustment, $estimate->currency_name)); ?>
                                     </td>
                                 </tr>
                                 <?php } ?>
@@ -211,7 +211,7 @@
                                         </span>
                                     </td>
                                     <td class="total">
-                                        <?php echo app_format_money($estimate->total, $estimate->currency_name); ?>
+                                        <?php echo e(app_format_money($estimate->total, $estimate->currency_name)); ?>
                                     </td>
                                 </tr>
                             </tbody>
@@ -247,7 +247,7 @@
                             <div class="pull-left"><i
                                     class="<?php echo get_mime_class($attachment['filetype']); ?>"></i>
                             </div>
-                            <a href="<?php echo $attachment_url; ?>"><?php echo $attachment['file_name']; ?></a>
+                            <a href="<?php echo e($attachment_url); ?>"><?php echo e($attachment['file_name']); ?></a>
                         </div>
                         <?php
                } ?>
@@ -259,7 +259,7 @@
                             <b><?php echo _l('estimate_note'); ?></b>
                         </p>
                         <div class="tw-text-neutral-500">
-                            <?php echo $estimate->clientnote; ?>
+                            <?php echo process_text_content_for_display($estimate->clientnote); ?>
                         </div>
                     </div>
                     <?php } ?>
@@ -270,7 +270,7 @@
                             <b><?php echo _l('terms_and_conditions'); ?></b>
                         </p>
                         <div class="tw-text-neutral-500">
-                            <?php echo $estimate->terms; ?>
+                            <?php echo process_text_content_for_display($estimate->terms); ?>
                         </div>
                     </div>
                     <?php } ?>

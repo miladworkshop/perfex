@@ -11,7 +11,7 @@
             <?php echo form_open_multipart($this->uri->uri_string(), ['id' => 'expense-form', 'class' => 'dropzone dropzone-manual']) ; ?>
             <div class="col-md-6">
                 <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700">
-                    <?php echo $title; ?>
+                    <?php echo e($title); ?>
                 </h4>
                 <div class="panel_s">
                     <div class="panel-body">
@@ -26,7 +26,7 @@
                         <div class="row">
                             <div class="col-md-10">
                                 <i class="<?php echo get_mime_class($expense->filetype); ?>"></i> <a
-                                    href="<?php echo site_url('download/file/expense/' . $expense->expenseid); ?>"><?php echo $expense->attachment; ?></a>
+                                    href="<?php echo site_url('download/file/expense/' . $expense->expenseid); ?>"><?php echo e($expense->attachment); ?></a>
                             </div>
                             <?php if ($expense->attachment_added_from == get_staff_user_id() || is_admin()) { ?>
                             <div class="col-md-2 text-right">
@@ -47,11 +47,11 @@
                         <?php hooks()->do_action('before_expense_form_name', isset($expense) ? $expense : null); ?>
 
                         <i class="fa-regular fa-circle-question pull-left tw-mt-0.5 tw-mr-1" data-toggle="tooltip"
-                            data-title="<?php echo _l('expense_name_help'); ?> - <?php echo _l('expense_field_billable_help', _l('expense_name')); ?>"></i>
+                            data-title="<?php echo _l('expense_name_help'); ?> - <?php echo e(_l('expense_field_billable_help', _l('expense_name'))); ?>"></i>
                         <?php $value = (isset($expense) ? $expense->expense_name : ''); ?>
                         <?php echo render_input('expense_name', 'expense_name', $value); ?>
                         <i class="fa-regular fa-circle-question pull-left tw-mt-0.5 tw-mr-1" data-toggle="tooltip"
-                            data-title="<?php echo _l('expense_field_billable_help', _l('expense_add_edit_note')); ?>"></i>
+                            data-title="<?php echo e(_l('expense_field_billable_help', _l('expense_add_edit_note'))); ?>"></i>
                         <?php $value = (isset($expense) ? $expense->note : ''); ?>
                         <?php echo render_textarea('note', 'expense_add_edit_note', $value, ['rows' => 4], []); ?>
                         <?php
@@ -77,7 +77,7 @@
                          $hide_billable_options = '';
                      }
                      ?>
-                        <div class="checkbox checkbox-primary billable <?php echo $hide_billable_options; ?>">
+                        <div class="checkbox checkbox-primary billable <?php echo e($hide_billable_options); ?>">
                             <input type="checkbox" id="billable" <?php if (isset($expense) && $expense->invoiceid !== null) {
                          echo 'disabled';
                      } ?> name="billable" <?php if (isset($expense)) {
@@ -112,14 +112,14 @@
                          $hide_project_selector = '';
                      }
                      ?>
-                        <div class="form-group projects-wrapper<?php echo $hide_project_selector; ?>">
+                        <div class="form-group projects-wrapper<?php echo e($hide_project_selector); ?>">
                             <label for="project_id"><?php echo _l('project'); ?></label>
                             <div id="project_ajax_search_wrapper">
                                 <select name="project_id" id="project_id" class="projects ajax-search"
                                     data-live-search="true" data-width="100%"
                                     data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                                     <?php if (isset($expense) && $expense->project_id) {
-                         echo '<option value="' . $expense->project_id . '" selected>' . get_project_name_by_id($expense->project_id) . '</option>';
+                         echo '<option value="' . $expense->project_id . '" selected>' . e(get_project_name_by_id($expense->project_id)) . '</option>';
                      }
                            ?>
                                 </select>
@@ -191,10 +191,10 @@
                                  $selected = 'selected';
                              }
                          } ?>
-                                        <option value="<?php echo $tax['id']; ?>" <?php echo $selected; ?>
-                                            data-percent="<?php echo $tax['taxrate']; ?>"
-                                            data-subtext="<?php echo $tax['name']; ?>">
-                                            <?php echo $tax['taxrate']; ?>%
+                                        <option value="<?php echo e($tax['id']); ?>" <?php echo e($selected); ?>
+                                            data-percent="<?php echo e($tax['taxrate']); ?>"
+                                            data-subtext="<?php echo e($tax['name']); ?>">
+                                            <?php echo e($tax['taxrate']); ?>%
                                         </option>
                                         <?php
                      } ?>
@@ -217,10 +217,10 @@
                                  $selected = 'selected';
                              }
                          } ?>
-                                        <option value="<?php echo $tax['id']; ?>" <?php echo $selected; ?>
-                                            data-percent="<?php echo $tax['taxrate']; ?>"
-                                            data-subtext="<?php echo $tax['name']; ?>">
-                                            <?php echo $tax['taxrate']; ?>%
+                                        <option value="<?php echo e($tax['id']); ?>" <?php echo e($selected); ?>
+                                            data-percent="<?php echo e($tax['taxrate']); ?>"
+                                            data-subtext="<?php echo e($tax['name']); ?>">
+                                            <?php echo e($tax['taxrate']); ?>%
                                         </option>
                                         <?php
                      } ?>
@@ -325,15 +325,15 @@
                             <div class="form-group recurring-cycles">
                                 <label for="cycles"><?php echo _l('recurring_total_cycles'); ?>
                                     <?php if (isset($expense) && $expense->total_cycles > 0) {
-                         echo '<small>' . _l('cycles_passed', $expense->total_cycles) . '</small>';
+                         echo '<small>' . e(_l('cycles_passed', $expense->total_cycles)) . '</small>';
                      }
                            ?>
                                 </label>
                                 <div class="input-group">
                                     <input type="number" class="form-control" <?php if ($value == 0) {
                                echo ' disabled';
-                           } ?> name="cycles" id="cycles" value="<?php echo $value; ?>" <?php if (isset($expense) && $expense->total_cycles > 0) {
-                               echo 'min="' . ($expense->total_cycles) . '"';
+                           } ?> name="cycles" id="cycles" value="<?php echo e($value); ?>" <?php if (isset($expense) && $expense->total_cycles > 0) {
+                               echo 'min="' . e($expense->total_cycles) . '"';
                            } ?>>
                                     <div class="input-group-addon">
                                         <div class="checkbox">
@@ -347,14 +347,14 @@
                             </div>
                         </div>
                         <div>
-                            <?php
-                        $hide_invoice_recurring_options = 'hide';
-                        if (isset($expense) && $expense->billable == 1) {
-                            $hide_invoice_recurring_options = '';
-                        }
+                        <?php
+                            $hide_invoice_recurring_options = 'hide';
+                            if (isset($expense) && $expense->billable == 1) {
+                                $hide_invoice_recurring_options = '';
+                            }
                         ?>
                             <div
-                                class="checkbox checkbox-primary billable_recurring_options <?php echo $hide_invoice_recurring_options; ?>">
+                                class="checkbox checkbox-primary billable_recurring_options <?php echo e($hide_invoice_recurring_options); ?>">
                                 <input type="checkbox" id="create_invoice_billable" name="create_invoice_billable" <?php if (isset($expense)) {
                             if ($expense->create_invoice_billable == 1) {
                                 echo 'checked';
@@ -367,7 +367,7 @@
                             </div>
                         </div>
                         <div
-                            class="checkbox checkbox-primary billable_recurring_options <?php echo $hide_invoice_recurring_options; ?>">
+                            class="checkbox checkbox-primary billable_recurring_options <?php echo e($hide_invoice_recurring_options); ?>">
                             <input type="checkbox" name="send_invoice_to_customer" id="send_invoice_to_customer" <?php if (isset($expense)) {
                             if ($expense->send_invoice_to_customer == 1) {
                                 echo 'checked';
@@ -394,7 +394,7 @@ var expenseDropzone;
 init_ajax_project_search_by_customer_id();
 var selectCurrency = $('select[name="currency"]');
 <?php if (isset($customer_currency)) { ?>
-var customer_currency = '<?php echo $customer_currency; ?>';
+var customer_currency = '<?php echo e($customer_currency); ?>';
 <?php } ?>
 $(function() {
     $('body').on('change', '#project_id', function() {

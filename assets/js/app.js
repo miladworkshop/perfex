@@ -295,22 +295,6 @@ function add_hotkey(key, func) {
   });
 }
 
-function _tinymce_mobile_toolbar() {
-  return [
-    "undo",
-    "redo",
-    "styleselect",
-    "bold",
-    "italic",
-    "link",
-    "image",
-    "bullist",
-    "numlist",
-    "forecolor",
-    "fontsizeselect",
-  ];
-}
-
 // Function that convert decimal logged time to HH:MM format
 function decimalToHM(decimal) {
   var hrs = parseInt(Number(decimal));
@@ -363,20 +347,14 @@ function is_ms_browser() {
 function _simple_editor_config() {
   return {
     forced_root_block: "p",
-    height: !is_mobile() ? 100 : 50,
     menubar: false,
     autoresize_bottom_margin: 15,
     plugins: [
-      "table advlist codesample autosave" +
-        (!is_mobile() ? " autoresize " : " ") +
-        "lists link image textcolor media contextmenu paste",
+      "quickbars", "table", "advlist", "codesample", "autosave", "lists", "link", "image", "media",
     ],
-    toolbar:
-      "insert formatselect bold forecolor backcolor" +
-      (is_mobile() ? " | " : " ") +
-      "alignleft aligncenter alignright bullist numlist | restoredraft",
-    insert_button_items: "image media link codesample",
-    toolbar1: "",
+    toolbar: "blocks image media alignleft aligncenter alignright bullist numlist restoredraft",
+    quickbars_insert_toolbar: 'image quicktable | hr',
+    quickbars_selection_toolbar: "bold italic | forecolor backcolor | quicklink | h2 h3 | codesample",
   };
 }
 
@@ -1362,4 +1340,127 @@ function htmlEntities(str) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
+}
+
+function escapeHtml(value, doubleEncode = true) {
+  if (typeof value === 'undefined' || value === null) {
+      return '';
+  }
+
+  // Convert value if it's an instance of a backed enum (in modern JS environments, you can use instanceof with enums)
+  if (typeof value === 'object' && value.hasOwnProperty('value')) {
+      value = value.value;
+  }
+
+  let escapedValue = value.toString().replace(/&/g, '&amp;')
+                                     .replace(/</g, '&lt;')
+                                     .replace(/>/g, '&gt;')
+                                     .replace(/"/g, '&quot;')
+                                     .replace(/'/g, '&#039;');
+
+  // If doubleEncode is false, we need to revert the encoded ampersands back to their original form for already escaped entities
+  if (!doubleEncode) {
+      escapedValue = escapedValue.replace(/&amp;(#\d+;|#[xX][\da-fA-F]+;|[a-zA-Z]+;)/g, '&$1');
+  }
+
+  return escapedValue;
+}
+
+function init_tinymce_inline_editor(options = {}, selector) {
+  selector = selector || 'div.editable'
+
+  tinymce.remove(selector);
+  
+  function saveContent(manual) {
+    if(options.saveUsing) {
+      options.saveUsing(manual);
+    }
+  }
+
+  var settings = {
+    selector: selector,
+    inline: true,
+    toolbar: false,
+    menubar: false,
+    branding: false,
+    cache_suffix: '?v='+app.version,
+    language: app.tinymce_lang || 'en',
+    relative_urls: false,
+    remove_script_host: false,
+    paste_block_drop: true,
+    entity_encoding: "raw",
+    apply_source_formatting: false,
+    valid_elements: "+*[*]",
+    valid_children: "+body[style], +style[type]",
+    file_picker_callback: elFinderBrowser,
+    table_default_styles: {
+      width: "100%",
+    },
+    font_size_formats: "8pt 10pt 12pt 14pt 18pt 24pt 36pt",
+    pagebreak_separator: '<p pagebreak="true"></p>',
+    pagebreak_split_block: true,
+    plugins: [
+      "quickbars", "advlist", "autolink", "lists", "link", "image",
+      "visualblocks", "code", "pagebreak", "searchreplace", "media", "table"
+    ],
+    autoresize_bottom_margin: 50,
+    quickbars_insert_toolbar: 'image media quicktable | bullist numlist | h2 h3 | pagebreak | hr',
+    quickbars_selection_toolbar:
+    "bold italic underline superscript | forecolor backcolor link | alignleft aligncenter alignright alignjustify | fontfamily fontsize | h2 h3",
+    contextmenu: "paste pastetext searchreplace | visualblocks pagebreak | code",
+    setup: function (editor) {
+      if(options.onSetup) {
+        options.onSetup(editor)
+      }
+
+      editor.addCommand("mceSave", function () {
+        saveContent(true);
+      });
+      
+      editor.addShortcut("Meta+S", "", "mceSave");
+      
+      editor.on("MouseLeave blur", function () {
+        if (tinymce.activeEditor.isDirty()) {
+          saveContent();
+        }
+      });
+
+      editor.on("blur", function () {
+        $.Shortcuts.start();
+      });
+
+      editor.on("focus", function () {
+        $.Shortcuts.stop();
+      });
+    },
+  };
+
+  if (is_mobile()) {
+    window.addEventListener("beforeunload", function (event) {
+      if (tinymce.activeEditor.isDirty()) {
+        saveContent();
+      }
+    });
+  }
+  
+  tinymce.init(settings);
+}
+
+/**
+ * @deprecated
+ */
+function _tinymce_mobile_toolbar() {
+  return [
+    "undo",
+    "redo",
+    "styleselect",
+    "bold",
+    "italic",
+    "link",
+    "image",
+    "bullist",
+    "numlist",
+    "forecolor",
+    "fontsizeselect",
+  ];
 }

@@ -4,9 +4,9 @@
 	<label for="clients_default_theme" class="control-label"><?php echo _l('settings_clients_default_theme'); ?></label>
 	<select name="settings[clients_default_theme]" id="clients_default_theme" class="form-control selectpicker" data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
 		<?php foreach (get_all_client_themes() as $theme) { ?>
-		<option value="<?php echo $theme; ?>" <?php if (active_clients_theme() == $theme) {
+		<option value="<?php echo e($theme); ?>" <?php if (active_clients_theme() == $theme) {
     echo 'selected';
-} ?>><?php echo ucfirst($theme); ?></option>
+} ?>><?php echo e(ucfirst($theme)); ?></option>
 		<?php } ?>
 	</select>
 </div>
@@ -27,14 +27,31 @@
     if ($tabKey == 'profile' || $tabKey == 'contacts') {
         continue;
     } ?>
-			<option value="<?php echo $tabKey; ?>"<?php if ((is_array($current_tabs)
+			<option value="<?php echo e($tabKey); ?>"<?php if ((is_array($current_tabs)
             && array_key_exists($tabKey, $current_tabs) && $current_tabs[$tabKey] == true) || (is_array($current_tabs) && !array_key_exists($tabKey, $current_tabs))) {
         echo ' selected';
     } ?>>
-				<?php echo $tab['name']; ?>
+				<?php echo e($tab['name']); ?>
 			</option>
-		<?php
-} ?>
+		<?php } ?>
+	</select>
+</div>
+<hr />
+<div class="form-group">
+	<label for="required_register_fields" class="control-label"><?php echo _l('required_register_fields'); ?></label>
+	<select name="settings[required_register_fields][]" id="required_register_fields" multiple class="form-control selectpicker" data-none-selected-text="<?php echo _l('all'); ?>" data-actions-box="true">
+		<?php 
+		$optionFields = get_required_fields_for_registration();
+		foreach($optionFields['contact'] as $key => $field) { ?>
+			<option value="<?php echo $key; ?>" <?php echo $field['is_required'] ? 'selected' : '';?> <?php echo $field['disabled'] ? 'disabled' : ''; ?>>
+			<?php echo $field['label'] . ' - ' . _l('contact'); ?>
+		</option>
+		<?php } ?> 
+		<?php foreach($optionFields['company'] as $key => $field) { ?>
+			<option value="<?php echo $key; ?>" <?php echo $field['is_required'] ? 'selected' : '';?> <?php echo $field['disabled'] ? 'disabled' : ''; ?>>
+			<?php echo $field['label'] . ' - ' . _l('client_company'); ?>
+		</option>
+		<?php } ?> 
 	</select>
 </div>
 <hr />
@@ -79,10 +96,10 @@
 				<?php echo _l('settings_no'); ?>
 			</option>
 		<?php foreach ($estimateRequestForms as $form) { ?>
-			<option value="<?php echo $form['id']; ?>"<?php if (get_option('show_estimate_request_in_customers_area') == $form['id']) {
+			<option value="<?php echo e($form['id']); ?>"<?php if (get_option('show_estimate_request_in_customers_area') == $form['id']) {
         echo ' selected';
     } ?>>
-				<?php echo $form['name']; ?>
+				<?php echo e($form['name']); ?>
 			</option>
 		<?php } ?>
 	</select>
@@ -94,8 +111,8 @@
 	<div class="checkbox checkbox-primary">
 		<input type="checkbox" name="settings[default_contact_permissions][]" <?php if (is_array($default_contact_permissions) && in_array($p['id'], $default_contact_permissions)) {
         echo 'checked';
-    } ?> id="dcp_<?php echo $p['id']; ?>" value="<?php echo $p['id']; ?>">
-		<label for="dcp_<?php echo $p['id']; ?>"><?php echo $p['name']; ?></label>
+    } ?> id="dcp_<?php echo e($p['id']); ?>" value="<?php echo e($p['id']); ?>">
+		<label for="dcp_<?php echo e($p['id']); ?>"><?php echo e($p['name']); ?></label>
 	</div>
 	<?php } ?>
 </div>

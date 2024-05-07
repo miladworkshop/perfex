@@ -13,7 +13,7 @@
                         <select class="selectpicker" name="report-group-change" data-width="100%"
                             data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                             <?php foreach ($groups as $group) { ?>
-                            <option value="<?php echo $group['groupid']; ?>"><?php echo $group['name']; ?></option>
+                            <option value="<?php echo e($group['groupid']); ?>"><?php echo e($group['name']); ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -22,7 +22,7 @@
             <div class="col-md-12">
                 <div class="row">
                     <?php foreach ($groups as $group) { ?>
-                    <div class="col-md-12 group-report hide" id="group_<?php echo $group['groupid']; ?>">
+                    <div class="col-md-12 group-report hide" id="group_<?php echo e($group['groupid']); ?>">
                         <div class="panel_s">
                             <div class="panel-body">
                                 <?php foreach ($group['articles'] as $article) {
@@ -46,13 +46,13 @@
                                                     <span
                                                         class="label label-default mright5 inline-block mbot10"><?php echo _l('internal_article'); ?></span>
                                                     <?php } ?>
-                                                    <?php echo $article['subject']; ?></span>
+                                                    <?php echo e($article['subject']); ?></span>
                                                 (<?php echo _l('kb_report_total_answers'); ?>:
-                                                <?php echo $total_answers; ?>)
+                                                <?php echo e($total_answers); ?>)
                                             </div>
                                             <?php if ($total_yes_answers > 0) { ?>
                                             <div class="col-md-4 text-right">
-                                                <?php echo _l('report_kb_yes'); ?>: <?php echo $total_yes_answers; ?>
+                                                <?php echo _l('report_kb_yes'); ?>: <?php echo e($total_yes_answers); ?>
                                             </div>
                                             <?php } ?>
                                         </div>
@@ -63,20 +63,20 @@
                                             <div class="progress-bar progress-bar-info progress-bar-striped"
                                                 role="progressbar" aria-valuenow="40" aria-valuemin="0"
                                                 aria-valuemax="100" style="width: 0%"
-                                                data-percent="<?php echo $percent_yes; ?>">
+                                                data-percent="<?php echo e($percent_yes); ?>">
                                                 0%
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12 text-right">
-                                                <?php echo _l('report_kb_no'); ?>: <?php echo $total_no_answers; ?>
+                                                <?php echo _l('report_kb_no'); ?>: <?php echo e($total_no_answers); ?>
                                             </div>
                                         </div>
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-danger progress-bar-striped"
                                                 role="progressbar" aria-valuenow="40" aria-valuemin="0"
                                                 aria-valuemax="100" style="width: 0%"
-                                                data-percent="<?php echo $percent_no; ?>">
+                                                data-percent="<?php echo e($percent_no); ?>">
                                                 0%
                                             </div>
                                         </div>

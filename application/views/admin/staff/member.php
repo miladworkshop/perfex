@@ -21,12 +21,12 @@
                 <?php } ?>
                 <div class="tw-flex tw-justify-between">
                     <h4 class="tw-mb-0 tw-font-semibold tw-text-lg tw-text-neutral-700">
-                        <?php echo $member->firstname . ' ' . $member->lastname; ?>
+                        <?php echo e($member->firstname . ' ' . $member->lastname); ?>
                         <?php if ($member->last_activity && $member->staffid != get_staff_user_id()) { ?>
                         <small> - <?php echo _l('last_active'); ?>:
                             <span class="text-has-action" data-toggle="tooltip"
-                                data-title="<?php echo _dt($member->last_activity); ?>">
-                                <?php echo time_ago($member->last_activity); ?>
+                                data-title="<?php echo e(_dt($member->last_activity)); ?>">
+                                <?php echo e(time_ago($member->last_activity)); ?>
                             </span>
                         </small>
                         <?php } ?>
@@ -81,7 +81,7 @@
                               }
                               ?>
                                         <input type="checkbox" value="1" name="is_not_staff" id="is_not_staff"
-                                            <?php echo $checked; ?>>
+                                            <?php echo e($checked); ?>>
                                         <label for="is_not_staff"><?php echo _l('is_not_staff_member'); ?></label>
                                     </div>
                                     <hr />
@@ -123,7 +123,7 @@
                                   echo 0;
                               } ?>" id="hourly_rate" class="form-control">
                                         <span class="input-group-addon">
-                                            <?php echo $base_currency->symbol; ?>
+                                            <?php echo e($base_currency->symbol); ?>
                                         </span>
                                     </div>
                                 </div>
@@ -133,21 +133,21 @@
                                     <label for="facebook" class="control-label"><i class="fa-brands fa-facebook-f"></i>
                                         <?php echo _l('staff_add_edit_facebook'); ?></label>
                                     <input type="text" class="form-control" name="facebook" value="<?php if (isset($member)) {
-                                  echo $member->facebook;
+                                  echo e($member->facebook);
                               } ?>">
                                 </div>
                                 <div class="form-group">
                                     <label for="linkedin" class="control-label"><i class="fa-brands fa-linkedin-in"></i>
                                         <?php echo _l('staff_add_edit_linkedin'); ?></label>
                                     <input type="text" class="form-control" name="linkedin" value="<?php if (isset($member)) {
-                                  echo $member->linkedin;
+                                  echo e($member->linkedin);
                               } ?>">
                                 </div>
                                 <div class="form-group">
                                     <label for="skype" class="control-label"><i class="fa-brands fa-skype"></i>
                                         <?php echo _l('staff_add_edit_skype'); ?></label>
                                     <input type="text" class="form-control" name="skype" value="<?php if (isset($member)) {
-                                  echo $member->skype;
+                                  echo e($member->skype);
                               } ?>">
                                 </div>
                                 <?php if (!is_language_disabled()) { ?>
@@ -165,10 +165,10 @@
                                           $selected = 'selected';
                                       }
                                   } ?>
-                                        <option value="<?php echo $availableLanguage; ?>" <?php echo $selected; ?>>
-                                            <?php echo ucfirst($availableLanguage); ?></option>
-                                        <?php
-                              } ?>
+                                        <option value="<?php echo e($availableLanguage); ?>" <?php echo $selected; ?>>
+                                            <?php echo e(ucfirst($availableLanguage)); ?>
+                                        </option>
+                                        <?php } ?>
                                     </select>
                                 </div>
                                 <?php } ?>
@@ -209,11 +209,11 @@
                                   }
                               }
                               ?>
-                                        <input type="checkbox" id="dep_<?php echo $department['departmentid']; ?>"
-                                            name="departments[]" value="<?php echo $department['departmentid']; ?>"
-                                            <?php echo $checked; ?>>
+                                        <input type="checkbox" id="dep_<?php echo e($department['departmentid']); ?>"
+                                            name="departments[]" value="<?php echo e($department['departmentid']); ?>"
+                                            <?php echo e($checked); ?>>
                                         <label
-                                            for="dep_<?php echo $department['departmentid']; ?>"><?php echo $department['name']; ?></label>
+                                            for="dep_<?php echo e($department['departmentid']); ?>"><?php echo e($department['name']); ?></label>
                                     </div>
                                     <?php } ?>
                                 </div>
@@ -232,7 +232,7 @@
                                  }
                               ?>
                                             <input type="checkbox" name="administrator" id="administrator"
-                                                <?php echo $isadmin; ?>>
+                                                <?php echo e($isadmin); ?>>
                                             <label
                                                 for="administrator"><?php echo _l('staff_add_edit_administrator'); ?></label>
                                         </div>
@@ -275,8 +275,8 @@
                                 <?php if ($member->last_password_change != null) { ?>
                                 <?php echo _l('staff_add_edit_password_last_changed'); ?>:
                                 <span class="text-has-action" data-toggle="tooltip"
-                                    data-title="<?php echo _dt($member->last_password_change); ?>">
-                                    <?php echo time_ago($member->last_password_change); ?>
+                                    data-title="<?php echo e(_dt($member->last_password_change)); ?>">
+                                    <?php echo e(time_ago($member->last_password_change)); ?>
                                 </span>
                                 <?php } } ?>
                                 <?php } ?>
@@ -350,29 +350,29 @@
                                     <?php foreach ($user_notes as $note) { ?>
                                     <tr>
                                         <td width="50%">
-                                            <div data-note-description="<?php echo $note['id']; ?>">
-                                                <?php echo check_for_links($note['description']); ?>
+                                            <div data-note-description="<?php echo e($note['id']); ?>">
+                                                <?php echo process_text_content_for_display($note['description']); ?>
                                             </div>
-                                            <div data-note-edit-textarea="<?php echo $note['id']; ?>"
+                                            <div data-note-edit-textarea="<?php echo e($note['id']); ?>"
                                                 class="hide inline-block full-width">
                                                 <textarea name="description" class="form-control"
                                                     rows="4"><?php echo clear_textarea_breaks($note['description']); ?></textarea>
                                                 <div class="text-right mtop15">
                                                     <button type="button" class="btn btn-default"
-                                                        onclick="toggle_edit_note(<?php echo $note['id']; ?>);return false;"><?php echo _l('cancel'); ?></button>
+                                                        onclick="toggle_edit_note(<?php echo e($note['id']); ?>);return false;"><?php echo _l('cancel'); ?></button>
                                                     <button type="button" class="btn btn-primary"
-                                                        onclick="edit_note(<?php echo $note['id']; ?>);"><?php echo _l('update_note'); ?></button>
+                                                        onclick="edit_note(<?php echo e($note['id']); ?>);"><?php echo _l('update_note'); ?></button>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td><?php echo $note['firstname'] . ' ' . $note['lastname']; ?></td>
-                                        <td data-order="<?php echo $note['dateadded']; ?>">
-                                            <?php echo _dt($note['dateadded']); ?></td>
+                                        <td><?php echo e($note['firstname'] . ' ' . $note['lastname']); ?></td>
+                                        <td data-order="<?php echo e($note['dateadded']); ?>">
+                                            <?php echo e(_dt($note['dateadded'])); ?></td>
                                         <td>
                                             <div class="tw-flex tw-items-center tw-space-x-3">
                                                 <?php if ($note['addedfrom'] == get_staff_user_id() || staff_can('delete',  'staff')) { ?>
                                                 <a href="#"
-                                                    onclick="toggle_edit_note(<?php echo $note['id']; ?>);return false;"
+                                                    onclick="toggle_edit_note(<?php echo e($note['id']); ?>);return false;"
                                                     class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700">
                                                     <i class="fa-regular fa-pen-to-square fa-lg"></i>
                                                 </a>
@@ -455,11 +455,11 @@
                            foreach ($timesheets as $t) { ?>
                                 <tr>
                                     <td><a href="#"
-                                            onclick="init_task_modal(<?php echo $t['task_id']; ?>); return false;"><?php echo $t['name']; ?></a>
+                                            onclick="init_task_modal(<?php echo e($t['task_id']); ?>); return false;"><?php echo e($t['name']); ?></a>
                                     </td>
-                                    <td data-order="<?php echo $t['start_time']; ?>">
-                                        <?php echo _dt($t['start_time'], true); ?></td>
-                                    <td data-order="<?php echo $t['end_time']; ?>">
+                                    <td data-order="<?php echo e($t['start_time']); ?>">
+                                        <?php echo e($t['start_time'], true); ?></td>
+                                    <td data-order="<?php echo e($t['end_time']); ?>">
                                         <?php
                                  // Allow admins or timer user to stop forgotten timers by staff member
                                  if ($t['not_finished'] && (is_admin() || $t['staff_id'] === get_staff_user_id())) {
@@ -471,9 +471,9 @@
                                             data-html="true" data-trigger="manual"
                                             data-title="<?php echo _l('note'); ?>"
                                             data-content='<?php echo render_textarea('timesheet_note'); ?><button type="button"
-                                          onclick="timer_action(this, <?php echo $t['task_id']; ?>, <?php echo $t['id']; ?>, 1);" class="btn btn-primary btn-sm"><?php echo _l('save'); ?></button>'
+                                          onclick="timer_action(this, <?php echo e($t['task_id']); ?>, <?php echo e($t['id']); ?>, 1);" class="btn btn-primary btn-sm"><?php echo _l('save'); ?></button>'
                                             onclick="return false;" <?php } else { ?>
-                                            onclick="timer_action(this, <?php echo $t['task_id']; ?>, <?php echo $t['id']; ?>, 1); return false;"
+                                            onclick="timer_action(this, <?php echo e($t['task_id']); ?>, <?php echo e($t['id']); ?>, 1); return false;"
                                             <?php } ?> class="text-danger">
                                             <i class="fa-regular fa-clock"></i>
                                             <?php echo _l('task_stop_timer'); ?>
@@ -482,7 +482,7 @@
                                  } elseif ($t['not_finished']) {
                                      echo '<b>' . _l('timer_not_stopped_yet') . '</b>';
                                  } else {
-                                     echo _dt($t['end_time'], true);
+                                     echo e(_dt($t['end_time'], true));
                                  }
                               ?>
                                     </td>
@@ -490,17 +490,17 @@
                                         <?php
                                  $rel_data   = get_relation_data($t['rel_type'], $t['rel_id']);
                                  $rel_values = get_relation_values($rel_data, $t['rel_type']);
-                                 echo '<a href="' . $rel_values['link'] . '">' . $rel_values['name'] . '</a>';
+                                 echo '<a href="' . e($rel_values['link']) . '">' . e($rel_values['name']) . '</a>';
                                  ?>
                                     </td>
-                                    <td><?php echo app_format_money($t['hourly_rate'], $base_currency); ?></td>
+                                    <td><?php echo e(app_format_money($t['hourly_rate'], $base_currency)); ?></td>
                                     <td>
-                                        <?php echo '<b>' . seconds_to_time_format($t['end_time'] - $t['start_time']) . '</b>'; ?>
+                                        <?php echo '<b>' . e(seconds_to_time_format($t['end_time'] - $t['start_time'])) . '</b>'; ?>
                                     </td>
-                                    <td data-order="<?php echo sec2qty($t['total']); ?>">
+                                    <td data-order="<?php echo e(sec2qty($t['total'])); ?>">
                                         <?php
                                  $total_logged_time[] = ['total' => $t['total'], 'hourly_rate' => $t['hourly_rate']];
-                                 echo '<b>' . sec2qty($t['total']) . '</b>';
+                                 echo '<b>' . e(sec2qty($t['total'])) . '</b>';
                                  ?>
                                     </td>
                                     <td>
@@ -523,22 +523,22 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td align="right"><?php echo '<b>' . _l('total_by_hourly_rate') . ':</b> ' . app_format_money(
+                                    <td align="right"><?php echo '<b>' . _l('total_by_hourly_rate') . ':</b> ' . e(app_format_money(
                                   collect($total_logged_time)->reduce(function ($carry, $item) {
                                       return $carry + (sec2qty($item['total']) * (float) $item['hourly_rate']);
                                   }, 0),
                                   $base_currency
-                              ); ?>
+                              )); ?>
                                     </td>
                                     <td align="right">
-                                        <?php echo '<b>' . _l('total_logged_hours_by_staff') . ':</b> ' . seconds_to_time_format(
-                                  collect($total_logged_time)->pluck('total')->sum()
-                              ); ?>
+                                        <?php echo '<b>' . _l('total_logged_hours_by_staff') . ':</b> ' . e(seconds_to_time_format(
+                                            collect($total_logged_time)->pluck('total')->sum()
+                                        )); ?>
                                     </td>
                                     <td align="right">
-                                        <?php echo '<b>' . _l('total_logged_hours_by_staff') . ':</b> ' . sec2qty(
-                                  collect($total_logged_time)->pluck('total')->sum()
-                              ); ?>
+                                        <?php echo '<b>' . _l('total_logged_hours_by_staff') . ':</b> ' . e(sec2qty(
+                                            collect($total_logged_time)->pluck('total')->sum()
+                                        )); ?>
                                     </td>
                                     <td></td>
                                 </tr>
@@ -555,11 +555,11 @@
                             <?php echo form_hidden('staff_id', $member->staffid); ?>
                         </div>
                         <?php render_datatable([
-                  _l('project_name'),
-                  _l('project_start_date'),
-                  _l('project_deadline'),
-                  _l('project_status'),
-                  ], 'staff-projects'); ?>
+                            _l('project_name'),
+                            _l('project_start_date'),
+                            _l('project_deadline'),
+                            _l('project_status'),
+                        ], 'staff-projects'); ?>
                     </div>
                 </div>
             </div>
@@ -634,5 +634,4 @@
     });
     </script>
     </body>
-
     </html>

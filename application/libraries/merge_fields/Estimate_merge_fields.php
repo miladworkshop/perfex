@@ -97,16 +97,16 @@ class Estimate_merge_fields extends App_merge_fields
 
         $currency = get_currency($estimate->currency);
 
-        $fields['{estimate_sale_agent}']   = get_staff_full_name($estimate->sale_agent);
-        $fields['{estimate_total}']        = app_format_money($estimate->total, $currency);
-        $fields['{estimate_subtotal}']     = app_format_money($estimate->subtotal, $currency);
+        $fields['{estimate_sale_agent}']   = e(get_staff_full_name($estimate->sale_agent));
+        $fields['{estimate_total}']        = e(app_format_money($estimate->total, $currency));
+        $fields['{estimate_subtotal}']     = e(app_format_money($estimate->subtotal, $currency));
         $fields['{estimate_link}']         = site_url('estimate/' . $estimate_id . '/' . $estimate->hash);
-        $fields['{estimate_number}']       = format_estimate_number($estimate_id);
-        $fields['{estimate_reference_no}'] = $estimate->reference_no;
-        $fields['{estimate_expirydate}']   = _d($estimate->expirydate);
-        $fields['{estimate_date}']         = _d($estimate->date);
-        $fields['{estimate_status}']       = format_estimate_status($estimate->status, '', false);
-        $fields['{project_name}']          = get_project_name_by_id($estimate->project_id);
+        $fields['{estimate_number}']       = e(format_estimate_number($estimate_id));
+        $fields['{estimate_reference_no}'] = e($estimate->reference_no);
+        $fields['{estimate_expirydate}']   = e(_d($estimate->expirydate));
+        $fields['{estimate_date}']         = e(_d($estimate->date));
+        $fields['{estimate_status}']       = e(format_estimate_status($estimate->status, '', false));
+        $fields['{project_name}']          = e(get_project_name_by_id($estimate->project_id));
         $fields['{estimate_short_url}']    = get_estimate_shortlink($estimate);
 
         $custom_fields = get_custom_fields('estimate');

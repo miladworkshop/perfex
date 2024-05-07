@@ -197,9 +197,9 @@ abstract class App_items_table_template
                     $item_tax = '';
                     if ((count($item['taxes']) > 1 && get_option('remove_tax_name_from_item_table') == false) || get_option('remove_tax_name_from_item_table') == false || multiple_taxes_found_for_item($item['taxes'])) {
                         $tmp      = explode('|', $tax['taxname']);
-                        $item_tax = $tmp[0] . ' ' . app_format_number($tmp[1]) . '%<br />';
+                        $item_tax = $tmp[0] . ' ' . e(app_format_number($tmp[1])) . '%<br />';
                     } else {
-                        $item_tax .= app_format_number($tax['taxrate']) . '%';
+                        $item_tax .= e(app_format_number($tax['taxrate'])) . '%';
                     }
 
                     $itemHTML .= hooks()->apply_filters('item_tax_table_row', $item_tax, $item);

@@ -120,9 +120,9 @@ class Tasks_merge_fields extends App_merge_fields
         }
 
         if (is_client_logged_in()) {
-            $fields['{task_user_take_action}'] = get_contact_full_name(get_contact_user_id());
+            $fields['{task_user_take_action}'] = e(get_contact_full_name(get_contact_user_id()));
         } else {
-            $fields['{task_user_take_action}'] = get_staff_full_name(get_staff_user_id());
+            $fields['{task_user_take_action}'] = e(get_staff_full_name(get_staff_user_id()));
         }
 
         $fields['{task_comment}'] = '';
@@ -135,17 +135,17 @@ class Tasks_merge_fields extends App_merge_fields
             $this->ci->db->where('id', $task->rel_id);
             $project = $this->ci->db->get()->row();
             if ($project) {
-                $fields['{project_name}'] = $project->name;
+                $fields['{project_name}'] = e($project->name);
             }
         }
 
         if (!empty($task->rel_id)) {
             $rel_data                 = get_relation_data($task->rel_type, $task->rel_id);
             $rel_values               = get_relation_values($rel_data, $task->rel_type);
-            $fields['{task_related}'] = $rel_values['name'];
+            $fields['{task_related}'] = e($rel_values['name']);
         }
 
-        $fields['{task_name}']        = $task->name;
+        $fields['{task_name}']        = e($task->name);
         $fields['{task_description}'] = $task->description;
 
         $languageChanged = false;
@@ -169,8 +169,8 @@ class Tasks_merge_fields extends App_merge_fields
             }
         }
 
-        $fields['{task_status}']   = format_task_status($task->status, false, true);
-        $fields['{task_priority}'] = task_priority($task->priority);
+        $fields['{task_status}']   = e(format_task_status($task->status, false, true));
+        $fields['{task_priority}'] = e(task_priority($task->priority));
 
         $custom_fields = get_custom_fields('tasks');
         foreach ($custom_fields as $field) {
@@ -183,8 +183,8 @@ class Tasks_merge_fields extends App_merge_fields
             load_client_language();
         }
 
-        $fields['{task_startdate}'] = _d($task->startdate);
-        $fields['{task_duedate}']   = _d($task->duedate);
+        $fields['{task_startdate}'] = e(_d($task->startdate));
+        $fields['{task_duedate}']   = e(_d($task->duedate));
         $fields['{comment_link}']   = '';
 
         $this->ci->db->where('taskid', $task_id);

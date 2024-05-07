@@ -345,7 +345,7 @@ class Estimates extends AdminController
             set_alert('danger', _l('estimate_status_changed_fail'));
         }
         if ($this->set_estimate_pipeline_autoload($id)) {
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
         } else {
             redirect(admin_url('estimates/list_estimates/' . $id));
         }
@@ -369,7 +369,7 @@ class Estimates extends AdminController
             set_alert('danger', _l('sent_expiry_reminder_fail'));
         }
         if ($this->set_estimate_pipeline_autoload($id)) {
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
         } else {
             redirect(admin_url('estimates/list_estimates/' . $id));
         }
@@ -406,7 +406,7 @@ class Estimates extends AdminController
             set_alert('danger', _l('estimate_sent_to_client_fail'));
         }
         if ($this->set_estimate_pipeline_autoload($id)) {
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
         } else {
             redirect(admin_url('estimates/list_estimates/' . $id));
         }
@@ -434,7 +434,7 @@ class Estimates extends AdminController
                 $this->session->set_flashdata('estimateid', $id);
             }
             if ($this->set_estimate_pipeline_autoload($id)) {
-                redirect($_SERVER['HTTP_REFERER']);
+                redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
             } else {
                 redirect(admin_url('estimates/list_estimates/' . $id));
             }
@@ -453,14 +453,14 @@ class Estimates extends AdminController
         if ($new_id) {
             set_alert('success', _l('estimate_copied_successfully'));
             if ($this->set_estimate_pipeline_autoload($new_id)) {
-                redirect($_SERVER['HTTP_REFERER']);
+                redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
             } else {
                 redirect(admin_url('estimates/estimate/' . $new_id));
             }
         }
         set_alert('danger', _l('estimate_copied_fail'));
         if ($this->set_estimate_pipeline_autoload($id)) {
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
         } else {
             redirect(admin_url('estimates/estimate/' . $id));
         }

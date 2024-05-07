@@ -35,9 +35,9 @@ if (is_staff_member()) {
     ?>
                     <div class="goal tw-px-1 tw-pb-1">
                         <h4 class="pull-left font-medium no-mtop">
-                            <?php echo $goal['goal_type_name']; ?>
+                            <?php echo e($goal['goal_type_name']); ?>
                             <br />
-                            <small><?php echo $goal['subject']; ?></small>
+                            <small><?php echo e($goal['subject']); ?></small>
                         </h4>
                         <h4 class="pull-right bold no-mtop text-success text-right">
                             <?php echo $goal['achievement']['total']; ?>

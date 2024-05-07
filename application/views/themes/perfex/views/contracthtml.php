@@ -15,8 +15,8 @@
             <div class="sm:tw-flex sm:tw-justify-between -tw-mx-4">
                 <div class="sm:tw-self-end tw-inline-flex">
                     <h4 class="tw-my-0 tw-font-semibold contract-html-subject">
-                        <?php echo $contract->subject; ?><br />
-                        <small><?php echo $contract->type_name; ?></small>
+                        <?php echo e($contract->subject); ?><br />
+                        <small><?php echo e($contract->type_name); ?></small>
                     </h4>
                     <?php if (!($contract->signed == 0 && $contract->marked_as_signed == 0)) { ?>
                     <span
@@ -94,7 +94,7 @@
                         <div class="col-md-12 contract-value">
                             <h4 class="bold tw-mb-3">
                                 <?php echo _l('contract_value'); ?>:
-                                <?php echo app_format_money($contract->contract_value, get_base_currency()); ?>
+                                <?php echo e(app_format_money($contract->contract_value, get_base_currency())); ?>
                             </h4>
                         </div>
                         <?php } ?>
@@ -102,20 +102,20 @@
                             # <?php echo _l('contract_number'); ?>
                         </div>
                         <div class="tw-text-normal col-md-7 contract-number tw-text-neutral-700">
-                            <?php echo $contract->id; ?>
+                            <?php echo e($contract->id); ?>
                         </div>
                         <div class="tw-text-normal col-md-5 text-muted contract-start-date">
                             <?php echo _l('contract_start_date'); ?>
                         </div>
                         <div class="tw-text-normal col-md-7 contract-start-date tw-text-neutral-700">
-                            <?php echo _d($contract->datestart); ?>
+                            <?php echo e(_d($contract->datestart)); ?>
                         </div>
                         <?php if (!empty($contract->dateend)) { ?>
                         <div class="tw-text-normal col-md-5 text-muted contract-end-date">
                             <?php echo _l('contract_end_date'); ?>
                         </div>
                         <div class="tw-text-normal col-md-7 contract-end-date tw-text-neutral-700">
-                            <?php echo _d($contract->dateend); ?>
+                            <?php echo e(_d($contract->dateend)); ?>
                         </div>
                         <?php } ?>
                         <?php if (!empty($contract->type_name)) { ?>
@@ -123,7 +123,7 @@
                             <?php echo _l('contract_type'); ?>
                         </div>
                         <div class="tw-text-normal col-md-7 contract-type tw-text-neutral-700">
-                            <?php echo $contract->type_name; ?>
+                            <?php echo e($contract->type_name); ?>
                         </div>
                         <?php } ?>
                         <?php if ($contract->signed == 1) { ?>
@@ -131,7 +131,7 @@
                             <?php echo _l('date_signed'); ?>
                         </div>
                         <div class="tw-text-normal col-md-7 contract-type tw-text-neutral-700">
-                            <?php echo _dt($contract->acceptance_date); ?>
+                            <?php echo e(_dt($contract->acceptance_date)); ?>
                         </div>
                         <?php } ?>
                     </div>
@@ -148,7 +148,7 @@
                         <div class="col-md-12 row mbot15">
                             <div class="pull-left"><i
                                     class="<?php echo get_mime_class($attachment['filetype']); ?>"></i></div>
-                            <a href="<?php echo $attachment_url; ?>"><?php echo $attachment['file_name']; ?></a>
+                            <a href="<?php echo e($attachment_url); ?>"><?php echo e($attachment['file_name']); ?></a>
                         </div>
                         <?php
 } ?>
@@ -165,21 +165,21 @@
                             <?php echo _l('contract_signed_by'); ?>
                         </div>
                         <div class="col-md-7 contract-contract-signed-by">
-                            <?php echo "{$contract->acceptance_firstname} {$contract->acceptance_lastname}"; ?>
+                            <?php echo e("{$contract->acceptance_firstname} {$contract->acceptance_lastname}"); ?>
                         </div>
 
                         <div class="col-md-5 text-muted contract-signed-by">
                             <?php echo _l('contract_signed_date'); ?>
                         </div>
                         <div class="col-md-7 contract-contract-signed-by">
-                            <?php echo _d(explode(' ', $contract->acceptance_date)[0]); ?>
+                            <?php echo e(_d(explode(' ', $contract->acceptance_date)[0])); ?>
                         </div>
 
                         <div class="col-md-5 text-muted contract-signed-by">
                             <?php echo _l('contract_signed_ip'); ?>
                         </div>
                         <div class="col-md-7 contract-contract-signed-by">
-                            <?php echo $contract->acceptance_ip; ?>
+                            <?php echo e($contract->acceptance_ip); ?>
                         </div>
                     </div>
                     <?php } ?>
@@ -202,23 +202,23 @@
                       $comment_html .= '<div class="contract_comment mtop10 mbot20" data-commentid="' . $comment['id'] . '">';
                       if ($comment['staffid'] != 0) {
                           $comment_html .= staff_profile_image($comment['staffid'], [
-                     'staff-profile-image-small',
-                     'media-object img-circle pull-left mright10',
-                  ]);
+                                'staff-profile-image-small',
+                                'media-object img-circle pull-left mright10',
+                          ]);
                       }
                       $comment_html .= '<div class="media-body valign-middle">';
                       $comment_html .= '<div class="mtop5">';
                       $comment_html .= '<b>';
                       if ($comment['staffid'] != 0) {
-                          $comment_html .= get_staff_full_name($comment['staffid']);
+                          $comment_html .= e(get_staff_full_name($comment['staffid']));
                       } else {
                           $comment_html .= _l('is_customer_indicator');
                       }
                       $comment_html .= '</b>';
-                      $comment_html .= ' - <small class="mtop10 text-muted">' . time_ago($comment['dateadded']) . '</small>';
+                      $comment_html .= ' - <small class="mtop10 text-muted">' . e(time_ago($comment['dateadded'])) . '</small>';
                       $comment_html .= '</div>';
                       $comment_html .= '<br />';
-                      $comment_html .= check_for_links($comment['content']) . '<br />';
+                      $comment_html .= process_text_content_for_display($comment['content']) . '<br />';
                       $comment_html .= '</div>';
                       $comment_html .= '</div>';
                   }

@@ -88,9 +88,9 @@ return App_table::find('expenses')
             $categoryOutput = '';
 
             if (is_numeric($clientid)) {
-                $categoryOutput = '<a href="' . admin_url('expenses/list_expenses/' . $aRow['id']) . '">' . $aRow['category_name'] . '</a>';
+                $categoryOutput = '<a href="' . admin_url('expenses/list_expenses/' . $aRow['id']) . '">' . e($aRow['category_name']) . '</a>';
             } else {
-                $categoryOutput = '<a href="' . admin_url('expenses/list_expenses/' . $aRow['id']) . '" onclick="init_expense(' . $aRow['id'] . ');return false;">' . $aRow['category_name'] . '</a>';
+                $categoryOutput = '<a href="' . admin_url('expenses/list_expenses/' . $aRow['id']) . '" onclick="init_expense(' . $aRow['id'] . ');return false;">' . e($aRow['category_name']) . '</a>';
             }
 
             if ($aRow['billable'] == 1) {
@@ -139,38 +139,38 @@ return App_table::find('expenses')
                 $total += ($tmpTotal / 100 * $tax->taxrate);
             }
 
-            $row[] = app_format_money($total, $aRow['currency_name']);
+            $row[] = e(app_format_money($total, $aRow['currency_name']));
 
-            $row[] = '<a href="' . admin_url('expenses/list_expenses/' . $aRow['id']) . '" onclick="init_expense(' . $aRow['id'] . ');return false;">' . $aRow['expense_name'] . '</a>';
+            $row[] = '<a href="' . admin_url('expenses/list_expenses/' . $aRow['id']) . '" onclick="init_expense(' . $aRow['id'] . ');return false;">' . e($aRow['expense_name']) . '</a>';
 
             $outputReceipt = '';
 
             if (!empty($aRow['file_name'])) {
-                $outputReceipt = '<a href="' . site_url('download/file/expense/' . $aRow['id']) . '">' . $aRow['file_name'] . '</a>';
+                $outputReceipt = '<a href="' . site_url('download/file/expense/' . $aRow['id']) . '">' . e($aRow['file_name']) . '</a>';
             }
 
             $row[] = $outputReceipt;
 
-            $row[] = _d($aRow['date']);
+            $row[] = e(_d($aRow['date']));
 
-            $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '">' . $aRow['project_name'] . '</a>';
+            $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '">' . e($aRow['project_name']) . '</a>';
 
-            $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . $aRow['company'] . '</a>';
+            $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . e($aRow['company']) . '</a>';
 
             if ($aRow['invoiceid']) {
-                $row[] = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['invoiceid']) . '">' . format_invoice_number($aRow['invoiceid']) . '</a>';
+                $row[] = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['invoiceid']) . '">' . e(format_invoice_number($aRow['invoiceid'])) . '</a>';
             } else {
                 $row[] = '';
             }
 
-            $row[] = $aRow['reference_no'];
+            $row[] = e($aRow['reference_no']);
 
             $paymentModeOutput = '';
 
             if ($aRow['paymentmode'] != '0' && !empty($aRow['paymentmode'])) {
                 $payment_mode = $this->ci->payment_modes_model->get($aRow['paymentmode'], [], false, true);
                 if ($payment_mode) {
-                    $paymentModeOutput = $payment_mode->name;
+                    $paymentModeOutput = e($payment_mode->name);
                 }
             }
 
@@ -207,7 +207,7 @@ return App_table::find('expenses')
                 ])->all();
             }),
         App_table_filter::new('amount', 'NumberRule')->label(str_replace(':', '', _l('expense_amount'))),
-        App_table_filter::new('contract_type', 'MultiSelectRule')
+        App_table_filter::new('category', 'MultiSelectRule')
             ->label(_l('expense_report_category'))
             ->options(function ($ci) {
                 return collect($ci->expenses_model->get_category())->map(fn ($category) => [

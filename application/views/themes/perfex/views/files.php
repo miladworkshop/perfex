@@ -9,7 +9,7 @@
         <input type="file" name="file" multiple class="hide" />
         <?php echo form_close(); ?>
         <?php hooks()->do_action('after_customers_area_files_dropzone'); ?>
-        <div class="tw-mt-4 tw-flex tw-justify-end tw-items-center tw-space-x-2">
+        <div class="tw-mt-4 tw-flex tw-justify-end tw-items-center tw-space-x-2 tw-mb-5">
             <button class="gpicker" data-on-pick="customerFileGoogleDriveSave">
                 <i class="fa-brands fa-google" aria-hidden="true"></i>
                 <?php echo _l('choose_from_google_drive'); ?>
@@ -55,24 +55,24 @@
                         echo '<div class="preview_image">';
                     }
                     ?>
-                        <a href="<?php echo $attachment_url; ?>"
+                        <a href="<?php echo e($attachment_url); ?>"
                             <?php echo(isset($file['external']) && !empty($file['external']) ? ' target="_blank"' : ''); ?>
                             class="display-block mbot5">
                             <?php if ($is_image) { ?>
                             <div class="table-image">
                                 <div class="text-center"><i class="fa fa-spinner fa-spin mtop30"></i></div>
-                                <img src="#" class="img-table-loading" data-orig="<?php echo $img_url; ?>">
+                                <img src="#" class="img-table-loading" data-orig="<?php echo e($img_url); ?>">
                             </div>
                             <?php } else { ?>
                             <i class="<?php echo get_mime_class($file['filetype']); ?>"></i>
-                            <?php echo $file['file_name']; ?>
+                            <?php echo e($file['file_name']); ?>
                             <?php } ?>
                         </a>
                         <?php if ($is_image) {
                         echo '</div>';
                     } ?>
                     </td>
-                    <td data-order="<?php echo $file['dateadded']; ?>"><?php echo _dt($file['dateadded']); ?></td>
+                    <td data-order="<?php echo e($file['dateadded']); ?>"><?php echo e(_dt($file['dateadded'])); ?></td>
                     <?php if (get_option('allow_contact_to_delete_files') == 1) { ?>
                     <td>
                         <?php if ($file['contact_id'] == get_contact_user_id()) { ?>

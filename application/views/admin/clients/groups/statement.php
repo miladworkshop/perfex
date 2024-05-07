@@ -26,7 +26,7 @@
     <div class="clearfix"></div>
     <div class="col-md-12">
         <h4 class="tw-font-semibold tw-mb-0">
-            <?php echo _l('customer_statement_for', get_company_name($client->userid)); ?></h4>
+            <?php echo e(_l('customer_statement_for', get_company_name($client->userid))); ?></h4>
     </div>
     <div class="clearfix"></div>
 

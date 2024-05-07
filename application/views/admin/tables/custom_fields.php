@@ -22,7 +22,7 @@ foreach ($rResult as $aRow) {
     for ($i = 0; $i < count($aColumns); $i++) {
         $_data = $aRow[$aColumns[$i]];
         if ($aColumns[$i] == 'name' || $aColumns[$i] == 'id') {
-            $_data = '<a href="' . admin_url('custom_fields/field/' . $aRow['id']) . '">' . $_data . '</a>';
+            $_data = '<a href="' . admin_url('custom_fields/field/' . $aRow['id']) . '">' . e($_data) . '</a>';
             if ($aColumns[$i] == 'name') {
                 $_data .= '<div class="row-options">';
                 $_data .= '<a href="' . admin_url('custom_fields/field/' . $aRow['id']) . '">' . _l('edit') . '</a>';

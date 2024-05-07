@@ -24,7 +24,7 @@
       <div
         class="tw-py-2 tw-px-4 tw-space-x-2 tw-divide-x tw-divide-solid tw-divide-neutral-300"
       >
-        <a href="#" @click="newFilter">New Filter</a>
+        <a href="#" @click="newFilter">{{ $t("filter_new") }}</a>
         <a
           href="#"
           @click="clearActiveFilter"
@@ -45,7 +45,7 @@
       <li class="divider"></li>
       <div
         v-if="localSavedFilters.length === 0"
-        class="tw-px-4 tw-pt-4 tw-pb-3 tw-text-center tw-text-neutral-500"
+        class="tw-px-4 tw-pt-4 tw-pb-3 tw-text-balance tw-text-center tw-text-neutral-500"
       >
         {{ $t("no_filters_found") }}
       </div>
@@ -199,12 +199,16 @@
                   <input
                     type="checkbox"
                     :id="id + 'DefaultFilter'"
+                    @change="handleDefaultInputChange"
                     v-model.boolean="filterIsDefault"
                   />
                   <label :for="id + 'DefaultFilter'">
                     {{ $t("filter_mark_as_default") }}
                   </label>
                 </div>
+                <span v-show="showDefaultFilterInfo" class="tw-ml-6 -tw-mt-2 tw-block tw-text-neutral-500">
+                  {{ $t('default_filter_info') }}
+                </span>
               </div>
             </div>
           </div>
@@ -301,6 +305,7 @@ const props = defineProps({
 const rulesSelectId = `${props.id}Rules`;
 const rulesSelecSelector = `#${rulesSelectId}`;
 
+const showDefaultFilterInfo = ref(false)
 const localSavedFilters = ref(props.savedFilters.map(castFilterValues));
 const activeFilterId = ref(null);
 const builderRules = ref([]);
@@ -421,6 +426,7 @@ function applyHandler() {
     }
     // Sets it as active and apply
     setFilterActive(responseFilter);
+    showDefaultFilterInfo.value = false
   });
 }
 
@@ -604,4 +610,9 @@ watch(
   },
   { deep: true }
 );
+
+function handleDefaultInputChange(e) {
+  showDefaultFilterInfo.value = filterIsDefault.value
+}
+
 </script>

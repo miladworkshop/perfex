@@ -18,7 +18,6 @@
 <svg id="gantt"></svg>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-
         var gantt_data = <?php echo json_encode($gantt_data); ?>;
 
         if (gantt_data.length > 0) {

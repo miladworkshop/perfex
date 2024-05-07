@@ -6,7 +6,7 @@
             <div class="col-md-8 col-md-offset-2">
                 <div class="tw-flex tw-justify-between tw-items-center tw-mb-4">
                     <h4 class="tw-my-0 tw-font-semibold tw-text-lg tw-text-neutral-700">
-                        <?php echo $title; ?>
+                        <?php echo e($title); ?>
                     </h4>
 
                     <?php if (isset($custom_field)) { ?>
@@ -60,7 +60,7 @@
                         <div class="select-placeholder form-group">
                             <label for="fieldto"><?php echo _l('custom_field_add_edit_belongs_top'); ?></label>
                             <select name="fieldto" id="fieldto" class="selectpicker" data-width="100%"
-                                <?php echo $disable; ?>
+                                <?php echo e($disable); ?>
                                 data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                                 <option value=""></option>
                                 <option value="company" <?php if (isset($custom_field) && $custom_field->fieldto == 'company') {

@@ -20,44 +20,44 @@
 
             <hr class="-tw-mx-3 tw-mt-3 tw-mb-6">
 
-
             <div class="activity-feed">
                 <?php
-     foreach ($projects_activity as $activity) {
-         $name = $activity['fullname'];
-         if ($activity['staff_id'] != 0) {
-             $href = admin_url('profile/' . $activity['staff_id']);
-         } elseif ($activity['contact_id'] != 0) {
-             $name = '<span class="label label-info inline-block mright5">' . _l('is_customer_indicator') . '</span> - ' . $name;
-             $href = admin_url('clients/client/' . get_user_id_by_contact_id($activity['contact_id']) . '?contactid=' . $activity['contact_id']);
-         } else {
-             $href = '';
-             $name = '[CRON]';
-         } ?>
+                    foreach ($projects_activity as $activity) {
+                        $name = e($activity['fullname']);
+                        if ($activity['staff_id'] != 0) {
+                            $href = admin_url('profile/' . $activity['staff_id']);
+                        } elseif ($activity['contact_id'] != 0) {
+                            $name = '<span class="label label-info inline-block mright5">' . _l('is_customer_indicator') . '</span> - ' . $name;
+                            $href = admin_url('clients/client/' . get_user_id_by_contact_id($activity['contact_id']) . '?contactid=' . $activity['contact_id']);
+                        } else {
+                            $href = '';
+                            $name = '[CRON]';
+                        } ?>
                 <div class="feed-item">
                     <div class="date"><span class="text-has-action" data-toggle="tooltip"
-                            data-title="<?php echo _dt($activity['dateadded']); ?>">
-                            <?php echo time_ago($activity['dateadded']); ?>
+                            data-title="<?php echo e(_dt($activity['dateadded'])); ?>">
+                            <?php echo e(time_ago($activity['dateadded'])); ?>
                         </span>
                     </div>
                     <div class="text">
                         <p class="bold no-mbot">
                             <?php if ($href != '') { ?>
-                            <a href="<?php echo $href; ?>"><?php echo $name; ?></a> -
+                            <a href="<?php echo e($href); ?>"><?php echo $name; ?></a> -
                             <?php } else {
-             echo $name;
-         } ; ?>
-                            <?php echo $activity['description']; ?>
+                                echo $name;
+                            } ?>
+                            <?php echo e($activity['description']); ?>
                         </p>
                         <?php echo _l('project_name'); ?>: <a
-                            href="<?php echo admin_url('projects/view/' . $activity['project_id']); ?>"><?php echo $activity['project_name']; ?></a>
+                            href="<?php echo admin_url('projects/view/' . $activity['project_id']); ?>">
+                            <?php echo e($activity['project_name']); ?>
+                        </a>
                     </div>
                     <?php if (!empty($activity['additional_data'])) { ?>
-                    <p class="text-muted mtop5"><?php echo $activity['additional_data']; ?></p>
+                        <p class="text-muted mtop5"><?php echo $activity['additional_data']; ?></p>
                     <?php } ?>
                 </div>
-                <?php
-     } ?>
+                <?php } ?>
             </div>
         </div>
     </div>

@@ -99,7 +99,7 @@
                                                 if ((!$has_permission_create && !$this->tasks_model->is_task_assignee(get_staff_user_id(), $task['id']))) {
                                                     continue;
                                                 }
-                                                echo '<option value="' . $task['id'] . '">' . $task['name'] . '</option>';
+                                                echo '<option value="' . $task['id'] . '">' . e($task['name']) . '</option>';
                                             }
                                                 ?>
                                         </select>

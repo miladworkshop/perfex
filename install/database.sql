@@ -1172,7 +1172,7 @@ CREATE TABLE `tblmigrations` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `tblmigrations` (`version`) VALUES
-(311);
+(316);
 
 CREATE TABLE `tblmilestones` (
   `id` int NOT NULL,
@@ -1592,7 +1592,12 @@ INSERT INTO `tbloptions` (`id`, `name`, `value`, `autoload`) VALUES
 (329, 'contract_sign_reminder_every_days', '0', 1),
 (330, 'last_updated_date', '', 1),
 (331, 'v310_incompatible_tables', '[]', 1),
-(332, 'upgraded_from_version', '', 0);
+(332, 'required_register_fields', '[]', 0),
+(333, 'allow_non_admin_members_to_delete_tickets_and_replies', '0', 1),
+(334, 'allow_non_admin_members_to_edit_ticket_messages', '0', 1),
+(335, 'proposal_auto_convert_to_invoice_on_client_accept', '0', 1),
+(336, 'show_project_on_proposal', '1', 1),
+(337, 'upgraded_from_version', '', 0);
 
 CREATE TABLE `tblpayment_attempts` (
   `id` int UNSIGNED NOT NULL,
@@ -2863,7 +2868,7 @@ ALTER TABLE `tblnotifications`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `tbloptions`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=333;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=338;
 
 ALTER TABLE `tblpayment_attempts`
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;

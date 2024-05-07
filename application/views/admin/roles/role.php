@@ -6,7 +6,7 @@
             <div class="col-md-7">
                 <div class="tw-flex tw-justify-between tw-items-center tw-mb-2">
                     <h4 class="tw-my-0 tw-font-semibold tw-text-lg tw-text-neutral-700">
-                        <?php echo $title; ?>
+                        <?php echo e($title); ?>
                     </h4>
                     <?php if (isset($role)) { ?>
                     <a href="<?php echo admin_url('roles/role'); ?>"
@@ -65,7 +65,7 @@
                                  echo '<a href="' . admin_url('staff/profile/' . $staff['staffid']) . '">' . staff_profile_image($staff['staffid'], [
                                    'staff-profile-image-small',
                                  ]) . '</a>';
-                                 echo ' <a href="' . admin_url('staff/member/' . $staff['staffid']) . '">' . $staff['firstname'] . ' ' . $staff['lastname'] . '</a>';
+                                 echo ' <a href="' . admin_url('staff/member/' . $staff['staffid']) . '">' . e($staff['firstname'] . ' ' . $staff['lastname']) . '</a>';
                                  ?>
                                         </td>
                                     </tr>

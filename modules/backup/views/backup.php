@@ -6,7 +6,7 @@
             <div class="col-md-12">
                 <div class="tw-flex tw-justify-between tw-items-center tw-mb-2 sm:tw-mb-4">
                     <h4 class="tw-my-0 tw-font-semibold tw-text-lg tw-self-end">
-                        <?php echo $title; ?>
+                        <?php echo e($title); ?>
                     </h4>
                     <div>
                         <a href="#" data-toggle="modal" data-target="#auto_backup_config"
@@ -38,7 +38,7 @@
                                 <tr>
                                     <td>
                                         <a href="<?php echo site_url('backup/download/' . $backupNameNoExtension); ?>">
-                                            <?php echo $backup; ?>
+                                            <?php echo e($backup); ?>
                                         </a>
                                     </td>
                                     <td>

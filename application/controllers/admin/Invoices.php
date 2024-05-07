@@ -627,11 +627,7 @@ class Invoices extends AdminController
         } else {
             set_alert('warning', _l('problem_deleting', _l('invoice_lowercase')));
         }
-        if (strpos($_SERVER['HTTP_REFERER'], 'list_invoices') !== false) {
-            redirect(admin_url('invoices/list_invoices'));
-        } else {
-            redirect($_SERVER['HTTP_REFERER']);
-        }
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     public function delete_attachment($id)

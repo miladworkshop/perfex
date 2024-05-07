@@ -22,7 +22,7 @@
                         </div>
                         <div class="checkbox checkbox-primary">
                             <input type="checkbox" name="show_on_pdf" id="show_on_pdf">
-                            <label for="show_on_pdf"><?php echo _l('show_on_invoice_on_pdf', _l('payment_mode_add_edit_description')); ?></label>
+                            <label for="show_on_pdf"><?php echo e(_l('show_on_invoice_on_pdf', _l('payment_mode_add_edit_description'))); ?></label>
                         </div>
                         <div class="checkbox checkbox-primary">
                             <input type="checkbox" name="selected_by_default" id="selected_by_default">

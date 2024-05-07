@@ -101,10 +101,10 @@
                         <div class="form-group">
                             <label for="website"><?php echo _l('client_website'); ?></label>
                             <div class="input-group">
-                                <input type="text" name="website" id="website" value="<?php echo $client->website; ?>"
+                                <input type="text" name="website" id="website" value="<?php echo e($client->website); ?>"
                                     class="form-control">
                                 <span class="input-group-btn">
-                                    <a href="<?php echo maybe_add_http($client->website); ?>" class="btn btn-default"
+                                    <a href="<?php echo e(maybe_add_http($client->website)); ?>" class="btn btn-default"
                                         target="_blank" tabindex="-1">
                                         <i class="fa fa-globe"></i></a>
                                 </span>
@@ -164,8 +164,8 @@
                                  $selected = 'selected';
                              }
                          } ?>
-                                        <option value="<?php echo $availableLanguage; ?>" <?php echo $selected; ?>>
-                                            <?php echo ucfirst($availableLanguage); ?></option>
+                                        <option value="<?php echo e($availableLanguage); ?>" <?php echo e($selected); ?>>
+                                            <?php echo e(ucfirst($availableLanguage)); ?></option>
                                         <?php
                      } ?>
                                     </select>
@@ -216,10 +216,10 @@
                            'staff-profile-image-small',
                            'mright5',
                            ]);
-                           echo get_staff_full_name($c_admin['staff_id']); ?></a>
+                           echo e(get_staff_full_name($c_admin['staff_id'])); ?></a>
                             </td>
-                            <td data-order="<?php echo $c_admin['date_assigned']; ?>">
-                                <?php echo _dt($c_admin['date_assigned']); ?></td>
+                            <td data-order="<?php echo e($c_admin['date_assigned']); ?>">
+                                <?php echo e(_dt($c_admin['date_assigned'])); ?></td>
                             <?php if (staff_can('create',  'customers') || staff_can('edit',  'customers')) { ?>
                             <td>
                                 <a href="<?php echo admin_url('clients/delete_customer_admin/' . $client->userid . '/' . $c_admin['staff_id']); ?>"

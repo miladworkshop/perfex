@@ -78,13 +78,13 @@ class Credit_note_merge_fields extends App_merge_fields
             return $fields;
         }
 
-        $fields['{credit_note_number}']            = format_credit_note_number($id);
-        $fields['{credit_note_total}']             = app_format_money($credit_note->total, $credit_note->currency_name);
-        $fields['{credit_note_subtotal}']          = app_format_money($credit_note->subtotal, $credit_note->currency_name);
-        $fields['{credit_note_credits_remaining}'] = app_format_money($credit_note->remaining_credits, $credit_note->currency_name);
-        $fields['{credit_note_credits_used}']      = app_format_money($credit_note->credits_used, $credit_note->currency_name);
-        $fields['{credit_note_date}']              = _d($credit_note->date);
-        $fields['{credit_note_status}']            = format_credit_note_status($credit_note->status, true);
+        $fields['{credit_note_number}']            = e(format_credit_note_number($id));
+        $fields['{credit_note_total}']             = e(app_format_money($credit_note->total, $credit_note->currency_name));
+        $fields['{credit_note_subtotal}']          = e(app_format_money($credit_note->subtotal, $credit_note->currency_name));
+        $fields['{credit_note_credits_remaining}'] = e(app_format_money($credit_note->remaining_credits, $credit_note->currency_name));
+        $fields['{credit_note_credits_used}']      = e(app_format_money($credit_note->credits_used, $credit_note->currency_name));
+        $fields['{credit_note_date}']              = e(_d($credit_note->date));
+        $fields['{credit_note_status}']            = e(format_credit_note_status($credit_note->status, true));
 
         $custom_fields = get_custom_fields('credit_note');
 

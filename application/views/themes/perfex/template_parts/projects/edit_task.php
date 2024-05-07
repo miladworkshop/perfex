@@ -4,10 +4,10 @@
         <?php echo form_open_multipart('', ['id' => 'task-form']); ?>
         <?php echo form_hidden('action', 'new_task'); ?>
         <?php echo form_hidden('task_id', $task->id); ?>
-        <h2 class="tw-text-xl tw-font-semibold tw-mt-0" id="task-edit-heading"><?php echo $task->name; ?></h2>
+        <h2 class="tw-text-xl tw-font-semibold tw-mt-0" id="task-edit-heading"><?php echo e($task->name); ?></h2>
         <div class="form-group">
             <label for="name"><?php echo _l('task_add_edit_subject'); ?></label>
-            <input type="text" name="name" id="name" class="form-control" required value="<?php echo $task->name; ?>">
+            <input type="text" name="name" id="name" class="form-control" required value="<?php echo e($task->name); ?>">
         </div>
         <div class="row">
             <div class="col-md-<?php if ($project->settings->view_milestones == 1) {
@@ -43,9 +43,9 @@
                         data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                         <option value=""></option>
                         <?php foreach ($milestones as $milestone) { ?>
-                        <option value="<?php echo $milestone['id']; ?>" <?php if ($milestone['id'] == $task->milestone) {
+                        <option value="<?php echo e($milestone['id']); ?>" <?php if ($milestone['id'] == $task->milestone) {
     echo ' selected';
-} ?>><?php echo $milestone['name']; ?></option>
+} ?>><?php echo e($milestone['name']); ?></option>
                         <?php } ?>
                     </select>
                 </div>
@@ -68,9 +68,9 @@
             <select class="selectpicker" multiple="true" name="assignees[]" id="assignees" data-width="100%"
                 data-live-search="true">
                 <?php foreach ($members as $member) { ?>
-                <option value="<?php echo $member['staff_id']; ?>" <?php if ($this->tasks_model->is_task_assignee($member['staff_id'], $task->id)) {
+                <option value="<?php echo e($member['staff_id']); ?>" <?php if ($this->tasks_model->is_task_assignee($member['staff_id'], $task->id)) {
     echo ' selected';
-} ?>><?php echo get_staff_full_name($member['staff_id']); ?></option>
+} ?>><?php echo e(get_staff_full_name($member['staff_id'])); ?></option>
                 <?php } ?>
             </select>
         </div>

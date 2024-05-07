@@ -8,23 +8,22 @@
             </a>
             <?php } ?>
             <h1 class="mbot20">
-                <?php echo hooks()->apply_filters('consent_public_page_heading', get_option('companyname')); ?></h1>
+                <?php echo e(hooks()->apply_filters('consent_public_page_heading', get_option('companyname'))); ?></h1>
             <div class="tc-content mbot20">
                 <?php echo get_option('gdpr_consent_public_page_top_block'); ?>
             </div>
         </div>
         <?php
         echo form_open();
-        foreach ($purposes as $purpose) {
-            ?>
+        foreach ($purposes as $purpose) { ?>
         <div class="col-md-12">
             <div class="gdpr-purpose">
                 <div class="row">
                     <div class="col-md-9">
-                        <h3 class="gdpr-purpose-heading"><?php echo $purpose['name']; ?>
+                        <h3 class="gdpr-purpose-heading"><?php echo e($purpose['name']); ?>
                             <?php if (!empty($purpose['consent_last_updated'])) { ?>
                             <small
-                                class="text-muted"><?php echo _l('consent_last_updated', _dt($purpose['consent_last_updated'])); ?></small>
+                                class="text-muted"><?php echo e(_l('consent_last_updated', _dt($purpose['consent_last_updated']))); ?></small>
                             <?php } ?>
                         </h3>
                     </div>
@@ -39,11 +38,11 @@
                         <?php
                      if (!empty($purpose['opt_in_purpose_description']) && !empty($purpose['consent_given'])) { ?>
                         <p class="no-mbot mtop10">
-                            <?php echo $purpose['opt_in_purpose_description']; ?>
+                            <?php echo e($purpose['opt_in_purpose_description']); ?>
                         </p>
                         <?php } elseif (!empty($purpose['description']) && empty($purpose['consent_given'])) { ?>
                         <p class="no-mbot mtop10">
-                            <?php echo $purpose['description']; ?>
+                            <?php echo e($purpose['description']); ?>
                         </p>
                         <?php } ?>
                         <hr />
@@ -51,25 +50,25 @@
                             <?php
                         if (empty($purpose['consent_given'])) { ?>
                             <div class="radio radio-inline">
-                                <input type="radio" value="opt-in" id="opt_in_<?php echo $purpose['id']; ?>"
-                                    name="action[<?php echo $purpose['id']; ?>]">
+                                <input type="radio" value="opt-in" id="opt_in_<?php echo e($purpose['id']); ?>"
+                                    name="action[<?php echo e($purpose['id']); ?>]">
                                 <label
-                                    for="opt_in_<?php echo $purpose['id']; ?>"><?php echo _l('gdpr_consent_agree'); ?></label>
+                                    for="opt_in_<?php echo e($purpose['id']); ?>"><?php echo _l('gdpr_consent_agree'); ?></label>
                             </div>
                             <?php if (empty($purpose['last_action_is_opt_out'])) { ?>
                             <div class="radio radio-inline">
-                                <input type="radio" value="opt-out" id="opt_out_<?php echo $purpose['id']; ?>"
-                                    name="action[<?php echo $purpose['id']; ?>]">
+                                <input type="radio" value="opt-out" id="opt_out_<?php echo e($purpose['id']); ?>"
+                                    name="action[<?php echo e($purpose['id']); ?>]">
                                 <label
-                                    for="opt_out_<?php echo $purpose['id']; ?>"><?php echo _l('gdpr_consent_disagree'); ?></label>
+                                    for="opt_out_<?php echo e($purpose['id']); ?>"><?php echo _l('gdpr_consent_disagree'); ?></label>
                             </div>
                             <?php } ?>
                             <?php } else { ?>
                             <div class="radio radio-inline">
-                                <input type="radio" value="opt-out" id="opt_out_<?php echo $purpose['id']; ?>"
-                                    name="action[<?php echo $purpose['id']; ?>]">
+                                <input type="radio" value="opt-out" id="opt_out_<?php echo e($purpose['id']); ?>"
+                                    name="action[<?php echo e($purpose['id']); ?>]">
                                 <label
-                                    for="opt_out_<?php echo $purpose['id']; ?>"><?php echo _l('gdpr_consent_disagree'); ?></label>
+                                    for="opt_out_<?php echo e($purpose['id']); ?>"><?php echo _l('gdpr_consent_disagree'); ?></label>
                             </div>
                             <?php } ?>
                         </div>

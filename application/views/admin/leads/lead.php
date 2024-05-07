@@ -65,7 +65,7 @@ if (isset($lead)) {
                             <?php } ?>
                             <li role="presentation">
                                 <a href="#tab_proposals_leads"
-                                    onclick="initDataTable('.table-proposals-lead', admin_url + 'proposals/proposal_relations/' + <?php echo $lead->id; ?> + '/lead','undefined', 'undefined','undefined',[6,'desc']);"
+                                    onclick="initDataTable('.table-proposals-lead', admin_url + 'proposals/proposal_relations/' + <?php echo e($lead->id); ?> + '/lead','undefined', 'undefined','undefined',[6,'desc']);"
                                     aria-controls="tab_proposals_leads" role="tab" data-toggle="tab">
                                     <?php echo _l('proposals');
                         if ($total_proposals > 0) {
@@ -76,7 +76,7 @@ if (isset($lead)) {
                             </li>
                             <li role="presentation">
                                 <a href="#tab_tasks_leads"
-                                    onclick="init_rel_tasks_table(<?php echo $lead->id; ?>,'lead','.table-rel-tasks-leads');"
+                                    onclick="init_rel_tasks_table(<?php echo e($lead->id); ?>,'lead','.table-rel-tasks-leads');"
                                     aria-controls="tab_tasks_leads" role="tab" data-toggle="tab">
                                     <?php echo _l('tasks');
                         if ($total_tasks > 0) {
@@ -96,7 +96,7 @@ if (isset($lead)) {
                             </li>
                             <li role="presentation">
                                 <a href="#lead_reminders"
-                                    onclick="initDataTable('.table-reminders-leads', admin_url + 'misc/get_reminders/' + <?php echo $lead->id; ?> + '/' + 'lead', undefined, undefined,undefined,[1, 'asc']);"
+                                    onclick="initDataTable('.table-reminders-leads', admin_url + 'misc/get_reminders/' + <?php echo e($lead->id); ?> + '/' + 'lead', undefined, undefined,undefined,[1, 'asc']);"
                                     aria-controls="lead_reminders" role="tab" data-toggle="tab">
                                     <?php echo _l('leads_reminders_tab');
                            if ($total_reminders > 0) {
@@ -150,14 +150,14 @@ if (isset($lead)) {
                         </div>
                         <div class="media-body">
                             <h4 class="bold no-margin lead-mail-activity-subject">
-                                <?php echo $_mail_activity['subject']; ?>
+                                <?php echo e($_mail_activity['subject']); ?>
                                 <br />
                                 <small
-                                    class="text-muted display-block mtop5 font-medium-xs"><?php echo _dt($_mail_activity['dateadded']); ?></small>
+                                    class="text-muted display-block mtop5 font-medium-xs"><?php echo e(_dt($_mail_activity['dateadded'])); ?></small>
                             </h4>
                             <div class="lead-mail-activity-body">
                                 <hr />
-                                <?php echo $_mail_activity['body']; ?>
+                                <?php echo process_text_content_for_display($_mail_activity['body']); ?>
                             </div>
                             <hr />
                         </div>
@@ -170,7 +170,7 @@ if (isset($lead)) {
                 <?php if (is_gdpr() && (get_option('gdpr_enable_lead_public_form') == '1' || get_option('gdpr_enable_consent_for_leads') == '1' || (get_option('gdpr_data_portability_leads') == '1') && is_admin())) { ?>
                 <div role="tabpanel" class="tab-pane" id="gdpr">
                     <?php if (get_option('gdpr_enable_lead_public_form') == '1') { ?>
-                    <a href="<?php echo $lead->public_url; ?>" target="_blank" class="mtop5">
+                    <a href="<?php echo e($lead->public_url); ?>" target="_blank" class="mtop5">
                         <?php echo _l('view_public_form'); ?>
                     </a>
                     <?php } ?>
@@ -203,28 +203,30 @@ if (isset($lead)) {
                             <div class="feed-item">
                                 <div class="date">
                                     <span class="text-has-action" data-toggle="tooltip"
-                                        data-title="<?php echo _dt($log['date']); ?>">
-                                        <?php echo time_ago($log['date']); ?>
+                                        data-title="<?php echo e(_dt($log['date'])); ?>">
+                                        <?php echo e(time_ago($log['date'])); ?>
                                     </span>
                                 </div>
                                 <div class="text">
                                     <?php if ($log['staffid'] != 0) { ?>
                                     <a href="<?php echo admin_url('profile/' . $log['staffid']); ?>">
-                                        <?php echo staff_profile_image($log['staffid'], ['staff-profile-xs-image pull-left mright5']);
-                              ?>
+                                        <?php 
+                                            echo staff_profile_image($log['staffid'], ['staff-profile-xs-image pull-left mright5']);
+                                        ?>
                                     </a>
                                     <?php
                               }
                               $additional_data = '';
                               if (!empty($log['additional_data'])) {
                                   $additional_data = unserialize($log['additional_data']);
-                                  echo ($log['staffid'] == 0) ? _l($log['description'], $additional_data) : $log['full_name'] . ' - ' . _l($log['description'], $additional_data);
+                                  echo ($log['staffid'] == 0) ? _l($log['description'], $additional_data) : e($log['full_name']) . ' - ' . _l($log['description'], $additional_data);
                               } else {
-                                  echo $log['full_name'] . ' - ';
+                                  echo e($log['full_name']) . ' - ';
+
                                   if ($log['custom_activity'] == 0) {
-                                      echo _l($log['description']);
+                                      echo e(_l($log['description']));
                                   } else {
-                                      echo _l($log['description'], '', false);
+                                      echo process_text_content_for_display(_l($log['description'], '', false));
                                   }
                               }
                               ?>
@@ -281,7 +283,7 @@ if (isset($lead)) {
                 </div>
                 <div role="tabpanel" class="tab-pane" id="lead_reminders">
                     <a href="#" data-toggle="modal" class="btn btn-default"
-                        data-target=".reminder-modal-lead-<?php echo $lead->id; ?>"><i class="fa-regular fa-bell"></i>
+                        data-target=".reminder-modal-lead-<?php echo e($lead->id); ?>"><i class="fa-regular fa-bell"></i>
                         <?php echo _l('lead_set_reminder_title'); ?></a>
                     <hr />
                     <?php render_datatable([ _l('reminder_description'), _l('reminder_date'), _l('reminder_staff'), _l('reminder_is_notified')], 'reminders-leads'); ?>
@@ -347,11 +349,11 @@ if (isset($lead)) {
                         <div class="media-body">
                             <?php if ($note['addedfrom'] == get_staff_user_id() || is_admin()) { ?>
                             <a href="#" class="pull-right text-danger"
-                                onclick="delete_lead_note(this,<?php echo $note['id']; ?>, <?php echo $lead->id; ?>);return false;">
+                                onclick="delete_lead_note(this,<?php echo e($note['id']); ?>, <?php echo e($lead->id); ?>);return false;">
 
                                 <i class="fa fa fa-times"></i></a>
                             <a href="#" class="pull-right mright5"
-                                onclick="toggle_edit_note(<?php echo $note['id']; ?>);return false;">
+                                onclick="toggle_edit_note(<?php echo e($note['id']); ?>);return false;">
                                 <i class="fa-regular fa-pen-to-square"></i>
                                 <?php } ?>
 
@@ -359,27 +361,25 @@ if (isset($lead)) {
                                     <h5 class="media-heading tw-font-semibold tw-mb-0">
                                         <?php if (!empty($note['date_contacted'])) { ?>
                                         <span data-toggle="tooltip"
-                                            data-title="<?php echo _dt($note['date_contacted']); ?>">
+                                            data-title="<?php echo e(_dt($note['date_contacted'])); ?>">
                                             <i class="fa fa-phone-square text-success" aria-hidden="true"></i>
                                         </span>
                                         <?php } ?>
-                                        <?php echo get_staff_full_name($note['addedfrom']); ?>
+                                        <?php echo e(get_staff_full_name($note['addedfrom'])); ?>
                                     </h5>
                                     <span class="tw-text-sm tw-text-neutral-500">
-                                        <?php echo _l('lead_note_date_added', _dt($note['dateadded'])); ?>
+                                        <?php echo e(_l('lead_note_date_added', _dt($note['dateadded']))); ?>
                                     </span>
                                 </a>
 
-                                <div data-note-description="<?php echo $note['id']; ?>" class="text-muted mtop10">
-                                    <?php echo check_for_links(app_happy_text($note['description'])); ?>
-                                </div>
-                                <div data-note-edit-textarea="<?php echo $note['id']; ?>" class="hide mtop15">
+                                <div data-note-description="<?php echo e($note['id']); ?>" class="text-muted mtop10"><?php echo process_text_content_for_display($note['description']); ?></div>
+                                <div data-note-edit-textarea="<?php echo e($note['id']); ?>" class="hide mtop15">
                                     <?php echo render_textarea('note', '', $note['description']); ?>
                                     <div class="text-right">
                                         <button type="button" class="btn btn-default"
-                                            onclick="toggle_edit_note(<?php echo $note['id']; ?>);return false;"><?php echo _l('cancel'); ?></button>
+                                            onclick="toggle_edit_note(<?php echo e($note['id']); ?>);return false;"><?php echo _l('cancel'); ?></button>
                                         <button type="button" class="btn btn-primary"
-                                            onclick="edit_note(<?php echo $note['id']; ?>);"><?php echo _l('update_note'); ?></button>
+                                            onclick="edit_note(<?php echo e($note['id']); ?>);"><?php echo _l('update_note'); ?></button>
                                     </div>
                                 </div>
                         </div>

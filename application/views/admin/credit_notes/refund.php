@@ -3,7 +3,7 @@
     <div class="panel_s">
         <?php echo form_open(admin_url('credit_notes/' . (isset($refund) ? 'edit_refund' : 'create_refund') . '/' . (isset($refund) ? $refund->id . '/' . $refund->credit_note_id : $credit_note->id)), ['id' => 'credit_note_refund_form']); ?>
         <div class="panel-body">
-            <h4 class="no-margin"><?php echo _l('refund'); ?> (<?php echo format_credit_note_number($credit_note->id); ?>)</h4>
+            <h4 class="no-margin"><?php echo _l('refund'); ?> (<?php echo e(format_credit_note_number($credit_note->id)); ?>)</h4>
             <hr class="hr-panel-separator" />
             <div class="row">
                 <div class="col-md-6">
@@ -15,9 +15,9 @@
                         <select class="selectpicker" name="payment_mode" data-width="100%" data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                             <option value=""></option>
                             <?php foreach ($payment_modes as $mode) { ?>
-                                <option value="<?php echo $mode['id']; ?>"<?php if (isset($refund) && $refund->payment_mode == $mode['id']) {
+                                <option value="<?php echo e($mode['id']); ?>"<?php if (isset($refund) && $refund->payment_mode == $mode['id']) {
                         echo ' selected';
-                    } ?>><?php echo $mode['name']; ?></option>
+                    } ?>><?php echo e($mode['name']); ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="pull-right mtop15">
-            <a href="#" class="btn btn-danger" onclick="init_credit_note(<?php echo $credit_note->id; ?>); return false;">
+            <a href="#" class="btn btn-danger" onclick="init_credit_note(<?php echo e($credit_note->id); ?>); return false;">
                 <?php echo _l('cancel'); ?>
             </a>
             <button type="submit" autocomplete="off" data-loading-text="<?php echo _l('wait_text'); ?>" data-form="#credit_note_refund_form" class="btn btn-success">

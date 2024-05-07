@@ -13,7 +13,7 @@
                 <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700 tw-inline-flex tw-items-center">
                     <?php echo staff_profile_image($staff_p->staffid, ['staff-profile-image-small tw-mr-2'], 'small'); ?>
 
-                    <?php echo $staff_p->firstname . ' ' . $staff_p->lastname; ?>
+                    <?php echo e($staff_p->firstname . ' ' . $staff_p->lastname); ?>
 
                     <?php if (is_admin($staff_p->staffid)) { ?>
                     <span class="label label-info tw-ml-2"><?php echo _l('staff_admin_profile'); ?></span>
@@ -34,22 +34,22 @@
                                         <?php if ($staff_p->last_activity && $staff_p->staffid != get_staff_user_id()) { ?>
                                         <small> - <?php echo _l('last_active'); ?>:
                                             <span class="text-has-action" data-toggle="tooltip"
-                                                data-title="<?php echo _dt($staff_p->last_activity); ?>">
-                                                <?php echo time_ago($staff_p->last_activity); ?>
+                                                data-title="<?php echo e(_dt($staff_p->last_activity)); ?>">
+                                                <?php echo e(time_ago($staff_p->last_activity)); ?>
                                             </span>
                                         </small>
                                         <?php } ?>
                                     </h4>
                                     <p class="tw-flex tw-items-center tw-mb-1">
                                         <i class="fa-regular fa-envelope fa-lg tw-text-neutral-400 tw-mr-2"></i>
-                                        <a href="mailto:<?php echo $staff_p->email; ?>">
-                                            <?php echo $staff_p->email; ?>
+                                        <a href="mailto:<?php echo e($staff_p->email); ?>">
+                                            <?php echo e($staff_p->email); ?>
                                         </a>
                                     </p>
                                     <?php if ($staff_p->phonenumber != '') { ?>
                                     <p class="tw-flex tw-items-center">
                                         <i class="fa fa-phone-square fa-lg tw-text-neutral-400 tw-mr-2"></i>
-                                        <?php echo $staff_p->phonenumber; ?>
+                                        <?php echo e($staff_p->phonenumber); ?>
                                     </p>
                                     <?php } ?>
                                     <?php if (count($staff_departments) > 0) { ?>
@@ -62,7 +62,7 @@
                                         <?php
               foreach ($staff_departments as $staff_department) {
                   if ($staff_department['departmentid'] == $department['departmentid']) { ?>
-                                        <div class="label label-primary"><?php echo $staff_department['name']; ?></div>
+                                        <div class="label label-primary"><?php echo e($staff_department['name']); ?></div>
                                         <?php }
               }
              ?>
@@ -73,20 +73,20 @@
                             </div>
                             <div class="tw-space-x-0.5">
                                 <?php if (!empty($staff_p->facebook)) { ?>
-                                <a href="<?php echo html_escape($staff_p->facebook); ?>" target="_blank"
+                                <a href="<?php echo e($staff_p->facebook); ?>" target="_blank"
                                     class="btn btn-default btn-icon">
                                     <i class="fa-brands fa-facebook-f"></i>
                                 </a>
                                 <?php } ?>
                                 <?php if (!empty($staff_p->linkedin)) { ?>
-                                <a href="<?php echo html_escape($staff_p->linkedin); ?>"
+                                <a href="<?php echo e($staff_p->linkedin); ?>"
                                     class="btn btn-default btn-icon">
                                     <i class="fa-brands fa-linkedin-in"></i>
                                 </a>
                                 <?php } ?>
                                 <?php if (!empty($staff_p->skype)) { ?>
-                                <a href="skype:<?php echo html_escape($staff_p->skype); ?>" data-toggle="tooltip"
-                                    title="<?php echo html_escape($staff_p->skype); ?>" target="_blank"
+                                <a href="skype:<?php echo e($staff_p->skype); ?>" data-toggle="tooltip"
+                                    title="<?php echo e($staff_p->skype); ?>" target="_blank"
                                     class="btn btn-default btn-icon">
                                     <i class="fa-brands fa-skype"></i>
                                 </a>
@@ -149,7 +149,7 @@ $(function() {
     var notifications = $('#notifications');
     if (notifications.length > 0) {
         var page = 0;
-        var total_pages = '<?php echo $total_pages; ?>';
+        var total_pages = '<?php echo e($total_pages); ?>';
         $('.loader').on('click', function(e) {
             e.preventDefault();
             if (page <= total_pages) {
@@ -182,7 +182,7 @@ $(function() {
                             link_class_indicator + '"' + link_notification + '>';
                         notifications += '<div class="description">';
                         if (obj.from_fullname) {
-                            notifications += obj.from_fullname + ' - ';
+                            notifications += escapeHtml(obj.from_fullname) + ' - ';
                         }
                         notifications += obj.description;
                         notifications += '</div>';

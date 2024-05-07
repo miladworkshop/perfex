@@ -4,7 +4,7 @@
       <div class="modal-content">
          <div class="modal-header">
             <button type="button" class="close" onclick="close_modal_manually('._project_file'); return false;"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title"><?php echo $file->subject; ?></h4>
+            <h4 class="modal-title"><?php echo e($file->subject); ?></h4>
          </div>
          <div class="modal-body">
             <div class="row">
@@ -16,15 +16,17 @@
                   <hr />
                   <?php } else { ?>
                   <?php if (!empty($file->description)) { ?>
-                  <p class="bold"><?php echo _l('project_discussion_description'); ?></p>
-                  <p class="text-muted"><?php echo $file->description; ?></p>
+                     <p class="bold"><?php echo _l('project_discussion_description'); ?></p>
+                     <div class="tw-text-neutral-500">
+                        <?php echo process_text_content_for_display($file->description); ?>
+                     </div>
                   <hr />
                   <?php } ?>
                   <?php } ?>
                   <?php if (!empty($file->external) && $file->external == 'dropbox') { ?>
-                  <a href="<?php echo $file->external_link; ?>" target="_blank" class="btn btn-primary mbot20"><i class="fa fa-dropbox" aria-hidden="true"></i> <?php echo _l('open_in_dropbox'); ?></a><br /><br />
+                  <a href="<?php echo e($file->external_link); ?>" target="_blank" class="btn btn-primary mbot20"><i class="fa fa-dropbox" aria-hidden="true"></i> <?php echo _l('open_in_dropbox'); ?></a><br /><br />
                   <?php } elseif (!empty($file->external) && $file->external == 'gdrive') { ?>
-                     <a href="<?php echo $file->external_link; ?>" target="_blank" class="btn btn-primary mbot20">
+                     <a href="<?php echo e($file->external_link); ?>" target="_blank" class="btn btn-primary mbot20">
                            <i class="fa-brands fa-google" aria-hidden="true"></i>
                            <?php echo _l('open_in_google'); ?>
                      </a>
@@ -46,9 +48,9 @@
                          echo $previewMarkdown;
                      } else {
                          if (empty($file->external)) {
-                             echo '<a href="' . site_url('uploads/projects/' . $file->project_id . '/' . $file->file_name) . '" download>' . $file->file_name . '</a>';
+                             echo '<a href="' . site_url('uploads/projects/' . $file->project_id . '/' . $file->file_name) . '" download>' . e($file->file_name) . '</a>';
                          } else {
-                             echo '<a href="' . $file->external_link . '" target="_blank">' . $file->file_name . '</a>';
+                             echo '<a href="' . $file->external_link . '" target="_blank">' . e($file->file_name) . '</a>';
                          }
 
                          echo '<p class="text-muted">' . _l('no_preview_available_for_file') . '</p>';
@@ -70,9 +72,9 @@
 </div>
 <!-- /.modal -->
 <script>
-   var discussion_id = '<?php echo $file->id; ?>';
-   var discussion_user_profile_image_url = '<?php echo $discussion_user_profile_image_url; ?>';
-   var current_user_is_admin = '<?php echo $current_user_is_admin; ?>';
+   var discussion_id = '<?php echo e($file->id); ?>';
+   var discussion_user_profile_image_url = '<?php echo e($discussion_user_profile_image_url); ?>';
+   var current_user_is_admin = '<?php echo e($current_user_is_admin); ?>';
    $('body').on('shown.bs.modal', '._project_file', function() {
      var content_height = ($('body').find('._project_file .modal-content').height() - 165);
      if($('iframe').length > 0){

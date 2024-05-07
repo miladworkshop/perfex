@@ -19,7 +19,7 @@
                                 data-none-selected-text="<?php echo _l('batch_payment_filter_by_customer') ?>">
                                 <option value=""></option>
                                 <?php foreach ($customers as $customer) { ?>
-                                <option value="<?php echo $customer->userid; ?>"><?php echo $customer->company; ?>
+                                <option value="<?php echo e($customer->userid); ?>"><?php echo e($customer->company); ?>
                                 </option>
                                 <?php } ?>
                             </select>
@@ -46,7 +46,7 @@
                                 </thead>
                                 <tbody>
                                     <?php foreach ($invoices as $index => $invoice) { ?>
-                                    <tr class="batch_payment_item" data-clientid="<?php echo $invoice->clientid; ?>"
+                                    <tr class="batch_payment_item" data-clientid="<?php echo e($invoice->clientid); ?>"
                                         data-invoiceId="<?php echo $invoice->id ?>">
                                         <td>
                                             <a href="<?php echo admin_url('invoices/list_invoices/' . $invoice->id); ?>"
@@ -72,7 +72,7 @@
                                                     data-none-selected-text="-">
                                                     <option></option>
                                                     <?php foreach ($invoice->allowed_payment_modes as $mode) { ?>
-                                                    <option value="<?php echo $mode->id; ?>"><?php echo $mode->name; ?>
+                                                    <option value="<?php echo e($mode->id); ?>"><?php echo e($mode->name); ?>
                                                     </option>
                                                     <?php } ?>
                                                 </select>

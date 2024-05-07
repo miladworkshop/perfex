@@ -4,9 +4,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Estimate extends ClientsController
 {
-    public function index($id, $hash)
+    public function index($id = '', $hash = '')
     {
         check_estimate_restrictions($id, $hash);
+
         $estimate = $this->estimates_model->get($id);
 
         if (!is_client_logged_in()) {

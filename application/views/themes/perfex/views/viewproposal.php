@@ -19,7 +19,7 @@
                             </span>
                         </td>
                         <td class="subtotal">
-                            <?php echo app_format_money($proposal->subtotal, $proposal->currency_name); ?>
+                            <?php echo e(app_format_money($proposal->subtotal, $proposal->currency_name)); ?>
                         </td>
                     </tr>
                     <?php if (is_sale_discount_applied($proposal)) { ?>
@@ -27,19 +27,19 @@
                         <td>
                             <span class="bold tw-text-neutral-700"><?php echo _l('estimate_discount'); ?>
                                 <?php if (is_sale_discount($proposal, 'percent')) { ?>
-                                (<?php echo app_format_number($proposal->discount_percent, true); ?>%)
+                                (<?php echo e(app_format_number($proposal->discount_percent, true)); ?>%)
                                 <?php } ?>
                             </span>
                         </td>
                         <td class="discount">
-                            <?php echo '-' . app_format_money($proposal->discount_total, $proposal->currency_name); ?>
+                            <?php echo e('-' . app_format_money($proposal->discount_total, $proposal->currency_name)); ?>
                         </td>
                     </tr>
                     <?php } ?>
                     <?php
-                  foreach ($items->taxes() as $tax) {
-                      echo '<tr class="tax-area"><td class="bold !tw-text-neutral-700">' . $tax['taxname'] . ' (' . app_format_number($tax['taxrate']) . '%)</td><td>' . app_format_money($tax['total_tax'], $proposal->currency_name) . '</td></tr>';
-                  }
+                        foreach ($items->taxes() as $tax) {
+                            echo '<tr class="tax-area"><td class="bold !tw-text-neutral-700">' . e($tax['taxname']) . ' (' . e(app_format_number($tax['taxrate'])) . '%)</td><td>' . e(app_format_money($tax['total_tax'], $proposal->currency_name)) . '</td></tr>';
+                        }
                   ?>
                     <?php if ((int)$proposal->adjustment != 0) { ?>
                     <tr>
@@ -49,7 +49,7 @@
                             </span>
                         </td>
                         <td class="adjustment">
-                            <?php echo app_format_money($proposal->adjustment, $proposal->currency_name); ?>
+                            <?php echo e(app_format_money($proposal->adjustment, $proposal->currency_name)); ?>
                         </td>
                     </tr>
                     <?php } ?>
@@ -60,7 +60,7 @@
                             </span>
                         </td>
                         <td class="total">
-                            <?php echo app_format_money($proposal->total, $proposal->currency_name); ?>
+                            <?php echo e(app_format_money($proposal->total, $proposal->currency_name)); ?>
                         </td>
                     </tr>
                 </tbody>
@@ -98,17 +98,17 @@
                     <div class="col-md-12">
                         <div class="pull-left">
                             <h4 class="tw-font-semibold tw-my-0 proposal-html-number">#
-                                <?php echo format_proposal_number($proposal->id); ?><br />
-                                <small class="proposal-html-subject"><?php echo $proposal->subject; ?></small>
+                                <?php echo e(format_proposal_number($proposal->id)); ?><br />
+                                <small class="proposal-html-subject"><?php echo e($proposal->subject); ?></small>
                             </h4>
                         </div>
                         <div class="visible-xs">
                             <div class="clearfix"></div>
                         </div>
                         <?php if (($proposal->status != 2 && $proposal->status != 3)) {
-          if (!empty($proposal->open_till) && date('Y-m-d', strtotime($proposal->open_till)) < date('Y-m-d')) {
-              echo '<span class="label label-warning tw-ml-4">' . _l('proposal_expired') . '</span>';
-          } else { ?>
+                        if (!empty($proposal->open_till) && date('Y-m-d', strtotime($proposal->open_till)) < date('Y-m-d')) {
+                            echo '<span class="label label-warning tw-ml-4">' . _l('proposal_expired') . '</span>';
+                        } else { ?>
                         <?php if ($identity_confirmation_enabled == '1') { ?>
                         <button type="button" id="accept_action"
                             class="btn btn-success pull-right action-button mleft5">
@@ -131,13 +131,13 @@
                         <?php } ?>
                         <!-- end expired proposal -->
                         <?php
-      } else {
-          if ($proposal->status == 2) {
-              echo '<span class="label label-danger tw-ml-4">' . _l('proposal_status_declined') . '</span>';
-          } elseif ($proposal->status == 3) {
-              echo '<span class="label label-success tw-ml-4">' . _l('proposal_status_accepted') . '</span>';
-          }
-      } ?>
+                        } else {
+                            if ($proposal->status == 2) {
+                                echo '<span class="label label-danger tw-ml-4">' . _l('proposal_status_declined') . '</span>';
+                            } elseif ($proposal->status == 3) {
+                                echo '<span class="label label-success tw-ml-4">' . _l('proposal_status_accepted') . '</span>';
+                            }
+                        } ?>
                         <?php echo form_open($this->uri->uri_string()); ?>
                         <button type="submit" class="btn btn-default pull-right action-button mleft5"><i
                                 class="fa-regular fa-file-pdf"></i>
@@ -190,8 +190,8 @@
                 </ul>
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane<?php if (!$this->input->get('tab') || $this->input->get('tab') === 'summary') {
-          echo ' active';
-      } ?>" id="summary">
+                            echo ' active';
+                        } ?>" id="summary">
                         <address class="proposal-html-company-info tw-text-neutral-500 tw-text-normal">
                             <?php echo format_organization_info(); ?>
                         </address>
@@ -206,7 +206,7 @@
                             <?php if ($proposal->total != 0) { ?>
                             <div class="tw-text-normal col-md-12 proposal-html-total">
                                 <h4 class="bold tw-mb-3">
-                                    <?php echo _l('proposal_total_info', app_format_money($proposal->total, $proposal->currency_name)); ?>
+                                    <?php echo e(_l('proposal_total_info', app_format_money($proposal->total, $proposal->currency_name))); ?>
                                 </h4>
                             </div>
                             <?php } ?>
@@ -214,20 +214,20 @@
                                 <?php echo _l('proposal_status'); ?>
                             </div>
                             <div class="tw-text-normal col-md-8 proposal-status tw-text-neutral-700">
-                                <?php echo format_proposal_status($proposal->status, '', false); ?>
+                                <?php echo e(format_proposal_status($proposal->status, '', false)); ?>
                             </div>
                             <div class="tw-text-normal col-md-4 text-muted proposal-date">
                                 <?php echo _l('proposal_date'); ?>
                             </div>
                             <div class="tw-text-normal col-md-8 proposal-date tw-text-neutral-700">
-                                <?php echo _d($proposal->date); ?>
+                                <?php echo e(_d($proposal->date)); ?>
                             </div>
                             <?php if (!empty($proposal->open_till)) { ?>
                             <div class="tw-text-normal col-md-4 text-muted proposal-open-till">
                                 <?php echo _l('proposal_open_till'); ?>
                             </div>
                             <div class="tw-text-normal col-md-8 proposal-open-till tw-text-neutral-700">
-                                <?php echo _d($proposal->open_till); ?>
+                                <?php echo e(_d($proposal->open_till)); ?>
                             </div>
                             <?php } ?>
                             <?php if ($proposal->project_id != '' && get_option('show_project_on_proposal') == 1) { ?>
@@ -235,7 +235,7 @@
                                 <?php echo _l('project'); ?>
                             </div>
                             <div class="tw-text-normal col-md-8 proposal-html-project tw-text-neutral-700">
-                                <?php echo get_project_name_by_id($proposal->project_id); ?>
+                                <?php echo e(get_project_name_by_id($proposal->project_id)); ?>
                             </div>
                             <?php } ?>
                         </div>
@@ -254,17 +254,16 @@
                             <div class="col-md-12 row mbot15">
                                 <div class="pull-left"><i
                                         class="<?php echo get_mime_class($attachment['filetype']); ?>"></i></div>
-                                <a href="<?php echo $attachment_url; ?>"><?php echo $attachment['file_name']; ?></a>
+                                <a href="<?php echo e($attachment_url); ?>"><?php echo e($attachment['file_name']); ?></a>
                             </div>
-                            <?php
-      } ?>
+                            <?php } ?>
                         </div>
                         <?php } ?>
                     </div>
                     <?php if ($proposal->allow_comments == 1) { ?>
                     <div role="tabpanel" class="tab-pane<?php if ($this->input->get('tab') === 'discussion') {
-          echo ' active';
-      } ?>" id="discussion">
+                        echo ' active';
+                    } ?>" id="discussion">
                         <?php echo form_open($this->uri->uri_string()) ; ?>
                         <div class="proposal-comment">
                             <textarea name="content" rows="4" class="form-control"></textarea>
@@ -288,15 +287,15 @@
                          $proposal_comments .= '<div class="mtop5 tw-text-neutral-600">';
                          $proposal_comments .= '<b>';
                          if ($comment['staffid'] != 0) {
-                             $proposal_comments .= get_staff_full_name($comment['staffid']);
+                             $proposal_comments .= e(get_staff_full_name($comment['staffid']));
                          } else {
                              $proposal_comments .= _l('is_customer_indicator');
                          }
                          $proposal_comments .= '</b>';
-                         $proposal_comments .= ' - <small class="mtop10 text-muted">' . time_ago($comment['dateadded']) . '</small>';
+                         $proposal_comments .= ' - <small class="mtop10 text-muted">' . e(time_ago($comment['dateadded'])) . '</small>';
                          $proposal_comments .= '</div>';
                          $proposal_comments .= '<div class="tw-text-neutral-500">';
-                         $proposal_comments .= check_for_links($comment['content']);
+                         $proposal_comments .= process_text_content_for_display($comment['content']);
                          $proposal_comments .= '</div>';
                          $proposal_comments .= '</div>';
                          $proposal_comments .= '</div>';
@@ -317,21 +316,21 @@
                         <?php echo _l('proposal_signed_by'); ?>
                     </div>
                     <div class="col-md-7 proposal-proposal-signed-by">
-                        <?php echo "{$proposal->acceptance_firstname} {$proposal->acceptance_lastname}"; ?>
+                        <?php echo e("{$proposal->acceptance_firstname} {$proposal->acceptance_lastname}"); ?>
                     </div>
 
                     <div class="col-md-5 text-muted proposal-signed-by">
                         <?php echo _l('proposal_signed_date'); ?>
                     </div>
                     <div class="col-md-7 proposal-proposal-signed-by">
-                        <?php echo _d(explode(' ', $proposal->acceptance_date)[0]); ?>
+                        <?php echo e(_d(explode(' ', $proposal->acceptance_date)[0])); ?>
                     </div>
 
                     <div class="col-md-5 text-muted proposal-signed-by">
                         <?php echo _l('proposal_signed_ip'); ?>
                     </div>
                     <div class="col-md-7 proposal-signed-by">
-                        <?php echo $proposal->acceptance_ip; ?>
+                        <?php echo e($proposal->acceptance_ip); ?>
                     </div>
                 </div>
                 <?php } ?>

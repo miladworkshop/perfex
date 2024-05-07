@@ -17,7 +17,7 @@
                 <div class="sm:tw-self-end">
                     <h3 class="bold tw-my-0 invoice-html-number">
                         <span class="sticky-visible hide tw-mb-2">
-                            <?php echo format_invoice_number($invoice->id); ?>
+                            <?php echo e(format_invoice_number($invoice->id)); ?>
                         </span>
                     </h3>
                     <span class="invoice-html-status">
@@ -58,7 +58,7 @@
         <div class="col-md-10 col-md-offset-1 tw-mb-5">
             <div class="alert alert-danger text-center">
                 <p class="tw-font-medium">
-                    <?php echo _l('overdue_by_days', get_total_days_overdue($invoice->duedate)) ?>
+                    <?php echo e(_l('overdue_by_days', get_total_days_overdue($invoice->duedate))); ?>
                 </p>
             </div>
         </div>
@@ -67,7 +67,7 @@
             <div class="row mtop20">
                 <div class="col-md-6 col-sm-6 transaction-html-info-col-left">
                     <h4 class="tw-font-semibold tw-text-neutral-700 invoice-html-number">
-                        <?php echo format_invoice_number($invoice->id); ?>
+                        <?php echo e(format_invoice_number($invoice->id)); ?>
                     </h4>
                     <address class="invoice-html-company-info tw-text-neutral-500 tw-text-normal">
                         <?php echo format_organization_info(); ?>
@@ -94,26 +94,26 @@
                         <span class="tw-font-medium tw-text-neutral-700">
                             <?php echo _l('invoice_data_date'); ?>
                         </span>
-                        <?php echo _d($invoice->date); ?>
+                        <?php echo e(_d($invoice->date)); ?>
                     </p>
                     <?php if (!empty($invoice->duedate)) { ?>
                     <p class="invoice-html-duedate tw-mb-0 tw-text-normal">
                         <span class="tw-font-medium tw-text-neutral-700">
                             <?php echo _l('invoice_data_duedate'); ?>
                         </span>
-                        <?php echo _d($invoice->duedate); ?>
+                        <?php echo e(_d($invoice->duedate)); ?>
                     </p>
                     <?php } ?>
                     <?php if ($invoice->sale_agent && get_option('show_sale_agent_on_invoices') == 1) { ?>
                     <p class="invoice-html-sale-agent tw-mb-0 tw-text-normal">
                         <span class="tw-font-medium tw-text-neutral-700"><?php echo _l('sale_agent_string'); ?>:</span>
-                        <?php echo get_staff_full_name($invoice->sale_agent); ?>
+                        <?php echo e(get_staff_full_name($invoice->sale_agent)); ?>
                     </p>
                     <?php } ?>
                     <?php if ($invoice->project_id && get_option('show_project_on_invoice') == 1) { ?>
                     <p class="invoice-html-project tw-mb-0 tw-text-normal">
                         <span class="tw-font-medium tw-text-neutral-700"><?php echo _l('project'); ?>:</span>
-                        <?php echo get_project_name_by_id($invoice->project_id); ?>
+                        <?php echo e(get_project_name_by_id($invoice->project_id)); ?>
                     </p>
                     <?php } ?>
                     <?php $pdf_custom_fields = get_custom_fields('invoice', ['show_on_pdf' => 1, 'show_on_client_portal' => 1]);
@@ -123,7 +123,7 @@
                        continue;
                    } ?>
                     <p class="tw-mb-0 tw-text-normal">
-                        <span class="tw-font-medium tw-text-neutral-700"><?php echo $field['name']; ?>: </span>
+                        <span class="tw-font-medium tw-text-neutral-700"><?php echo e($field['name']); ?>: </span>
                         <?php echo $value; ?>
                     </p>
                     <?php
@@ -148,7 +148,7 @@
                                     <span class="bold tw-text-neutral-700"><?php echo _l('invoice_subtotal'); ?></span>
                                 </td>
                                 <td class="subtotal">
-                                    <?php echo app_format_money($invoice->subtotal, $invoice->currency_name); ?>
+                                    <?php echo e(app_format_money($invoice->subtotal, $invoice->currency_name)); ?>
                                 </td>
                             </tr>
                             <?php if (is_sale_discount_applied($invoice)) { ?>
@@ -156,18 +156,18 @@
                                 <td>
                                     <span class="bold tw-text-neutral-700"><?php echo _l('invoice_discount'); ?>
                                         <?php if (is_sale_discount($invoice, 'percent')) { ?>
-                                        (<?php echo app_format_number($invoice->discount_percent, true); ?>%)
+                                        (<?php echo e(app_format_number($invoice->discount_percent, true)); ?>%)
                                         <?php } ?></span>
                                 </td>
                                 <td class="discount">
-                                    <?php echo '-' . app_format_money($invoice->discount_total, $invoice->currency_name); ?>
+                                    <?php echo e('-' . app_format_money($invoice->discount_total, $invoice->currency_name)); ?>
                                 </td>
                             </tr>
                             <?php } ?>
                             <?php
                                 foreach ($items->taxes() as $tax) {
-                                    echo '<tr class="tax-area"><td class="bold !tw-text-neutral-700">' . $tax['taxname'] . ' (' . app_format_number($tax['taxrate']) . '%)</td><td>' . app_format_money($tax['total_tax'], $invoice->currency_name) . '</td></tr>';
-                                }
+                                    echo '<tr class="tax-area"><td class="bold !tw-text-neutral-700">' . e($tax['taxname']) . ' (' . e(app_format_number($tax['taxrate'])) . '%)</td><td>' . e(app_format_money($tax['total_tax'], $invoice->currency_name)) . '</td></tr>';
+                                }           
                             ?>
                             <?php if ((int)$invoice->adjustment != 0) { ?>
                             <tr>
@@ -177,7 +177,7 @@
                                     </span>
                                 </td>
                                 <td class="adjustment">
-                                    <?php echo app_format_money($invoice->adjustment, $invoice->currency_name); ?>
+                                    <?php echo e(app_format_money($invoice->adjustment, $invoice->currency_name)); ?>
                                 </td>
                             </tr>
                             <?php } ?>
@@ -186,7 +186,7 @@
                                     <span class="bold tw-text-neutral-700"><?php echo _l('invoice_total'); ?></span>
                                 </td>
                                 <td class="total">
-                                    <?php echo app_format_money($invoice->total, $invoice->currency_name); ?>
+                                    <?php echo e(app_format_money($invoice->total, $invoice->currency_name)); ?>
                                 </td>
                             </tr>
                             <?php if (count($invoice->payments) > 0 && get_option('show_total_paid_on_invoice') == 1) { ?>
@@ -197,7 +197,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <?php echo '-' . app_format_money(sum_from_table(db_prefix() . 'invoicepaymentrecords', ['field' => 'amount', 'where' => ['invoiceid' => $invoice->id]]), $invoice->currency_name); ?>
+                                    <?php echo e('-' . app_format_money(sum_from_table(db_prefix() . 'invoicepaymentrecords', ['field' => 'amount', 'where' => ['invoiceid' => $invoice->id]]), $invoice->currency_name)); ?>
                                 </td>
                             </tr>
                             <?php } ?>
@@ -207,7 +207,7 @@
                                     <span class="bold tw-text-neutral-700"><?php echo _l('applied_credits'); ?></span>
                                 </td>
                                 <td>
-                                    <?php echo '-' . app_format_money($credits_applied, $invoice->currency_name); ?>
+                                    <?php echo e('-' . app_format_money($credits_applied, $invoice->currency_name)); ?>
                                 </td>
                             </tr>
                             <?php } ?>
@@ -221,7 +221,7 @@
                                 </td>
                                 <td>
                                     <span class="<?php echo $invoice->total_left_to_pay > 0 ? 'text-danger': ''; ?>">
-                                        <?php echo app_format_money($invoice->total_left_to_pay, $invoice->currency_name); ?>
+                                        <?php echo e(app_format_money($invoice->total_left_to_pay, $invoice->currency_name)); ?>
                                     </span>
                                 </td>
                             </tr>
@@ -258,7 +258,7 @@
                         <div class="pull-left">
                             <i class="<?php echo get_mime_class($attachment['filetype']); ?>"></i>
                         </div>
-                        <a href="<?php echo $attachment_url; ?>"><?php echo $attachment['file_name']; ?></a>
+                        <a href="<?php echo e($attachment_url); ?>"><?php echo e($attachment['file_name']); ?></a>
                     </div>
                     <?php
                             } ?>
@@ -270,7 +270,7 @@
                         <b><?php echo _l('invoice_note'); ?></b>
                     </p>
                     <div class="tw-text-neutral-500 tw-mt-2.5">
-                        <?php echo $invoice->clientnote; ?>
+                        <?php echo process_text_content_for_display($invoice->clientnote); ?>
                     </div>
                 </div>
                 <?php } ?>
@@ -283,7 +283,7 @@
                         </b>
                     </p>
                     <div class="tw-text-neutral-500 tw-mt-2.5">
-                        <?php echo $invoice->terms; ?>
+                        <?php echo process_text_content_for_display($invoice->terms); ?>
                     </div>
                 </div>
                 <?php } ?>
@@ -311,18 +311,18 @@
                             <?php foreach ($invoice->payments as $payment) { ?>
                             <tr>
                                 <td>
-                                    <span class="pull-left"><?php echo $payment['paymentid']; ?></span>
+                                    <span class="pull-left"><?php echo e($payment['paymentid']); ?></span>
                                     <?php echo form_open($this->uri->uri_string()); ?>
-                                    <button type="submit" value="<?php echo $payment['paymentid']; ?>"
+                                    <button type="submit" value="<?php echo e($payment['paymentid']); ?>"
                                         class="btn btn-icon btn-default pull-right" name="paymentpdf"><i
                                             class="fa-regular fa-file-pdf"></i></button>
                                     <?php echo form_close(); ?>
                                 </td>
-                                <td><?php echo $payment['name']; ?> <?php if (!empty($payment['paymentmethod'])) {
+                                <td><?php echo e($payment['name']); ?> <?php if (!empty($payment['paymentmethod'])) {
                    echo ' - ' . $payment['paymentmethod'];
                } ?></td>
-                                <td><?php echo _d($payment['date']); ?></td>
-                                <td><?php echo app_format_money($payment['amount'], $invoice->currency_name); ?></td>
+                                <td><?php echo e(_d($payment['date'])); ?></td>
+                                <td><?php echo e(app_format_money($payment['amount'], $invoice->currency_name)); ?></td>
                             </tr>
                             <?php } ?>
                         </tbody>
@@ -355,13 +355,13 @@
                                      continue;
                                  } ?>
                             <div class="radio radio-success online-payment-radio">
-                                <input type="radio" value="<?php echo $mode['id']; ?>"
-                                    id="pm_<?php echo $mode['id']; ?>" name="paymentmode">
-                                <label for="pm_<?php echo $mode['id']; ?>"><?php echo $mode['name']; ?></label>
+                                <input type="radio" value="<?php echo e($mode['id']); ?>"
+                                    id="pm_<?php echo e($mode['id']); ?>" name="paymentmode">
+                                <label for="pm_<?php echo e($mode['id']); ?>"><?php echo e($mode['name']); ?></label>
                             </div>
                             <?php if (!empty($mode['description'])) { ?>
                             <div class="mbot15">
-                                <?php echo $mode['description']; ?>
+                                <?php echo process_text_content_for_display($mode['description']); ?>
                             </div>
                             <?php }
                              }
@@ -371,22 +371,22 @@
                                 <label for="amount"
                                     class="control-label"><?php echo _l('invoice_html_amount'); ?></label>
                                 <div class="input-group">
-                                    <input type="number" required max="<?php echo $invoice->total_left_to_pay; ?>"
-                                        data-total="<?php echo $invoice->total_left_to_pay; ?>" name="amount"
-                                        class="form-control" value="<?php echo $invoice->total_left_to_pay; ?>">
+                                    <input type="number" required max="<?php echo e($invoice->total_left_to_pay); ?>"
+                                        data-total="<?php echo e($invoice->total_left_to_pay); ?>" name="amount"
+                                        class="form-control" value="<?php echo e($invoice->total_left_to_pay); ?>">
                                     <span class="input-group-addon">
-                                        <?php echo $invoice->symbol; ?>
+                                        <?php echo e($invoice->symbol); ?>
                                     </span>
                                 </div>
                                 <?php } else {
-                             echo '<h4 class="bold mbot25">' . _l('invoice_html_total_pay', app_format_money($invoice->total_left_to_pay, $invoice->currency_name)) . '</h4>';
+                             echo '<h4 class="bold mbot25">' . e(_l('invoice_html_total_pay', app_format_money($invoice->total_left_to_pay, $invoice->currency_name))) . '</h4>';
                          } ?>
                             </div>
                             <div id="pay_button">
                                 <input id="pay_now" type="submit" name="make_payment" class="btn btn-success"
                                     value="<?php echo _l('invoice_html_online_payment_button_text'); ?>">
                             </div>
-                            <input type="hidden" name="hash" value="<?php echo $hash; ?>">
+                            <input type="hidden" name="hash" value="<?php echo e($hash); ?>">
                             <?php echo form_close(); ?>
                         </div>
                         <?php
@@ -403,10 +403,10 @@
                              if (!is_payment_mode_allowed_for_invoice($mode['id'], $invoice->id)) {
                                  continue;
                              } ?>
-                            <p class="bold"><?php echo $mode['name']; ?></p>
+                            <p class="bold"><?php echo e($mode['name']); ?></p>
                             <?php if (!empty($mode['description'])) { ?>
                             <div class="mbot15">
-                                <?php echo $mode['description']; ?>
+                                <?php echo process_text_content_for_display($mode['description']); ?>
                             </div>
                             <?php }
                          }

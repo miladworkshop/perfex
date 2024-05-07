@@ -140,13 +140,13 @@
                         <div class="feed-item">
                             <div class="date">
                                 <span class="text-has-action" data-toggle="tooltip"
-                                    data-title="<?php echo _dt($log['date']); ?>">
-                                    <?php echo time_ago($log['date']); ?>
+                                    data-title="<?php echo e(_dt($log['date'])); ?>">
+                                    <?php echo e(time_ago($log['date'])); ?>
                                 </span>
                             </div>
                             <div class="text">
-                                <?php echo $log['staffid']; ?><br />
-                                <?php echo $log['description']; ?>
+                                <?php echo e($log['staffid']); ?><br />
+                                <?php echo e($log['description']); ?>
                             </div>
                         </div>
                         <?php } ?>

@@ -54,19 +54,19 @@
         <?php foreach ($discussions as $discussion) { ?>
         <tr>
             <td><a
-                    href="<?php echo site_url('clients/project/' . $project->id . '?group=' . $group . '&discussion_id=' . $discussion['id']); ?>"><?php echo $discussion['subject']; ?></a>
+                    href="<?php echo site_url('clients/project/' . $project->id . '?group=' . $group . '&discussion_id=' . $discussion['id']); ?>"><?php echo e($discussion['subject']); ?></a>
             </td>
-            <td data-order="<?php echo $discussion['last_activity']; ?>">
+            <td data-order="<?php echo e($discussion['last_activity']); ?>">
                 <?php
                         if (!is_null($discussion['last_activity'])) {
                             $last_activity = time_ago($discussion['last_activity']);
                         } else {
                             $last_activity = _l('project_discussion_no_activity');
                         }
-                        echo $last_activity;
+                        echo e($last_activity);
                         ?>
             </td>
-            <td><?php echo $discussion['total_comments']; ?></td>
+            <td><?php echo e($discussion['total_comments']); ?></td>
         </tr>
         <?php } ?>
     </tbody>
@@ -75,21 +75,23 @@
 } else { ?>
 <?php echo form_hidden('discussion_user_profile_image_url', $discussion_user_profile_image_url); ?>
 <?php echo form_hidden('discussion_id', $discussion->id); ?>
-<h3 class="tw-font-medium tw-mt-0 tw-text-lg"><?php echo $discussion->subject; ?></h3>
-<p class="tw-mb-0 tw-text-neutral-500"><?php echo _l('project_discussion_posted_on', _d($discussion->datecreated)); ?>
+<h3 class="tw-font-medium tw-mt-0 tw-text-lg"><?php echo e($discussion->subject); ?></h3>
+<p class="tw-mb-0 tw-text-neutral-700"><?php echo e(_l('project_discussion_posted_on', _d($discussion->datecreated))); ?>
 </p>
-<p class="tw-mb-0 tw-text-neutral-500">
+<p class="tw-mb-0 tw-text-neutral-700">
     <?php if ($discussion->staff_id == 0) {
-                            echo _l('project_discussion_posted_by', get_contact_full_name($discussion->contact_id));
-                        } else {
-                            echo _l('project_discussion_posted_by', get_staff_full_name($discussion->staff_id));
-                        }
-?>
+        echo e(_l('project_discussion_posted_by', get_contact_full_name($discussion->contact_id)));
+    } else {
+        echo e(_l('project_discussion_posted_by', get_staff_full_name($discussion->staff_id)));
+    }
+    ?>
 </p>
-<p class="tw-text-neutral-500"><?php echo _l('project_discussion_total_comments'); ?>:
+<p class="tw-text-neutral-700"><?php echo _l('project_discussion_total_comments'); ?>:
     <?php echo total_rows(db_prefix() . 'projectdiscussioncomments', ['discussion_id' => $discussion->id, 'discussion_type' => 'regular']); ?>
 </p>
-<p><?php echo $discussion->description; ?></p>
+<div class="tw-text-neutral-500">
+    <?php echo process_text_content_for_display($discussion->description); ?>
+</div>
 <hr />
 <div id="discussion-comments" class="tc-content"></div>
 <?php } ?>

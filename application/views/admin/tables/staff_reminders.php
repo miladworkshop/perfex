@@ -54,13 +54,14 @@ foreach ($rResult as $aRow) {
         }
 
         if ($aColumns[$i] == db_prefix() . 'reminders.date') {
-            $_data = _dt($_data);
-        } elseif ($i == 0) {
+            $_data = e(_dt($_data));
+        } elseif ($i == 1) {
+            $_data = process_text_content_for_display($aRow[db_prefix().'reminders.description']);
+        }elseif ($i == 0) {
             // rel type name
             $rel_data   = get_relation_data($aRow['rel_type'], $aRow['rel_id']);
             $rel_values = get_relation_values($rel_data, $aRow['rel_type']);
-            $_data      = '<a href="' . $rel_values['link'] . '">' . $rel_values['name'] . '</a>';
-
+            $_data      = '<a href="' . $rel_values['link'] . '">' . e($rel_values['name']) . '</a>';
 
             if ($aRow['creator'] == get_staff_user_id() || is_admin()) {
                 $_data .= '<div class="row-options">';

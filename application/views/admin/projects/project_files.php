@@ -83,36 +83,36 @@
     $path = get_upload_path_by_type('project') . $project->id . '/' . $file['file_name']; ?>
                 <tr>
                     <td>
-                        <div class="checkbox"><input type="checkbox" value="<?php echo $file['id']; ?>"><label></label>
+                        <div class="checkbox"><input type="checkbox" value="<?php echo e($file['id']); ?>"><label></label>
                         </div>
                     </td>
-                    <td data-order="<?php echo $file['file_name']; ?>">
+                    <td data-order="<?php echo e($file['file_name']); ?>">
                         <a href="#"
-                            onclick="view_project_file(<?php echo $file['id']; ?>,<?php echo $file['project_id']; ?>); return false;">
+                            onclick="view_project_file(<?php echo e($file['id']); ?>,<?php echo e($file['project_id']); ?>); return false;">
                             <?php if (is_image(PROJECT_ATTACHMENTS_FOLDER . $project->id . '/' . $file['file_name']) || (!empty($file['external']) && !empty($file['thumbnail_link']))) {
         echo '<div class="text-left"><i class="fa fa-spinner fa-spin mtop30"></i></div>';
-        echo '<img class="project-file-image img-table-loading" src="#" data-orig="' . project_file_url($file, true) . '" width="100">';
+        echo '<img class="project-file-image img-table-loading" src="#" data-orig="' . e(project_file_url($file, true)) . '" width="100">';
         echo '</div>';
     }
     echo $file['subject']; ?></a>
                     </td>
-                    <td data-order="<?php echo $file['filetype']; ?>"><?php echo $file['filetype']; ?></td>
-                    <td data-order="<?php echo $file['last_activity']; ?>">
+                    <td data-order="<?php echo e($file['filetype']); ?>"><?php echo e($file['filetype']); ?></td>
+                    <td data-order="<?php echo e($file['last_activity']); ?>">
                         <?php
             if (!is_null($file['last_activity'])) { ?>
                         <span class="text-has-action" data-toggle="tooltip"
-                            data-title="<?php echo _dt($file['last_activity']); ?>">
-                            <?php echo time_ago($file['last_activity']); ?>
+                            data-title="<?php echo e(_dt($file['last_activity'])); ?>">
+                            <?php echo e(time_ago($file['last_activity'])); ?>
                         </span>
                         <?php } else {
                 echo _l('project_discussion_no_activity');
             } ?>
                     </td>
                     <?php $total_file_comments = total_rows(db_prefix() . 'projectdiscussioncomments', ['discussion_id' => $file['id'], 'discussion_type' => 'file']); ?>
-                    <td data-order="<?php echo $total_file_comments; ?>">
-                        <?php echo $total_file_comments; ?>
+                    <td data-order="<?php echo e($total_file_comments); ?>">
+                        <?php echo e($total_file_comments); ?>
                     </td>
-                    <td data-order="<?php echo $file['visible_to_customer']; ?>">
+                    <td data-order="<?php echo e($file['visible_to_customer']); ?>">
                         <?php
             $checked = '';
     if ($file['visible_to_customer'] == 1) {
@@ -121,9 +121,9 @@
                         <div class="onoffswitch">
                             <input type="checkbox"
                                 data-switch-url="<?php echo admin_url(); ?>projects/change_file_visibility"
-                                id="<?php echo $file['id']; ?>" data-id="<?php echo $file['id']; ?>"
-                                class="onoffswitch-checkbox" value="<?php echo $file['id']; ?>" <?php echo $checked; ?>>
-                            <label class="onoffswitch-label" for="<?php echo $file['id']; ?>"></label>
+                                id="<?php echo e($file['id']); ?>" data-id="<?php echo e($file['id']); ?>"
+                                class="onoffswitch-checkbox" value="<?php echo e($file['id']); ?>" <?php echo e($checked); ?>>
+                            <label class="onoffswitch-label" for="<?php echo e($file['id']); ?>"></label>
                         </div>
 
                     </td>
@@ -132,21 +132,21 @@
         $_data = '<a href="' . admin_url('staff/profile/' . $file['staffid']) . '">' . staff_profile_image($file['staffid'], [
                 'staff-profile-image-small',
               ]) . '</a>';
-        $_data .= ' <a href="' . admin_url('staff/member/' . $file['staffid']) . '">' . get_staff_full_name($file['staffid']) . '</a>';
+        $_data .= ' <a href="' . admin_url('staff/member/' . $file['staffid']) . '">' . e(get_staff_full_name($file['staffid'])) . '</a>';
         echo $_data;
     } else {
-        echo ' <img src="' . contact_profile_image_url($file['contact_id'], 'thumb') . '" class="client-profile-image-small mrigh5">
-             <a href="' . admin_url('clients/client/' . get_user_id_by_contact_id($file['contact_id']) . '?contactid=' . $file['contact_id']) . '">' . get_contact_full_name($file['contact_id']) . '</a>';
+        echo ' <img src="' . e(contact_profile_image_url($file['contact_id'], 'thumb')) . '" class="client-profile-image-small mrigh5">
+             <a href="' . admin_url('clients/client/' . get_user_id_by_contact_id($file['contact_id']) . '?contactid=' . $file['contact_id']) . '">' . e(get_contact_full_name($file['contact_id'])) . '</a>';
     } ?>
                     </td>
-                    <td data-order="<?php echo $file['dateadded']; ?>"><?php echo _dt($file['dateadded']); ?></td>
+                    <td data-order="<?php echo e($file['dateadded']); ?>"><?php echo e(_dt($file['dateadded'])); ?></td>
                     <td>
                         <div class="tw-flex tw-items-center tw-space-x-3">
                             <?php if (empty($file['external'])) {
         $file_name = $file['original_file_name'] != '' ? $file['original_file_name'] : $file['file_name']; ?>
-                            <a href="#" data-toggle="modal" data-original-file-name="<?php echo $file_name; ?>"
-                                data-filetype="<?php echo $file['filetype']; ?>"
-                                data-file-name="<?php echo $file['original_file_name']; ?>"
+                            <a href="#" data-toggle="modal" data-original-file-name="<?php echo e($file_name); ?>"
+                                data-filetype="<?php echo e($file['filetype']); ?>"
+                                data-file-name="<?php echo e($file['original_file_name']); ?>"
                                 data-path="<?php echo PROJECT_ATTACHMENTS_FOLDER . $project->id . '/' . $file['file_name']; ?>"
                                 data-target="#send_file"
                                 class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700 tw-mt-1">

@@ -12,13 +12,13 @@
 <div
     class="tw-border tw-border-solid tw-border-neutral-200 tw-rounded-md tw-overflow-hidden tw-mb-3 last:tw-mb-0 panel-vault">
     <div class="tw-flex tw-justify-between tw-items-center tw-px-6 tw-py-3 tw-border-b tw-border-solid tw-border-neutral-200 tw-bg-neutral-50"
-        id="<?php echo 'vaultEntryHeading-' . $entry['id']; ?>">
+        id="<?php echo 'vaultEntryHeading-' . e($entry['id']); ?>">
         <h4 class="tw-font-semibold tw-my-0 tw-text-lg">
-            <?php echo $entry['server_address']; ?>
+            <?php echo e($entry['server_address']); ?>
         </h4>
         <div class="tw-flex-inline tw-items-center tw-space-x-2">
             <?php if ($entry['creator'] == get_staff_user_id() || is_admin()) { ?>
-            <a href="#" onclick="edit_vault_entry(<?php echo $entry['id']; ?>); return false;" class="text-muted">
+            <a href="#" onclick="edit_vault_entry(<?php echo e($entry['id']); ?>); return false;" class="text-muted">
                 <i class="fa-regular fa-pen-to-square"></i>
             </a>
             <a href="<?php echo admin_url('clients/vault_entry_delete/' . $entry['id']); ?>"
@@ -32,35 +32,35 @@
         <div class="row">
             <div class="col-md-6 border-right">
                 <p class="tw-mb-1">
-                    <b><?php echo _l('server_address'); ?>: </b><?php echo $entry['server_address']; ?>
+                    <b><?php echo _l('server_address'); ?>: </b><?php echo e($entry['server_address']); ?>
                 </p>
                 <p class="tw-mb-1">
                     <b><?php echo _l('port'); ?>:
-                    </b><?php echo !empty($entry['port']) ? $entry['port'] : _l('no_port_provided'); ?>
+                    </b><?php echo e(!empty($entry['port']) ? e($entry['port']) : _l('no_port_provided')); ?>
                 </p>
                 <p class="tw-mb-1">
-                    <b><?php echo _l('vault_username'); ?>: </b><?php echo $entry['username']; ?>
+                    <b><?php echo _l('vault_username'); ?>: </b><?php echo e($entry['username']); ?>
                 </p>
                 <p class="tw-mb-1">
                     <b><?php echo _l('vault_password'); ?>: </b><span class="vault-password-fake">
                         <?php echo str_repeat('&bull;', 10); ?> </span><span class="vault-password-encrypted"></span> <a
                         href="#" class="vault-view-password mleft10" data-toggle="tooltip"
                         data-title="<?php echo _l('view_password'); ?>"
-                        onclick="vault_re_enter_password(<?php echo $entry['id']; ?>,this); return false;"><i
+                        onclick="vault_re_enter_password(<?php echo e($entry['id']); ?>,this); return false;"><i
                             class="fa fa-lock" aria-hidden="true"></i></a>
                 </p>
             </div>
             <div class="col-md-6 text-center">
                 <?php if (!empty($entry['description'])) { ?>
                 <p>
-                    <b><?php echo _l('vault_description'); ?>: </b><br /><?php echo $entry['description']; ?>
+                    <b><?php echo _l('vault_description'); ?>: </b><br /><?php echo process_text_content_for_display($entry['description']); ?>
                 </p>
                 <hr />
                 <?php } ?>
-                <p class="text-muted"><?php echo _l('vault_entry_created_from', $entry['creator_name']); ?> -
+                <p class="text-muted"><?php echo e(_l('vault_entry_created_from', $entry['creator_name'])); ?> -
                     <span class="text-has-action" data-toggle="tooltip"
-                        data-title="<?php echo _dt($entry['date_created']); ?>">
-                        <?php echo time_ago($entry['date_created']); ?>
+                        data-title="<?php echo e(_dt($entry['date_created'])); ?>">
+                        <?php echo e(time_ago($entry['date_created'])); ?>
                     </span>
                 </p>
                 <p>
@@ -68,8 +68,8 @@
                 <p class="text-muted no-mbot">
                     <?php echo _l('vault_entry_last_update', $entry['last_updated_from']); ?> -
                     <span class="text-has-action" data-toggle="tooltip"
-                        data-title="<?php echo _dt($entry['last_updated']); ?>">
-                        <?php echo time_ago($entry['last_updated']); ?>
+                        data-title="<?php echo e(_dt($entry['last_updated'])); ?>">
+                        <?php echo e(time_ago($entry['last_updated'])); ?>
                 </p>
                 </span>
                 <p>

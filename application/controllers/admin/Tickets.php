@@ -124,6 +124,10 @@ class Tickets extends AdminController
             redirect(admin_url('tickets'));
         }
 
+        if (!can_staff_delete_ticket()) {
+            access_denied('delete ticket');
+        }
+
         $response = $this->tickets_model->delete($ticketid);
 
         if ($response == true) {
@@ -132,11 +136,12 @@ class Tickets extends AdminController
             set_alert('warning', _l('problem_deleting', _l('ticket_lowercase')));
         }
 
-        if (strpos($_SERVER['HTTP_REFERER'], 'tickets/ticket') !== false) {
+        // ensure if deleted from single ticket page, user is redirected to index
+        if (str_contains(previous_url(), 'ticket/' . $ticketid)) {
             redirect(admin_url('tickets'));
-        } else {
-            redirect($_SERVER['HTTP_REFERER']);
+            return;
         }
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     public function delete_attachment($id)
@@ -157,7 +162,7 @@ class Tickets extends AdminController
             $this->tickets_model->delete_ticket_attachment($id);
         }
 
-        redirect($_SERVER['HTTP_REFERER']);
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     public function update_staff_replying($ticketId, $userId = '')
@@ -175,7 +180,7 @@ class Tickets extends AdminController
             $isAnotherReplying = $ticket->staff_id_replying !== null && $ticket->staff_id_replying !== get_staff_user_id();
             echo json_encode([
                 'is_other_staff_replying' => $isAnotherReplying,
-                'message'                 => $isAnotherReplying ? _l('staff_is_currently_replying', get_staff_full_name($ticket->staff_id_replying)) : '',
+                'message'                 => $isAnotherReplying ? e(_l('staff_is_currently_replying', get_staff_full_name($ticket->staff_id_replying))) : '',
             ]);
             die;
         }
@@ -254,6 +259,10 @@ class Tickets extends AdminController
 
     public function edit_message()
     {
+        if (!can_staff_edit_ticket_message()) {
+            access_denied();
+        }
+
         if ($this->input->post()) {
             $data         = $this->input->post();
             $data['data'] = html_purify($this->input->post('data', false));
@@ -281,6 +290,11 @@ class Tickets extends AdminController
         if (!$reply_id) {
             redirect(admin_url('tickets'));
         }
+
+        if (!can_staff_delete_ticket_reply()) {
+            access_denied('delete ticket');
+        }
+
         $response = $this->tickets_model->delete_ticket_reply($ticket_id, $reply_id);
         if ($response == true) {
             set_alert('success', _l('deleted', _l('ticket_reply')));
@@ -422,7 +436,7 @@ class Tickets extends AdminController
                 for ($i = 0; $i < count($aColumns); $i++) {
                     $_data = $aRow[$aColumns[$i]];
                     if ($aColumns[$i] == 'name') {
-                        $_data = '<a href="' . admin_url('tickets/predefined_reply/' . $aRow['id']) . '">' . $_data . '</a>';
+                        $_data = '<a href="' . admin_url('tickets/predefined_reply/' . $aRow['id']) . '">' . e($_data) . '</a>';
                     }
                     $row[] = $_data;
                 }
@@ -698,6 +712,7 @@ class Tickets extends AdminController
         if ($this->input->post()) {
             $ids      = $this->input->post('ids');
             $is_admin = is_admin();
+            $staffCanDeleteTicket = can_staff_delete_ticket();
 
             if (!is_array($ids)) {
                 return;
@@ -716,12 +731,15 @@ class Tickets extends AdminController
                 $total_merged = $this->tickets_model->merge($primary_ticket, $status, $ids);
             } elseif ($this->input->post('mass_delete')) {
                 $total_deleted = 0;
-                if ($is_admin) {
+                if ($is_admin || $staffCanDeleteTicket) {
                     foreach ($ids as $id) {
                         if ($this->tickets_model->delete($id)) {
                             $total_deleted++;
                         }
                     }
+                } else {
+                    ajax_access_denied();
+                    return;
                 }
             } else {
                 $status     = $this->input->post('status');

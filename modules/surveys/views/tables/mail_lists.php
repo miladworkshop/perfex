@@ -19,10 +19,12 @@ foreach ($rResult as $aRow) {
     for ($i = 0; $i < count($aColumns); $i++) {
         $_data = $aRow[$aColumns[$i]];
         if ($aColumns[$i] == 'name') {
-            $_data = '<a href="' . admin_url('surveys/mail_list_view/' . $aRow['listid']) . '">' . $_data . '</a>';
+            $_data = '<a href="' . admin_url('surveys/mail_list_view/' . $aRow['listid']) . '">' . e($_data) . '</a>';
             $_data .= '<p>Total emails: ' . total_rows(db_prefix() . 'listemails', 'listid=' . $aRow['listid']) . '</p>';
         } elseif ($aColumns[$i] == db_prefix() . 'emaillists.datecreated') {
             $_data = _dt($_data);
+        } else {
+            $_data = e($_data);
         }
         $row[] = $_data;
     }

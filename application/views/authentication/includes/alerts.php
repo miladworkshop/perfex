@@ -13,7 +13,7 @@
   }
   if($this->session->flashdata('message-'.$alertclass)){ ?>
     <div class="col-lg-12" id="alerts">
-      <div class="text-center alert alert-<?php echo $alertclass; ?>">
+      <div class="text-center alert alert-<?php echo e($alertclass); ?>">
         <?php
         echo $this->session->flashdata('message-'.$alertclass);
         ?>

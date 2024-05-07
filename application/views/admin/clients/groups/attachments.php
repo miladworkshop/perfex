@@ -73,7 +73,7 @@
     } ?>
                 <?php foreach ($attachment as $_att) {
         ?>
-                <tr id="tr_file_<?php echo $_att['id']; ?>">
+                <tr id="tr_file_<?php echo e($_att['id']); ?>">
                     <td>
                         <?php
                                    $path = $upload_path . $_att[$key_indicator] . '/' . $_att['file_name'];
@@ -102,11 +102,11 @@
                             <?php if ($is_image) { ?>
                             <div class="table-image">
                                 <div class="text-center"><i class="fa fa-spinner fa-spin mtop30"></i></div>
-                                <img src="#" class="img-table-loading" data-orig="<?php echo $img_url; ?>">
+                                <img src="#" class="img-table-loading" data-orig="<?php echo e($img_url); ?>">
                             </div>
                             <?php } else { ?>
                             <i class="<?php echo get_mime_class($_att['filetype']); ?>"></i>
-                            <?php echo $_att['file_name']; ?>
+                            <?php echo e($_att['file_name']); ?>
                             <?php } ?>
                         </a>
                         <?php if ($is_image) {
@@ -118,12 +118,12 @@
                             data-title="<?php echo _l('customer_attachments_show_notice'); ?>" <?php } ?>>
                             <input type="checkbox" <?php if ($type != 'customer') {
             echo 'disabled';
-        } ?> id="<?php echo $_att['id']; ?>" data-id="<?php echo $_att['id']; ?>"
+        } ?> id="<?php echo e($_att['id']); ?>" data-id="<?php echo e($_att['id']); ?>"
                                 class="onoffswitch-checkbox customer_file"
                                 data-switch-url="<?php echo admin_url(); ?>misc/toggle_file_visibility" <?php if (isset($_att['visible_to_customer']) && $_att['visible_to_customer'] == 1) {
             echo 'checked';
         } ?>>
-                            <label class="onoffswitch-label" for="<?php echo $_att['id']; ?>"></label>
+                            <label class="onoffswitch-label" for="<?php echo e($_att['id']); ?>"></label>
                         </div>
                         <?php if ($type == 'customer' && $_att['visible_to_customer'] == 1) {
             $file_visibility_message = '';
@@ -142,24 +142,24 @@
                 $names             = '';
                 $contacts_selected = '';
                 foreach ($share_contacts_id as $file_share) {
-                    $names .= get_contact_full_name($file_share['contact_id']) . ', ';
+                    $names .= e(get_contact_full_name($file_share['contact_id'])) . ', ';
                     $contacts_selected .= $file_share['contact_id'] . ',';
                 }
                 if ($contacts_selected != '') {
                     $contacts_selected = substr($contacts_selected, 0, -1);
                 }
                 if ($names != '') {
-                    echo '<a href="#" onclick="do_share_file_contacts(\'' . $contacts_selected . '\',' . $_att['id'] . '); return false;"><i class="fa-regular fa-pen-to-square"></i></a> ' . _l('share_file_with_show', mb_substr($names, 0, -2));
+                    echo '<a href="#" onclick="do_share_file_contacts(\'' . $contacts_selected . '\',' . $_att['id'] . '); return false;"><i class="fa-regular fa-pen-to-square"></i></a> ' . e(_l('share_file_with_show', mb_substr($names, 0, -2)));
                 }
             }
         } ?>
                     </td>
-                    <td data-order="<?php echo $_att['dateadded']; ?>"><?php echo _dt($_att['dateadded']); ?></td>
+                    <td data-order="<?php echo e($_att['dateadded']); ?>"><?php echo e(_dt($_att['dateadded'])); ?></td>
                     <td>
                         <div class="tw-flex tw-items-center tw-space-x-3">
                             <?php if (!isset($_att['external'])) { ?>
-                            <a href="#" data-toggle="modal" data-file-name="<?php echo $_att['file_name']; ?>"
-                                data-filetype="<?php echo $_att['filetype']; ?>" data-path="<?php echo $path; ?>"
+                            <a href="#" data-toggle="modal" data-file-name="<?php echo e($_att['file_name']); ?>"
+                                data-filetype="<?php echo e($_att['filetype']); ?>" data-path="<?php echo e($path); ?>"
                                 data-target="#send_file"
                                 class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700 tw-mt-1">
                                 <i class="fa-regular fa-envelope fa-lg"></i>
@@ -175,15 +175,12 @@
                             <?php } ?>
                         </div>
                     </td>
-                    <?php
-    } ?>
+                    <?php } ?>
                 </tr>
-                <?php
-} ?>
+                <?php } ?>
             </tbody>
         </table>
     </div>
-
 </div>
 <?php
 $this->load->view('admin/clients/modals/send_file_modal');

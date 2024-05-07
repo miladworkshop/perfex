@@ -42,7 +42,7 @@
                       $project_id = $estimate->project_id;
                   }
                   if ($project_id) {
-                      echo '<option value="' . $project_id . '" selected>' . get_project_name_by_id($project_id) . '</option>';
+                      echo '<option value="' . $project_id . '" selected>' . e(get_project_name_by_id($project_id)) . '</option>';
                   }
                 ?>
                         </select>
@@ -60,24 +60,24 @@
                             <span class="billing_street">
                                 <?php $billing_street = (isset($estimate) ? $estimate->billing_street : '--'); ?>
                                 <?php $billing_street = ($billing_street == '' ? '--' :$billing_street); ?>
-                                <?php echo $billing_street; ?></span><br>
+                                <?php echo process_text_content_for_display($billing_street); ?></span><br>
                             <span class="billing_city">
                                 <?php $billing_city = (isset($estimate) ? $estimate->billing_city : '--'); ?>
                                 <?php $billing_city = ($billing_city == '' ? '--' :$billing_city); ?>
-                                <?php echo $billing_city; ?></span>,
+                                <?php echo e($billing_city); ?></span>,
                             <span class="billing_state">
                                 <?php $billing_state = (isset($estimate) ? $estimate->billing_state : '--'); ?>
                                 <?php $billing_state = ($billing_state == '' ? '--' :$billing_state); ?>
-                                <?php echo $billing_state; ?></span>
+                                <?php echo e($billing_state); ?></span>
                             <br />
                             <span class="billing_country">
                                 <?php $billing_country = (isset($estimate) ? get_country_short_name($estimate->billing_country) : '--'); ?>
                                 <?php $billing_country = ($billing_country == '' ? '--' :$billing_country); ?>
-                                <?php echo $billing_country; ?></span>,
+                                <?php echo e($billing_country); ?></span>,
                             <span class="billing_zip">
                                 <?php $billing_zip = (isset($estimate) ? $estimate->billing_zip : '--'); ?>
                                 <?php $billing_zip = ($billing_zip == '' ? '--' :$billing_zip); ?>
-                                <?php echo $billing_zip; ?></span>
+                                <?php echo e($billing_zip); ?></span>
                         </address>
                     </div>
                     <div class="col-md-6">
@@ -86,24 +86,24 @@
                             <span class="shipping_street">
                                 <?php $shipping_street = (isset($estimate) ? $estimate->shipping_street : '--'); ?>
                                 <?php $shipping_street = ($shipping_street == '' ? '--' :$shipping_street); ?>
-                                <?php echo $shipping_street; ?></span><br>
+                                <?php echo process_text_content_for_display($shipping_street); ?></span><br>
                             <span class="shipping_city">
                                 <?php $shipping_city = (isset($estimate) ? $estimate->shipping_city : '--'); ?>
                                 <?php $shipping_city = ($shipping_city == '' ? '--' :$shipping_city); ?>
-                                <?php echo $shipping_city; ?></span>,
+                                <?php echo e($shipping_city); ?></span>,
                             <span class="shipping_state">
                                 <?php $shipping_state = (isset($estimate) ? $estimate->shipping_state : '--'); ?>
                                 <?php $shipping_state = ($shipping_state == '' ? '--' :$shipping_state); ?>
-                                <?php echo $shipping_state; ?></span>
+                                <?php echo e($shipping_state); ?></span>
                             <br />
                             <span class="shipping_country">
                                 <?php $shipping_country = (isset($estimate) ? get_country_short_name($estimate->shipping_country) : '--'); ?>
                                 <?php $shipping_country = ($shipping_country == '' ? '--' :$shipping_country); ?>
-                                <?php echo $shipping_country; ?></span>,
+                                <?php echo e($shipping_country); ?></span>,
                             <span class="shipping_zip">
                                 <?php $shipping_zip = (isset($estimate) ? $estimate->shipping_zip : '--'); ?>
                                 <?php $shipping_zip = ($shipping_zip == '' ? '--' :$shipping_zip); ?>
-                                <?php echo $shipping_zip; ?></span>
+                                <?php echo e($shipping_zip); ?></span>
                         </address>
                     </div>
                 </div>
@@ -165,24 +165,24 @@
                             <?php if (isset($estimate)) { ?>
                             <a href="#" onclick="return false;" data-toggle="popover"
                                 data-container='._transaction_form' data-html="true"
-                                data-content="<label class='control-label'><?php echo _l('settings_sales_estimate_prefix'); ?></label><div class='input-group'><input name='s_prefix' type='text' class='form-control' value='<?php echo $estimate->prefix; ?>'></div><button type='button' onclick='save_sales_number_settings(this); return false;' data-url='<?php echo admin_url('estimates/update_number_settings/' . $estimate->id); ?>' class='btn btn-primary btn-block mtop15'><?php echo _l('submit'); ?></button>"><i
+                                data-content="<label class='control-label'><?php echo _l('settings_sales_estimate_prefix'); ?></label><div class='input-group'><input name='s_prefix' type='text' class='form-control' value='<?php echo e($estimate->prefix); ?>'></div><button type='button' onclick='save_sales_number_settings(this); return false;' data-url='<?php echo admin_url('estimates/update_number_settings/' . $estimate->id); ?>' class='btn btn-primary btn-block mtop15'><?php echo _l('submit'); ?></button>"><i
                                     class="fa fa-cog"></i></a>
                             <?php }
                     echo $prefix;
                   ?>
                         </span>
-                        <input type="text" name="number" class="form-control" value="<?php echo $_estimate_number; ?>"
-                            data-isedit="<?php echo $isedit; ?>"
-                            data-original-number="<?php echo $data_original_number; ?>">
+                        <input type="text" name="number" class="form-control" value="<?php echo e($_estimate_number); ?>"
+                            data-isedit="<?php echo e($isedit); ?>"
+                            data-original-number="<?php echo e($data_original_number); ?>">
                         <?php if ($format == 3) { ?>
                         <span class="input-group-addon">
-                            <span id="prefix_year" class="format-n-yy"><?php echo $yy; ?></span>
+                            <span id="prefix_year" class="format-n-yy"><?php echo e($yy); ?></span>
                         </span>
                         <?php } elseif ($format == 4) { ?>
                         <span class="input-group-addon">
-                            <span id="prefix_month" class="format-mm-yyyy"><?php echo $mm; ?></span>
+                            <span id="prefix_month" class="format-mm-yyyy"><?php echo e($mm); ?></span>
                             /
-                            <span id="prefix_year" class="format-mm-yyyy"><?php echo $yyyy; ?></span>
+                            <span id="prefix_year" class="format-mm-yyyy"><?php echo e($yyyy); ?></span>
                         </span>
                         <?php } ?>
                     </div>
@@ -254,7 +254,7 @@
                                 <select class="selectpicker display-block mbot15" name="status" data-width="100%"
                                     data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                                     <?php foreach ($estimate_statuses as $status) { ?>
-                                    <option value="<?php echo $status; ?>" <?php if (isset($estimate) && $estimate->status == $status) {
+                                    <option value="<?php echo e($status); ?>" <?php if (isset($estimate) && $estimate->status == $status) {
                             echo 'selected';
                         } ?>><?php echo format_estimate_status($status, '', false); ?></option>
                                     <?php } ?>

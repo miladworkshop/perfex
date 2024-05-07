@@ -10,7 +10,7 @@
                     <div class="tw-flex tw-justify-between tw-items-center">
                         <p class="tw-font-semibold tw-mb-0">
                             <?php echo _l('ticket_merged_notice'); ?>:
-                            <?php echo $ticket->merged_ticket_id; ?>
+                            <?php echo e($ticket->merged_ticket_id); ?>
                         </p>
                         <a href="<?php echo admin_url('tickets/ticket/' . $ticket->merged_ticket_id); ?>"
                             class="btn btn-info btn-sm">
@@ -24,7 +24,7 @@
                         <div class="tw-inline-flex tw-items-center tw-grow md:tw-mr-4">
                             <h3 class="tw-font-semibold tw-text-xl tw-my-0">
                                 <span id="ticket_subject">
-                                    #<?php echo $ticket->ticketid; ?> - <?php echo $ticket->subject; ?>
+                                    #<?php echo e($ticket->ticketid); ?> - <?php echo e($ticket->subject); ?>
                                 </span>
                             </h3>
                             <?php echo '<span class="tw-self-start md:tw-self-center label' . (is_mobile() ? ' ' : ' mleft15 ') . 'single-ticket-status-label" style="color:' . $ticket->statuscolor . ';border: 1px solid ' . adjust_hex_brightness($ticket->statuscolor, 0.4) . '; background:' . adjust_hex_brightness($ticket->statuscolor, 0.04) . ';">' . ticket_status_translate($ticket->ticketstatusid) . '</span>'; ?>
@@ -89,7 +89,7 @@
                                         </li>
                                         <li role="presentation">
                                             <a href="#tasks"
-                                                onclick="init_rel_tasks_table(<?php echo $ticket->ticketid; ?>,'ticket'); return false;"
+                                                onclick="init_rel_tasks_table(<?php echo e($ticket->ticketid); ?>,'ticket'); return false;"
                                                 aria-controls="tasks" role="tab" data-toggle="tab">
                                                 <?php echo _l('tasks'); ?>
                                             </a>
@@ -139,11 +139,11 @@
                                                             class="tw-text-sm tw-font-medium tw-text-warning-800 tw-mb-0 tw-mt-1 tw-grow">
                                                             <a href="<?php echo admin_url('staff/profile/' . $note['addedfrom']); ?>"
                                                                 class="tw-text-warning-700 hover:tw-text-warning-900">
-                                                                <?php echo _l('ticket_single_ticket_note_by', get_staff_full_name($note['addedfrom'])); ?>
+                                                                <?php echo e(_l('ticket_single_ticket_note_by', get_staff_full_name($note['addedfrom']))); ?>
                                                             </a>
                                                             <br />
                                                             <span class="tw-text-xs tw-text-warning-600">
-                                                                <?php echo _l('ticket_single_note_added', _dt($note['dateadded'])); ?>
+                                                                <?php echo e(_l('ticket_single_note_added', _dt($note['dateadded']))); ?>
                                                             </span>
                                                         </h3>
 
@@ -151,7 +151,7 @@
                                                         <div class="tw-space-x-1 tw-hidden group-hover:tw-block">
                                                             <a href="#"
                                                                 class="tw-text-warning-600 hover:tw-text-warning-700 focus:tw-text-warning-700"
-                                                                onclick="toggle_edit_note(<?php echo $note['id']; ?>);return false;">
+                                                                onclick="toggle_edit_note(<?php echo e($note['id']); ?>);return false;">
                                                                 <i class="fa-regular fa-pen-to-square fa-lg"></i>
                                                             </a>
                                                             <a href="<?php echo admin_url('misc/delete_note/' . $note['id']); ?>"
@@ -163,20 +163,20 @@
                                                     </div>
 
                                                     <div class="tw-mt-2 tw-text-sm tw-text-warning-700">
-                                                        <div data-note-description="<?php echo $note['id']; ?>">
-                                                            <?php echo check_for_links($note['description']); ?>
+                                                        <div data-note-description="<?php echo e($note['id']); ?>">
+                                                            <?php echo process_text_content_for_display($note['description']); ?>
                                                         </div>
-                                                        <div data-note-edit-textarea="<?php echo $note['id']; ?>"
+                                                        <div data-note-edit-textarea="<?php echo e($note['id']); ?>"
                                                             class="hide">
                                                             <textarea name="description" class="form-control"
                                                                 rows="4"><?php echo clear_textarea_breaks($note['description']); ?></textarea>
                                                             <div class="text-right tw-mt-3">
                                                                 <button type="button" class="btn btn-default"
-                                                                    onclick="toggle_edit_note(<?php echo $note['id']; ?>);return false;">
+                                                                    onclick="toggle_edit_note(<?php echo e($note['id']); ?>);return false;">
                                                                     <?php echo _l('cancel'); ?>
                                                                 </button>
                                                                 <button type="button" class="btn btn-primary"
-                                                                    onclick="edit_note(<?php echo $note['id']; ?>);">
+                                                                    onclick="edit_note(<?php echo e($note['id']); ?>);">
                                                                     <?php echo _l('update_note'); ?>
                                                                 </button>
                                                             </div>
@@ -192,15 +192,17 @@
                                 <?php } ?>
                                 <div>
                                     <?php echo form_open_multipart($this->uri->uri_string(), ['id' => 'single-ticket-form', 'novalidate' => true]); ?>
-                                    <a href="<?php echo admin_url('tickets/delete/' . $ticket->ticketid); ?>"
-                                        data-toggle="tooltip" data-title="<?= _l('delete', _l('ticket_lowercase')); ?>"
-                                        class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700 _delete tw-mr-2">
-                                        <i class="fa-regular fa-trash-can fa-lg"></i>
-                                    </a>
+                                    <?php if (can_staff_delete_ticket()) { ?>
+                                        <a href="<?php echo admin_url('tickets/delete/' . $ticket->ticketid); ?>"
+                                            data-toggle="tooltip" data-title="<?= _l('delete', _l('ticket_lowercase')); ?>"
+                                            class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700 _delete tw-mr-2">
+                                            <i class="fa-regular fa-trash-can fa-lg"></i>
+                                        </a>
+                                    <?php } ?>
 
                                     <?php if (!empty($ticket->priority_name)) { ?>
                                     <span class="ticket-label label label-default inline-block">
-                                        <?php echo _l('ticket_single_priority', ticket_priority_translate($ticket->priorityid)); ?>
+                                        <?php echo e(_l('ticket_single_priority', ticket_priority_translate($ticket->priorityid))); ?>
                                     </span>
                                     <?php } ?>
                                     <?php if (!empty($ticket->service_name)) { ?>
@@ -215,14 +217,14 @@
                                     <?php if ($ticket->assigned != 0) { ?>
                                     <span class="ticket-label label label-info inline-block">
                                         <?php echo _l('ticket_assigned'); ?>:
-                                        <?php echo get_staff_full_name($ticket->assigned); ?>
+                                        <?php echo e(get_staff_full_name($ticket->assigned)); ?>
                                     </span>
                                     <?php } ?>
                                     <?php if ($ticket->lastreply !== null) { ?>
                                     <span class="ticket-label label label-success inline-block" data-toggle="tooltip"
-                                        title="<?php echo _dt($ticket->lastreply); ?>">
+                                        title="<?php echo e(_dt($ticket->lastreply)); ?>">
                                         <span class="text-has-action">
-                                            <?php echo _l('ticket_single_last_reply', time_ago($ticket->lastreply)); ?>
+                                            <?php echo e(_l('ticket_single_last_reply', time_ago($ticket->lastreply))); ?>
                                         </span>
                                     </span>
                                     <?php } ?>
@@ -242,8 +244,8 @@
                                                     data-live-search="true" class="selectpicker"
                                                     data-title="<?php echo _l('ticket_single_insert_predefined_reply'); ?>">
                                                     <?php foreach ($predefined_replies as $predefined_reply) { ?>
-                                                    <option value="<?php echo $predefined_reply['id']; ?>">
-                                                        <?php echo $predefined_reply['name']; ?></option>
+                                                    <option value="<?php echo e($predefined_reply['id']); ?>">
+                                                        <?php echo e($predefined_reply['name']); ?></option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
@@ -260,10 +262,10 @@
                                                     <option value=""></option>
                                                     <?php foreach ($groups as $group) { ?>
                                                     <?php if (count($group['articles']) > 0) { ?>
-                                                    <optgroup label="<?php echo $group['name']; ?>">
+                                                    <optgroup label="<?php echo e($group['name']); ?>">
                                                         <?php foreach ($group['articles'] as $article) { ?>
-                                                        <option value="<?php echo $article['articleid']; ?>">
-                                                            <?php echo $article['subject']; ?>
+                                                        <option value="<?php echo e($article['articleid']); ?>">
+                                                            <?php echo e($article['subject']); ?>
                                                         </option>
                                                         <?php } ?>
                                                     </optgroup>
@@ -277,7 +279,7 @@
                                         <div
                                             class="alert alert-warning staff_replying_notice <?php echo ($ticket->staff_id_replying === null || $ticket->staff_id_replying === get_staff_user_id()) ? 'hide' : '' ?>">
                                             <?php if ($ticket->staff_id_replying !== null && $ticket->staff_id_replying !== get_staff_user_id()) { ?>
-                                            <p><?php echo _l('staff_is_currently_replying', get_staff_full_name($ticket->staff_id_replying)); ?>
+                                            <p><?php echo e(_l('staff_is_currently_replying', get_staff_full_name($ticket->staff_id_replying))); ?>
                                             </p>
                                             <?php } ?>
                                         </div>
@@ -379,7 +381,7 @@
                             </div>
                             <div role="tabpanel" class="tab-pane" id="tab_reminders">
                                 <a href="#" class="btn btn-default" data-toggle="modal"
-                                    data-target=".reminder-modal-ticket-<?php echo $ticket->ticketid; ?>"><i
+                                    data-target=".reminder-modal-ticket-<?php echo e($ticket->ticketid); ?>"><i
                                         class="fa-regular fa-bell"></i>
                                     <?php echo _l('ticket_set_reminder_title'); ?></a>
                                 <hr />
@@ -429,12 +431,12 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <?php
-                              if ($ticket->userid != 0) {
-                                  echo render_input('email', 'ticket_settings_email', $ticket->email, 'email', ['disabled' => true]);
-                              } else {
-                                  echo render_input('email', 'ticket_settings_email', $ticket->ticket_email, 'email', ['disabled' => true]);
-                              }
-                             ?>
+                                                    if ($ticket->userid != 0) {
+                                                        echo render_input('email', 'ticket_settings_email', $ticket->email, 'email', ['disabled' => true]);
+                                                    } else {
+                                                        echo render_input('email', 'ticket_settings_email', $ticket->ticket_email, 'email', ['disabled' => true]);
+                                                    }
+                                                ?>
                                             </div>
                                         </div>
                                         <?php echo render_select('department', $departments, ['departmentid', 'name'], 'ticket_settings_departments', $ticket->department); ?>
@@ -458,10 +460,10 @@
                                  if ($member['active'] == 0 && $ticket->assigned != $member['staffid']) {
                                      continue;
                                  } ?>
-                                                <option value="<?php echo $member['staffid']; ?>" <?php if ($ticket->assigned == $member['staffid']) {
+                                                <option value="<?php echo e($member['staffid']); ?>" <?php if ($ticket->assigned == $member['staffid']) {
                                      echo 'selected';
                                  } ?>>
-                                                    <?php echo $member['firstname'] . ' ' . $member['lastname'] ; ?>
+                                                    <?php echo e($member['firstname'] . ' ' . $member['lastname']) ; ?>
                                                 </option>
                                                 <?php
                              } ?>
@@ -497,8 +499,8 @@
                                                     data-live-search="true" data-width="100%"
                                                     data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                                                     <?php if ($ticket->project_id) { ?>
-                                                    <option value="<?php echo $ticket->project_id; ?>">
-                                                        <?php echo get_project_name_by_id($ticket->project_id); ?>
+                                                    <option value="<?php echo e($ticket->project_id); ?>">
+                                                        <?php echo e(get_project_name_by_id($ticket->project_id)); ?>
                                                     </option>
                                                     <?php } ?>
                                                 </select>
@@ -547,17 +549,17 @@
                                     <?php if ($ticket->admin == null || $ticket->admin == 0) { ?>
                                     <?php if ($ticket->userid != 0) { ?>
                                     <a
-                                        href="<?php echo admin_url('clients/client/' . $ticket->userid . '?contactid=' . $ticket->contactid); ?>"><?php echo $ticket->submitter; ?>
+                                        href="<?php echo admin_url('clients/client/' . $ticket->userid . '?contactid=' . $ticket->contactid); ?>"><?php echo e($ticket->submitter); ?>
                                     </a>
                                     <?php } else {
-                                  echo $ticket->submitter; ?>
+                                  echo e($ticket->submitter); ?>
                                     <br />
                                     <a
-                                        href="mailto:<?php echo $ticket->ticket_email; ?>"><?php echo $ticket->ticket_email; ?></a>
+                                        href="mailto:<?php echo e($ticket->ticket_email); ?>"><?php echo e($ticket->ticket_email); ?></a>
                                     <hr />
                                     <?php
                         if (total_rows(db_prefix() . 'spam_filters', ['type' => 'sender', 'value' => $ticket->ticket_email, 'rel_type' => 'tickets']) == 0) { ?>
-                                    <button type="button" data-sender="<?php echo $ticket->ticket_email; ?>"
+                                    <button type="button" data-sender="<?php echo e($ticket->ticket_email); ?>"
                                         class="btn btn-danger block-sender btn-sm"> <?php echo _l('block_sender'); ?>
                                     </button>
                                     <?php
@@ -567,7 +569,9 @@
                               }
               } else {  ?>
                                     <a
-                                        href="<?php echo admin_url('profile/' . $ticket->admin); ?>"><?php echo $ticket->opened_by; ?></a>
+                                        href="<?php echo admin_url('profile/' . $ticket->admin); ?>">
+                                        <?php echo e($ticket->opened_by); ?>
+                                    </a>
                                     <?php } ?>
                                 </p>
                                 <p class="text-muted">
@@ -582,7 +586,7 @@
                                 </p>
                                 <?php if (staff_can('create',  'tasks')) { ?>
                                 <a href="#" class="btn btn-default btn-sm"
-                                    onclick="convert_ticket_to_task(<?php echo $ticket->ticketid; ?>,'ticket'); return false;"><?php echo _l('convert_to_task'); ?></a>
+                                    onclick="convert_ticket_to_task(<?php echo e($ticket->ticketid); ?>,'ticket'); return false;"><?php echo _l('convert_to_task'); ?></a>
                                 <?php } ?>
                             </div>
                             <div class="col-md-9">
@@ -591,17 +595,25 @@
                                         <?php if (!empty($ticket->message)) { ?>
                                         <a href="#"
                                             class="tw-text-neutral-500 hover:tw-text-neutral-700 active:tw-text-neutral-600"
-                                            onclick="print_ticket_message(<?php echo $ticket->ticketid; ?>, 'ticket'); return false;"
+                                            onclick="print_ticket_message(<?php echo e($ticket->ticketid); ?>, 'ticket'); return false;"
                                             class="mright5"><i class="fa fa-print"></i></a>
                                         <?php } ?>
-                                        <a href="#"
-                                            class="tw-text-neutral-500 hover:tw-text-neutral-700 active:tw-text-neutral-600"
-                                            onclick="edit_ticket_message(<?php echo $ticket->ticketid; ?>,'ticket'); return false;"><i
-                                                class="fa-regular fa-pen-to-square"></i></a>
+                                        <?php if (can_staff_edit_ticket_message()) { ?>
+                                            <a href="#"
+                                               class="tw-text-neutral-500 hover:tw-text-neutral-700 active:tw-text-neutral-600"
+                                               onclick="edit_ticket_message(<?php echo e($ticket->ticketid); ?>,'ticket'); return false;"><i
+                                                        class="fa-regular fa-pen-to-square"></i></a>
+                                        <?php } ?>
                                     </div>
                                 </div>
-                                <div data-ticket-id="<?php echo $ticket->ticketid; ?>" class="tc-content">
-                                    <?php echo check_for_links($ticket->message); ?>
+                                <div data-ticket-id="<?php echo e($ticket->ticketid); ?>" class="tc-content">
+                                <?php
+                                    if(empty($ticket->admin)) {
+                                        echo process_text_content_for_display($ticket->message);
+                                    } else {
+                                        echo check_for_links($ticket->message);
+                                    }
+                                ?>
                                 </div>
                                 <?php if (count($ticket->attachments) > 0) {
                echo '<hr />';
@@ -614,9 +626,9 @@
                    } ?>
                                 <a href="<?php echo site_url('download/file/ticket/' . $attachment['id']); ?>"
                                     class="display-block mbot5" <?php if ($is_image) { ?>
-                                    data-lightbox="attachment-ticket-<?php echo $ticket->ticketid; ?>" <?php } ?>>
+                                    data-lightbox="attachment-ticket-<?php echo e($ticket->ticketid); ?>" <?php } ?>>
                                     <i class="<?php echo get_mime_class($attachment['filetype']); ?>"></i>
-                                    <?php echo $attachment['file_name']; ?>
+                                    <?php echo e($attachment['file_name']); ?>
                                     <?php if ($is_image) { ?>
                                     <img class="mtop5"
                                         src="<?php echo site_url('download/preview_image?path=' . protected_file_url_by_path($path) . '&type=' . $attachment['filetype']); ?>">
@@ -636,7 +648,7 @@
                         </div>
                     </div>
                     <div class="panel-footer">
-                        <?php echo _l('ticket_posted', _dt($ticket->date)); ?>
+                        <?php echo e(_l('ticket_posted', _dt($ticket->date))); ?>
                     </div>
                 </div>
                 <?php foreach ($ticket_replies as $reply) { ?>
@@ -650,35 +662,45 @@
                                     <?php if ($reply['admin'] == null || $reply['admin'] == 0) { ?>
                                     <?php if ($reply['userid'] != 0) { ?>
                                     <a
-                                        href="<?php echo admin_url('clients/client/' . $reply['userid'] . '?contactid=' . $reply['contactid']); ?>"><?php echo $reply['submitter']; ?></a>
+                                        href="<?php echo admin_url('clients/client/' . $reply['userid'] . '?contactid=' . $reply['contactid']); ?>"><?php echo e($reply['submitter']); ?></a>
                                     <?php } else { ?>
-                                    <?php echo $reply['submitter']; ?>
+                                    <?php echo e($reply['submitter']); ?>
                                     <br />
                                     <a
-                                        href="mailto:<?php echo $reply['reply_email']; ?>"><?php echo $reply['reply_email']; ?></a>
+                                        href="mailto:<?php echo e($reply['reply_email']); ?>">
+                                        <?php echo e($reply['reply_email']); ?>
+                                    </a>
                                     <?php } ?>
                                     <?php } else { ?>
                                     <a
-                                        href="<?php echo admin_url('profile/' . $reply['admin']); ?>"><?php echo $reply['submitter']; ?></a>
+                                        href="<?php echo admin_url('profile/' . $reply['admin']); ?>">
+                                        <?php echo e($reply['submitter']); ?>
+                                    </a>
                                     <?php } ?>
                                 </p>
                                 <p class="text-muted">
-                                    <?php if ($reply['admin'] !== null || $reply['admin'] != 0) {
-               echo _l('ticket_staff_string');
-           } else {
-               if ($reply['userid'] != 0) {
-                   echo _l('ticket_client_string');
-               }
-           }
-                 ?>
+                                    <?php
+                                        if ($reply['admin'] !== null || $reply['admin'] != 0) {
+                                            echo _l('ticket_staff_string');
+                                        } else {
+                                            if ($reply['userid'] != 0) {
+                                                echo _l('ticket_client_string');
+                                            }
+                                        }
+                                    ?>
                                 </p>
                                 <hr />
-                                <a href="<?php echo admin_url('tickets/delete_ticket_reply/' . $ticket->ticketid . '/' . $reply['id']); ?>"
-                                    class="btn btn-danger pull-left _delete mright5 btn-sm"><?php echo _l('delete_ticket_reply'); ?></a>
+                                <?php if (can_staff_delete_ticket_reply()) { ?>
+                                    <a href="<?php echo admin_url('tickets/delete_ticket_reply/' . $ticket->ticketid . '/' . $reply['id']); ?>"
+                                        class="btn btn-danger pull-left _delete mright5 btn-sm">
+                                        <?php echo _l('delete_ticket_reply'); ?>
+                                    </a>
+                                <?php } ?>
                                 <div class="clearfix"></div>
                                 <?php if (staff_can('create',  'tasks')) { ?>
                                 <a href="#" class="pull-left btn btn-default mtop5 btn-sm"
-                                    onclick="convert_ticket_to_task(<?php echo $reply['id']; ?>,'reply'); return false;"><?php echo _l('convert_to_task'); ?>
+                                    onclick="convert_ticket_to_task(<?php echo e($reply['id']); ?>,'reply'); return false;">
+                                    <?php echo _l('convert_to_task'); ?>
                                 </a>
                                 <div class="clearfix"></div>
                                 <?php } ?>
@@ -689,18 +711,24 @@
                                         <?php if (!empty($reply['message'])) { ?>
                                         <a href="#"
                                             class="tw-text-neutral-500 hover:tw-text-neutral-700 active:tw-text-neutral-600"
-                                            onclick="print_ticket_message(<?php echo $reply['id']; ?>, 'reply'); return false;"
+                                            onclick="print_ticket_message(<?php echo e($reply['id']); ?>, 'reply'); return false;"
                                             class="mright5"><i class="fa fa-print"></i></a>
                                         <?php } ?>
                                         <a href="#"
                                             class="tw-text-neutral-500 hover:tw-text-neutral-700 active:tw-text-neutral-600"
-                                            onclick="edit_ticket_message(<?php echo $reply['id']; ?>,'reply'); return false;"><i
+                                            onclick="edit_ticket_message(<?php echo e($reply['id']); ?>,'reply'); return false;"><i
                                                 class="fa-regular fa-pen-to-square"></i></a>
                                     </div>
                                 </div>
                                 <div class="clearfix"></div>
-                                <div data-reply-id="<?php echo $reply['id']; ?>" class="tc-content">
-                                    <?php echo check_for_links($reply['message']); ?>
+                                <div data-reply-id="<?php echo e($reply['id']); ?>" class="tc-content">
+                                <?php
+                                    if(empty($reply['admin'])) {
+                                        echo process_text_content_for_display($reply['message']);
+                                    } else {
+                                        echo check_for_links($reply['message']);
+                                    }
+                                ?>
                                 </div>
                                 <?php if (count($reply['attachments']) > 0) {
                      echo '<hr />';
@@ -713,9 +741,9 @@
                          } ?>
                                 <a href="<?php echo site_url('download/file/ticket/' . $attachment['id']); ?>"
                                     class="display-block mbot5" <?php if ($is_image) { ?>
-                                    data-lightbox="attachment-reply-<?php echo $reply['id']; ?>" <?php } ?>>
+                                    data-lightbox="attachment-reply-<?php echo e($reply['id']); ?>" <?php } ?>>
                                     <i class="<?php echo get_mime_class($attachment['filetype']); ?>"></i>
-                                    <?php echo $attachment['file_name']; ?>
+                                    <?php echo e($attachment['file_name']); ?>
                                     <?php if ($is_image) { ?>
                                     <img class="mtop5"
                                         src="<?php echo site_url('download/preview_image?path=' . protected_file_url_by_path($path) . '&type=' . $attachment['filetype']); ?>">
@@ -725,16 +753,16 @@
                              echo '</div>';
                          }
                          if (is_admin() || (!is_admin() && get_option('allow_non_admin_staff_to_delete_ticket_attachments') == '1')) {
-                             echo '<a href="' . admin_url('tickets/delete_attachment/' . $attachment['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
-                         }
-                         echo '<hr />';
-                     }
-                 } ?>
+                            echo '<a href="' . admin_url('tickets/delete_attachment/' . $attachment['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+                        }
+                        echo '<hr />';
+                    }
+                } ?>
                             </div>
                         </div>
                     </div>
                     <div class="panel-footer">
-                        <span><?php echo _l('ticket_posted', _dt($reply['date'])); ?></span>
+                        <span><?php echo e(_l('ticket_posted', _dt($reply['date']))); ?></span>
                     </div>
                 </div>
                 <?php } ?>
@@ -756,8 +784,10 @@
    'members'        => $staff,
    'reminder_title' => _l('ticket_set_reminder_title'), ]
                  ); ?>
+
+<?php if (can_staff_edit_ticket_message()) {?>
 <!-- Edit Ticket Messsage Modal -->
-<div class="modal fade" id="ticket-message" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade" id="ticket-message" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" role="document">
         <?php echo form_open(admin_url('tickets/edit_message')); ?>
         <div class="modal-content">
@@ -778,6 +808,7 @@
         <?php echo form_close(); ?>
     </div>
 </div>
+<?php } ?>
 <script>
 var _ticket_message;
 </script>
@@ -817,7 +848,7 @@ $(function() {
         editorMessage.on('change', function() {
             if (!firstTypeCheckPerformed) {
                 // make AJAX Request
-                $.get(admin_url + 'tickets/check_staff_replying/<?php echo $ticket->ticketid; ?>',
+                $.get(admin_url + 'tickets/check_staff_replying/<?php echo e($ticket->ticketid); ?>',
                     function(result) {
                         var data = JSON.parse(result)
                         if (data.is_other_staff_replying === true || data
@@ -833,18 +864,18 @@ $(function() {
             }
 
             $.post(admin_url +
-                'tickets/update_staff_replying/<?php echo $ticket->ticketid; ?>/<?php echo get_staff_user_id()?>'
+                'tickets/update_staff_replying/<?php echo e($ticket->ticketid); ?>/<?php echo get_staff_user_id()?>'
             );
         });
 
         $(document).on('pagehide, beforeunload', function() {
-            $.post(admin_url + 'tickets/update_staff_replying/<?php echo $ticket->ticketid; ?>');
+            $.post(admin_url + 'tickets/update_staff_replying/<?php echo e($ticket->ticketid); ?>');
         })
 
         $(document).on('visibilitychange', function() {
             if (document.visibilityState === 'visible' || (editorMessage.getContent().trim() != ''))
                 return;
-            $.post(admin_url + 'tickets/update_staff_replying/<?php echo $ticket->ticketid; ?>');
+            $.post(admin_url + 'tickets/update_staff_replying/<?php echo e($ticket->ticketid); ?>');
         })
     }
 });
@@ -858,8 +889,10 @@ function edit_ticket_message(id, type) {
     // type is either ticket or reply
     _ticket_message = $('[data-' + type + '-id="' + id + '"]').html();
     init_ticket_edit_editor();
-    tinyMCE.activeEditor.setContent(_ticket_message);
     $('#ticket-message').modal('show');
+    setTimeout(function(){
+        tinyMCE.activeEditor.setContent(_ticket_message);
+    }, 1000)
     edit_ticket_message_additional.append(hidden_input('type', type));
     edit_ticket_message_additional.append(hidden_input('id', id));
     edit_ticket_message_additional.append(hidden_input('main_ticket', $('input[name="ticketid"]').val()));
@@ -880,7 +913,7 @@ function convert_ticket_to_task(id, type) {
         _ticket_message = $('[data-reply-id="' + id + '"]').html();
     }
     var new_task_url = admin_url +
-        'tasks/task?rel_id=<?php echo $ticket->ticketid; ?>&rel_type=ticket&ticket_to_task=true';
+        'tasks/task?rel_id=<?php echo e($ticket->ticketid); ?>&rel_type=ticket&ticket_to_task=true';
     new_task(new_task_url);
 }
 <?php } ?>

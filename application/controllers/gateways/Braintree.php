@@ -92,11 +92,11 @@ class Braintree extends App_Controller
                     <div class="panel-heading">
                         <div class="panel-title">
                             <?php echo _l('payment_for_invoice'); ?> -
-                            <?php echo _l('payment_total', app_format_money($data['total'], $data['invoice']->currency_name)); ?>
+                            <?php echo e(_l('payment_total', app_format_money($data['total'], $data['invoice']->currency_name))); ?>
                         </div>
                         <a
                             href="<?php echo site_url('invoice/' . $data['invoice']->id . '/' . $data['invoice']->hash); ?>">
-                            <?php echo format_invoice_number($data['invoice']->id); ?>
+                            <?php echo e(format_invoice_number($data['invoice']->id)); ?>
                         </a>
                     </div>
                     <div class="panel-body">
@@ -105,13 +105,13 @@ class Braintree extends App_Controller
                                 <div class="form-group">
                                     <label for="email"><?php echo _l('payment_billing_email'); ?></label>
                                     <input type="email" class="form-control" id="email"
-                                        value="<?php echo isset($data['contact']) ? $data['contact']->email : ''; ?>">
+                                        value="<?php echo isset($data['contact']) ? e($data['contact']->email) : ''; ?>">
                                     <span id="help-email" class="help-block"></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="billing-phone"><?php echo _l('client_phonenumber'); ?></label>
                                     <input type="billing-phone" class="form-control" id="billing-phone"
-                                        value="<?php echo isset($data['phone']) ? $data['phone'] : ''; ?>">
+                                        value="<?php echo isset($data['phone']) ? e($data['phone']) : ''; ?>">
                                     <span id="help-billing-phone" class="help-block"></span>
                                 </div>
                                 <div class="row">
@@ -121,7 +121,7 @@ class Braintree extends App_Controller
                                                 for="billing-given-name"><?php echo _l('client_firstname'); ?></label>
                                             <input type="billing-given-name" class="form-control"
                                                 id="billing-given-name"
-                                                value="<?php echo isset($data['contact']) ? $data['contact']->firstname : ''; ?>">
+                                                value="<?php echo isset($data['contact']) ? e($data['contact']->firstname) : ''; ?>">
                                             <span id="help-billing-given-name" class="help-block"></span>
                                         </div>
                                     </div>
@@ -129,7 +129,7 @@ class Braintree extends App_Controller
                                         <div class="form-group">
                                             <label for="billing-surname"><?php echo _l('client_lastname'); ?></label>
                                             <input type="billing-surname" class="form-control" id="billing-surname"
-                                                value="<?php echo isset($data['contact']) ? $data['contact']->lastname : ''; ?>">
+                                                value="<?php echo isset($data['contact']) ? e($data['contact']->lastname) : ''; ?>">
                                             <span id="help-billing-surname" class="help-block"></span>
                                         </div>
                                     </div>
@@ -141,7 +141,7 @@ class Braintree extends App_Controller
                                                 for="billing-street-address"><?php echo _l('billing_address'); ?></label>
                                             <input type="billing-street-address" class="form-control"
                                                 id="billing-street-address"
-                                                value="<?php echo $data['invoice']->billing_street; ?>">
+                                                value="<?php echo e($data['invoice']->billing_street); ?>">
                                             <span id="help-billing-street-address" class="help-block"></span>
                                         </div>
                                     </div>
@@ -149,7 +149,7 @@ class Braintree extends App_Controller
                                         <div class="form-group">
                                             <label for="billing-locality"><?php echo _l('billing_city'); ?></label>
                                             <input type="billing-locality" class="form-control" id="billing-locality"
-                                                value="<?php echo $data['invoice']->billing_city; ?>">
+                                                value="<?php echo e($data['invoice']->billing_city); ?>">
                                             <span id="help-billing-locality" class="help-block"></span>
                                         </div>
                                     </div>
@@ -167,7 +167,7 @@ class Braintree extends App_Controller
                                             <label for="billing-postal-code"><?php echo _l('billing_zip'); ?></label>
                                             <input type="billing-postal-code" class="form-control"
                                                 id="billing-postal-code"
-                                                value="<?php echo $data['invoice']->billing_zip; ?>">
+                                                value="<?php echo e($data['invoice']->billing_zip); ?>">
                                             <span id="help-billing-postal-code" class="help-block"></span>
                                         </div>
                                     </div>

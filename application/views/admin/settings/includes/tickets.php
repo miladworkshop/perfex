@@ -39,6 +39,10 @@
         <hr />
         <?php render_yes_no_option('allow_non_admin_staff_to_delete_ticket_attachments', 'allow_non_admin_staff_to_delete_ticket_attachments'); ?>
         <hr />
+        <?php render_yes_no_option('allow_non_admin_members_to_delete_tickets_and_replies', 'allow_non_admin_members_to_delete_tickets_and_replies'); ?>
+        <hr />
+        <?php render_yes_no_option('allow_non_admin_members_to_edit_ticket_messages', 'allow_non_admin_members_to_edit_ticket_messages'); ?>
+        <hr />
         <?php render_yes_no_option('allow_customer_to_change_ticket_status', 'allow_customer_to_change_ticket_status'); ?>
         <hr />
         <?php render_yes_no_option('only_show_contact_tickets', 'only_show_contact_tickets'); ?>

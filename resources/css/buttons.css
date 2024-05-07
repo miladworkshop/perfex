@@ -1,4 +1,8 @@
 @layer components {
+  .btn-group {
+    @apply focus-within:tw-z-10;
+  }
+
   .btn,
   .btn-group > .btn {
     @apply tw-rounded-md tw-text-[13.45px] tw-leading-[20px] tw-font-medium;

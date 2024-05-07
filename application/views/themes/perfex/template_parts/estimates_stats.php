@@ -24,7 +24,7 @@ if (get_option('exclude_estimate_from_client_area_with_draft_status') == 0) {
 ?>
 <div class="row text-left estimates-stats">
     <?php if (get_option('exclude_estimate_from_client_area_with_draft_status') == 0) { ?>
-    <div class="<?php echo $col_class; ?> estimates-stats-draft">
+    <div class="<?php echo e($col_class); ?> estimates-stats-draft">
         <div class="row">
             <div class="col-md-8 stats-status">
                 <a href="<?php echo site_url('clients/estimates/1'); ?>"
@@ -33,20 +33,20 @@ if (get_option('exclude_estimate_from_client_area_with_draft_status') == 0) {
                 </a>
             </div>
             <div class="col-md-4 text-right bold stats-numbers">
-                <?php echo $total_draft; ?> / <?php echo $total_estimates; ?>
+                <?php echo e($total_draft); ?> / <?php echo e($total_estimates); ?>
             </div>
             <div class="col-md-12 tw-mt-1.5">
                 <div class="progress">
                     <div class="progress-bar progress-bar-<?php echo estimate_status_color_class(1); ?>"
                         role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 0%"
-                        data-percent="<?php echo $percent_draft; ?>">
+                        data-percent="<?php echo e($percent_draft); ?>">
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <?php } ?>
-    <div class="<?php echo $col_class; ?> estimates-stats-sent">
+    <div class="<?php echo e($col_class); ?> estimates-stats-sent">
         <div class="row">
             <div class="col-md-8 stats-status">
                 <a href="<?php echo site_url('clients/estimates/2'); ?>"
@@ -55,19 +55,19 @@ if (get_option('exclude_estimate_from_client_area_with_draft_status') == 0) {
                 </a>
             </div>
             <div class="col-md-4 text-right bold stats-numbers">
-                <?php echo $total_sent; ?> / <?php echo $total_estimates; ?>
+                <?php echo e($total_sent); ?> / <?php echo e($total_estimates); ?>
             </div>
             <div class="col-md-12 tw-mt-1.5">
                 <div class="progress">
                     <div class="progress-bar progress-bar-<?php echo estimate_status_color_class(2); ?>"
                         role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 0%"
-                        data-percent="<?php echo $percent_sent; ?>">
+                        data-percent="<?php echo e($percent_sent); ?>">
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="<?php echo $col_class; ?> estimates-stats-expired">
+    <div class="<?php echo e($col_class); ?> estimates-stats-expired">
         <div class="row">
             <div class="col-md-8 stats-status">
                 <a href="<?php echo site_url('clients/estimates/5'); ?>"
@@ -76,19 +76,19 @@ if (get_option('exclude_estimate_from_client_area_with_draft_status') == 0) {
                 </a>
             </div>
             <div class="col-md-4 text-right bold stats-numbers">
-                <?php echo $total_expired; ?> / <?php echo $total_estimates; ?>
+                <?php echo e($total_expired); ?> / <?php echo e($total_estimates); ?>
             </div>
             <div class="col-md-12 tw-mt-1.5">
                 <div class="progress">
                     <div class="progress-bar progress-bar-<?php echo estimate_status_color_class(5); ?>"
                         role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 0%"
-                        data-percent="<?php echo $percent_expired; ?>">
+                        data-percent="<?php echo e($percent_expired); ?>">
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="<?php echo $col_class; ?> estimates-stats-declined">
+    <div class="<?php echo e($col_class); ?> estimates-stats-declined">
         <div class="row">
             <div class="col-md-8 stats-status">
                 <a href="<?php echo site_url('clients/estimates/3'); ?>"
@@ -97,19 +97,19 @@ if (get_option('exclude_estimate_from_client_area_with_draft_status') == 0) {
                 </a>
             </div>
             <div class="col-md-4 text-right bold stats-numbers">
-                <?php echo $total_declined; ?> / <?php echo $total_estimates; ?>
+                <?php echo e($total_declined); ?> / <?php echo e($total_estimates); ?>
             </div>
             <div class="col-md-12 tw-mt-1.5">
                 <div class="progress">
                     <div class="progress-bar progress-bar-<?php echo estimate_status_color_class(3); ?>"
                         role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 0%"
-                        data-percent="<?php echo $percent_declined; ?>">
+                        data-percent="<?php echo e($percent_declined); ?>">
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="<?php echo $col_class; ?> estimates-stats-accepted">
+    <div class="<?php echo e($col_class); ?> estimates-stats-accepted">
         <div class="row">
             <div class="col-md-8 stats-status">
                 <a href="<?php echo site_url('clients/estimates/4'); ?>"
@@ -118,13 +118,13 @@ if (get_option('exclude_estimate_from_client_area_with_draft_status') == 0) {
                 </a>
             </div>
             <div class="col-md-4 text-right bold stats-numbers">
-                <?php echo $total_accepted; ?> / <?php echo $total_estimates; ?>
+                <?php echo e($total_accepted); ?> / <?php echo e($total_estimates); ?>
             </div>
             <div class="col-md-12 tw-mt-1.5">
                 <div class="progress">
                     <div class="progress-bar progress-bar-<?php echo estimate_status_color_class(4); ?>"
                         role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 0%"
-                        data-percent="<?php echo $percent_accepted; ?>">
+                        data-percent="<?php echo e($percent_accepted); ?>">
                     </div>
                 </div>
             </div>

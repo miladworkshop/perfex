@@ -710,8 +710,10 @@ function load_client_language($customer_id = '')
         if ((is_client_logged_in() || $customer_id != '') && !is_language_disabled()) {
             $client_language = get_client_default_language($customer_id);
 
-            if (!empty($client_language)
-                && file_exists(APPPATH . 'language/' . $client_language)) {
+            if (
+                !empty($client_language)
+                && file_exists(APPPATH . 'language/' . $client_language)
+            ) {
                 $language = $client_language;
             }
         }
@@ -848,10 +850,10 @@ function login_as_client($id)
 
     if (!$primary) {
         set_alert('danger', _l('no_primary_contact'));
-        redirect($_SERVER['HTTP_REFERER']);
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     } elseif ($primary->active == '0') {
         set_alert('danger', 'Customer primary contact is not active, please set the primary contact as active in order to login as client');
-        redirect($_SERVER['HTTP_REFERER']);
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     $CI->load->model('announcements_model');
@@ -1223,13 +1225,21 @@ function set_contact_language($lang, $duration = 60 * 60 * 24 * 31 * 3)
 
 /**
  * @since  2.7.0
+ * 
  * get logged in contact language
+ * 
  * @return string
  */
 function get_contact_language()
 {
     if (!is_null(get_cookie('contact_language'))) {
-        return get_cookie('contact_language');
+        $language = get_cookie('contact_language');
+
+        $availableLanguages = get_instance()->app->get_available_languages();
+
+        if (in_array($language, $availableLanguages)) {
+            return $language;
+        }
     }
 
     return '';
@@ -1247,4 +1257,39 @@ function get_contact_language()
 function is_automatic_calling_codes_enabled()
 {
     return hooks()->apply_filters('automatic_calling_codes_enabled', true);
+}
+
+/**
+ * @since 3.1.2
+ * 
+ * Get the required fields for registration.
+ * 
+ * @return array 
+ */
+function get_required_fields_for_registration()
+{
+    $option = get_option('required_register_fields');
+
+    $required = $option ? json_decode($option) : [];
+
+    return [
+        'contact' => [
+            'contact_firstname' => ['label' => _l('clients_firstname'), 'is_required' => true, 'disabled' => true],
+            'contact_lastname' => ['label' => _l('clients_lastname'), 'is_required' => true, 'disabled' => true],
+            'contact_email' => ['label' => _l('clients_email'), 'is_required' => true, 'disabled' => true],
+            'contact_contact_phonenumber' => ['label' => _l('clients_phone'), 'is_required' => in_array('contact_contact_phonenumber', $required), 'disabled' => false],
+            'contact_website' => ['label' => _l('client_website'), 'is_required' => in_array('contact_website', $required), 'disabled' => false],
+            'contact_title' => ['label' => _l('contact_position'), 'is_required' => in_array('contact_title', $required), 'disabled' => false],
+        ],
+        'company' => [
+            'company_company' => ['label' => _l('clients_company'), 'is_required' => (bool) get_option('company_is_required'), 'disabled' => true],
+            'company_vat' => ['label' => _l('clients_vat'), 'is_required' => in_array('company_vat', $required), 'disabled' => false],
+            'company_phonenumber' => ['label' => _l('clients_phone'), 'is_required' => in_array('company_phonenumber', $required), 'disabled' => false],
+            'company_country' => ['label' => _l('clients_country'), 'is_required' => in_array('company_country', $required), 'disabled' => false],
+            'company_city' => ['label' => _l('clients_city'), 'is_required' => in_array('company_city', $required), 'disabled' => false],
+            'company_address' => ['label' => _l('clients_address'), 'is_required' => in_array('company_address', $required), 'disabled' => false],
+            'company_zip' => ['label' => _l('clients_zip'), 'is_required' => in_array('company_zip', $required), 'disabled' => false],
+            'company_state' => ['label' => _l('clients_state'), 'is_required' => in_array('company_state', $required), 'disabled' => false],
+        ],
+    ];
 }

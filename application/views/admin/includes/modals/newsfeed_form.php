@@ -11,7 +11,7 @@
                 <?php echo form_open_multipart('admin/newsfeed/add_post', ['class' => 'dropzone', 'id' => 'new-post-form']); ?>
                 <a href="<?php echo admin_url('profile'); ?>">
                     <?php echo staff_profile_image($current_user->staffid, ['staff-profile-image-small']); ?>
-                    <?php echo $current_user->firstname . ' ' . $current_user->lastname ; ?></a>
+                    <?php echo e($current_user->firstname . ' ' . $current_user->lastname); ?></a>
                 <textarea name="content" id="post" rows="5" class="form-control"
                     placeholder="<?php echo _l('whats_on_your_mind'); ?>"></textarea>
                 <hr />
@@ -22,7 +22,7 @@
                     data-none-selected-text="<?php echo _l('newsfeed_all_departments'); ?>">
 
                     <?php foreach ($departments as $department) { ?>
-                    <option value="<?php echo $department['departmentid']; ?>"><?php echo $department['name']; ?>
+                    <option value="<?php echo e($department['departmentid']); ?>"><?php echo e($department['name']); ?>
                     </option>
                     <?php } ?>
                 </select>

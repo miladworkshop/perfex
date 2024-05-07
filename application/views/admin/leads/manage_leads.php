@@ -74,9 +74,9 @@
                                           }
                                        ?>
                                 </span>
-                                <span style="color:<?php echo $status['color']; ?>"
+                                <span style="color:<?php echo e($status['color']); ?>"
                                     class="<?php echo isset($status['junk']) || isset($status['lost']) ? 'text-danger' : ''; ?>">
-                                    <?php echo $status['name']; ?>
+                                    <?php echo e($status['name']); ?>
                                 </span>
                             </div>
                             <?php } ?>
@@ -298,7 +298,7 @@
 <?php include_once(APPPATH . 'views/admin/leads/status.php'); ?>
 <?php init_tail(); ?>
 <script>
-var openLeadID = '<?php echo $leadid; ?>';
+var openLeadID = '<?php echo e($leadid); ?>';
 $(function() {
     leads_kanban();
     $('#leads_bulk_mark_lost').on('change', function() {

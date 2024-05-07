@@ -30,8 +30,8 @@
                                    $_currency = $this->currencies_model->get($c['id']);
                                }
                            } ?>
-                                <option value="<?php echo $c['id']; ?>" <?php echo $selected; ?>>
-                                    <?php echo $c['name']; ?>
+                                <option value="<?php echo e($c['id']); ?>" <?php echo e($selected); ?>>
+                                    <?php echo e($c['name']); ?>
                                 </option>
                                 <?php
                        } ?>

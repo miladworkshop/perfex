@@ -2349,6 +2349,10 @@ table.items tr.main td {
   padding-left: 25px;
 }
 
+#kan-ban .panel-body .lead-name {
+  margin-left: -10px;
+}
+
 #kan-ban .not-sortable .panel-body .task-name {
   background: none;
 }
@@ -2402,8 +2406,8 @@ table.items tr.main td {
 
 .cpicker {
   float: left;
-  margin-right: 15px;
-  border-radius: 1px;
+  margin-right: 7px;
+  border-radius: 2px;
 }
 
 .kan-ban-settings {
@@ -2412,8 +2416,8 @@ table.items tr.main td {
 }
 
 .cpicker-small {
-  width: 10px;
-  height: 10px;
+  width: 15px;
+  height: 15px;
 }
 
 .cpicker-big {
@@ -2504,6 +2508,10 @@ table.items tr.main td {
   display: block;
   width: 95.5%;
   margin-left: 7px;
+}
+
+body.modal-open .tox-tinymce-aux  {
+  z-index: 99999999999;
 }
 
 .modal .task-single-col {
@@ -4019,6 +4027,11 @@ li.task.overdue-task .panel-body {
   font-style: italic;
 }
 
+.tc-content p:empty:before {
+  content: ' ';
+  white-space: pre;
+}
+
 .task-modal-single .comment-content img {
   max-width: 100%;
   height: auto;
@@ -4936,15 +4949,6 @@ div[data-container] {
 .project_proposals .panel_s {
   box-shadow: none !important;
   border: 0;
-}
-
-.save_predefined_reply_from_message {
-  clear: both !important;
-  float: right !important;
-  margin-top: 11px !important;
-  margin-right: 18px !important;
-  font-size: 13px !important;
-  cursor: pointer !important;
 }
 
 .text-has-action {

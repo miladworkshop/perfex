@@ -37,13 +37,13 @@
                             <div
                                 class="md:tw-border-r md:tw-border-solid md:tw-border-neutral-300 tw-flex-1 tw-flex tw-items-center">
                                 <span class="tw-font-semibold sm:tw-w-auto tw-mr-3 rtl:tw-ml-3 tw-text-lg">
-                                    <?php echo $count_active; ?></span>
+                                    <?php echo e($count_active); ?></span>
                                 <span class="text-info"><?php echo _l('contract_summary_active'); ?></span>
                             </div>
                             <div
                                 class="md:tw-border-r md:tw-border-solid md:tw-border-neutral-300 tw-flex-1 tw-flex tw-items-center">
                                 <span class="tw-font-semibold sm:tw-w-auto tw-mr-3 rtl:tw-ml-3 tw-text-lg">
-                                    <?php echo $count_expired; ?></span>
+                                    <?php echo e($count_expired); ?></span>
                                 <span class="text-danger"><?php echo _l('contract_summary_expired'); ?></span>
                             </div>
                             <div
@@ -56,13 +56,13 @@
                             <div
                                 class="md:tw-border-r md:tw-border-solid md:tw-border-neutral-300 tw-flex-1 tw-flex tw-items-center">
                                 <span class="tw-font-semibold sm:tw-w-auto tw-mr-3 rtl:tw-ml-3 tw-text-lg">
-                                    <?php echo $count_recently_created; ?></span>
+                                    <?php echo e($count_recently_created); ?></span>
                                 <span class="text-success"><?php echo _l('contract_summary_recently_added'); ?></span>
                             </div>
                             <div
                                 class="tw-flex tw-items-center md:tw-border-r md:tw-border-solid tw-flex-1 md:tw-border-neutral-300 lg:tw-border-0">
                                 <span class="tw-font-semibold sm:tw-w-auto tw-mr-3 rtl:tw-ml-3 tw-text-lg">
-                                    <?php echo $count_trash; ?></span>
+                                    <?php echo e($count_trash); ?></span>
                                 <span class="text-muted"><?php echo _l('contract_summary_trash'); ?></span>
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                                     <?php echo _l('contract_summary_by_type_value'); ?>
                                     (<span data-toggle="tooltip" data-title="<?php echo _l('base_currency_string'); ?>"
                                         class="text-has-action">
-                                        <?php echo $base_currency->name; ?></span>)
+                                        <?php echo e($base_currency->name); ?></span>)
                                 </h4>
                                 <div class="relative" style="max-height:400px">
                                     <canvas class="chart" height="400" id="contracts-value-by-type-chart"></canvas>

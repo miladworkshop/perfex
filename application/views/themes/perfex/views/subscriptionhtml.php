@@ -14,9 +14,10 @@
         <div class="container preview-sticky-container">
             <div class="sm:tw-flex sm:tw-justify-between -tw-mx-4">
                 <div class="sm:tw-self-end">
-                    <h4 class="bold tw-my-0 subscription-html-name"><?php echo $subscription->name; ?><br />
-                        <small class="proposal-html-description"><?php echo $subscription->description; ?></small>
-                    </h4>
+                    <h4 class="bold tw-my-0 subscription-html-name"><?php echo e($subscription->name); ?></h4>
+                    <div class="proposal-html-description">
+                        <?php echo process_text_content_for_display($subscription->description); ?>
+                    </div>
                 </div>
                 <div class="tw-flex tw-items-end tw-space-x-2 tw-mt-3 sm:tw-mt-0">
                     <?php
@@ -71,7 +72,7 @@
                         <span class="tw-font-medium tw-text-neutral-700">
                             <?php echo _l('subscription'); ?> #:
                         </span>
-                        <?php echo $subscription->id; ?>
+                        <?php echo e($subscription->id); ?>
                     </p>
 
                     <p class="tw-mb-0 tw-text-normal subscription-date">
@@ -79,10 +80,11 @@
                             <?php echo _l('subscription_date'); ?>:
                         </span>
                         <?php
-                                echo !empty($subscription->stripe_subscription_id) && !empty($subscription->date_subscribed) // late webhook check
-                                ? _d(date('Y-m-d', strtotime($subscription->date_subscribed)))
-                                : _d(date('Y-m-d'));
-                            ?>
+                            echo e(!empty($subscription->stripe_subscription_id) && !empty($subscription->date_subscribed) 
+                            // late webhook check
+                            ? _d(date('Y-m-d', strtotime($subscription->date_subscribed)))
+                            : _d(date('Y-m-d')));
+                        ?>
                     </p>
 
                     <?php if (!empty($subscription->date)) { ?>
@@ -91,12 +93,12 @@
                             <?php echo _l('first_billing_date'); ?>:
                         </span>
                         <?php if (!empty($subscription->stripe_subscription_id)) {
-                                echo _d($subscription->date);
+                                echo e(_d($subscription->date));
                             } else {
                                 if ($subscription->date <= date('Y-m-d')) {
-                                    echo _d(date('Y-m-d'));
+                                    echo e(_d(date('Y-m-d')));
                                 } else {
-                                    echo _d($subscription->date);
+                                    echo e(_d($subscription->date));
                                 }
                             } ?>
                     </p>
@@ -104,7 +106,7 @@
                     <?php if ($invoice->project_id && get_option('show_project_on_invoice') == 1) { ?>
                     <p class="tw-mb-0 tw-text-normal subscription-project">
                         <span class="tw-font-medium tw-text-neutral-700"><?php echo _l('project'); ?>:</span>
-                        <?php echo get_project_name_by_id($invoice->project_id); ?>
+                        <?php echo e(get_project_name_by_id($invoice->project_id)); ?>
                     </p>
                     <?php } ?>
                 </div>
@@ -113,9 +115,9 @@
                 <div class="col-md-12">
                     <div class="table-responsive">
                         <?php
-               $items = get_items_table_data($invoice, 'invoice');
-               echo $items->table();
-               ?>
+                            $items = get_items_table_data($invoice, 'invoice');
+                            echo $items->table();
+                        ?>
                     </div>
                 </div>
                 <div class="col-md-6 col-md-offset-6">
@@ -126,19 +128,19 @@
                                     <span class="bold tw-text-neutral-700"><?php echo _l('invoice_subtotal'); ?></span>
                                 </td>
                                 <td class="subtotal">
-                                    <?php echo app_format_money($invoice->subtotal, $invoice->currency_name); ?>
+                                    <?php echo e(app_format_money($invoice->subtotal, $invoice->currency_name)); ?>
                                 </td>
                             </tr>
                             <?php
-                  foreach ($items->taxes() as $tax) {
-                      echo '<tr class="tax-area"><td class="bold !tw-text-neutral-700">' . $tax['taxname'] . ' (' . app_format_number($tax['taxrate']) . '%)</td><td>' . app_format_money($tax['total_tax'], $invoice->currency_name) . '</td></tr>';
-                  }
-                 ?>
+                                foreach ($items->taxes() as $tax) {
+                                    echo '<tr class="tax-area"><td class="bold !tw-text-neutral-700">' . e($tax['taxname']) . ' (' . e(app_format_number($tax['taxrate'])) . '%)</td><td>' . e(app_format_money($tax['total_tax'], $invoice->currency_name)) . '</td></tr>';
+                                }
+                            ?>
                             <tr>
                                 <td><span class="bold tw-text-neutral-700"><?php echo _l('invoice_total'); ?></span>
                                 </td>
                                 <td class="total">
-                                    <?php echo app_format_money($invoice->total, $invoice->currency_name); ?>
+                                    <?php echo e(app_format_money($invoice->total, $invoice->currency_name)); ?>
                                 </td>
                             </tr>
                             <?php if (get_option('show_amount_due_on_invoice') == 1
@@ -154,7 +156,7 @@
                                 </td>
                                 <td>
                                     <span class="<?php echo $invoice->total_left_to_pay > 0 ? 'text-danger ': ''; ?>">
-                                        <?php echo app_format_money($invoice->total_left_to_pay, $invoice->currency_name); ?>
+                                        <?php echo e(app_format_money($invoice->total_left_to_pay, $invoice->currency_name)); ?>
                                     </span>
                                 </td>
                             </tr>
@@ -166,24 +168,22 @@
                 <?php if (!empty($invoice->clientnote)) {
                      ?>
                 <div class="col-md-12 subscription-html-note">
-                    <b><?php echo _l('invoice_note'); ?></b><br /><br /><?php echo $invoice->clientnote; ?>
+                    <b><?php echo _l('invoice_note'); ?></b><br /><br /><?php echo e($invoice->clientnote); ?>
                 </div>
                 <?php
                  } ?>
-                <?php if (!empty($invoice->terms) || !empty($subscription->terms)) {
-                     ?>
+                <?php if (!empty($invoice->terms) || !empty($subscription->terms)) { ?>
                 <div class="col-md-12 subscription-html-terms-and-conditions">
                     <hr />
                     <b><?php echo _l('terms_and_conditions'); ?></b><br /><br />
                     <?php
-              echo empty($subscription->terms)
-              ? $invoice->terms
-              : $subscription->terms; ?>
-                </div>
-                <?php
-                 } ?>
-                <?php if (count($child_invoices) > 0) {
-                     ?>
+                        echo process_text_content_for_display(empty($subscription->terms)
+                        ? $invoice->terms
+                        : $subscription->terms); 
+                    ?>
+                    </div>
+                <?php } ?>
+                <?php if (count($child_invoices) > 0) { ?>
                 <div class="col-md-12 subscription-child-invoices">
                     <hr />
                     <b><?php echo _l('invoices'); ?></b>
@@ -197,26 +197,23 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($child_invoices as $child_invoice) {
-                         ?>
+                            <?php foreach ($child_invoices as $child_invoice) { ?>
                             <tr>
                                 <td>
                                     <a href="<?php echo site_url('invoice/' . $child_invoice->id . '/' . $child_invoice->hash); ?>"
                                         target="_blank">
-                                        <?php echo format_invoice_number($child_invoice->id); ?>
+                                        <?php echo e(format_invoice_number($child_invoice->id)); ?>
                                     </a>
                                 </td>
-                                <td><?php echo _d($child_invoice->date); ?></td>
-                                <td><?php echo app_format_money($child_invoice->total, $child_invoice->currency_name); ?>
+                                <td><?php echo e($child_invoice->date); ?></td>
+                                <td><?php echo e(app_format_money($child_invoice->total, $child_invoice->currency_name)); ?>
                                 </td>
                             </tr>
-                            <?php
-                     } ?>
+                            <?php } ?>
                         </tbody>
                     </table>
                 </div>
-                <?php
-                 } ?>
+                <?php } ?>
             </div>
         </div>
     </div>

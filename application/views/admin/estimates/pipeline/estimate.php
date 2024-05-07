@@ -4,7 +4,7 @@
         <div class="modal-content">
            <div class="modal-header">
             <button type="button" class="close" onclick="close_modal_manually('.estimate-pipeline'); return false;" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title"><?php echo format_estimate_number($id); ?></h4>
+            <h4 class="modal-title"><?php echo e(format_estimate_number($id)); ?></h4>
         </div>
         <div class="modal-body">
             <div class="row">

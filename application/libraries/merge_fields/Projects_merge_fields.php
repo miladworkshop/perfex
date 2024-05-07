@@ -155,10 +155,10 @@ class Projects_merge_fields extends App_merge_fields
         $this->ci->db->where('id', $project_id);
         $project = $this->ci->db->get(db_prefix().'projects')->row();
 
-        $fields['{project_name}']        = $project->name;
-        $fields['{project_deadline}']    = _d($project->deadline);
-        $fields['{project_start_date}']  = _d($project->start_date);
-        $fields['{project_description}'] = $project->description;
+        $fields['{project_name}']        = e($project->name);
+        $fields['{project_deadline}']    = e(_d($project->deadline));
+        $fields['{project_start_date}']  = e(_d($project->start_date));
+        $fields['{project_description}'] = e($project->description);
 
         $custom_fields = get_custom_fields('projects');
         foreach ($custom_fields as $field) {
@@ -166,9 +166,9 @@ class Projects_merge_fields extends App_merge_fields
         }
 
         if (is_client_logged_in()) {
-            $cf = get_contact_full_name(get_contact_user_id());
+            $cf = e(get_contact_full_name(get_contact_user_id()));
         } else {
-            $cf = get_staff_full_name(get_staff_user_id());
+            $cf = e(get_staff_full_name(get_staff_user_id()));
         }
 
         $fields['{file_creator}']       = $cf;
@@ -187,8 +187,8 @@ class Projects_merge_fields extends App_merge_fields
 
             $discussion = $this->ci->db->get($table)->row();
 
-            $fields['{discussion_subject}']     = $discussion->subject;
-            $fields['{discussion_description}'] = $discussion->description;
+            $fields['{discussion_subject}']     = e($discussion->subject);
+            $fields['{discussion_description}'] = e($discussion->description);
 
             if (isset($additional_data['discussion_comment_id'])) {
                 $this->ci->db->where('id', $additional_data['discussion_comment_id']);

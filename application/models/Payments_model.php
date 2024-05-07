@@ -365,7 +365,7 @@ class Payments_model extends App_Model
                             $member['staffid'],
                             $invoice,
                             $attach,
-                            $payment->id
+                            $payment->paymentid
                         );
                     }
                 }

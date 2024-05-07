@@ -4,7 +4,7 @@
     <div class="panel_s">
         <div class="panel-body">
             <h4 class="tw-my-0 tw-font-semibold">
-                <?php echo _l('schedule_email_for', format_estimate_number($estimate->id)); ?>
+                <?php echo e(_l('schedule_email_for', format_estimate_number($estimate->id))); ?>
             </h4>
             <hr class="hr-panel-separator" />
             <div class="row">
@@ -50,7 +50,7 @@
             </div>
         </div>
         <div class="panel-footer text-right">
-            <a href="#" class="btn btn-danger" onclick="init_estimate(<?php echo $estimate->id; ?>); return false;">
+            <a href="#" class="btn btn-danger" onclick="init_estimate(<?php echo e($estimate->id); ?>); return false;">
                 <?php echo _l('cancel'); ?>
             </a>
             <button type="submit" autocomplete="off" data-loading-text="<?php echo _l('wait_text'); ?>"

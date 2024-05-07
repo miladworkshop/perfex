@@ -42,7 +42,7 @@
     <ul class="dropdown-menu width300">
         <li>
             <a href="#" data-cview="all"
-                onclick="dt_custom_view('','<?php echo $view_table_name; ?>',''); return false;">
+                onclick="dt_custom_view('','<?php echo e($view_table_name); ?>',''); return false;">
                 <?php echo _l('task_list_all'); ?>
             </a>
         </li>
@@ -51,28 +51,28 @@
         <li class="clear-all-prevent<?php if ($status['filter_default'] == true) {
         echo ' active';
     } ?>">
-            <a href="#" data-cview="task_status_<?php echo $status['id']; ?>"
-                onclick="dt_custom_view('task_status_<?php echo $status['id']; ?>','<?php echo $view_table_name; ?>','task_status_<?php echo $status['id']; ?>'); return false;">
-                <?php echo $status['name']; ?>
+            <a href="#" data-cview="task_status_<?php echo e($status['id']); ?>"
+                onclick="dt_custom_view('task_status_<?php echo e($status['id']); ?>','<?php echo e($view_table_name); ?>','task_status_<?php echo e($status['id']); ?>'); return false;">
+                <?php echo e($status['name']); ?>
             </a>
         </li>
         <?php } ?>
         <li class="divider"></li>
         <li class="filter-group" data-filter-group="group-date">
             <a href="#" data-cview="today_tasks"
-                onclick="dt_custom_view('today_tasks','<?php echo $view_table_name; ?>','today_tasks'); return false;">
+                onclick="dt_custom_view('today_tasks','<?php echo e($view_table_name); ?>','today_tasks'); return false;">
                 <?php echo _l('todays_tasks'); ?>
             </a>
         </li>
         <li class="filter-group" data-filter-group="group-date">
             <a href="#" data-cview="due_date_passed"
-                onclick="dt_custom_view('due_date_passed','<?php echo $view_table_name; ?>','due_date_passed'); return false;">
+                onclick="dt_custom_view('due_date_passed','<?php echo e($view_table_name); ?>','due_date_passed'); return false;">
                 <?php echo _l('task_list_duedate_passed'); ?>
             </a>
         </li>
         <li class="filter-group" data-filter-group="group-date">
             <a href="#" data-cview="upcoming_tasks"
-                onclick="dt_custom_view('upcoming_tasks','<?php echo $view_table_name; ?>','upcoming_tasks'); return false;">
+                onclick="dt_custom_view('upcoming_tasks','<?php echo e($view_table_name); ?>','upcoming_tasks'); return false;">
                 <?php echo _l('upcoming_tasks'); ?>
             </a>
         </li>
@@ -80,20 +80,20 @@
         <li class="filter-group <?php echo(staff_cant('view', 'tasks') ? ' active' : ''); ?>"
             data-filter-group="assigned-follower-not-assigned">
             <a href="#" data-cview="my_tasks"
-                onclick="dt_custom_view('my_tasks','<?php echo $view_table_name; ?>','my_tasks'); return false;">
+                onclick="dt_custom_view('my_tasks','<?php echo e($view_table_name); ?>','my_tasks'); return false;">
                 <?php echo _l('tasks_view_assigned_to_user'); ?>
             </a>
         </li>
         <li class="filter-group" data-filter-group="assigned-follower-not-assigned">
             <a href="#" data-cview="my_following_tasks"
-                onclick="dt_custom_view('my_following_tasks','<?php echo $view_table_name; ?>','my_following_tasks'); return false;">
+                onclick="dt_custom_view('my_following_tasks','<?php echo e($view_table_name); ?>','my_following_tasks'); return false;">
                 <?php echo _l('tasks_view_follower_by_user'); ?>
             </a>
         </li>
         <?php if (staff_can('view',  'tasks')) { ?>
         <li class="filter-group" data-filter-group="assigned-follower-not-assigned">
             <a href="#" data-cview="not_assigned"
-                onclick="dt_custom_view('not_assigned','<?php echo $view_table_name; ?>','not_assigned'); return false;">
+                onclick="dt_custom_view('not_assigned','<?php echo e($view_table_name); ?>','not_assigned'); return false;">
                 <?php echo _l('task_list_not_assigned'); ?>
             </a>
         </li>
@@ -101,7 +101,7 @@
         <?php if (staff_can('create',  'tasks') || staff_can('edit',  'tasks')) { ?>
         <li>
             <a href="#" data-cview="recurring_tasks"
-                onclick="dt_custom_view('recurring_tasks','<?php echo $view_table_name; ?>','recurring_tasks'); return false;">
+                onclick="dt_custom_view('recurring_tasks','<?php echo e($view_table_name); ?>','recurring_tasks'); return false;">
                 <?php echo _l('recurring_tasks'); ?>
             </a>
         </li>
@@ -110,19 +110,19 @@
         <li class="divider"></li>
         <li class="filter-group" data-filter-group="group-billable">
             <a href="#" data-cview="billable"
-                onclick="dt_custom_view('billable','<?php echo $view_table_name; ?>','billable'); return false;">
+                onclick="dt_custom_view('billable','<?php echo e($view_table_name); ?>','billable'); return false;">
                 <?php echo _l('task_billable'); ?>
             </a>
         </li>
         <li class="filter-group" data-filter-group="group-billable">
             <a href="#" data-cview="billed"
-                onclick="dt_custom_view('billed','<?php echo $view_table_name; ?>','billed'); return false;">
+                onclick="dt_custom_view('billed','<?php echo e($view_table_name); ?>','billed'); return false;">
                 <?php echo _l('task_billed'); ?>
             </a>
         </li>
         <li class="filter-group" data-filter-group="group-billable">
             <a href="#" data-cview="not_billed"
-                onclick="dt_custom_view('not_billed','<?php echo $view_table_name; ?>','not_billed'); return false;">
+                onclick="dt_custom_view('not_billed','<?php echo e($view_table_name); ?>','not_billed'); return false;">
                 <?php echo _l('task_billed_no'); ?>
             </a>
         </li>
@@ -136,8 +136,8 @@
             <ul class="dropdown-menu dropdown-menu-left">
                 <?php foreach ($tasks_filter_assignees as $as) { ?>
                 <li>
-                    <a href="#" data-cview="task_assigned_<?php echo $as['assigneeid']; ?>"
-                        onclick="dt_custom_view(<?php echo $as['assigneeid']; ?>,'<?php echo $view_table_name; ?>','task_assigned_<?php echo $as['assigneeid']; ?>'); return false;"><?php echo $as['full_name']; ?></a>
+                    <a href="#" data-cview="task_assigned_<?php echo e($as['assigneeid']); ?>"
+                        onclick="dt_custom_view(<?php echo e($as['assigneeid']); ?>,'<?php echo e($view_table_name); ?>','task_assigned_<?php echo e($as['assigneeid']); ?>'); return false;"><?php echo e($as['full_name']); ?></a>
                 </li>
                 <?php } ?>
             </ul>

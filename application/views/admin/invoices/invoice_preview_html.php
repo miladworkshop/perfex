@@ -6,7 +6,7 @@ if ($invoice->status == Invoices_model::STATUS_DRAFT) { ?>
 <?php }
 if (isset($invoice->scheduled_email) && $invoice->scheduled_email) { ?>
 <div class="alert alert-warning">
-    <?php echo _l('invoice_will_be_sent_at', _dt($invoice->scheduled_email->scheduled_at)); ?>
+    <?php echo e(_l('invoice_will_be_sent_at', _dt($invoice->scheduled_email->scheduled_at))); ?>
     <?php if (staff_can('edit', 'invoices') || $invoice->addedfrom == get_staff_user_id()) { ?>
     <a href="#" onclick="edit_invoice_scheduled_email(<?php echo $invoice->scheduled_email->id; ?>); return false;">
         <?php echo _l('edit'); ?>
@@ -48,7 +48,7 @@ if (isset($invoice->scheduled_email) && $invoice->scheduled_email) { ?>
          && $recurring_invoice->cycles > 0
          && $recurring_invoice->cycles == $recurring_invoice->total_cycles) { ?>
                 <div class="alert alert-info no-mbot">
-                    <?php echo _l('recurring_has_ended', _l('invoice_lowercase')); ?>
+                    <?php echo e(_l('recurring_has_ended', _l('invoice_lowercase'))); ?>
                 </div>
                 <?php } elseif ($show_recurring_invoice_info) { ?>
                 <span class="label label-info">
@@ -56,21 +56,21 @@ if (isset($invoice->scheduled_email) && $invoice->scheduled_email) { ?>
                if ($recurring_invoice->status == Invoices_model::STATUS_DRAFT) {
                    echo '<i class="fa-solid fa-circle-exclamation fa-fw text-warning tw-mr-1" data-toggle="tooltip" title="' . _l('recurring_invoice_draft_notice') . '"></i>';
                }
-               echo _l('cycles_remaining'); ?>:&nbsp;
+                    echo _l('cycles_remaining'); ?>:&nbsp;
                     <b>
                         <?php
-                  echo $recurring_invoice->cycles == 0 ? _l('cycles_infinity') : $recurring_invoice->cycles - $recurring_invoice->total_cycles;
-                  ?>
+                            echo e($recurring_invoice->cycles == 0 ? _l('cycles_infinity') : $recurring_invoice->cycles - $recurring_invoice->total_cycles);
+                        ?>
                     </b>
                 </span>
                 <?php
             if ($recurring_invoice->cycles == 0 || $recurring_invoice->cycles != $recurring_invoice->total_cycles) {
-                echo '<span class="label label-info tw-ml-3"><i class="fa-regular fa-circle-question fa-fw tw-mr-1" data-toggle="tooltip" data-title="' . _l('recurring_recreate_hour_notice', _l('invoice')) . '"></i> ' . _l('next_invoice_date', '&nbsp;<b>' . _d($next_date) . '</b>') . '</span>';
+                echo '<span class="label label-info tw-ml-1"><i class="fa-regular fa-circle-question fa-fw tw-mr-1" data-toggle="tooltip" data-title="' . _l('recurring_recreate_hour_notice', _l('invoice')) . '"></i> ' . _l('next_invoice_date', '&nbsp;<b>' . e(_d($next_date)) . '</b>') . '</span>';
             }
          } ?>
             </div>
             <?php if ($invoice->is_recurring_from != null) { ?>
-            <?php echo '<p class="text-muted' . ($show_recurring_invoice_info ? ' mtop15': '') . '">' . _l('invoice_recurring_from', '<a href="' . admin_url('invoices/list_invoices/' . $invoice->is_recurring_from) . '" onclick="init_invoice(' . $invoice->is_recurring_from . ');return false;">' . format_invoice_number($invoice->is_recurring_from) . '</a></p>'); ?>
+            <?php echo '<p class="text-muted' . ($show_recurring_invoice_info ? ' mtop15': '') . '">' . _l('invoice_recurring_from', '<a href="' . admin_url('invoices/list_invoices/' . $invoice->is_recurring_from) . '" onclick="init_invoice(' . $invoice->is_recurring_from . ');return false;">' . e(format_invoice_number($invoice->is_recurring_from)) . '</a></p>'); ?>
             <?php } ?>
         </div>
         <div class="clearfix"></div>
@@ -82,21 +82,21 @@ if (isset($invoice->scheduled_email) && $invoice->scheduled_email) { ?>
             <h4 class="font-medium mtop15 mbot20"><?php echo _l('related_to_project', [
          _l('invoice_lowercase'),
          _l('project_lowercase'),
-         '<a href="' . admin_url('projects/view/' . $invoice->project_id) . '" target="_blank">' . $invoice->project_data->name . '</a>',
+         '<a href="' . admin_url('projects/view/' . $invoice->project_id) . '" target="_blank">' . e($invoice->project_data->name) . '</a>',
          ]); ?></h4>
         </div>
         <?php } ?>
         <div class="col-md-6 col-sm-6">
             <h4 class="bold">
                 <?php
-         $tags = get_tags_in($invoice->id, 'invoice');
-         if (count($tags) > 0) {
-             echo '<i class="fa fa-tag" aria-hidden="true" data-toggle="tooltip" data-title="' . html_escape(implode(', ', $tags)) . '"></i>';
-         }
-        ?>
+                    $tags = get_tags_in($invoice->id, 'invoice');
+                    if (count($tags) > 0) {
+                        echo '<i class="fa fa-tag" aria-hidden="true" data-toggle="tooltip" data-title="' . e(implode(', ', $tags)) . '"></i>';
+                    }
+                ?>
                 <a href="<?php echo admin_url('invoices/invoice/' . $invoice->id); ?>">
                     <span id="invoice-number">
-                        <?php echo format_invoice_number($invoice->id); ?>
+                        <?php echo e(format_invoice_number($invoice->id)); ?>
                     </span>
                 </a>
             </h4>
@@ -120,40 +120,39 @@ if (isset($invoice->scheduled_email) && $invoice->scheduled_email) { ?>
                 <span class="bold">
                     <?php echo _l('invoice_data_date'); ?>
                 </span>
-                <?php echo _d($invoice->date); ?>
+                <?php echo e(_d($invoice->date)); ?>
             </p>
             <?php if (!empty($invoice->duedate)) { ?>
             <p class="no-mbot">
                 <span class="bold">
                     <?php echo _l('invoice_data_duedate'); ?>
                 </span>
-                <?php echo _d($invoice->duedate); ?>
+                <?php echo e(_d($invoice->duedate)); ?>
             </p>
             <?php } ?>
             <?php if ($invoice->sale_agent && get_option('show_sale_agent_on_invoices') == 1) { ?>
             <p class="no-mbot">
                 <span class="bold"><?php echo _l('sale_agent_string'); ?>: </span>
-                <?php echo get_staff_full_name($invoice->sale_agent); ?>
+                <?php echo e(get_staff_full_name($invoice->sale_agent)); ?>
             </p>
             <?php } ?>
             <?php if ($invoice->project_id && get_option('show_project_on_invoice') == 1) { ?>
             <p class="no-mbot">
                 <span class="bold"><?php echo _l('project'); ?>:</span>
-                <?php echo get_project_name_by_id($invoice->project_id); ?>
+                <?php echo e(get_project_name_by_id($invoice->project_id)); ?>
             </p>
             <?php } ?>
             <?php $pdf_custom_fields = get_custom_fields('invoice', ['show_on_pdf' => 1]);
-   foreach ($pdf_custom_fields as $field) {
-       $value = get_custom_field_value($invoice->id, $field['id'], 'invoice');
-       if ($value == '') {
-           continue;
-       } ?>
+            foreach ($pdf_custom_fields as $field) {
+                $value = get_custom_field_value($invoice->id, $field['id'], 'invoice');
+                if ($value == '') {
+                    continue;
+                } ?>
             <p class="no-mbot">
-                <span class="bold"><?php echo $field['name']; ?>: </span>
+                <span class="bold"><?php echo e($field['name']); ?>: </span>
                 <?php echo $value; ?>
             </p>
-            <?php
-   } ?>
+            <?php } ?>
             <?php hooks()->do_action('after_right_panel_invoice_preview_template', $invoice); ?>
         </div>
     </div>
@@ -161,9 +160,9 @@ if (isset($invoice->scheduled_email) && $invoice->scheduled_email) { ?>
         <div class="col-md-12">
             <div class="table-responsive">
                 <?php
-         $items = get_items_table_data($invoice, 'invoice', 'html', true);
-         echo $items->table();
-         ?>
+                    $items = get_items_table_data($invoice, 'invoice', 'html', true);
+                    echo $items->table();
+                ?>
             </div>
         </div>
         <div class="col-md-5 col-md-offset-7">
@@ -174,7 +173,7 @@ if (isset($invoice->scheduled_email) && $invoice->scheduled_email) { ?>
                             <span class="bold tw-text-neutral-700"><?php echo _l('invoice_subtotal'); ?></span>
                         </td>
                         <td class="subtotal">
-                            <?php echo app_format_money($invoice->subtotal, $invoice->currency_name); ?>
+                            <?php echo e(app_format_money($invoice->subtotal, $invoice->currency_name)); ?>
                         </td>
                     </tr>
                     <?php if (is_sale_discount_applied($invoice)) { ?>
@@ -182,27 +181,27 @@ if (isset($invoice->scheduled_email) && $invoice->scheduled_email) { ?>
                         <td>
                             <span class="bold tw-text-neutral-700"><?php echo _l('invoice_discount'); ?>
                                 <?php if (is_sale_discount($invoice, 'percent')) { ?>
-                                (<?php echo app_format_number($invoice->discount_percent, true); ?>%)
+                                (<?php echo e(app_format_number($invoice->discount_percent, true)); ?>%)
                                 <?php } ?>
                             </span>
                         </td>
                         <td class="discount">
-                            <?php echo '-' . app_format_money($invoice->discount_total, $invoice->currency_name); ?>
+                            <?php echo e('-' . app_format_money($invoice->discount_total, $invoice->currency_name)); ?>
                         </td>
                     </tr>
                     <?php } ?>
                     <?php
-               foreach ($items->taxes() as $tax) {
-                   echo '<tr class="tax-area"><td class="bold !tw-text-neutral-700">' . $tax['taxname'] . ' (' . app_format_number($tax['taxrate']) . '%)</td><td>' . app_format_money($tax['total_tax'], $invoice->currency_name) . '</td></tr>';
-               }
-              ?>
+                        foreach ($items->taxes() as $tax) {
+                            echo '<tr class="tax-area"><td class="bold !tw-text-neutral-700">' . e($tax['taxname']) . ' (' . e(app_format_number($tax['taxrate'])) . '%)</td><td>' . e(app_format_money($tax['total_tax'], $invoice->currency_name)) . '</td></tr>';
+                        }
+                    ?>
                     <?php if ((int)$invoice->adjustment != 0) { ?>
                     <tr>
                         <td>
                             <span class="bold tw-text-neutral-700"><?php echo _l('invoice_adjustment'); ?></span>
                         </td>
                         <td class="adjustment">
-                            <?php echo app_format_money($invoice->adjustment, $invoice->currency_name); ?>
+                            <?php echo e(app_format_money($invoice->adjustment, $invoice->currency_name)); ?>
                         </td>
                     </tr>
                     <?php } ?>
@@ -211,7 +210,7 @@ if (isset($invoice->scheduled_email) && $invoice->scheduled_email) { ?>
                             <span class="bold tw-text-neutral-700"><?php echo _l('invoice_total'); ?></span>
                         </td>
                         <td class="total">
-                            <?php echo app_format_money($invoice->total, $invoice->currency_name); ?>
+                            <?php echo e(app_format_money($invoice->total, $invoice->currency_name)); ?>
                         </td>
                     </tr>
                     <?php if (count($invoice->payments) > 0 && get_option('show_total_paid_on_invoice') == 1) { ?>
@@ -220,7 +219,7 @@ if (isset($invoice->scheduled_email) && $invoice->scheduled_email) { ?>
                             <span class="bold tw-text-neutral-700"><?php echo _l('invoice_total_paid'); ?></span>
                         </td>
                         <td>
-                            <?php echo '-' . app_format_money(sum_from_table(db_prefix() . 'invoicepaymentrecords', ['field' => 'amount', 'where' => ['invoiceid' => $invoice->id]]), $invoice->currency_name); ?>
+                            <?php echo e('-' . app_format_money(sum_from_table(db_prefix() . 'invoicepaymentrecords', ['field' => 'amount', 'where' => ['invoiceid' => $invoice->id]]), $invoice->currency_name)); ?>
                         </td>
                     </tr>
                     <?php } ?>
@@ -230,7 +229,7 @@ if (isset($invoice->scheduled_email) && $invoice->scheduled_email) { ?>
                             <span class="bold tw-text-neutral-700"><?php echo _l('applied_credits'); ?></span>
                         </td>
                         <td>
-                            <?php echo '-' . app_format_money($credits_applied, $invoice->currency_name); ?>
+                            <?php echo e('-' . app_format_money($credits_applied, $invoice->currency_name)); ?>
                         </td>
                     </tr>
                     <?php } ?>
@@ -243,7 +242,7 @@ if (isset($invoice->scheduled_email) && $invoice->scheduled_email) { ?>
                         </td>
                         <td>
                             <span class="<?php echo $invoice->total_left_to_pay > 0 ? 'text-danger ': ''; ?>">
-                                <?php echo app_format_money($invoice->total_left_to_pay, $invoice->currency_name); ?>
+                                <?php echo e(app_format_money($invoice->total_left_to_pay, $invoice->currency_name)); ?>
                             </span>
                         </td>
                     </tr>
@@ -261,12 +260,12 @@ if (isset($invoice->scheduled_email) && $invoice->scheduled_email) { ?>
                   if (!empty($attachment['external'])) {
                       $attachment_url = $attachment['external_link'];
                   } ?>
-    <div class="mbot15 row inline-block full-width" data-attachment-id="<?php echo $attachment['id']; ?>">
+    <div class="mbot15 row inline-block full-width" data-attachment-id="<?php echo e($attachment['id']); ?>">
         <div class="col-md-8">
             <div class="pull-left"><i class="<?php echo get_mime_class($attachment['filetype']); ?>"></i></div>
-            <a href="<?php echo $attachment_url; ?>" target="_blank"><?php echo $attachment['file_name']; ?></a>
+            <a href="<?php echo e($attachment_url); ?>" target="_blank"><?php echo e($attachment['file_name']); ?></a>
             <br />
-            <small class="text-muted"> <?php echo $attachment['filetype']; ?></small>
+            <small class="text-muted"> <?php echo e($attachment['filetype']); ?></small>
         </div>
         <div class="col-md-4 text-right tw-space-x-2">
             <?php if ($attachment['visible_to_customer'] == 0) {
@@ -277,12 +276,12 @@ if (isset($invoice->scheduled_email) && $invoice->scheduled_email) { ?>
                       $tooltip = _l('hide_from_customer');
                   } ?>
             <a href="#" data-toggle="tooltip"
-                onclick="toggle_file_visibility(<?php echo $attachment['id']; ?>,<?php echo $invoice->id; ?>,this); return false;"
-                data-title="<?php echo $tooltip; ?>"><i class="fa <?php echo $icon; ?> fa-lg"
+                onclick="toggle_file_visibility(<?php echo e($attachment['id']); ?>,<?php echo e($invoice->id); ?>,this); return false;"
+                data-title="<?php echo e($tooltip); ?>"><i class="fa <?php echo e($icon); ?> fa-lg"
                     aria-hidden="true"></i></a>
             <?php if ($attachment['staffid'] == get_staff_user_id() || is_admin()) { ?>
             <a href="#" class="text-danger"
-                onclick="delete_invoice_attachment(<?php echo $attachment['id']; ?>); return false;"><i
+                onclick="delete_invoice_attachment(<?php echo e($attachment['id']); ?>); return false;"><i
                     class="fa fa-times fa-lg"></i></a>
             <?php } ?>
         </div>
@@ -294,13 +293,13 @@ if (isset($invoice->scheduled_email) && $invoice->scheduled_email) { ?>
     <?php if ($invoice->clientnote != '') { ?>
     <div class="col-md-12 row mtop15">
         <p class="bold text-muted"><?php echo _l('invoice_note'); ?></p>
-        <p><?php echo $invoice->clientnote; ?></p>
+        <?php echo process_text_content_for_display($invoice->clientnote); ?>
     </div>
     <?php } ?>
     <?php if ($invoice->terms != '') { ?>
     <div class="col-md-12 row mtop15">
         <p class="bold text-muted"><?php echo _l('terms_and_conditions'); ?></p>
-        <p><?php echo $invoice->terms; ?></p>
+        <?php echo process_text_content_for_display($invoice->terms); ?>
     </div>
     <?php } ?>
 </div>

@@ -6,7 +6,7 @@
          <div id="company-logo">
             <?php get_company_logo(); ?>
          </div>
-         <h2 class="bold"><?php echo $survey->subject; ?></h2>
+         <h2 class="bold"><?php echo e($survey->subject); ?></h2>
          <hr />
          <p><?php echo $survey->viewdescription; ?></p>
          <?php if(count($survey->questions) > 0){

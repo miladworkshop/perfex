@@ -162,7 +162,7 @@ return App_table::find('leads')
             $hrefAttr = 'href="' . admin_url('leads/index/' . $aRow['id']) . '" onclick="init_lead(' . $aRow['id'] . ');return false;"';
             $row[]    = '<a ' . $hrefAttr . '>' . $aRow['id'] . '</a>';
 
-            $nameRow = '<a ' . $hrefAttr . '>' . $aRow['name'] . '</a>';
+            $nameRow = '<a ' . $hrefAttr . '>' . e($aRow['name']) . '</a>';
 
             $nameRow .= '<div class="row-options">';
             $nameRow .= '<a ' . $hrefAttr . '>' . _l('view') . '</a>';
@@ -190,24 +190,24 @@ return App_table::find('leads')
                 $consents    = $this->ci->gdpr_model->get_consent_purposes($aRow['id'], 'lead');
 
                 foreach ($consents as $consent) {
-                    $consentHTML .= '<p style="margin-bottom:0px;">' . $consent['name'] . (!empty($consent['consent_given']) ? '<i class="fa fa-check text-success pull-right"></i>' : '<i class="fa fa-remove text-danger pull-right"></i>') . '</p>';
+                    $consentHTML .= '<p style="margin-bottom:0px;">' . e($consent['name']) . (!empty($consent['consent_given']) ? '<i class="fa fa-check text-success pull-right"></i>' : '<i class="fa fa-remove text-danger pull-right"></i>') . '</p>';
                 }
                 $row[] = $consentHTML;
             }
-            $row[] = $aRow['company'];
+            $row[] = e($aRow['company']);
 
-            $row[] = ($aRow['email'] != '' ? '<a href="mailto:' . $aRow['email'] . '">' . $aRow['email'] . '</a>' : '');
+            $row[] = ($aRow['email'] != '' ? '<a href="mailto:' . e($aRow['email']) . '">' . e($aRow['email']) . '</a>' : '');
 
-            $row[] = ($aRow['phonenumber'] != '' ? '<a href="tel:' . $aRow['phonenumber'] . '">' . $aRow['phonenumber'] . '</a>' : '');
+            $row[] = ($aRow['phonenumber'] != '' ? '<a href="tel:' . e($aRow['phonenumber']) . '">' . e($aRow['phonenumber']) . '</a>' : '');
 
             $base_currency = get_base_currency();
-            $row[]         = ($aRow['lead_value'] != 0 ? app_format_money($aRow['lead_value'], $base_currency->id) : '');
+            $row[]         = e(($aRow['lead_value'] != 0 ? app_format_money($aRow['lead_value'], $base_currency->id) : ''));
 
             $row[] .= render_tags($aRow['tags']);
 
             $assignedOutput = '';
             if ($aRow['assigned'] != 0) {
-                $full_name = $aRow['assigned_firstname'] . ' ' . $aRow['assigned_lastname'];
+                $full_name = e($aRow['assigned_firstname'] . ' ' . $aRow['assigned_lastname']);
 
                 $assignedOutput = '<a data-toggle="tooltip" data-title="' . $full_name . '" href="' . admin_url('profile/' . $aRow['assigned']) . '">' . staff_profile_image($aRow['assigned'], [
                     'staff-profile-image-small',
@@ -226,7 +226,7 @@ return App_table::find('leads')
                     $outputStatus = '<span class="label label-warning">' . _l('lead_junk') . '</span>';
                 }
             } else {
-                $outputStatus = '<span class="lead-status-' . $aRow['status'] . ' label' . (empty($aRow['color']) ? ' label-default' : '') . '" style="color:' . $aRow['color'] . ';border:1px solid ' . adjust_hex_brightness($aRow['color'], 0.4) . ';background: ' . adjust_hex_brightness($aRow['color'], 0.04) . ';">' . $aRow['status_name'];
+                $outputStatus = '<span class="lead-status-' . $aRow['status'] . ' label' . (empty($aRow['color']) ? ' label-default' : '') . '" style="color:' . $aRow['color'] . ';border:1px solid ' . adjust_hex_brightness($aRow['color'], 0.4) . ';background: ' . adjust_hex_brightness($aRow['color'], 0.04) . ';">' . e($aRow['status_name']);
 
                 if (!$locked) {
                     $outputStatus .= '<div class="dropdown inline-block mleft5 table-export-exclude">';
@@ -239,7 +239,7 @@ return App_table::find('leads')
                         if ($aRow['status'] != $leadChangeStatus['id']) {
                             $outputStatus .= '<li>
                           <a href="#" onclick="lead_mark_as(' . $leadChangeStatus['id'] . ',' . $aRow['id'] . '); return false;">
-                             ' . $leadChangeStatus['name'] . '
+                             ' . e($leadChangeStatus['name']) . '
                           </a>
                        </li>';
                         }
@@ -252,11 +252,11 @@ return App_table::find('leads')
 
             $row[] = $outputStatus;
 
-            $row[] = $aRow['source_name'];
+            $row[] = e($aRow['source_name']);
 
-            $row[] = ($aRow['lastcontact'] == '0000-00-00 00:00:00' || !is_date($aRow['lastcontact']) ? '' : '<span data-toggle="tooltip" data-title="' . _dt($aRow['lastcontact']) . '" class="text-has-action is-date">' . time_ago($aRow['lastcontact']) . '</span>');
+            $row[] = ($aRow['lastcontact'] == '0000-00-00 00:00:00' || !is_date($aRow['lastcontact']) ? '' : '<span data-toggle="tooltip" data-title="' . e(_dt($aRow['lastcontact'])) . '" class="text-has-action is-date">' . e(time_ago($aRow['lastcontact'])) . '</span>');
 
-            $row[] = '<span data-toggle="tooltip" data-title="' . _dt($aRow['dateadded']) . '" class="text-has-action is-date">' . time_ago($aRow['dateadded']) . '</span>';
+            $row[] = '<span data-toggle="tooltip" data-title="' . e(_dt($aRow['dateadded'])) . '" class="text-has-action is-date">' . e(time_ago($aRow['dateadded'])) . '</span>';
 
             // Custom fields add values
             foreach ($customFieldsColumns as $customFieldColumn) {

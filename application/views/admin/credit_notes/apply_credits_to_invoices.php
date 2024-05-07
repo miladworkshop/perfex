@@ -1,14 +1,14 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <?php if ($credit_note->status == 1) { ?>
 <!-- Modal Apply Credits -->
-<div class="modal fade apply-credits-to-invoice" id="apply_credits" data-credits-remaining="<?php echo $credit_note->remaining_credits; ?>" tabindex="-1" role="dialog" aria-labelledby="modalLabelApplyCredits">
+<div class="modal fade apply-credits-to-invoice" id="apply_credits" data-credits-remaining="<?php echo e($credit_note->remaining_credits); ?>" tabindex="-1" role="dialog" aria-labelledby="modalLabelApplyCredits">
   <div class="modal-dialog modal-lg" role="document">
     <?php echo form_open(admin_url('credit_notes/apply_credits_to_invoices/' . $credit_note->id), ['id' => 'apply_credits_form']); ?>
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="modalLabelApplyCredits">
-            <?php echo _l('apply_credits_from', format_credit_note_number($credit_note->id)); ?>
+            <?php echo e(_l('apply_credits_from', format_credit_note_number($credit_note->id))); ?>
         </h4>
     </div>
     <div class="modal-body">
@@ -25,19 +25,17 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($available_creditable_invoices as $invoice) {
-    ?>
+                <?php foreach ($available_creditable_invoices as $invoice) { ?>
                 <tr>
-                    <td><a href="<?php echo admin_url('invoices/list_invoices/' . $invoice['id']); ?>" target="_blank"><?php echo format_invoice_number($invoice['id']); ?></a></td>
-                    <td><?php echo _d($invoice['date']); ?></td>
-                    <td><?php echo app_format_money($invoice['total'], $invoice['currency_name']) ?></td>
-                    <td><?php echo app_format_money($invoice['total_left_to_pay'], $invoice['currency_name']) ?></td>
+                    <td><a href="<?php echo admin_url('invoices/list_invoices/' . $invoice['id']); ?>" target="_blank"><?php echo e(format_invoice_number($invoice['id'])); ?></a></td>
+                    <td><?php echo e(_d($invoice['date'])); ?></td>
+                    <td><?php echo e(app_format_money($invoice['total'], $invoice['currency_name'])); ?></td>
+                    <td><?php echo e(app_format_money($invoice['total_left_to_pay'], $invoice['currency_name'])); ?></td>
                     <td>
-                        <input type="number" name="amount[<?php echo $invoice['id']; ?>]" class="form-control apply-credits-field" value="0">
+                        <input type="number" name="amount[<?php echo e($invoice['id']); ?>]" class="form-control apply-credits-field" value="0">
                     </td>
                 </tr>
-                <?php
-} ?>
+                <?php } ?>
             </tbody>
         </table>
     </div>
@@ -49,13 +47,13 @@
                      <tr>
                         <td class="bold"><?php echo _l('amount_to_credit'); ?>:</td>
                         <td class="amount-to-credit">
-                            <?php echo app_format_money(0, $credit_note->currency_name); ?>
+                            <?php echo e(app_format_money(0, $credit_note->currency_name)); ?>
                         </td>
                     </tr>
                     <tr>
                         <td class="bold"><?php echo _l('credit_note_remaining_credits'); ?>:</td>
                         <td class="credit-note-balance-due">
-                            <?php echo app_format_money($credit_note->remaining_credits, $credit_note->currency_name); ?>
+                            <?php echo e(app_format_money($credit_note->remaining_credits, $credit_note->currency_name)); ?>
                         </td>
                     </tr>
                 </tbody>
@@ -79,7 +77,7 @@
 </div>
 <script>
     $('body').addClass('no-calculate-total');
-    init_currency(<?php echo $credit_note->currencyid; ?>);
+    init_currency(<?php echo e($credit_note->currencyid); ?>);
     $(function(){
         appValidateForm('#apply_credits_form');
     });

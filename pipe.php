@@ -188,18 +188,12 @@ if (class_exists('EmailReplyParser\EmailReplyParser')
     }
 }
 
-// Trim message
-$body = trim($body);
+$body = trim($body);        
 $body = str_replace('&nbsp;', ' ', $body);
-// Remove html tags - strips inline styles also
-$body = trim(strip_html_tags($body, '<br/>, <br>, <a>'));
-// Once again do security
-$body = $instance->security->xss_clean($body);
-// Remove duplicate new lines
-$body = preg_replace("/[\r\n]+/", "\n", $body);
-// new lines with <br />
-$body = preg_replace('/\n(\s*\n)+/', '<br />', $body);
-$body = preg_replace('/\n/', '<br />', $body);
+$body = trim(remove_html_invisible_tags($body));
+$body = preg_replace('/^<html[^>]*>/', '', $body);
+$body = preg_replace('/.*<body[^>]*>(.*?)<\/body>.*/is', '$1', $body);
+$body = trim($body);
 
 $instance->tickets_model->insert_piped_ticket([
     'to'          => $to,

@@ -30,10 +30,10 @@ $rResult = $result['rResult'];
 foreach ($rResult as $aRow) {
     $row = [];
 
-    $nameRow = $aRow['name'];
+    $nameRow = e($aRow['name']);
 
     if (staff_can('edit_milestones', 'projects')) {
-        $nameRow = '<a href="#" onclick="edit_milestone(this,' . $aRow['id'] . '); return false" data-name="' . $aRow['name'] . '" data-start_date="' . _d($aRow['start_date']) . '" data-due_date="' . _d($aRow['due_date']) . '" data-order="' . $aRow['milestone_order'] . '" data-description="' . htmlspecialchars(clear_textarea_breaks($aRow['description'])) . '" data-description-visible-to-customer="' . $aRow['description_visible_to_customer'] . '" data-hide-from-customer="' . $aRow['hide_from_customer'] . '">' . $nameRow . '</a>';
+        $nameRow = '<a href="#" onclick="edit_milestone(this,' . $aRow['id'] . '); return false" data-name="' . $nameRow . '" data-start_date="' . _d($aRow['start_date']) . '" data-due_date="' . _d($aRow['due_date']) . '" data-order="' . $aRow['milestone_order'] . '" data-description="' . htmlspecialchars(clear_textarea_breaks($aRow['description'])) . '" data-description-visible-to-customer="' . $aRow['description_visible_to_customer'] . '" data-hide-from-customer="' . $aRow['hide_from_customer'] . '">' . $nameRow . '</a>';
     }
 
     if (staff_can('delete_milestones', 'projects')) {
@@ -43,9 +43,9 @@ foreach ($rResult as $aRow) {
     }
 
     $row[] = $nameRow;
-    $row[] =  _d($aRow['start_date']);
+    $row[] =  e(_d($aRow['start_date']));
 
-    $dateRow = _d($aRow['due_date']);
+    $dateRow = e(_d($aRow['due_date']));
 
     if (date('Y-m-d') > $aRow['due_date'] && total_rows(db_prefix() . 'tasks', [
                 'milestone' => $aRow['id'],
@@ -58,7 +58,7 @@ foreach ($rResult as $aRow) {
 
     $row[] = $dateRow;
 
-    $row[] = clear_textarea_breaks($aRow['description']);
+    $row[] = process_text_content_for_display($aRow['description']);
 
     $row['DT_RowClass'] = 'has-row-options';
 

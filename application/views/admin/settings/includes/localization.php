@@ -5,7 +5,7 @@ $date_formats = get_available_date_formats();
     <label for="dateformat" class="control-label"><?php echo _l('settings_localization_date_format'); ?></label>
     <select name="settings[dateformat]" id="dateformat" class="form-control selectpicker" data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
         <?php foreach($date_formats as $key => $val){ ?>
-        <option value="<?php echo $key; ?>" <?php if($key == get_option('dateformat')){echo 'selected';} ?>><?php echo $val; ?></option>
+        <option value="<?php echo e($key); ?>" <?php if($key == get_option('dateformat')){echo 'selected';} ?>><?php echo e($val); ?></option>
         <?php } ?>
     </select>
 </div>
@@ -22,9 +22,9 @@ $date_formats = get_available_date_formats();
     <label for="timezones" class="control-label"><?php echo _l('settings_localization_default_timezone'); ?></label>
     <select name="settings[default_timezone]" id="timezones" class="form-control selectpicker" data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>" data-live-search="true">
         <?php foreach(get_timezones_list() as $key => $timezones){ ?>
-        <optgroup label="<?php echo $key; ?>">
+        <optgroup label="<?php echo e($key); ?>">
             <?php foreach($timezones as $timezone){ ?>
-            <option value="<?php echo $timezone; ?>" <?php if(get_option('default_timezone') == $timezone){echo 'selected';} ?>><?php echo $timezone; ?></option>
+            <option value="<?php echo e($timezone); ?>" <?php if(get_option('default_timezone') == $timezone){echo 'selected';} ?>><?php echo e($timezone); ?></option>
             <?php } ?>
         </optgroup>
         <?php } ?>
@@ -37,7 +37,7 @@ $date_formats = get_available_date_formats();
         <?php foreach($this->app->get_available_languages() as $availableLanguage){
                 $subtext = hooks()->apply_filters('settings_language_subtext', '', $availableLanguage);
             ?>
-            <option value="<?php echo $availableLanguage; ?>" data-subtext="<?php echo $subtext; ?>" <?php if($availableLanguage == get_option('active_language')){echo ' selected'; } ?>><?php echo ucfirst($availableLanguage); ?></option>
+            <option value="<?php echo e($availableLanguage); ?>" data-subtext="<?php echo e($subtext); ?>" <?php if($availableLanguage == get_option('active_language')){echo ' selected'; } ?>><?php echo e(ucfirst($availableLanguage)); ?></option>
             <?php } ?>
         </select>
     </div>

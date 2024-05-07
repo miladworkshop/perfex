@@ -174,8 +174,8 @@ class Leads_model extends App_Model
         ]);
 
         $not_additional_data = [
-            get_staff_full_name(),
-            '<a href="' . admin_url('profile/' . $assigned) . '" target="_blank">' . get_staff_full_name($assigned) . '</a>',
+            e(get_staff_full_name()),
+            '<a href="' . admin_url('profile/' . $assigned) . '" target="_blank">' . e(get_staff_full_name($assigned)) . '</a>',
         ];
 
         if ($integration == true) {
@@ -703,20 +703,23 @@ class Leads_model extends App_Model
      */
     public function get_status($id = '', $where = [])
     {
-        $this->db->where($where);
         if (is_numeric($id)) {
+            $this->db->where($where);
             $this->db->where('id', $id);
 
             return $this->db->get(db_prefix() . 'leads_status')->row();
         }
 
-        $statuses = $this->app_object_cache->get('leads-all-statuses');
+        $whereKey = md5(serialize($where));
+      
+        $statuses = $this->app_object_cache->get('leads-all-statuses-'.$whereKey);
 
         if (!$statuses) {
+            $this->db->where($where);
             $this->db->order_by('statusorder', 'asc');
 
             $statuses = $this->db->get(db_prefix() . 'leads_status')->result_array();
-            $this->app_object_cache->add('leads-all-statuses', $statuses);
+            $this->app_object_cache->add('leads-all-statuses-'.$whereKey, $statuses);
         }
 
         return $statuses;

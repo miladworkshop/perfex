@@ -99,18 +99,18 @@ class Contract_merge_fields extends App_merge_fields
 
         $currency = get_base_currency();
 
-        $fields['{contract_id}']             = $contract->id;
-        $fields['{contract_subject}']        = $contract->subject;
-        $fields['{contract_type}']           = $contract->type_name;
+        $fields['{contract_id}']             = e($contract->id);
+        $fields['{contract_subject}']        = e($contract->subject);
+        $fields['{contract_type}']           = e($contract->type_name);
         $fields['{contract_description}']    = nl2br($contract->description);
-        $fields['{contract_datestart}']      = _d($contract->datestart);
-        $fields['{contract_dateend}']        = _d($contract->dateend);
-        $fields['{contract_contract_value}'] = app_format_money($contract->contract_value, $currency);
+        $fields['{contract_datestart}']      = e(_d($contract->datestart));
+        $fields['{contract_dateend}']        = e(_d($contract->dateend));
+        $fields['{contract_contract_value}'] = e(app_format_money($contract->contract_value, $currency));
 
         $fields['{contract_link}']       = site_url('contract/' . $contract->id . '/' . $contract->hash);
-        $fields['{project_name}']        = get_project_name_by_id($contract->project_id);
+        $fields['{project_name}']        = e(get_project_name_by_id($contract->project_id));
         $fields['{contract_short_url}']  = get_contract_shortlink($contract);
-        $fields['{contract_created_at}'] = _dt($contract->created_at);
+        $fields['{contract_created_at}'] = e(_dt($contract->created_at));
 
         $custom_fields = get_custom_fields('contracts');
         foreach ($custom_fields as $field) {

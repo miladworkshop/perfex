@@ -4,17 +4,17 @@ if (count($invoices_to_merge) > 0) { ?>
     <h4 class="tw-font-semibold tw-mb-4"><?php echo _l('invoices_available_for_merging'); ?></h4>
     <?php foreach ($invoices_to_merge as $_inv) { ?>
     <div class="checkbox">
-        <input type="checkbox" name="invoices_to_merge[]" value="<?php echo $_inv->id; ?>">
+        <input type="checkbox" name="invoices_to_merge[]" value="<?php echo e($_inv->id); ?>">
         <label for="">
             <a href="<?php echo admin_url('invoices/list_invoices/' . $_inv->id); ?>" data-toggle="tooltip"
                 data-title="<?php echo format_invoice_status($_inv->status, '', false); ?>" target="_blank">
-                <?php echo format_invoice_number($_inv->id); ?>
-            </a> - <?php echo app_format_money($_inv->total, $_inv->currency_name); ?>
+                <?php echo e(format_invoice_number($_inv->id)); ?>
+            </a> - <?php echo e(app_format_money($_inv->total, $_inv->currency_name)); ?>
         </label>
     </div>
     <?php
                 if ($_inv->discount_total > 0) {
-                    echo '<b>' . _l('invoices_merge_discount', app_format_money($_inv->discount_total, $_inv->currency_name)) . '</b><br />';
+                    echo '<b>' . e(_l('invoices_merge_discount', app_format_money($_inv->discount_total, $_inv->currency_name))) . '</b><br />';
                 }
                 ?>
     <?php } ?>

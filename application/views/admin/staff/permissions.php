@@ -12,9 +12,9 @@
                 $is_admin = is_admin($member->staffid);
             }
          foreach (get_available_staff_permissions($funcData) as $feature => $permission) { ?>
-            <tr data-name="<?php echo $feature; ?>">
+            <tr data-name="<?php echo e($feature); ?>">
                 <td>
-                    <b><?php echo $permission['name']; ?></b>
+                    <b><?php echo e($permission['name']); ?></b>
                 </td>
                 <td>
                     <?php
@@ -50,16 +50,16 @@
                             <input <?php if ($capability == 'view') { ?> data-can-view <?php } ?>
                                 <?php if ($capability == 'view_own') { ?> data-can-view-own <?php } ?>
                                 <?php if (is_array($name) && isset($name['not_applicable']) && $name['not_applicable']) { ?>
-                                data-not-applicable="true" <?php } ?> type="checkbox" <?php echo $checked; ?>
+                                data-not-applicable="true" <?php } ?> type="checkbox" <?php echo e($checked); ?>
                                 class="capability" id="<?php echo $feature . '_' . $capability; ?>"
-                                name="permissions[<?php echo $feature; ?>][]" value="<?php echo $capability; ?>"
-                                <?php echo $disabled; ?>>
+                                name="permissions[<?php echo e($feature); ?>][]" value="<?php echo e($capability); ?>"
+                                <?php echo e($disabled); ?>>
                             <label for="<?php echo $feature . '_' . $capability; ?>">
                                 <?php echo !is_array($name) ? $name : $name['name']; ?>
                             </label>
                             <?php
                       if (isset($permission['help']) && array_key_exists($capability, $permission['help'])) {
-                          echo '<i class="fa-regular fa-circle-question" data-toggle="tooltip" data-title="' . $permission['help'][$capability] . '"></i>';
+                          echo '<i class="fa-regular fa-circle-question" data-toggle="tooltip" data-title="' . e($permission['help'][$capability]) . '"></i>';
                       } ?>
                         </div>
                     </div>

@@ -339,11 +339,8 @@ class Contracts extends AdminController
         } else {
             set_alert('warning', _l('problem_deleting', _l('contract_lowercase')));
         }
-        if (strpos($_SERVER['HTTP_REFERER'], 'clients/') !== false) {
-            redirect($_SERVER['HTTP_REFERER']);
-        } else {
-            redirect(admin_url('contracts'));
-        }
+        
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     /* Manage contract types Since Version 1.0.3 */

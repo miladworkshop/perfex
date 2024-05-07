@@ -3928,3 +3928,14 @@ $lang['filter_operator_less_or_equal'] = 'less or equal';
 $lang['no_filters_found'] = 'No saved filters, get started by creating a new filter.';
 
 $lang['staff_logged_in_public_ticket_warning'] = 'You are logged in a staff member, if you want to reply to the ticket as staff, you must make reply via the admin area.';
+
+# Version 3.1.2
+$lang['allow_non_admin_members_to_delete_tickets_and_replies'] = 'Разрешить сотрудникам, не являющимся администраторами, удалять заявки и ответы';
+$lang['default_filter_info'] = 'Фильтр будет помечен как используемый по умолчанию только для вашей учетной записи.';
+$lang['required_register_fields'] = 'Обязательные поля для регистрации (личный кабинет клиента)';
+
+# Version 3.1.6
+$lang['allow_non_admin_members_to_edit_ticket_messages'] = 'Allow non-admin staff members to delete tickets and replies';
+$lang['proposal_auto_convert_to_invoice_on_client_accept'] = 'Auto convert the proposal to invoice after client accept (only customers related proposals)';
+$lang['invoice_activity_auto_converted_from_proposal']      = 'Invoice auto created from proposal with number %s';
+$lang['clients_proposal_invoiced_successfully'] = 'Thank you for accepting the proposal. Please review the created invoice for the proposal';

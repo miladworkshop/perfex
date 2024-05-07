@@ -15,7 +15,7 @@
    <a href="#removal_requests" aria-controls="removal_requests" role="tab" data-toggle="tab">
        Removal Requests
        <?php if ($not_pending_requests > 0) { ?>
-       <span class="badge"><?php echo $not_pending_requests; ?></span>
+       <span class="badge"><?php echo e($not_pending_requests); ?></span>
        <?php } ?>
    </a>
 </li>
@@ -52,8 +52,8 @@
                 <?php
                 foreach ($requests as $request) { ?>
                 <tr>
-                    <td data-order="<?php echo $request['id']; ?>"><?php echo $request['id']; ?></td>
-                    <td><?php echo $request['request_from']; ?>
+                    <td data-order="<?php echo e($request['id']); ?>"><?php echo e($request['id']); ?></td>
+                    <td><?php echo e($request['request_from']); ?>
                         <?php if (!empty($request['contact_id'])) {
                     echo '<span class="label label-info pull-right">Contact</span>';
                 } elseif (!empty($request['lead_id'])) {
@@ -61,9 +61,9 @@
                 }
                         ?>
                     </td>
-                    <td><?php echo $request['description']; ?></td>
-                    <td data-order="<?php echo $request['status']; ?>">
-                        <select class="selectpicker removalStatus" name="status" data-id="<?php echo $request['id']; ?>"  width="100%">
+                    <td><?php echo e($request['description']); ?></td>
+                    <td data-order="<?php echo e($request['status']); ?>">
+                        <select class="selectpicker removalStatus" name="status" data-id="<?php echo e($request['id']); ?>"  width="100%">
                             <option value="pending"<?php if ($request['status'] == 'pending') {
                             echo ' selected';
                         } ?>>Pending</option>
@@ -75,7 +75,9 @@
                         } ?>>Refused</option>
                         </select>
                     </td>
-                    <td data-order="<?php echo $request['request_date']; ?>"><?php echo _dt($request['request_date']); ?></td>
+                    <td data-order="<?php echo e($request['request_date']); ?>">
+                        <?php echo e(_dt($request['request_date'])); ?>
+                    </td>
                 </tr>
                 <?php } ?>
             </tbody>

@@ -95,3 +95,17 @@
     margin-top: 0;
   }
 }
+
+.tox-dialog-wrap__backdrop {
+  @apply !tw-bg-neutral-900/25;
+}
+
+.tox-dialog-wrap__backdrop--opaque {
+  @apply !tw-bg-neutral-900/25;
+}
+
+@media (max-width: 768px) {
+  .tox-dialog-wrap__backdrop--opaque {
+    background-color: #fff !important;
+  }
+}

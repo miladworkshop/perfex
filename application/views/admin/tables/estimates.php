@@ -87,9 +87,9 @@ return App_table::find('estimates')
             $numberOutput = '';
             // If is from client area table or projects area request
             if (is_numeric($clientid) || $project_id) {
-                $numberOutput = '<a href="' . admin_url('estimates/list_estimates/' . $aRow['id']) . '" target="_blank">' . format_estimate_number($aRow['id']) . '</a>';
+                $numberOutput = '<a href="' . admin_url('estimates/list_estimates/' . $aRow['id']) . '" target="_blank">' . e(format_estimate_number($aRow['id'])) . '</a>';
             } else {
-                $numberOutput = '<a href="' . admin_url('estimates/list_estimates/' . $aRow['id']) . '" onclick="init_estimate(' . $aRow['id'] . '); return false;">' . format_estimate_number($aRow['id']) . '</a>';
+                $numberOutput = '<a href="' . admin_url('estimates/list_estimates/' . $aRow['id']) . '" onclick="init_estimate(' . $aRow['id'] . '); return false;">' . e(format_estimate_number($aRow['id'])) . '</a>';
             }
 
             $numberOutput .= '<div class="row-options">';
@@ -102,7 +102,7 @@ return App_table::find('estimates')
 
             $row[] = $numberOutput;
 
-            $amount = app_format_money($aRow['total'], $aRow['currency_name']);
+            $amount = e(app_format_money($aRow['total'], $aRow['currency_name']));
 
             if ($aRow['invoiceid']) {
                 $amount .= '<br /><span class="hide"> - </span><span class="text-success tw-text-sm">' . _l('estimate_invoiced') . '</span>';
@@ -110,25 +110,25 @@ return App_table::find('estimates')
 
             $row[] = $amount;
 
-            $row[] = app_format_money($aRow['total_tax'], $aRow['currency_name']);
+            $row[] = e(app_format_money($aRow['total_tax'], $aRow['currency_name']));
 
             $row[] = $aRow['year'];
 
             if (empty($aRow['deleted_customer_name'])) {
-                $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . $aRow['company'] . '</a>';
+                $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . e($aRow['company']) . '</a>';
             } else {
-                $row[] = $aRow['deleted_customer_name'];
+                $row[] = e($aRow['deleted_customer_name']);
             }
 
-            $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '">' . $aRow['project_name'] . '</a>';
+            $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '">' . e($aRow['project_name']) . '</a>';
 
             $row[] = render_tags($aRow['tags']);
 
-            $row[] = _d($aRow['date']);
+            $row[] = e(_d($aRow['date']));
 
-            $row[] = _d($aRow['expirydate']);
+            $row[] = e(_d($aRow['expirydate']));
 
-            $row[] = $aRow['reference_no'];
+            $row[] = e($aRow['reference_no']);
 
             $row[] = format_estimate_status($aRow[db_prefix() . 'estimates.status']);
 

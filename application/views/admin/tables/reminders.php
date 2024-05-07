@@ -33,8 +33,10 @@ foreach ($rResult as $aRow) {
         if ($aColumns[$i] == 'staff') {
             $_data = '<a href="' . admin_url('staff/profile/' . $aRow['staff']) . '">' . staff_profile_image($aRow['staff'], [
                 'staff-profile-image-small',
-                ]) . ' ' . $aRow['firstname'] . ' ' . $aRow['lastname'] . '</a>';
+                ]) . ' ' . e($aRow['firstname'] . ' ' . $aRow['lastname']) . '</a>';
         } elseif ($aColumns[$i] == 'description') {
+            $_data = process_text_content_for_display($aRow['description']);
+            
             if ($aRow['creator'] == get_staff_user_id() || is_admin()) {
                 $_data .= '<div class="row-options">';
                 if ($aRow['isnotified'] == 0) {
@@ -50,8 +52,9 @@ foreach ($rResult as $aRow) {
                 $_data = _l('reminder_is_notified_boolean_no');
             }
         } elseif ($aColumns[$i] == 'date') {
-            $_data = _dt($_data);
-        }
+            $_data = e(_dt($_data));
+        } 
+
         $row[] = $_data;
     }
     $row['DT_RowClass'] = 'has-row-options';

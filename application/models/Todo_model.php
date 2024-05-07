@@ -54,13 +54,16 @@ class Todo_model extends App_Model
         } else {
             $this->db->limit($this->todo_limit);
         }
+
         $todos = $this->db->get()->result_array();
+        
         // format date
         $i = 0;
+
         foreach ($todos as $todo) {
             $todos[$i]['dateadded']    = _dt($todo['dateadded']);
             $todos[$i]['datefinished'] = _dt($todo['datefinished']);
-            $todos[$i]['description']  = check_for_links($todo['description']);
+            $todos[$i]['description']  = $todo['description'];
             $i++;
         }
 

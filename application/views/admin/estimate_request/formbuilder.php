@@ -156,9 +156,9 @@
                                                     data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                                                     <option value=""></option>
                                                     <?php foreach ($languages as $availableLanguage) { ?>
-                                                    <option value="<?php echo $availableLanguage; ?>"
+                                                    <option value="<?php echo e($availableLanguage); ?>"
                                                         <?php echo(isset($form) && $form->language == $availableLanguage) || (!isset($form) && get_option('active_language') == $availableLanguage) ? ' selected' : ''; ?>>
-                                                        <?php echo ucfirst($availableLanguage); ?>
+                                                        <?php echo e(ucfirst($availableLanguage)); ?>
                                                     </option>
                                                     <?php } ?>
                                                 </select>

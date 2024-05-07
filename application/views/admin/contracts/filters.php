@@ -77,8 +77,8 @@
         <li class="divider"></li>
         <?php foreach ($years as $year) { ?>
         <li class="active">
-            <a href="#" data-cview="year_<?php echo $year['year']; ?>"
-                onclick="dt_custom_view(<?php echo $year['year']; ?>,'.table-contracts','year_<?php echo $year['year']; ?>'); return false;"><?php echo $year['year']; ?>
+            <a href="#" data-cview="year_<?php echo e($year['year']); ?>"
+                onclick="dt_custom_view(<?php echo e($year['year']); ?>,'.table-contracts','year_<?php echo e($year['year']); ?>'); return false;"><?php echo e($year['year']); ?>
             </a>
         </li>
         <?php } ?>
@@ -89,8 +89,8 @@
             <a href="#" tabindex="-1"><?php echo _l('months'); ?></a>
             <ul class="dropdown-menu dropdown-menu-left">
                 <?php for ($m = 1; $m <= 12; $m++) { ?>
-                <li><a href="#" data-cview="contracts_by_month_<?php echo $m; ?>"
-                        onclick="dt_custom_view(<?php echo $m; ?>,'.table-contracts','contracts_by_month_<?php echo $m; ?>'); return false;"><?php echo _l(date('F', mktime(0, 0, 0, $m, 1))); ?></a>
+                <li><a href="#" data-cview="contracts_by_month_<?php echo e($m); ?>"
+                        onclick="dt_custom_view(<?php echo e($m); ?>,'.table-contracts','contracts_by_month_<?php echo e($m); ?>'); return false;"><?php echo _l(date('F', mktime(0, 0, 0, $m, 1))); ?></a>
                 </li>
                 <?php } ?>
             </ul>
@@ -100,9 +100,9 @@
         <li class="divider"></li>
         <?php foreach ($contract_types as $type) { ?>
         <li>
-            <a href="#" data-cview="contracts_by_type_<?php echo $type['id']; ?>"
-                onclick="dt_custom_view('contracts_by_type_<?php echo $type['id']; ?>','.table-contracts','contracts_by_type_<?php echo $type['id']; ?>'); return false;">
-                <?php echo $type['name']; ?>
+            <a href="#" data-cview="contracts_by_type_<?php echo e($type['id']); ?>"
+                onclick="dt_custom_view('contracts_by_type_<?php echo e($type['id']); ?>','.table-contracts','contracts_by_type_<?php echo e($type['id']); ?>'); return false;">
+                <?php echo e($type['name']); ?>
             </a>
         </li>
         <?php } ?>

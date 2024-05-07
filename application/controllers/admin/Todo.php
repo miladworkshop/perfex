@@ -50,7 +50,7 @@ class Todo extends AdminController
                 }
             }
 
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
         }
     }
 
@@ -68,7 +68,7 @@ class Todo extends AdminController
         if ($success) {
             set_alert('success', _l('todo_status_changed'));
         }
-        redirect($_SERVER['HTTP_REFERER']);
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     /* Update todo order / ajax */

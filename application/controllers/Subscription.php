@@ -13,11 +13,11 @@ class Subscription extends ClientsController
         $this->load->library('stripe_core');
     }
 
-    public function index($hash)
+    public function index($hash = '')
     {
         $subscription = $this->subscriptions_model->get_by_hash($hash);
 
-        if (!$subscription) {
+        if (!$hash || !$subscription) {
             show_404();
         }
 

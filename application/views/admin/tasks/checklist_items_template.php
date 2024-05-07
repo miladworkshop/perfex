@@ -28,7 +28,7 @@
 <div class="tw-flex tw-flex-col">
     <?php foreach ($checklists as $list) { ?>
     <div>
-        <div class="checklist" data-checklist-id="<?php echo $list['id']; ?>">
+        <div class="checklist" data-checklist-id="<?php echo e($list['id']); ?>">
             <div class="tw-flex">
                 <div class="checkbox checkbox-success checklist-checkbox" data-toggle="tooltip" title="">
                     <input type="checkbox" <?php if ($list['finished'] == 1 && $list['finished_from'] != get_staff_user_id() && !is_admin()) {
@@ -36,10 +36,10 @@
         } ?> name="checklist-box" <?php if ($list['finished'] == 1) {
             echo 'checked';
         }; ?>>
-                    <label for=""><span class="hide"><?php echo $list['description']; ?></span></label>
+                    <label for=""><span class="hide"><?php echo e($list['description']); ?></span></label>
                 </div>
                 <div class="tw-grow">
-                    <textarea data-taskid="<?php echo $task_id; ?>" name="checklist-description" rows="1" <?php if ($list['addedfrom'] != get_staff_user_id() && staff_cant('edit', 'tasks')) {
+                    <textarea data-taskid="<?php echo e($task_id); ?>" name="checklist-description" rows="1" <?php if ($list['addedfrom'] != get_staff_user_id() && staff_cant('edit', 'tasks')) {
             echo ' disabled';
         } ?>><?php echo clear_textarea_breaks($list['description']); ?></textarea>
                 </div>
@@ -48,7 +48,7 @@
                     <span class="dropdown" data-title="<?php echo _l('task_checklist_assign'); ?>"
                         data-toggle="tooltip">
                         <a href="#" class="tw-text-neutral-500 dropdown-toggle" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false" id="checklist-item-<?php echo $list['id']; ?>"
+                            aria-haspopup="true" aria-expanded="false" id="checklist-item-<?php echo e($list['id']); ?>"
                             onclick="return false;">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="tw-w-5 tw-h-5">
@@ -57,12 +57,12 @@
                             </svg>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-left"
-                            aria-labelledby="checklist-item-<?php echo $list['id']; ?>">
+                            aria-labelledby="checklist-item-<?php echo e($list['id']); ?>">
                             <?php foreach ($task_staff_members as $_staff) { ?>
                             <li>
                                 <a href="#"
-                                    onclick="save_checklist_assigned_staff('<?php echo $_staff['staffid'] ; ?>', '<?php echo $list['id']; ?>'); return false;">
-                                    <?php echo  $_staff['firstname'] . ' ' . $_staff['lastname'] ?>
+                                    onclick="save_checklist_assigned_staff('<?php echo $_staff['staffid'] ; ?>', '<?php echo e($list['id']); ?>'); return false;">
+                                    <?php echo e($_staff['firstname'] . ' ' . $_staff['lastname']); ?>
                                 </a>
                             </li>
                             <?php } ?>
@@ -74,7 +74,7 @@
                     <a href="#" class="tw-text-neutral-500 save-checklist-template<?php if ($list['description'] == '' || total_rows(db_prefix() . 'tasks_checklist_templates', ['description' => $list['description']]) > 0) {
             echo ' hide';
         } ?>" data-toggle="tooltip" data-title="<?php echo _l('save_as_template'); ?>"
-                        onclick="save_checklist_item_template(<?php echo $list['id']; ?>,this); return false;">
+                        onclick="save_checklist_item_template(<?php echo e($list['id']); ?>,this); return false;">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="tw-w-5 tw-h-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -84,7 +84,7 @@
                     <?php } ?>
                     <?php if (staff_can('delete',  'tasks') || $list['addedfrom'] == get_staff_user_id()) { ?>
                     <a href="#" class="tw-text-neutral-500 remove-checklist"
-                        onclick="delete_checklist_item(<?php echo $list['id']; ?>,this); return false;">
+                        onclick="delete_checklist_item(<?php echo e($list['id']); ?>,this); return false;">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="tw-w-5 tw-h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -97,21 +97,20 @@
             <p class="font-medium-xs mtop15 tw-text-neutral-500 checklist-item-info">
                 <?php
                 if ($list['addedfrom'] != get_staff_user_id()) {
-                    echo _l('task_created_by', get_staff_full_name($list['addedfrom']));
+                    echo e(_l('task_created_by', get_staff_full_name($list['addedfrom'])));
                 }
                 if ($list['addedfrom'] != get_staff_user_id() && $list['finished'] == 1) {
                     echo ' - ';
                 }
                 if ($list['finished'] == 1) {
-                    echo _l('task_checklist_item_completed_by', get_staff_full_name($list['finished_from']));
+                    echo e(_l('task_checklist_item_completed_by', get_staff_full_name($list['finished_from'])));
                 }
                 if (($list['addedfrom'] != get_staff_user_id() || $list['finished'] == 1) && !empty($list['assigned'])) {
                     echo ' - ';
                 }
                 if (!empty($list['assigned'])) {
-                    echo _l('task_checklist_assigned', get_staff_full_name($list['assigned']));
+                    echo e(_l('task_checklist_assigned', get_staff_full_name($list['assigned'])));
                 }
-
                 ?>
             </p>
             <?php } ?>
@@ -133,7 +132,7 @@ $(function() {
     }, 200);
 
     init_selectpicker();
-    var _hideCompletedItems = '<?php echo $hide_completed_items?>'
+    var _hideCompletedItems = '<?php echo $hide_completed_items ?>'
     if (_hideCompletedItems == 1) {
         toggle_completed_checklist_items_visibility();
     }

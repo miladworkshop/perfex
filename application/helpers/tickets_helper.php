@@ -253,9 +253,9 @@ $(function() {
         editorMessage.on('change', function() {
             if (editorMessage.getContent().trim() != '') {
                 if ($('#savePredefinedReplyFromMessage').length == 0) {
-                    $('[app-field-wrapper="message"] [role="menubar"] .mce-container-body:first')
+                    $('[app-field-wrapper="message"] [role="menubar"]:first')
                         .append(
-                            "<a id=\"savePredefinedReplyFromMessage\" data-toggle=\"modal\" data-target=\"#savePredefinedReplyFromMessageModal\" class=\"save_predefined_reply_from_message pointer\" href=\"#\"><?php echo _l('save_message_as_predefined_reply'); ?></a>"
+                            "<button id=\"savePredefinedReplyFromMessage\" data-toggle=\"modal\" type=\"button\" data-target=\"#savePredefinedReplyFromMessageModal\" class=\"tox-mbtn save_predefined_reply_from_message pointer\" href=\"#\"><?php echo _l('save_message_as_predefined_reply'); ?></button>"
                         );
                 }
                 // For open is handled on contact select
@@ -313,6 +313,37 @@ function get_ticket_public_url($ticket)
     }
 
     return site_url('forms/tickets/' . $key);
+}
+
+function can_staff_delete_ticket_reply()
+{
+    return can_staff_delete_ticket();
+}
+
+function can_staff_delete_ticket()
+{
+    if(is_admin()) {
+        return true;
+    }
+
+    if(!is_staff_member() && get_option('access_tickets_to_none_staff_members') == '0') {
+        return false;
+    }
+
+    return get_option('allow_non_admin_members_to_delete_tickets_and_replies') == '1';
+}
+
+function can_staff_edit_ticket_message()
+{
+    if(is_admin()) {
+        return true;
+    }
+
+    if(!is_staff_member() && get_option('access_tickets_to_none_staff_members') == '0') {
+        return false;
+    }
+
+    return get_option('allow_non_admin_members_to_edit_ticket_messages') == '1';
 }
 
 function ticket_public_form_customers_footer()

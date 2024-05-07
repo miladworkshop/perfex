@@ -239,7 +239,7 @@ function _maybe_remove_first_and_last_br_tag($text)
  */
 function _info_format_replace($mergeCode, $val, $txt)
 {
-    $tmpVal = strip_tags($val);
+    $tmpVal = strip_tags($val ?: '');
 
     if ($tmpVal != '') {
         $result = preg_replace('/({' . $mergeCode . '})/i', $val, $txt);

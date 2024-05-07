@@ -23,9 +23,9 @@
                                 name="project_id" id="project_id" class="form-control selectpicker">
                                 <option value=""></option>
                                 <?php foreach ($projects as $project) { ?>
-                                <option value="<?php echo $project['id']; ?>" <?php echo set_select('project_id', $project['id']); ?><?php if ($this->input->get('project_id') == $project['id']) {
+                                <option value="<?php echo e($project['id']); ?>" <?php echo set_select('project_id', $project['id']); ?><?php if ($this->input->get('project_id') == $project['id']) {
     echo ' selected';
-} ?>><?php echo $project['name']; ?></option>
+} ?>><?php echo e($project['name']); ?></option>
                                 <?php } ?>
                             </select>
                         </div>
@@ -38,9 +38,9 @@
                                         name="department" id="department" class="form-control selectpicker">
                                         <option value=""></option>
                                         <?php foreach ($departments as $department) { ?>
-                                        <option value="<?php echo $department['departmentid']; ?>"
+                                        <option value="<?php echo e($department['departmentid']); ?>"
                                             <?php echo set_select('department', $department['departmentid'], (count($departments) == 1 ? true : false)); ?>>
-                                            <?php echo $department['name']; ?>
+                                            <?php echo e($department['name']); ?>
                                         </option>
                                         <?php } ?>
                                     </select>
@@ -54,9 +54,9 @@
                                         name="priority" id="priority" class="form-control selectpicker">
                                         <option value=""></option>
                                         <?php foreach ($priorities as $priority) { ?>
-                                        <option value="<?php echo $priority['priorityid']; ?>"
+                                        <option value="<?php echo e($priority['priorityid']); ?>"
                                             <?php echo set_select('priority', $priority['priorityid'], hooks()->apply_filters('new_ticket_priority_selected', 2) == $priority['priorityid']); ?>>
-                                            <?php echo ticket_priority_translate($priority['priorityid']); ?>
+                                            <?php echo e(ticket_priority_translate($priority['priorityid'])); ?>
                                         </option>
                                         <?php } ?>
                                     </select>
@@ -72,9 +72,9 @@
                                 name="service" id="service" class="form-control selectpicker">
                                 <option value=""></option>
                                 <?php foreach ($services as $service) { ?>
-                                <option value="<?php echo $service['serviceid']; ?>"
+                                <option value="<?php echo e($service['serviceid']); ?>"
                                     <?php echo set_select('service', $service['serviceid'], (count($services) == 1 ? true : false)); ?>>
-                                    <?php echo $service['name']; ?></option>
+                                    <?php echo e($service['name']); ?></option>
                                 <?php } ?>
                             </select>
                         </div>

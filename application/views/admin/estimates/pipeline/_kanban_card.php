@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
    if ($estimate['status'] == $status) { ?>
-<li data-estimate-id="<?php echo $estimate['id']; ?>" class="<?php if ($estimate['invoiceid'] != null) {
+<li data-estimate-id="<?php echo e($estimate['id']); ?>" class="<?php if ($estimate['invoiceid'] != null) {
        echo 'not-sortable';
    } ?>">
     <div class="panel-body">
@@ -9,8 +9,8 @@
                 <h4 class="tw-font-semibold tw-text-base pipeline-heading tw-mb-0.5">
                     <a href="<?php echo admin_url('estimates/list_estimates/' . $estimate['id']); ?>"
                         class="tw-text-neutral-700 hover:tw-text-neutral-900 active:tw-text-neutral-900"
-                        onclick="estimate_pipeline_open(<?php echo $estimate['id']; ?>); return false;">
-                        <?php echo format_estimate_number($estimate['id']); ?>
+                        onclick="estimate_pipeline_open(<?php echo e($estimate['id']); ?>); return false;">
+                        <?php echo e(format_estimate_number($estimate['id'])); ?>
                     </a>
                     <?php if (staff_can('edit',  'estimates')) { ?>
                     <a href="<?php echo admin_url('estimates/estimate/' . $estimate['id']); ?>" target="_blank"
@@ -23,7 +23,7 @@
                 </h4>
                 <span class="tw-inline-block tw-w-full tw-mb-2">
                     <a href="<?php echo admin_url('clients/client/' . $estimate['clientid']); ?>" target="_blank">
-                        <?php echo $estimate['company']; ?>
+                        <?php echo e($estimate['company']); ?>
                     </a>
                 </span>
             </div>
@@ -34,20 +34,20 @@
                             <span class="tw-text-neutral-500">
                                 <?php echo _l('estimate_total'); ?>:
                             </span>
-                            <?php echo app_format_money($estimate['total'], $estimate['currency_name']); ?>
+                            <?php echo e(app_format_money($estimate['total'], $estimate['currency_name'])); ?>
                         </p>
                         <p class="tw-mb-0 tw-text-sm tw-text-neutral-700">
                             <span class="tw-text-neutral-500">
                                 <?php echo _l('estimate_data_date'); ?>:
                             </span>
-                            <?php echo _d($estimate['date']); ?>
+                            <?php echo e(_d($estimate['date'])); ?>
                         </p>
                         <?php if (is_date($estimate['expirydate']) || !empty($estimate['expirydate'])) { ?>
                         <p class="tw-mb-0 tw-text-sm tw-text-neutral-700">
                             <span class="tw-text-neutral-500">
                                 <?php echo _l('estimate_data_expiry_date'); ?>:
                             </span>
-                            <?php echo _d($estimate['expirydate']); ?>
+                            <?php echo e(_d($estimate['expirydate'])); ?>
                         </p>
                         <?php } ?>
                     </div>

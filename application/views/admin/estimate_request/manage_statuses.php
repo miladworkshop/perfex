@@ -24,23 +24,23 @@
                                 <?php foreach ($statuses as $status) { ?>
                                 <tr>
                                     <td>
-                                        <?php echo $status['id']; ?>
+                                        <?php echo e($status['id']); ?>
                                     </td>
                                     <td><a href="#"
-                                            onclick="edit_status(this,<?php echo $status['id']; ?>);return false;"
-                                            data-color="<?php echo $status['color']; ?>"
-                                            data-name="<?php echo $status['name']; ?>"
-                                            data-order="<?php echo $status['statusorder']; ?>"><?php echo $status['name']; ?></a><br />
+                                            onclick="edit_status(this,<?php echo e($status['id']); ?>);return false;"
+                                            data-color="<?php echo e($status['color']); ?>"
+                                            data-name="<?php echo e($status['name']); ?>"
+                                            data-order="<?php echo e($status['statusorder']); ?>"><?php echo e($status['name']); ?></a><br />
                                         <span class="text-muted">
                                             <?php echo _l('estimate_request_table_total', total_rows(db_prefix() . 'estimate_requests', ['status' => $status['id']])); ?></span>
                                     </td>
                                     <td>
                                         <div class="tw-flex tw-items-center tw-space-x-3">
                                             <a href="#"
-                                                onclick="edit_status(this,<?php echo $status['id']; ?>);return false;"
-                                                data-color="<?php echo $status['color']; ?>"
-                                                data-name="<?php echo $status['name']; ?>"
-                                                data-order="<?php echo $status['statusorder']; ?>"
+                                                onclick="edit_status(this,<?php echo e($status['id']); ?>);return false;"
+                                                data-color="<?php echo e($status['color']); ?>"
+                                                data-name="<?php echo e($status['name']); ?>"
+                                                data-order="<?php echo e($status['statusorder']); ?>"
                                                 class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700">
                                                 <i class="fa-regular fa-pen-to-square fa-lg"></i>
                                             </a>

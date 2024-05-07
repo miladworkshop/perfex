@@ -248,7 +248,7 @@ function staff_profile_image($id, $classes = ['staff-profile-image'], $type = 's
 
     $_attributes = '';
     foreach ($img_attrs as $key => $val) {
-        $_attributes .= $key . '=' . '"' . html_escape($val) . '" ';
+        $_attributes .= $key . '=' . '"' . e($val) . '" ';
     }
 
     $blankImageFormatted = '<img src="' . $url . '" ' . $_attributes . ' class="' . implode(' ', $classes) . '" />';
@@ -310,7 +310,7 @@ function get_staff_full_name($userid = '')
         $CI->app_object_cache->add('staff-full-name-data-' . $userid, $staff);
     }
 
-    return html_escape($staff ? $staff->firstname . ' ' . $staff->lastname : '');
+    return $staff ? $staff->firstname . ' ' . $staff->lastname : '';
 }
 
 /**

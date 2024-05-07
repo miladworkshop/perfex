@@ -9,21 +9,21 @@
                     <div class="row">
                         <div class="col-md-7 project-heading">
                             <div class="tw-flex tw-flex-wrap tw-items-center">
-                                <h3 class="hide project-name"><?php echo $project->name; ?></h3>
-                                <div id="project_view_name" class="tw-max-w-sm tw-mr-3">
+                                <h3 class="hide project-name"><?php echo e($project->name); ?></h3>
+                                <div id="project_view_name" class="tw-mr-3 tw-max-w-[350px]">
                                     <div class="tw-w-full">
                                         <select class="selectpicker" id="project_top" data-width="100%"
                                             <?php if (count($other_projects) > 6) { ?> data-live-search="true"
                                             <?php } ?>>
-                                            <option value="<?php echo $project->id; ?>" selected
-                                                data-content="<?php echo $project->name; ?> - <small><?php echo $project->client_data->company; ?></small>">
-                                                <?php echo $project->client_data->company; ?>
-                                                <?php echo $project->name; ?>
+                                            <option value="<?php echo e($project->id); ?>" selected
+                                                data-content="<?php echo e($project->name); ?> - <small><?php echo e($project->client_data->company); ?></small>">
+                                                <?php echo e($project->client_data->company); ?>
+                                                <?php echo e($project->name); ?>
                                             </option>
                                             <?php foreach ($other_projects as $op) { ?>
-                                            <option value="<?php echo $op['id']; ?>"
-                                                data-subtext="<?php echo $op['company']; ?>">#<?php echo $op['id']; ?> -
-                                                <?php echo $op['name']; ?></option>
+                                            <option value="<?php echo e($op['id']); ?>"
+                                                data-subtext="<?php echo e($op['company']); ?>">#<?php echo e($op['id']); ?> -
+                                                <?php echo e($op['name']); ?></option>
                                             <?php } ?>
                                         </select>
                                     </div>
@@ -36,7 +36,7 @@
                                     <div class="tw-flex -tw-space-x-1">
                                         <?php foreach ($members as $member) { ?>
                                         <span class="tw-group tw-relative"
-                                            data-title="<?php echo get_staff_full_name($member['staff_id']) . (staff_can('create',  'projects') || $member['staff_id'] == get_staff_user_id() ? ' - ' . _l('total_logged_hours_by_staff') . ': ' . seconds_to_time_format($member['total_logged_time']) : ''); ?>"
+                                            data-title="<?php echo e(get_staff_full_name($member['staff_id']) . (staff_can('create',  'projects') || $member['staff_id'] == get_staff_user_id() ? ' - ' . _l('total_logged_hours_by_staff') . ': ' . e(seconds_to_time_format($member['total_logged_time'])) : '')); ?>"
                                             data-toggle="tooltip">
                                             <?php if (staff_can('edit',  'projects')) { ?>
                                             <a href="<?php echo admin_url('projects/remove_team_member/' . $project->id . '/' . $member['staff_id']); ?>"
@@ -62,14 +62,14 @@
                                     </a>
                                 </div>
                                 <?php
-                                echo '<span class="tw-ml-1 project_status tw-inline-block label project-status-' . $project->status . '" style="color:' . $project_status['color'] . ';border:1px solid ' . adjust_hex_brightness($project_status['color'], 0.4) . ';background: ' . adjust_hex_brightness($project_status['color'], 0.04) . ';">' . $project_status['name'] . '</span>';
+                                echo '<span class="tw-ml-1 project_status tw-inline-block label project-status-' . $project->status . '" style="color:' . $project_status['color'] . ';border:1px solid ' . adjust_hex_brightness($project_status['color'], 0.4) . ';background: ' . adjust_hex_brightness($project_status['color'], 0.04) . ';">' . e($project_status['name']) . '</span>';
                             ?>
                             </div>
                         </div>
-                        <div class="col-md-5 text-right">
+                        <div class="col-md-5 text-right tw-space-x-1">
                             <?php if (staff_can('create',  'tasks')) { ?>
                             <a href="#"
-                                onclick="new_task_from_relation(undefined,'project',<?php echo $project->id; ?>); return false;"
+                                onclick="new_task_from_relation(undefined,'project',<?php echo e($project->id); ?>); return false;"
                                 class="btn btn-primary">
                                 <i class="fa-regular fa-plus tw-mr-1"></i>
                                 <?php echo _l('new_task'); ?>
@@ -80,7 +80,7 @@
                            ?>
                             <?php if (staff_can('create',  'invoices')) { ?>
                             <a href="#"
-                                onclick="<?php echo $invoice_func; ?>(<?php echo $project->id; ?>); return false;"
+                                onclick="<?php echo e($invoice_func); ?>(<?php echo e($project->id); ?>); return false;"
                                 class="invoice-project btn btn-primary<?php if ($project->client_data->active == 0) {
                                echo ' disabled';
                            } ?>">
@@ -102,7 +102,7 @@
                                 <ul class="dropdown-menu dropdown-menu-right width200 project-actions">
                                     <li>
                                         <a href="<?php echo admin_url('projects/pin_action/' . $project->id); ?>">
-                                            <?php echo $project_pin_tooltip; ?>
+                                            <?php echo e($project_pin_tooltip); ?>
                                         </a>
                                     </li>
                                     <?php if (staff_can('edit',  'projects')) { ?>
@@ -127,7 +127,7 @@
                                } ?>
                                     <li>
                                         <a href="#" data-name="<?php echo _l('project_status_' . $status['id']); ?>"
-                                            onclick="project_mark_as_modal(<?php echo $status['id']; ?>,<?php echo $project->id; ?>, this); return false;"><?php echo _l('project_mark_as', $status['name']); ?></a>
+                                            onclick="project_mark_as_modal(<?php echo e($status['id']); ?>,<?php echo e($project->id); ?>, this); return false;"><?php echo e(_l('project_mark_as', $status['name'])); ?></a>
                                     </li>
                                     <?php
                            } ?>
@@ -290,6 +290,10 @@ function discussion_comments(selector, discussion_id, discussion_type) {
                 var comment_index = textarea.data('comment_index');
                 var editorConfig = _simple_editor_config();
                 editorConfig.setup = function(ed) {
+                    initializeTinyMceMentions(ed, function () {
+                        return $.getJSON(admin_url + 'projects/get_staff_names_for_mentions/' + project_id)
+                    })
+
                     textarea.data('wysiwyg_editor', ed);
 
                     ed.on('change', function() {
@@ -316,55 +320,14 @@ function discussion_comments(selector, discussion_id, discussion_type) {
 
                     ed.on('init', function() {
                         if (content) ed.setContent(content);
-
-                        if ($('#mention-autocomplete-css').length === 0) {
-                            $('<link>').appendTo('head').attr({
-                                id: 'mention-autocomplete-css',
-                                type: 'text/css',
-                                rel: 'stylesheet',
-                                href: site_url +
-                                    'assets/plugins/tinymce/plugins/mention/autocomplete.css'
-                            });
-                        }
-
-                        if ($('#mention-css').length === 0) {
-                            $('<link>').appendTo('head').attr({
-                                type: 'text/css',
-                                id: 'mention-css',
-                                rel: 'stylesheet',
-                                href: site_url +
-                                    'assets/plugins/tinymce/plugins/mention/rte-content.css'
-                            });
-                        }
                     })
                 }
-
-                editorConfig.toolbar = editorConfig.toolbar.replace('alignright', 'alignright strikethrough')
-                editorConfig.plugins[0] += ' mention';
+                
                 editorConfig.content_style = 'span.mention {\
                      background-color: #eeeeee;\
                      padding: 3px;\
-                  }';
-                var projectUserMentions = [];
-                editorConfig.mentions = {
-                    source: function(query, process, delimiter) {
-                        if (projectUserMentions.length < 1) {
-                            $.getJSON(admin_url + 'projects/get_staff_names_for_mentions/' + project_id,
-                                function(data) {
-                                    projectUserMentions = data;
-                                    process(data)
-                                });
-                        } else {
-                            process(projectUserMentions)
-                        }
-                    },
-                    insert: function(item) {
-                        return '<span class="mention" contenteditable="false" data-mention-id="' + item
-                            .id + '">@' +
-                            item.name + '</span>&nbsp;';
-                    }
-                };
-
+                }';
+           
                 var containerId = this.get_container_id(comment_index);
                 tinyMCE.remove('#' + containerId);
 

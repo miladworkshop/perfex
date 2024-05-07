@@ -127,10 +127,10 @@
                             </thead>
                             <tbody>
                                 <?php foreach ($items_groups as $group) { ?>
-                                <tr class="row-has-options" data-group-row-id="<?php echo $group['id']; ?>">
-                                    <td data-order="<?php echo $group['id']; ?>"><?php echo $group['id']; ?></td>
-                                    <td data-order="<?php echo $group['name']; ?>">
-                                        <span class="group_name_plain_text"><?php echo $group['name']; ?></span>
+                                <tr class="row-has-options" data-group-row-id="<?php echo e($group['id']); ?>">
+                                    <td data-order="<?php echo e($group['id']); ?>"><?php echo e($group['id']); ?></td>
+                                    <td data-order="<?php echo e($group['name']); ?>">
+                                        <span class="group_name_plain_text"><?php echo e($group['name']); ?></span>
                                         <div class="group_edit hide">
                                             <div class="input-group">
                                                 <input type="text" class="form-control">

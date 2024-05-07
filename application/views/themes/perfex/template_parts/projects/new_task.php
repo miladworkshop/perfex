@@ -42,7 +42,7 @@
                         data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                         <option value=""></option>
                         <?php foreach ($milestones as $milestone) { ?>
-                        <option value="<?php echo $milestone['id']; ?>"><?php echo $milestone['name']; ?></option>
+                        <option value="<?php echo e($milestone['id']); ?>"><?php echo e($milestone['name']); ?></option>
                         <?php } ?>
                     </select>
                 </div>
@@ -63,9 +63,9 @@
             <select class="selectpicker" multiple="true" name="assignees[]" id="assignees" data-width="100%"
                 data-live-search="true">
                 <?php foreach ($members as $member) { ?>
-                <option value="<?php echo $member['staff_id']; ?>" <?php if (count($members) == 1) {
+                <option value="<?php echo e($member['staff_id']); ?>" <?php if (count($members) == 1) {
     echo ' selected';
-} ?>><?php echo get_staff_full_name($member['staff_id']); ?></option>
+} ?>><?php echo e(get_staff_full_name($member['staff_id'])); ?></option>
                 <?php } ?>
             </select>
         </div>

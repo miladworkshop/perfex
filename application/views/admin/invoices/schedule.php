@@ -5,7 +5,7 @@
 
         <div class="panel-body">
             <h4 class="tw-my-0 tw-font-semibold">
-                <?php echo _l('schedule_email_for', format_invoice_number($invoice->id)); ?>
+                <?php echo e(_l('schedule_email_for', format_invoice_number($invoice->id))); ?>
             </h4>
             <hr class="hr-panel-separator" />
             <div class="row">
@@ -52,7 +52,7 @@
         </div>
         <div class="panel-footer text-right">
             <a href="#" class="btn btn-danger"
-                onclick="init_invoice(<?php echo $invoice->id; ?>); return false;"><?php echo _l('cancel'); ?></a>
+                onclick="init_invoice(<?php echo e($invoice->id); ?>); return false;"><?php echo _l('cancel'); ?></a>
             <button type="submit" autocomplete="off" data-loading-text="<?php echo _l('wait_text'); ?>"
                 data-form="#schedule_send_form" class="btn btn-success"><?php echo _l('schedule'); ?></button>
         </div>

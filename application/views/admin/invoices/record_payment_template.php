@@ -5,7 +5,7 @@
         <?php echo form_hidden('invoiceid', $invoice->id); ?>
         <div class="panel-body">
             <h4 class="tw-my-0 tw-font-semibold">
-                <?php echo _l('record_payment_for_invoice'); ?> <?php echo format_invoice_number($invoice->id); ?>
+                <?php echo _l('record_payment_for_invoice'); ?> <?php echo e(format_invoice_number($invoice->id)); ?>
             </h4>
             <hr class="hr-panel-separator" />
             <div class="row">
@@ -24,7 +24,7 @@
                             <?php
                             if (is_payment_mode_allowed_for_invoice($mode['id'], $invoice->id)) {
                                 $totalAllowed++; ?>
-                            <option value="<?php echo $mode['id']; ?>"><?php echo $mode['name']; ?></option>
+                            <option value="<?php echo e($mode['id']); ?>"><?php echo e($mode['name']); ?></option>
                             <?php
                             } ?>
                             <?php } ?>
@@ -93,7 +93,7 @@
 
         <div class="panel-footer text-right">
             <a href="#" class="btn btn-danger"
-                onclick="init_invoice(<?php echo $invoice->id; ?>); return false;"><?php echo _l('cancel'); ?></a>
+                onclick="init_invoice(<?php echo e($invoice->id); ?>); return false;"><?php echo _l('cancel'); ?></a>
             <button type="submit" autocomplete="off" data-loading-text="<?php echo _l('wait_text'); ?>"
                 data-form="#record_payment_form" class="btn btn-success"><?php echo _l('submit'); ?></button>
         </div>

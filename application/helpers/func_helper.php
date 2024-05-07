@@ -1,5 +1,7 @@
 <?php
 
+use app\services\HtmlableText;
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 if (!function_exists('startsWith')) {
@@ -79,7 +81,7 @@ if (!function_exists('is_connected')) {
 if (!function_exists('str_lreplace')) {
     /**
      * Replace Last Occurence of a String in a String
-     * @since  Version 1.0.1
+     * @since  1.0.1
      * @param  string $search  string to be replaced
      * @param  string $replace replace with
      * @param  string $subject [the string to search
@@ -297,15 +299,42 @@ if (!function_exists('hex2rgb')) {
     }
 }
 
+if (!function_exists('process_text_content_for_display')) {
+    /**
+     * Process text content for display.
+     *
+     * @since 3.1.1
+     *
+     * @param string $text
+     * @return string
+     */
+    function process_text_content_for_display($text)
+    {
+        return (new HtmlableText($text))->toHtml();
+    }
+}
+
 if (!function_exists('check_for_links')) {
     /**
      * Check for links/emails/ftp in string to wrap in href
-     * @param  string $ret
+     * @param  string $text
      * @return string      formatted string with href in any found
      */
-    function check_for_links($ret)
+    function check_for_links($text)
     {
-        return \app\services\utilities\Str::clickable($ret);
+        if (empty($text)) {
+            return $text;
+        }
+
+        $text = htmlspecialchars_decode($text);
+
+        return \app\services\utilities\Str::clickable($text);
+     
+        $regexPattern = '/<a\s+[^>]*href="([^"]*)"[^>]*>.*?<\/a>/';
+
+        return preg_replace_callback($regexPattern, function ($matches) {
+            return $matches[1];
+        }, $text);
     }
 }
 
@@ -399,17 +428,10 @@ function app_fill_empty_common_attributes($array)
 function strip_html_tags($str, $allowed = '')
 {
     $str = preg_replace('/(<|>)\1{2}/is', '', $str);
+
+    $str = remove_html_invisible_tags($str);
+
     $str = preg_replace([
-        // Remove invisible content
-        '@<head[^>]*?>.*?</head>@siu',
-        '@<style[^>]*?>.*?</style>@siu',
-        '@<script[^>]*?.*?</script>@siu',
-        '@<object[^>]*?.*?</object>@siu',
-        '@<embed[^>]*?.*?</embed>@siu',
-        '@<applet[^>]*?.*?</applet>@siu',
-        '@<noframes[^>]*?.*?</noframes>@siu',
-        '@<noscript[^>]*?.*?</noscript>@siu',
-        '@<noembed[^>]*?.*?</noembed>@siu',
         // Add line breaks before and after blocks
         '@</?((address)|(blockquote)|(center)|(del))@iu',
         '@</?((div)|(h[1-9])|(ins)|(isindex)|(p)|(pre))@iu',
@@ -419,15 +441,6 @@ function strip_html_tags($str, $allowed = '')
         '@</?((label)|(select)|(optgroup)|(option)|(textarea))@iu',
         '@</?((frameset)|(frame)|(iframe))@iu',
     ], [
-        ' ',
-        ' ',
-        ' ',
-        ' ',
-        ' ',
-        ' ',
-        ' ',
-        ' ',
-        ' ',
         "\n\$0",
         "\n\$0",
         "\n\$0",
@@ -439,7 +452,7 @@ function strip_html_tags($str, $allowed = '')
     ], $str);
 
     $str = strip_tags($str, $allowed);
-
+    
     // Remove on events from attributes
     $re  = '/\bon[a-z]+\s*=\s*(?:([\'"]).+?\1|(?:\S+?\(.*?\)(?=[\s>])))/i';
     $str = preg_replace($re, '', $str);
@@ -451,6 +464,39 @@ function strip_html_tags($str, $allowed = '')
     return $str;
 }
 
+/**
+ * Function that removes invisible tags from HTML string
+ * 
+ * @since 3.1.5
+ * 
+ * @param  string $str
+ * 
+ * @return string
+ */
+function remove_html_invisible_tags($str)
+{
+    return preg_replace([
+        '@<head[^>]*?>.*?</head>@siu',
+        '@<style[^>]*?>.*?</style>@siu',
+        '@<script[^>]*?.*?</script>@siu',
+        '@<object[^>]*?.*?</object>@siu',
+        '@<embed[^>]*?.*?</embed>@siu',
+        '@<applet[^>]*?.*?</applet>@siu',
+        '@<noframes[^>]*?.*?</noframes>@siu',
+        '@<noscript[^>]*?.*?</noscript>@siu',
+        '@<noembed[^>]*?.*?</noembed>@siu',
+    ], [
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+    ], $str);
+}
 
 if (!function_exists('adjust_hex_brightness')) {
     function adjust_hex_brightness($hex, $percent)
@@ -508,8 +554,8 @@ function app_unserialize($data)
         $fixed = preg_replace_callback(
             '!s:\d+:"(.*?)";!s',
             function ($m) {
-            return 's:' . strlen($m[1]) . ':"' . $m[1] . '";';
-        },
+                return 's:' . strlen($m[1]) . ':"' . $m[1] . '";';
+            },
             $data
         );
 

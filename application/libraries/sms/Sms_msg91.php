@@ -5,13 +5,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Sms_msg91 extends App_sms
 {
     private $auth_key;
-
     private $sender_id;
-
     private $api_type;
-
-    private $apiRequestUrl = 'http://api.msg91.com/api/v2/sendsms';
-
+    private $apiRequestUrl   = 'http://api.msg91.com/api/v2/sendsms';
     private $worldRequestUrl = 'http://world.msg91.com/api/sendhttp.php';
 
     public function __construct()
@@ -23,33 +19,34 @@ class Sms_msg91 extends App_sms
         $this->api_type  = $this->get_option('msg91', 'api_type');
 
         $this->add_gateway('msg91', [
-                'info' => "<p>
+            'deprecated' => true,
+            'info' => "<p>
                     MSG91 SMS integration is one way messaging, means that your customers won't be able to reply to the SMS.
                 </p>
                 <hr class='hr-10'>",
-                'name'    => 'MSG91',
-                'options' => [
-                    [
-                        'name'  => 'sender_id',
-                        'label' => 'Sender ID',
-                        'info'  => '<p><a href="https://help.msg91.com/article/40-what-is-a-sender-id-how-to-select-a-sender-id" target="_blank">https://help.msg91.com/article/40-what-is-a-sender-id-how-to-select-a-sender-id</a></p>',
-                    ],
-                    [
-                        'name'          => 'api_type',
-                        'field_type'    => 'radio',
-                        'default_value' => 'api',
-                        'label'         => 'Api Type',
-                        'options'       => [
-                            ['label' => 'World', 'value' => 'world'],
-                            ['label' => 'Api', 'value' => 'api'],
-                        ],
-                    ],
-                    [
-                        'name'  => 'auth_key',
-                        'label' => 'Auth Key',
+            'name'    => 'MSG91',
+            'options' => [
+                [
+                    'name'  => 'sender_id',
+                    'label' => 'Sender ID',
+                    'info'  => '<p><a href="https://help.msg91.com/article/40-what-is-a-sender-id-how-to-select-a-sender-id" target="_blank">https://help.msg91.com/article/40-what-is-a-sender-id-how-to-select-a-sender-id</a></p>',
+                ],
+                [
+                    'name'          => 'api_type',
+                    'field_type'    => 'radio',
+                    'default_value' => 'api',
+                    'label'         => 'Api Type',
+                    'options'       => [
+                        ['label' => 'World', 'value' => 'world'],
+                        ['label' => 'Api', 'value' => 'api'],
                     ],
                 ],
-            ]);
+                [
+                    'name'  => 'auth_key',
+                    'label' => 'Auth Key',
+                ],
+            ],
+        ]);
 
         hooks()->add_action('after_sms_trigger_textarea_content', [$this, 'addDltTemplateIdField']);
     }
@@ -57,10 +54,10 @@ class Sms_msg91 extends App_sms
     /**
      * Send sms
      *
-     * @param  string $number
-     * @param  string $message
+     * @param string $number
+     * @param string $message
      *
-     * @return boolean
+     * @return bool
      */
     public function send($number, $message)
     {
@@ -74,10 +71,10 @@ class Sms_msg91 extends App_sms
     /**
      * Send SMS via World Route
      *
-     * @param  string $number
-     * @param  string $message
+     * @param string $number
+     * @param string $message
      *
-     * @return boolean
+     * @return bool
      */
     public function sendViaWorldRoute($number, $message)
     {
@@ -104,7 +101,7 @@ class Sms_msg91 extends App_sms
             }
 
             $this->set_error($result->message);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $response = json_decode($e->getResponse()->getBody()->getContents(), true);
 
             $this->set_error($response['message']);
@@ -116,10 +113,10 @@ class Sms_msg91 extends App_sms
     /**
      * Send SMS via the regular API route
      *
-     * @param  string $number
-     * @param  string $message
+     * @param string $number
+     * @param string $message
      *
-     * @return boolean
+     * @return bool
      */
     public function sendViaApiRoute($number, $message)
     {
@@ -148,7 +145,7 @@ class Sms_msg91 extends App_sms
             }
 
             $this->set_error($result->message);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $response = json_decode($e->getResponse()->getBody()->getContents(), true);
 
             $this->set_error($response['message']);
@@ -193,18 +190,22 @@ class Sms_msg91 extends App_sms
      */
     protected function getCommonQueryString()
     {
+        $dltTemplateId = null;
+
+        if (static::$trigger_being_sent) {
+            $dltTemplateId = get_option($this->dltTemplmateIdOptionName(static::$trigger_being_sent)) ?: null;
+        }
+
         return hooks()->apply_filters('msg91_common_options', array_filter([
-                'route'     => 4,
-                'country'   => 0,
-                'unicode'   => 1,
-                'dev_mode'  => $this->test_mode ? 1 : null,
-                'sender'    => $this->getSender(),
-                'DLT_TE_ID' => static::$trigger_being_sent ?
-                    get_option($this->dltTemplmateIdOptionName(static::$trigger_being_sent)) ?: null :
-                    null,
-            ], function ($value) {
-                return !is_null($value);
-            }));
+            'route'     => 4,
+            'country'   => 0,
+            'unicode'   => 1,
+            'dev_mode'  => $this->test_mode ? 1 : null,
+            'sender'    => $this->getSender(),
+            'DLT_TE_ID' => $dltTemplateId,
+        ], function ($value) {
+            return ! is_null($value);
+        }));
     }
 
     /**
@@ -220,6 +221,6 @@ class Sms_msg91 extends App_sms
             ],
             'version'        => CURL_HTTP_VERSION_1_1,
             'decode_content' => [CURLOPT_ENCODING => ''],
-            ];
+        ];
     }
 }

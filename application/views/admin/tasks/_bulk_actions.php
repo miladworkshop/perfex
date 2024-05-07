@@ -21,7 +21,7 @@
                   <select name="move_to_status_tasks_bulk_action" id="move_to_status_tasks_bulk_action" data-width="100%" class="selectpicker" data-none-selected-text="<?php echo _l('task_status'); ?>">
                      <option value=""></option>
                      <?php foreach ($task_statuses as $status) { ?>
-                        <option value="<?php echo $status['id']; ?>"><?php echo $status['name']; ?></option>
+                        <option value="<?php echo e($status['id']); ?>"><?php echo e($status['name']); ?></option>
                      <?php } ?>
                   </select>
                </div>

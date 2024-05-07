@@ -7,12 +7,12 @@
                     <div class="col-md-12">
                         <p class="project-info tw-mb-0 tw-font-medium tw-text-base tw-tracking-tight">
                             <?php echo _l('project_progress_text'); ?> <span
-                                class="tw-text-neutral-500"><?php echo $percent; ?>%</span>
+                                class="tw-text-neutral-500"><?php echo e($percent); ?>%</span>
                         </p>
                         <div class="progress progress-bar-mini">
                             <div class="progress-bar progress-bar-success no-percent-text not-dynamic"
-                                role="progressbar" aria-valuenow="<?php echo $percent; ?>" aria-valuemin="0"
-                                aria-valuemax="100" style="width: 0%" data-percent="<?php echo $percent; ?>">
+                                role="progressbar" aria-valuenow="<?php echo e($percent); ?>" aria-valuemin="0"
+                                aria-valuemax="100" style="width: 0%" data-percent="<?php echo e($percent); ?>">
                             </div>
                         </div>
                         <?php hooks()->do_action('admin_area_after_project_progress') ?>
@@ -43,15 +43,15 @@
                                     <div class="col-md-6">
                                         <p class="mtop5">
                                             <b><?php echo _l('server_address'); ?>:
-                                            </b><?php echo $vault_entry['server_address']; ?>
+                                            </b><?php echo e($vault_entry['server_address']); ?>
                                         </p>
                                         <p class="tw-mb-0">
                                             <b><?php echo _l('port'); ?>:
-                                            </b><?php echo !empty($vault_entry['port']) ? $vault_entry['port'] : _l('no_port_provided'); ?>
+                                            </b><?php echo e(!empty($vault_entry['port']) ? $vault_entry['port'] : _l('no_port_provided')); ?>
                                         </p>
                                         <p class="tw-mb-0">
                                             <b><?php echo _l('vault_username'); ?>:
-                                            </b><?php echo $vault_entry['username']; ?>
+                                            </b><?php echo e($vault_entry['username']); ?>
                                         </p>
                                         <p class="no-margin">
                                             <b><?php echo _l('vault_password'); ?>: </b><span
@@ -60,7 +60,7 @@
                                                 class="vault-password-encrypted"></span> <a href="#"
                                                 class="vault-view-password mleft10" data-toggle="tooltip"
                                                 data-title="<?php echo _l('view_password'); ?>"
-                                                onclick="vault_re_enter_password(<?php echo $vault_entry['id']; ?>,this); return false;"><i
+                                                onclick="vault_re_enter_password(<?php echo e($vault_entry['id']); ?>,this); return false;"><i
                                                     class="fa fa-lock" aria-hidden="true"></i></a>
                                         </p>
                                     </div>
@@ -68,7 +68,7 @@
                                         <?php if (!empty($vault_entry['description'])) { ?>
                                         <p class="tw-mb-0">
                                             <b><?php echo _l('vault_description'); ?>:
-                                            </b><br /><?php echo $vault_entry['description']; ?>
+                                            </b><br /><?php echo process_text_content_for_display($vault_entry['description']); ?>
                                         </p>
                                         <?php } ?>
                                     </div>
@@ -88,7 +88,7 @@
                                 <dt class="tw-text-sm tw-font-medium tw-text-neutral-500">
                                     <?php echo _l('project'); ?> <?php echo _l('the_number_sign'); ?>
                                 </dt>
-                                <dd class="tw-mt-1 tw-text-sm tw-text-neutral-900"><?php echo $project->id; ?></dd>
+                                <dd class="tw-mt-1 tw-text-sm tw-text-neutral-900"><?php echo e($project->id); ?></dd>
                             </div>
 
                             <div class="sm:tw-col-span-1 project-overview-customer">
@@ -97,8 +97,8 @@
                                 </dt>
                                 <dd class="tw-mt-1 tw-text-sm tw-text-neutral-900">
                                     <a
-                                        href="<?php echo admin_url(); ?>clients/client/<?php echo $project->clientid; ?>">
-                                        <?php echo $project->client_data->company; ?>
+                                        href="<?php echo admin_url(); ?>clients/client/<?php echo e($project->clientid); ?>">
+                                        <?php echo e($project->client_data->company); ?>
                                     </a>
                                 </dd>
                             </div>
@@ -110,15 +110,15 @@
                                 </dt>
                                 <dd class="tw-mt-1 tw-text-sm tw-text-neutral-900">
                                     <?php
-                     if ($project->billing_type == 1) {
-                         $type_name = 'project_billing_type_fixed_cost';
-                     } elseif ($project->billing_type == 2) {
-                         $type_name = 'project_billing_type_project_hours';
-                     } else {
-                         $type_name = 'project_billing_type_project_task_hours';
-                     }
-                    echo _l($type_name);
-                    ?>
+                                        if ($project->billing_type == 1) {
+                                            $type_name = 'project_billing_type_fixed_cost';
+                                        } elseif ($project->billing_type == 2) {
+                                            $type_name = 'project_billing_type_project_hours';
+                                        } else {
+                                            $type_name = 'project_billing_type_project_task_hours';
+                                        }
+                                        echo _l($type_name);
+                                    ?>
                                 </dd>
                             </div>
                             <?php if ($project->billing_type == 1 || $project->billing_type == 2) { ?>
@@ -128,14 +128,14 @@
                                     <?php echo _l('project_total_cost'); ?>
                                 </dt>
                                 <dd class="tw-mt-1 tw-text-sm tw-text-neutral-900">
-                                    <?php echo  app_format_money($project->project_cost, $currency); ?>
+                                    <?php echo e(app_format_money($project->project_cost, $currency)); ?>
                                 </dd>
                                 <?php  } else { ?>
                                 <dt class="tw-text-sm tw-font-medium tw-text-neutral-500">
                                     <?php echo _l('project_rate_per_hour'); ?>
                                 </dt>
                                 <dd class="tw-mt-1 tw-text-sm tw-text-neutral-900">
-                                    <?php echo app_format_money($project->project_rate_per_hour, $currency); ?>
+                                    <?php echo e(app_format_money($project->project_rate_per_hour, $currency)); ?>
                                 </dd>
                                 <?php } ?>
                             </div>
@@ -146,7 +146,7 @@
                                     <?php echo _l('project_status'); ?>
                                 </dt>
                                 <dd class="tw-mt-1 tw-text-sm tw-text-neutral-900">
-                                    <?php echo $project_status['name']; ?>
+                                    <?php echo e($project_status['name']); ?>
                                 </dd>
                             </div>
 
@@ -155,7 +155,7 @@
                                     <?php echo _l('project_datecreated'); ?>
                                 </dt>
                                 <dd class="tw-mt-1 tw-text-sm tw-text-neutral-900">
-                                    <?php echo _d($project->project_created); ?>
+                                    <?php echo e(_d($project->project_created)); ?>
                                 </dd>
                             </div>
                             <div class="sm:tw-col-span-1 project-overview-start-date">
@@ -163,7 +163,7 @@
                                     <?php echo _l('project_start_date'); ?>
                                 </dt>
                                 <dd class="tw-mt-1 tw-text-sm tw-text-neutral-900">
-                                    <?php echo _d($project->start_date); ?>
+                                    <?php echo e(_d($project->start_date)); ?>
                                 </dd>
                             </div>
                             <?php if ($project->deadline) { ?>
@@ -172,7 +172,7 @@
                                     <?php echo _l('project_deadline'); ?>
                                 </dt>
                                 <dd class="tw-mt-1 tw-text-sm tw-text-neutral-900">
-                                    <?php echo _d($project->deadline); ?>
+                                    <?php echo e(_d($project->deadline)); ?>
                                 </dd>
                             </div>
                             <?php } ?>
@@ -183,7 +183,7 @@
                                     <?php echo _l('project_completed_date'); ?>
                                 </dt>
                                 <dd class="tw-mt-1 tw-text-sm text-success">
-                                    <?php echo _dt($project->date_finished); ?>
+                                    <?php echo e(_dt($project->date_finished)); ?>
                                 </dd>
                             </div>
                             <?php } ?>
@@ -195,7 +195,7 @@
                                 </dt>
                                 <dd
                                     class="tw-mt-1 tw-text-sm <?php echo hours_to_seconds_format($project->estimated_hours) < (int)$project_total_logged_time ? 'text-warning' : 'text-neutral-900'; ?>">
-                                    <?php echo str_replace('.', ':', $project->estimated_hours); ?>
+                                    <?php echo e(str_replace('.', ':', $project->estimated_hours)); ?>
                                 </dd>
                             </div>
                             <?php } ?>
@@ -205,21 +205,21 @@
                                     <?php echo _l('project_overview_total_logged_hours'); ?>
                                 </dt>
                                 <dd class="tw-mt-1 tw-text-sm tw-text-neutral-900">
-                                    <?php echo seconds_to_time_format($project_total_logged_time); ?>
+                                    <?php echo e(seconds_to_time_format($project_total_logged_time)); ?>
                                 </dd>
                             </div>
 
 
                             <?php $custom_fields = get_custom_fields('projects');
-         if (count($custom_fields) > 0) { ?>
+                            if (count($custom_fields) > 0) { ?>
                             <?php foreach ($custom_fields as $field) { ?>
                             <?php $value = get_custom_field_value($project->id, $field['id'], 'projects');
-         if ($value == '') {
-             continue;
-         } ?>
+                            if ($value == '') {
+                                continue;
+                            } ?>
                             <div class="sm:tw-col-span-1">
                                 <dt class="tw-text-sm tw-font-medium tw-text-neutral-500">
-                                    <?php echo ucfirst($field['name']); ?>
+                                    <?php echo e(ucfirst($field['name'])); ?>
                                 </dt>
                                 <dd class="tw-mt-1 tw-text-sm tw-text-neutral-900">
                                     <?php echo $value; ?>
@@ -259,8 +259,8 @@
                 </div>
             </div>
         </div>
+        <?php hooks()->do_action('admin_project_overview_end_of_project_overview_left', $project) ?>
     </div>
-    <?php hooks()->do_action('admin_project_overview_end_of_project_overview_left', $project) ?>
     <div class="col-md-6 project-overview-right">
         <div class="row">
             <div class="col-md-<?php echo($project->deadline ? 6 : 12); ?> project-progress-bars">
@@ -270,11 +270,11 @@
                             <div class="row">
                                 <div class="col-md-9">
                                     <p class="bold text-dark tw-mb-2">
-                                        <span dir="ltr"><?php echo $tasks_not_completed; ?> /
-                                            <?php echo $total_tasks; ?></span>
+                                        <span dir="ltr"><?php echo e($tasks_not_completed); ?> /
+                                            <?php echo e($total_tasks); ?></span>
                                         <?php echo _l('project_open_tasks'); ?>
                                     </p>
-                                    <p class="text-muted bold tw-mb-0"><?php echo $tasks_not_completed_progress; ?>%</p>
+                                    <p class="text-muted bold tw-mb-0"><?php echo e($tasks_not_completed_progress); ?>%</p>
                                 </div>
                                 <div class="col-md-3 text-right">
                                     <i class="fa-regular fa-check-circle<?php echo $tasks_not_completed_progress >= 100 ? ' text-success' : ' text-muted'; ?>"
@@ -284,9 +284,9 @@
                                     <div class="progress no-margin progress-bar-mini">
                                         <div class="progress-bar progress-bar-success no-percent-text not-dynamic"
                                             role="progressbar"
-                                            aria-valuenow="<?php echo $tasks_not_completed_progress; ?>"
+                                            aria-valuenow="<?php echo e($tasks_not_completed_progress); ?>"
                                             aria-valuemin="0" aria-valuemax="100" style="width: 0%"
-                                            data-percent="<?php echo $tasks_not_completed_progress; ?>">
+                                            data-percent="<?php echo e($tasks_not_completed_progress); ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -302,11 +302,11 @@
                         <div class="row">
                             <div class="col-md-9">
                                 <p class="bold text-dark tw-mb-2">
-                                    <span dir="ltr"><?php echo $project_days_left; ?> /
-                                        <?php echo $project_total_days; ?></span>
+                                    <span dir="ltr"><?php echo e($project_days_left); ?> /
+                                        <?php echo e($project_total_days); ?></span>
                                     <?php echo _l('project_days_left'); ?>
                                 </p>
-                                <p class="text-muted bold tw-mb-0"><?php echo $project_time_left_percent; ?>%</p>
+                                <p class="text-muted bold tw-mb-0"><?php echo e($project_time_left_percent); ?>%</p>
                             </div>
                             <div class="col-md-3 text-right">
                                 <i class="fa-regular fa-calendar-check<?php echo $project_time_left_percent >= 100 ? ' text-success' : ' text-muted'; ?>"
@@ -314,13 +314,9 @@
                             </div>
                             <div class="col-md-12 mtop5">
                                 <div class="progress no-margin progress-bar-mini">
-                                    <div class="progress-bar<?php if ($project_time_left_percent == 0) {
-             echo ' progress-bar-warning ';
-         } else {
-             echo ' progress-bar-success ';
-         } ?>no-percent-text not-dynamic" role="progressbar" aria-valuenow="<?php echo $project_time_left_percent; ?>"
+                                    <div class="progress-bar no-percent-text not-dynamic <?php echo ($project_time_left_percent == 0) ? 'progress-bar-warning' : 'progress-bar-success'; ?>" role="progressbar" aria-valuenow="<?php echo e($project_time_left_percent); ?>"
                                         aria-valuemin="0" aria-valuemax="100" style="width: 0%"
-                                        data-percent="<?php echo $project_time_left_percent; ?>">
+                                        data-percent="<?php echo e($project_time_left_percent); ?>">
                                     </div>
                                 </div>
                             </div>
@@ -340,40 +336,40 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <?php
-         $data = $this->projects_model->total_logged_time_by_billing_type($project->id);
-         ?>
+                                    $data = $this->projects_model->total_logged_time_by_billing_type($project->id);
+                                ?>
                                 <p class="tw-mb-0 text-muted"><?php echo _l('project_overview_logged_hours'); ?> <span
-                                        class="bold"><?php echo $data['logged_time']; ?></span></p>
+                                        class="bold"><?php echo e($data['logged_time']); ?></span></p>
                                 <p class="bold font-medium tw-mb-0">
-                                    <?php echo app_format_money($data['total_money'], $currency); ?></p>
+                                    <?php echo e(app_format_money($data['total_money'], $currency)); ?></p>
                             </div>
                             <div class="col-md-3">
                                 <?php
-         $data = $this->projects_model->data_billable_time($project->id);
-         ?>
+                                    $data = $this->projects_model->data_billable_time($project->id);
+                                ?>
                                 <p class="tw-mb-0 text-info"><?php echo _l('project_overview_billable_hours'); ?> <span
-                                        class="bold"><?php echo $data['logged_time'] ?></span></p>
+                                        class="bold"><?php echo e($data['logged_time']); ?></span></p>
                                 <p class="bold font-medium tw-mb-0">
-                                    <?php echo app_format_money($data['total_money'], $currency); ?></p>
+                                    <?php echo e(app_format_money($data['total_money'], $currency)); ?></p>
                             </div>
                             <div class="col-md-3">
                                 <?php
-         $data = $this->projects_model->data_billed_time($project->id);
-         ?>
+                                    $data = $this->projects_model->data_billed_time($project->id);
+                                ?>
                                 <p class="tw-mb-0 text-success"><?php echo _l('project_overview_billed_hours'); ?> <span
-                                        class="bold"><?php echo $data['logged_time']; ?></span></p>
+                                        class="bold"><?php echo e($data['logged_time']); ?></span></p>
                                 <p class="bold font-medium tw-mb-0">
-                                    <?php echo app_format_money($data['total_money'], $currency); ?></p>
+                                    <?php echo e(app_format_money($data['total_money'], $currency)); ?></p>
                             </div>
                             <div class="col-md-3">
                                 <?php
-         $data = $this->projects_model->data_unbilled_time($project->id);
-         ?>
+                                    $data = $this->projects_model->data_unbilled_time($project->id);
+                                ?>
                                 <p class="tw-mb-0 text-danger"><?php echo _l('project_overview_unbilled_hours'); ?>
-                                    <span class="bold"><?php echo $data['logged_time']; ?></span>
+                                    <span class="bold"><?php echo e($data['logged_time']); ?></span>
                                 </p>
                                 <p class="bold font-medium tw-mb-0">
-                                    <?php echo app_format_money($data['total_money'], $currency); ?></p>
+                                    <?php echo e(app_format_money($data['total_money'], $currency)); ?></p>
                             </div>
                         </div>
                     </div>
@@ -390,27 +386,27 @@
                             <div class="col-md-3">
                                 <p class="tw-mb-0 text-muted"><?php echo _l('project_overview_expenses'); ?></p>
                                 <p class="bold font-medium tw-mb-0">
-                                    <?php echo app_format_money(sum_from_table(db_prefix() . 'expenses', ['where' => ['project_id' => $project->id], 'field' => 'amount']), $currency); ?>
+                                    <?php echo e(app_format_money(sum_from_table(db_prefix() . 'expenses', ['where' => ['project_id' => $project->id], 'field' => 'amount']), $currency)); ?>
                                 </p>
                             </div>
                             <div class="col-md-3">
                                 <p class="tw-mb-0 text-info"><?php echo _l('project_overview_expenses_billable'); ?></p>
                                 <p class="bold font-medium tw-mb-0">
-                                    <?php echo app_format_money(sum_from_table(db_prefix() . 'expenses', ['where' => ['project_id' => $project->id, 'billable' => 1], 'field' => 'amount']), $currency); ?>
+                                    <?php echo e(app_format_money(sum_from_table(db_prefix() . 'expenses', ['where' => ['project_id' => $project->id, 'billable' => 1], 'field' => 'amount']), $currency)); ?>
                                 </p>
                             </div>
                             <div class="col-md-3">
                                 <p class="tw-mb-0 text-success"><?php echo _l('project_overview_expenses_billed'); ?>
                                 </p>
                                 <p class="bold font-medium tw-mb-0">
-                                    <?php echo app_format_money(sum_from_table(db_prefix() . 'expenses', ['where' => ['project_id' => $project->id, 'invoiceid !=' => 'NULL', 'billable' => 1], 'field' => 'amount']), $currency); ?>
+                                    <?php echo e(app_format_money(sum_from_table(db_prefix() . 'expenses', ['where' => ['project_id' => $project->id, 'invoiceid !=' => 'NULL', 'billable' => 1], 'field' => 'amount']), $currency)); ?>
                                 </p>
                             </div>
                             <div class="col-md-3">
                                 <p class="tw-mb-0 text-danger"><?php echo _l('project_overview_expenses_unbilled'); ?>
                                 </p>
                                 <p class="bold font-medium tw-mb-0">
-                                    <?php echo app_format_money(sum_from_table(db_prefix() . 'expenses', ['where' => ['project_id' => $project->id, 'invoiceid IS NULL', 'billable' => 1], 'field' => 'amount']), $currency); ?>
+                                    <?php echo e(app_format_money(sum_from_table(db_prefix() . 'expenses', ['where' => ['project_id' => $project->id, 'invoiceid IS NULL', 'billable' => 1], 'field' => 'amount']), $currency)); ?>
                                 </p>
                             </div>
                         </div>
@@ -424,11 +420,11 @@
                 <a href="#" class="dropdown-toggle" type="button" id="dropdownMenuProjectLoggedTime"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     <?php if (!$this->input->get('overview_chart')) {
-             echo _l('this_week');
-         } else {
-             echo _l($this->input->get('overview_chart'));
-         }
-         ?>
+                            echo _l('this_week');
+                        } else {
+                            echo _l($this->input->get('overview_chart'));
+                        }
+                    ?>
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuProjectLoggedTime">

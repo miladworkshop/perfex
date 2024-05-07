@@ -41,7 +41,7 @@
     } ?><?php if ($database_upgrade_is_required) {
         echo ' warning';
     } ?>">
-                                        <td data-order="<?php echo $system_name; ?>">
+                                        <td data-order="<?php echo e($system_name); ?>">
                                             <p>
                                                 <b>
                                                     <?php echo $module['headers']['module_name']; ?>
@@ -72,7 +72,7 @@
 
     if (!$versionRequirementMet) {
         echo '<div class="alert alert-warning mtop5">';
-        echo 'This module requires at least v' . $module['headers']['requires_at_least'] . ' of the CRM.';
+        echo 'This module requires at least v' . e($module['headers']['requires_at_least']) . ' of the CRM.';
         if ($module['activated'] === 0) {
             echo ' Hence, cannot be activated';
         }
@@ -82,7 +82,7 @@
     if ($newVersionData = $this->app_modules->new_version_available($system_name)) {
         echo '<div class="alert alert-success mtop5">';
 
-        echo 'There is a new version of ' . $module['headers']['module_name'] . ' available. ';
+        echo 'There is a new version of ' . e($module['headers']['module_name']) . ' available. ';
         $version_actions = [];
 
         if (isset($newVersionData['changelog']) && !empty($newVersionData['changelog'])) {

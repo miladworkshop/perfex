@@ -29,9 +29,9 @@ class Invoice_batch_payments_merge_fields extends App_merge_fields
         $line = '<br>';
         foreach ($payments as $payment) {
             $line .= '----------------------------------------<br>';
-            $line .= _l('payment_table_invoice_number') . ': <a href="' . site_url('invoice/' . $payment->invoiceid . '/' . $payment->hash . '/') . '">#' . format_invoice_number($payment->invoiceid) . '</a><br>';
-            $line .= _l('invoice_payments_table_amount_heading') . ': ' . app_format_money($payment->amount, $payment->currency) . '<br>';
-            $line .= _l('invoice_data_date') . ': ' . _d($payment->date) . '<br>';
+            $line .= _l('payment_table_invoice_number') . ': <a href="' . site_url('invoice/' . $payment->invoiceid . '/' . $payment->hash . '/') . '">#' . e(format_invoice_number($payment->invoiceid)) . '</a><br>';
+            $line .= _l('invoice_payments_table_amount_heading') . ': ' . e(app_format_money($payment->amount, $payment->currency)) . '<br>';
+            $line .= _l('invoice_data_date') . ': ' . e(_d($payment->date)) . '<br>';
         }
         $line .= '----------------------------------------';
 

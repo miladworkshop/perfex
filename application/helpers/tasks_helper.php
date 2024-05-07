@@ -16,7 +16,7 @@ function format_task_status($status, $text = false, $clean = false)
 
     $status_name = $status['name'];
 
-    $status_name = hooks()->apply_filters('task_status_name', $status_name, $status);
+    $status_name = e(hooks()->apply_filters('task_status_name', $status_name, $status));
 
     if ($clean == true) {
         return $status_name;
@@ -176,9 +176,9 @@ function format_members_by_ids_and_names($ids, $names, $size = 'md')
                     ($size == 'md' ? 'tw-h-7 tw-w-7' : 'tw-h-5 tw-w-5') . ' tw-inline-block tw-rounded-full tw-ring-2 tw-ring-white',
                 ], 'small', [
                     'data-toggle' => 'tooltip',
-                    'data-title'  => $assigned,
+                    'data-title'  => e($assigned),
                 ]) . '</a>';
-            $exportAssignees .= $assigned . ', ';
+            $exportAssignees .= e($assigned) . ', ';
         }
     }
 
@@ -406,7 +406,7 @@ function init_relation_tasks_table($table_attributes = [], $filtersWrapperId = '
         <input type="checkbox" value="proposal" id="ts_rel_to_proposal" name="tasks_related_to[]">
         <label for="ts_rel_to_proposal">' . _l('proposals') . '</label>
         </div>';
-
+        echo form_hidden('tasks_related_to');
         echo '</div>';
     }
     echo "<div class='clearfix'></div>";

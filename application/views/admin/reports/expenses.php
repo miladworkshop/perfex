@@ -16,18 +16,18 @@
                 <a href="#" onclick="make_expense_pdf_export(); return false;" class="btn btn-default<?php if ($export_not_supported) {
     echo ' disabled';
 } ?>"><i class="fa-regular fa-file-pdf"></i></a>
-                <a download="expenses-report-<?php echo $current_year; ?>.xls" class="btn btn-default<?php if ($export_not_supported) {
+                <a download="expenses-report-<?php echo e($current_year); ?>.xls" class="btn btn-default<?php if ($export_not_supported) {
     echo ' disabled';
-} ?>" href="#" onclick="return ExcellentExport.excel(this, 'expenses-report-table', 'Expenses Report <?php echo $current_year; ?>');"><i
+} ?>" href="#" onclick="return ExcellentExport.excel(this, 'expenses-report-table', 'Expenses Report <?php echo e($current_year); ?>');"><i
                         class="fa-regular fa-file-excel"></i></a>
                 <?php if (count($expense_years) > 0) { ?>
                 <select class="selectpicker" name="expense_year" onchange="filter_expenses();"
                     data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                     <?php foreach ($expense_years as $year) { ?>
-                    <option value="<?php echo $year['year']; ?>" <?php if ($year['year'] == $current_year) {
+                    <option value="<?php echo e($year['year']); ?>" <?php if ($year['year'] == $current_year) {
     echo 'selected';
 } ?>>
-                        <?php echo $year['year']; ?>
+                        <?php echo e($year['year']); ?>
                     </option>
                     <?php } ?>
                 </select>
@@ -52,8 +52,8 @@
                                     $_currency = get_currency($c['id']);
                                 }
                             } ?>
-                        <option value="<?php echo $c['id']; ?>" <?php echo $selected; ?>>
-                            <?php echo $c['name']; ?>
+                        <option value="<?php echo e($c['id']); ?>" <?php echo e($selected); ?>>
+                            <?php echo e($c['name']); ?>
                         </option>
                         <?php
                         } ?>
@@ -81,7 +81,7 @@
                                                 echo '  <th class="bold">' . _l(date('F', mktime(0, 0, 0, $m, 1))) . '</th>';
                                             }
                                             ?>
-                                        <th class="bold"> <?php echo _l('year'); ?> (<?php echo $current_year; ?>)</th>
+                                        <th class="bold"> <?php echo _l('year'); ?> (<?php echo e($current_year); ?>)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -91,7 +91,7 @@
                                         $totalNetByExpenseCategory = [];
                                         foreach ($categories as $category) { ?>
                                     <tr>
-                                        <td class="bold"><?php echo $category['name']; ?></td>
+                                        <td class="bold"><?php echo e($category['name']); ?></td>
                                         <?php
                                             for ($m = 1; $m <= 12; $m++) {
                                                 // Set the monthly total expenses array
@@ -141,16 +141,16 @@
                                                 array_push($totalNetByExpenseCategory[$category['id']], $total_expenses);
                                                 // Output the total for this category
                                                 if (count($categories) <= 8) {
-                                                    echo app_format_money($total_expenses, $_currency);
+                                                    echo e(app_format_money($total_expenses, $_currency));
                                                 } else {
                                                     // show tooltip for the month if more the 8 categories found. becuase when listing down you wont be able to see the month
-                                                    echo '<span data-toggle="tooltip" title="' . _l(date('F', mktime(0, 0, 0, $m, 1))) . '">' . app_format_money($total_expenses, $_currency) . '</span>';
+                                                    echo '<span data-toggle="tooltip" title="' . _l(date('F', mktime(0, 0, 0, $m, 1))) . '">' . e(app_format_money($total_expenses, $_currency)) . '</span>';
                                                 }
                                                 echo '</td>'; ?>
                                         <?php
                                             } ?>
                                         <td class="tw-bg-neutral-50">
-                                            <?php echo app_format_money(array_sum($totalNetByExpenseCategory[$category['id']]), $_currency); ?>
+                                            <?php echo e(app_format_money(array_sum($totalNetByExpenseCategory[$category['id']]), $_currency)); ?>
                                         </td>
                                     </tr>
                                     <?php } ?>
@@ -165,7 +165,7 @@
                                                 $netMonthlyTotal[$month] = $total;
                                                 $current_year_total[]    = $total; ?>
                                         <td class="bold">
-                                            <?php echo app_format_money($total, $_currency); ?>
+                                            <?php echo e(app_format_money($total, $_currency)); ?>
                                         </td>
                                         <?php
                                             } ?>
@@ -176,7 +176,7 @@
                                                         foreach ($totalNetByExpenseCategory as $totalCat) {
                                                             $totalNetByExpenseCategorySum += array_sum($totalCat);
                                                         }
-                                                        echo app_format_money($totalNetByExpenseCategorySum, $_currency);
+                                                        echo e(app_format_money($totalNetByExpenseCategorySum, $_currency));
                                                         ?>
                                         </td>
                                     </tr>
@@ -190,11 +190,11 @@
                                                         $t            = array_sum($taxMonth);
                                                         $taxTotal[$m] = $t;
                                                         $taxYearlyTotal += $t;
-                                                        echo app_format_money($t, $_currency);
+                                                        echo e(app_format_money($t, $_currency));
                                                         echo '</td>';
                                                     }
                                                     echo '<td class="bold tw-bg-neutral-50">';
-                                                    echo app_format_money($taxYearlyTotal, $_currency);
+                                                    echo e(app_format_money($taxYearlyTotal, $_currency));
                                                     echo '</td>';
                                                     ?>
                                     </tr>
@@ -206,11 +206,11 @@
                                                     if (isset($netMonthlyTotal)) {
                                                         for ($m = 1; $m <= 12; $m++) {
                                                             echo '<td class="bold">';
-                                                            echo app_format_money($netMonthlyTotal[$m] + $taxTotal[$m], $_currency);
+                                                            echo e(app_format_money($netMonthlyTotal[$m] + $taxTotal[$m], $_currency));
                                                             echo '</td>';
                                                         }
                                                         echo '<td class="bold tw-bg-neutral-50">';
-                                                        echo app_format_money($totalNetByExpenseCategorySum + $taxYearlyTotal, $_currency);
+                                                        echo e(app_format_money($totalNetByExpenseCategorySum + $taxYearlyTotal, $_currency));
                                                         echo '</td>';
                                                     }
                                                     ?>
@@ -334,7 +334,7 @@ function make_expense_pdf_export() {
         pageMargins: [12, 12, 12, 12],
         "alignment": "center",
         content: [{
-                text: "<?php echo _l('expenses_report_for'); ?> <?php echo $current_year; ?>:",
+                text: "<?php echo _l('expenses_report_for'); ?> <?php echo e($current_year); ?>:",
                 bold: true,
                 fontSize: 25,
                 margin: [0, 5]

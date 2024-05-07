@@ -23,7 +23,8 @@
                             <div class="form-group profile-image-group">
                                 <div class="row">
                                     <div class="col-md-9">
-                                        <img src="<?php echo contact_profile_image_url($contact->id, 'thumb'); ?>"
+                                        <img src="<?php echo e(contact_profile_image_url($contact->id, 'thumb')); ?>
+"
                                             class="client-profile-image-thumb">
                                     </div>
                                     <div class="col-md-3 text-right">
@@ -50,18 +51,18 @@
                         <div class="form-group profile-positon-group">
                             <label for="title"><?php echo _l('contact_position'); ?></label>
                             <input type="text" class="form-control" name="title" id="title"
-                                value="<?php echo $contact->title; ?>">
+                                value="<?php echo e($contact->title); ?>">
                         </div>
                         <div class="form-group profile-email-group">
                             <label for="email"><?php echo _l('clients_email'); ?></label>
                             <input type="email" name="email" class="form-control" id="email"
-                                value="<?php echo $contact->email; ?>">
+                                value="<?php echo e($contact->email); ?>">
                             <?php echo form_error('email'); ?>
                         </div>
                         <div class="form-group profile-phone-group">
                             <label for="phonenumber"><?php echo _l('clients_phone'); ?></label>
                             <input type="text" class="form-control" name="phonenumber" id="phonenumber"
-                                value="<?php echo $contact->phonenumber; ?>">
+                                value="<?php echo e($contact->phonenumber); ?>">
                         </div>
                         <div class="form-group contact-direction-option profile-direction-group">
                             <label for="direction"><?php echo _l('document_direction'); ?></label>
@@ -178,7 +179,7 @@
             </div>
             <?php if ($contact->last_password_change !== null) { ?>
             <div class="panel-footer last-password-change">
-                <?php echo _l('clients_profile_last_changed_password', time_ago($contact->last_password_change)); ?>
+                <?php echo e(_l('clients_profile_last_changed_password', time_ago($contact->last_password_change))); ?>
             </div>
             <?php } ?>
         </div>

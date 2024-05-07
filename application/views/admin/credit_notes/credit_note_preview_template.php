@@ -84,7 +84,7 @@
                         <?php if (staff_can('edit',  'credit_notes') && $credit_note->status != 3) { ?>
                         <a href="<?php echo admin_url('credit_notes/credit_note/' . $credit_note->id); ?>"
                             class="btn btn-default btn-with-tooltip" data-toggle="tooltip"
-                            title="<?php echo _l('edit', _l('credit_note_lowercase')); ?>" data-placement="bottom">
+                            title="<?php echo e(_l('edit', _l('credit_note_lowercase'))); ?>" data-placement="bottom">
                             <i class="fa-regular fa-pen-to-square"></i>
                         </a>
                         <?php } ?>
@@ -171,7 +171,7 @@
                                    $delete_tooltip = _l('refunds_applied_cant_delete_credit_note');
                                } ?>
                                 <li>
-                                    <a data-toggle="tooltip" data-title="<?php echo $delete_tooltip; ?>"
+                                    <a data-toggle="tooltip" data-title="<?php echo e($delete_tooltip); ?>"
                                         href="<?php echo admin_url('credit_notes/delete/' . $credit_note->id); ?>"
                                         class="text-danger delete-text <?php if ($allow_delete) {
                                    echo ' _delete';
@@ -199,7 +199,7 @@
                                 <h4 class="bold">
                                     <a href="<?php echo admin_url('credit_notes/credit_note/' . $credit_note->id); ?>">
                                         <span id="credit-note-number">
-                                            <?php echo format_credit_note_number($credit_note->id); ?>
+                                            <?php echo e(format_credit_note_number($credit_note->id)); ?>
                                         </span>
                                     </a>
                                 </h4>
@@ -227,13 +227,13 @@
                                 <?php if (!empty($credit_note->reference_no)) { ?>
                                 <p class="no-mbot">
                                     <span class="bold"><?php echo _l('reference_no'); ?>:</span>
-                                    <?php echo $credit_note->reference_no; ?>
+                                    <?php echo e($credit_note->reference_no); ?>
                                 </p>
                                 <?php } ?>
                                 <?php if ($credit_note->project_id && get_option('show_project_on_credit_note') == '1') { ?>
                                 <p class="no-mbot">
                                     <span class="bold"><?php echo _l('project'); ?>:</span>
-                                    <?php echo get_project_name_by_id($credit_note->project_id); ?>
+                                    <?php echo e(get_project_name_by_id($credit_note->project_id)); ?>
                                 </p>
                                 <?php } ?>
                                 <?php $pdf_custom_fields = get_custom_fields('credit_note', ['show_on_pdf' => 1]);
@@ -243,7 +243,7 @@
                                    continue;
                                } ?>
                                 <p class="no-mbot">
-                                    <span class="bold"><?php echo $field['name']; ?>: </span>
+                                    <span class="bold"><?php echo e($field['name']); ?>: </span>
                                     <?php echo $value; ?>
                                 </p>
                                 <?php
@@ -269,7 +269,7 @@
                                                 </span>
                                             </td>
                                             <td class="subtotal">
-                                                <?php echo app_format_money($credit_note->subtotal, $credit_note->currency_name); ?>
+                                                <?php echo e(app_format_money($credit_note->subtotal, $credit_note->currency_name)); ?>
                                             </td>
                                         </tr>
                                         <?php if (is_sale_discount_applied($credit_note)) { ?>
@@ -278,18 +278,18 @@
                                                 <span class="bold tw-text-neutral-700">
                                                     <?php echo _l('credit_note_discount'); ?>
                                                     <?php if (is_sale_discount($credit_note, 'percent')) { ?>
-                                                    (<?php echo app_format_number($credit_note->discount_percent, true); ?>%)
+                                                    (<?php echo e(app_format_number($credit_note->discount_percent, true)); ?>%)
                                                     <?php } ?>
                                                 </span>
                                             </td>
                                             <td class="discount">
-                                                <?php echo '-' . app_format_money($credit_note->discount_total, $credit_note->currency_name); ?>
+                                                <?php echo e('-' . app_format_money($credit_note->discount_total, $credit_note->currency_name)); ?>
                                             </td>
                                         </tr>
                                         <?php } ?>
                                         <?php
                                  foreach ($items->taxes() as $tax) {
-                                     echo '<tr class="tax-area"><td class="bold !tw-text-neutral-700">' . $tax['taxname'] . ' (' . app_format_number($tax['taxrate']) . '%)</td><td>' . app_format_money($tax['total_tax'], $credit_note->currency_name) . '</td></tr>';
+                                     echo '<tr class="tax-area"><td class="bold !tw-text-neutral-700">' . e($tax['taxname']) . ' (' . e(app_format_number($tax['taxrate'])) . '%)</td><td>' . e(app_format_money($tax['total_tax'], $credit_note->currency_name)) . '</td></tr>';
                                  }
                                  ?>
                                         <?php if ((int)$credit_note->adjustment != 0) { ?>
@@ -299,7 +299,7 @@
                                                     class="bold tw-text-neutral-700"><?php echo _l('credit_note_adjustment'); ?></span>
                                             </td>
                                             <td class="adjustment">
-                                                <?php echo app_format_money($credit_note->adjustment, $credit_note->currency_name); ?>
+                                                <?php echo e(app_format_money($credit_note->adjustment, $credit_note->currency_name)); ?>
                                             </td>
                                         </tr>
                                         <?php } ?>
@@ -309,7 +309,7 @@
                                                     class="bold tw-text-neutral-700"><?php echo _l('credit_note_total'); ?></span>
                                             </td>
                                             <td class="total">
-                                                <?php echo app_format_money($credit_note->total, $credit_note->currency_name); ?>
+                                                <?php echo e(app_format_money($credit_note->total, $credit_note->currency_name)); ?>
                                             </td>
                                         </tr>
                                         <?php if ($credit_note->credits_used) { ?>
@@ -320,7 +320,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <?php echo '-' . app_format_money($credit_note->credits_used, $credit_note->currency_name); ?>
+                                                <?php echo e('-' . app_format_money($credit_note->credits_used, $credit_note->currency_name)); ?>
                                             </td>
                                         </tr>
                                         <?php } ?>
@@ -332,7 +332,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <?php echo '-' . app_format_money($credit_note->total_refunds, $credit_note->currency_name); ?>
+                                                <?php echo e('-' . app_format_money($credit_note->total_refunds, $credit_note->currency_name)); ?>
                                             </td>
                                         </tr>
                                         <?php } ?>
@@ -343,7 +343,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <?php echo app_format_money($credit_note->remaining_credits, $credit_note->currency_name); ?>
+                                                <?php echo e(app_format_money($credit_note->remaining_credits, $credit_note->currency_name)); ?>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -352,13 +352,13 @@
                             <?php if ($credit_note->clientnote != '') { ?>
                             <div class="col-md-12 mtop15">
                                 <p class="bold text-muted"><?php echo _l('credit_note_client_note'); ?></p>
-                                <p><?php echo $credit_note->clientnote; ?></p>
+                                <?php echo process_text_content_for_display($credit_note->clientnote); ?>
                             </div>
                             <?php } ?>
                             <?php if ($credit_note->terms != '') { ?>
                             <div class="col-md-12 mtop15">
                                 <p class="bold text-muted"><?php echo _l('terms_and_conditions'); ?></p>
-                                <p><?php echo $credit_note->terms; ?></p>
+                                <?php echo process_text_content_for_display($credit_note->terms); ?>
                             </div>
                             <?php } ?>
                         </div>
@@ -373,19 +373,19 @@
                              $attachment_url = $attachment['external_link'];
                          } ?>
                         <div class="mbot15 row inline-block full-width"
-                            data-attachment-id="<?php echo $attachment['id']; ?>">
+                            data-attachment-id="<?php echo e($attachment['id']); ?>">
                             <div class="col-md-8">
                                 <div class="pull-left"><i
                                         class="<?php echo get_mime_class($attachment['filetype']); ?>"></i></div>
-                                <a href="<?php echo $attachment_url; ?>"
-                                    target="_blank"><?php echo $attachment['file_name']; ?></a>
+                                <a href="<?php echo e($attachment_url); ?>"
+                                    target="_blank"><?php echo e($attachment['file_name']); ?></a>
                                 <br />
-                                <small class="text-muted"> <?php echo $attachment['filetype']; ?></small>
+                                <small class="text-muted"> <?php echo e($attachment['filetype']); ?></small>
                             </div>
                             <div class="col-md-4 text-right">
                                 <?php if ($attachment['staffid'] == get_staff_user_id() || is_admin()) { ?>
                                 <a href="#" class="text-danger"
-                                    onclick="delete_credit_note_attachment(<?php echo $attachment['id']; ?>); return false;"><i
+                                    onclick="delete_credit_note_attachment(<?php echo e($attachment['id']); ?>); return false;"><i
                                         class="fa fa-times"></i></a>
                                 <?php } ?>
                             </div>
@@ -415,14 +415,14 @@
                                 <td>
                                     <a
                                         href="<?php echo admin_url('invoices/list_invoices/' . $credit['invoice_id']); ?>">
-                                        <?php echo format_invoice_number($credit['invoice_id']); ?>
+                                        <?php echo e(format_invoice_number($credit['invoice_id'])); ?>
                                     </a>
                                 </td>
                                 <td>
-                                    <?php echo app_format_money($credit['amount'], $credit_note->currency_name); ?>
+                                    <?php echo e(app_format_money($credit['amount'], $credit_note->currency_name)); ?>
                                 </td>
                                 <td>
-                                    <?php echo _d($credit['date']); ?>
+                                    <?php echo e(_d($credit['date'])); ?>
                                     <?php if (staff_can('delete',  'credit_notes')) { ?>
                                     <a href="<?php echo admin_url('credit_notes/delete_credit_note_applied_credit/' . $credit['id'] . '/' . $credit['credit_id'] . '/' . $credit['invoice_id']); ?>"
                                         class="pull-right text-danger _delete"><i class="fa fa-trash"></i></a>
@@ -462,13 +462,13 @@
                             <?php foreach ($credit_note->refunds as $refund) { ?>
                             <tr>
                                 <td>
-                                    <?php echo _d($refund['refunded_on']); ?>
+                                    <?php echo e(_d($refund['refunded_on'])); ?>
                                 </td>
                                 <td>
-                                    <?php echo app_format_money($refund['amount'], $credit_note->currency_name); ?>
+                                    <?php echo e(app_format_money($refund['amount'], $credit_note->currency_name)); ?>
                                 </td>
                                 <td>
-                                    <?php echo $refund['payment_mode_name']; ?>
+                                    <?php echo e($refund['payment_mode_name']); ?>
                                 </td>
                                 <td>
                                     <?php if (staff_can('delete',  'credit_notes')) { ?>
@@ -478,12 +478,12 @@
                                     </a>
                                     <?php } ?>
                                     <?php if (staff_can('edit',  'credit_notes')) { ?>
-                                    <a href="#" onclick="edit_refund(<?php echo $refund['id']; ?>); return false;"
+                                    <a href="#" onclick="edit_refund(<?php echo e($refund['id']); ?>); return false;"
                                         class="pull-right mright5">
                                         <i class="fa-regular fa-pen-to-square"></i>
                                     </a>
                                     <?php } ?>
-                                    <?php echo $refund['note']; ?>
+                                    <?php echo e($refund['note']); ?>
                                 </td>
                             </tr>
                             <?php } ?>
@@ -493,7 +493,7 @@
                 </div>
                 <div role="tabpanel" class="tab-pane" id="tab_reminders">
                     <a href="#" class="btn btn-default" data-toggle="modal"
-                        data-target=".reminder-modal-credit_note-<?php echo $credit_note->id; ?>"><i
+                        data-target=".reminder-modal-credit_note-<?php echo e($credit_note->id); ?>"><i
                             class="fa-regular fa-bell"></i> <?php echo _l('credit_note_set_reminder_title'); ?></a>
                     <hr />
                     <?php render_datatable([ _l('reminder_description'), _l('reminder_date'), _l('reminder_staff'), _l('reminder_is_notified')], 'reminders'); ?>
@@ -515,12 +515,12 @@ init_form_reminder();
 init_tabs_scrollable();
 
 function refund_credit_note() {
-    var credit_note_id = <?php echo $credit_note->id; ?>;
+    var credit_note_id = <?php echo e($credit_note->id); ?>;
     $('#credit_note').load(admin_url + 'credit_notes/refund/' + credit_note_id);
 }
 
 function edit_refund(refund_id) {
-    var credit_note_id = <?php echo $credit_note->id; ?>;
+    var credit_note_id = <?php echo e($credit_note->id); ?>;
     $('#credit_note').load(admin_url + 'credit_notes/refund/' + credit_note_id + '/' + refund_id);
 }
 </script>

@@ -392,6 +392,11 @@ class App_table
     protected function castRules($filters, $table)
     {
         foreach ($filters as $key => $filter) {
+            if(!isset($filter['builder']['rules'])) {
+                $filters[$key]['builder']['rules'] = [];
+                $filter['builder']['rules'] = [];
+            }
+
             foreach ($filter['builder']['rules'] as $rk => $rule) {
                 if ($rule instanceof App_table_filter) {
                     continue;

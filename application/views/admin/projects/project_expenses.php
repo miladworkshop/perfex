@@ -38,7 +38,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><?php echo _l('add_new', _l('expense_lowercase')); ?></h4>
+                <h4 class="modal-title"><?php echo e(_l('add_new', _l('expense_lowercase'))); ?></h4>
             </div>
             <div class="modal-body">
                 <div id="dropzoneDragArea" class="dz-default dz-message">
@@ -60,8 +60,8 @@
                                 data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                                 <option value=""><?php echo _l('no_tax'); ?></option>
                                 <?php foreach ($taxes as $tax) { ?>
-                                <option value="<?php echo $tax['id']; ?>" data-subtext="<?php echo $tax['name']; ?>">
-                                    <?php echo $tax['taxrate']; ?>%</option>
+                                <option value="<?php echo e($tax['id']); ?>" data-subtext="<?php echo e($tax['name']); ?>">
+                                    <?php echo e($tax['taxrate']); ?>%</option>
                                 <?php } ?>
                             </select>
                         </div>
@@ -73,8 +73,8 @@
                                 data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>" disabled>
                                 <option value=""><?php echo _l('no_tax'); ?></option>
                                 <?php foreach ($taxes as $tax) { ?>
-                                <option value="<?php echo $tax['id']; ?>" data-subtext="<?php echo $tax['name']; ?>">
-                                    <?php echo $tax['taxrate']; ?>%</option>
+                                <option value="<?php echo e($tax['id']); ?>" data-subtext="<?php echo e($tax['name']); ?>">
+                                    <?php echo e($tax['taxrate']); ?>%</option>
                                 <?php } ?>
                             </select>
                         </div>

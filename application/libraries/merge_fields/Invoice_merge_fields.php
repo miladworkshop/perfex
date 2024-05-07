@@ -191,22 +191,22 @@ class Invoice_merge_fields extends App_merge_fields
             $this->ci->db->where('id', $payment_id);
             $payment = $this->ci->db->get(db_prefix() . 'invoicepaymentrecords')->row();
 
-            $fields['{payment_total}'] = app_format_money($payment->amount, $currency);
-            $fields['{payment_date}']  = _d($payment->date);
+            $fields['{payment_total}'] = e(app_format_money($payment->amount, $currency));
+            $fields['{payment_date}']  = e(_d($payment->date));
         }
 
-        $fields['{invoice_amount_due}'] = app_format_money(get_invoice_total_left_to_pay($invoice_id, $invoice->total), $currency);
-        $fields['{invoice_sale_agent}'] = get_staff_full_name($invoice->sale_agent);
-        $fields['{invoice_total}']      = app_format_money($invoice->total, $currency);
-        $fields['{invoice_subtotal}']   = app_format_money($invoice->subtotal, $currency);
+        $fields['{invoice_amount_due}'] = e(app_format_money(get_invoice_total_left_to_pay($invoice_id, $invoice->total), $currency));
+        $fields['{invoice_sale_agent}'] = e(get_staff_full_name($invoice->sale_agent));
+        $fields['{invoice_total}']      = e(app_format_money($invoice->total, $currency));
+        $fields['{invoice_subtotal}']   = e(app_format_money($invoice->subtotal, $currency));
 
         $fields['{invoice_link}']       = site_url('invoice/' . $invoice_id . '/' . $invoice->hash);
-        $fields['{invoice_number}']     = format_invoice_number($invoice_id);
-        $fields['{invoice_duedate}']    = _d($invoice->duedate);
-        $fields['{total_days_overdue}'] = get_total_days_overdue($invoice->duedate);
-        $fields['{invoice_date}']       = _d($invoice->date);
-        $fields['{invoice_status}']     = format_invoice_status($invoice->status, '', false);
-        $fields['{project_name}']       = get_project_name_by_id($invoice->project_id);
+        $fields['{invoice_number}']     = e(format_invoice_number($invoice_id));
+        $fields['{invoice_duedate}']    = e(_d($invoice->duedate));
+        $fields['{total_days_overdue}'] = e(get_total_days_overdue($invoice->duedate));
+        $fields['{invoice_date}']       = e(_d($invoice->date));
+        $fields['{invoice_status}']     = e(format_invoice_status($invoice->status, '', false));
+        $fields['{project_name}']       = e(get_project_name_by_id($invoice->project_id));
         $fields['{invoice_short_url}']  = get_invoice_shortlink($invoice);
 
         $custom_fields = get_custom_fields('invoice');

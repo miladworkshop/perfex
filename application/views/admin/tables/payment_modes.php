@@ -26,18 +26,18 @@ foreach ($rResult as $aRow) {
         $_data = $aRow[$aColumns[$i]];
 
         if ($aColumns[$i] == 'active') {
-            $checked = '';
-            if ($aRow['active'] == 1) {
-                $checked = 'checked';
-            }
+            $checked = $aRow['active'] == 1 ? 'checked' : '';
+            
             $_data = '<div class="onoffswitch">
-                <input type="checkbox" data-switch-url="' . admin_url() . 'paymentmodes/change_payment_mode_status" name="onoffswitch" class="onoffswitch-checkbox" id="c_' . $aRow['id'] . '" data-id="' . $aRow['id'] . '" ' . $checked . '>
-                <label class="onoffswitch-label" for="c_' . $aRow['id'] . '"></label>
+                <input type="checkbox" data-switch-url="' . admin_url() . 'paymentmodes/change_payment_mode_status" name="onoffswitch" class="onoffswitch-checkbox" id="c_' . e($aRow['id']) . '" data-id="' . e($aRow['id']) . '" ' . $checked . '>
+                <label class="onoffswitch-label" for="c_' . e($aRow['id']) . '"></label>
             </div>';
             // For exporting
             $_data .= '<span class="hide">' . ($checked == 'checked' ? _l('is_active_export') : _l('is_not_active_export')) . '</span>';
         } elseif ($aColumns[$i] == 'name' || $aColumns[$i] == 'id') {
-            $_data = '<a href="#" data-toggle="modal" data-default-selected="' . $aRow['selected_by_default'] . '" data-show-on-pdf="' . $aRow['show_on_pdf'] . '" data-target="#payment_mode_modal" data-expenses-only="' . $aRow['expenses_only'] . '" data-invoices-only="' . $aRow['invoices_only'] . '" data-id="' . $aRow['id'] . '">' . $_data . '</a>';
+            $_data = '<a href="#" data-toggle="modal" data-default-selected="' . e($aRow['selected_by_default']) . '" data-show-on-pdf="' . e($aRow['show_on_pdf']) . '" data-target="#payment_mode_modal" data-expenses-only="' . e($aRow['expenses_only']) . '" data-invoices-only="' . e($aRow['invoices_only']) . '" data-id="' . e($aRow['id']) . '">' . e($_data) . '</a>';
+        } elseif ($aColumns[$i] == 'description') {
+            $_data = process_text_content_for_display($_data);
         }
 
         $row[] = $_data;
@@ -47,11 +47,11 @@ foreach ($rResult as $aRow) {
     $options .= '<a href="#" class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700" ' . _attributes_to_string([
         'data-toggle'           => 'modal',
         'data-target'           => '#payment_mode_modal',
-        'data-id'               => $aRow['id'],
-        'data-expenses-only'    => $aRow['expenses_only'],
-        'data-invoices-only'    => $aRow['invoices_only'],
-        'data-show-on-pdf'      => $aRow['show_on_pdf'],
-        'data-default-selected' => $aRow['selected_by_default'],
+        'data-id'               => e($aRow['id']),
+        'data-expenses-only'    => e($aRow['expenses_only']),
+        'data-invoices-only'    => e($aRow['invoices_only']),
+        'data-show-on-pdf'      => e($aRow['show_on_pdf']),
+        'data-default-selected' => e($aRow['selected_by_default']),
         ]) . '>
         <i class="fa-regular fa-pen-to-square fa-lg"></i>
     </a>';

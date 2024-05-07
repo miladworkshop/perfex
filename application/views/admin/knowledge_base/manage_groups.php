@@ -31,33 +31,33 @@
                                 <tbody>
                                     <?php foreach ($groups as $group) { ?>
                                     <tr>
-                                        <td><?php echo $group['name']; ?> <span
+                                        <td><?php echo e($group['name']); ?> <span
                                                 class="badge mleft5"><?php echo total_rows(db_prefix() . 'knowledge_base', 'articlegroup=' . $group['groupid']); ?></span>
                                         </td>
                                         <td>
                                             <div class="onoffswitch">
-                                                <input type="checkbox" id="<?php echo $group['groupid']; ?>"
-                                                    data-id="<?php echo $group['groupid']; ?>"
+                                                <input type="checkbox" id="<?php echo e($group['groupid']); ?>"
+                                                    data-id="<?php echo e($group['groupid']); ?>"
                                                     class="onoffswitch-checkbox" <?php if (staff_cant('edit', 'knowledge_base')) {
     echo 'disabled';
 } ?> data-switch-url="<?php echo admin_url(); ?>knowledge_base/change_group_status" <?php if ($group['active'] == 1) {
     echo 'checked';
 } ?>>
                                                 <label class="onoffswitch-label"
-                                                    for="<?php echo $group['groupid']; ?>"></label>
+                                                    for="<?php echo e($group['groupid']); ?>"></label>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="tw-flex tw-items-center tw-space-x-3">
                                                 <?php if (staff_can('edit',  'knowledge_base')) { ?>
                                                 <a href="#"
-                                                    onclick="edit_kb_group(this,<?php echo $group['groupid']; ?>); return false"
-                                                    data-name="<?php echo $group['name']; ?>"
-                                                    data-color="<?php echo $group['color']; ?>"
+                                                    onclick="edit_kb_group(this,<?php echo e($group['groupid']); ?>); return false"
+                                                    data-name="<?php echo e($group['name']); ?>"
+                                                    data-color="<?php echo e($group['color']); ?>"
                                                     data-description="<?php echo clear_textarea_breaks($group['description']); ?>"
-                                                    data-order="<?php echo $group['group_order']; ?>"
-                                                    data-active="<?php echo $group['active']; ?>"
-                                                    data-slug="<?php echo $group['group_slug']; ?>"
+                                                    data-order="<?php echo e($group['group_order']); ?>"
+                                                    data-active="<?php echo e($group['active']); ?>"
+                                                    data-slug="<?php echo e($group['group_slug']); ?>"
                                                     class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700">
                                                     <i class="fa-regular fa-pen-to-square fa-lg"></i>
                                                 </a>

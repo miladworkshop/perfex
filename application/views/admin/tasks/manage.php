@@ -70,7 +70,7 @@
 </div>
 <?php init_tail(); ?>
 <script>
-taskid = '<?php echo $taskid; ?>';
+taskid = '<?php echo e($taskid); ?>';
 $(function() {
     tasks_kanban();
 });

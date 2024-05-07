@@ -31,7 +31,7 @@
                                         data-width="100%" data-live-search="true"
                                         data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                                         <?php if (isset($contact)) { ?>
-                                        <option value="<?php echo $contact['id']; ?>" selected>
+                                        <option value="<?php echo e($contact['id']); ?>" selected>
                                             <?php echo $contact['firstname'] . ' ' . $contact['lastname']; ?></option>
                                         <?php } ?>
                                         <option value=""></option>
@@ -72,10 +72,10 @@
                                         data-width="100%">
                                         <option value=""><?php echo _l('ticket_settings_none_assigned'); ?></option>
                                         <?php foreach ($staff as $member) { ?>
-                                        <option value="<?php echo $member['staffid']; ?>" <?php if ($member['staffid'] == get_staff_user_id()) {
+                                        <option value="<?php echo e($member['staffid']); ?>" <?php if ($member['staffid'] == get_staff_user_id()) {
     echo 'selected';
 } ?>>
-                                            <?php echo $member['firstname'] . ' ' . $member['lastname'] ; ?>
+                                            <?php echo e($member['firstname'] . ' ' . $member['lastname']); ?>
                                         </option>
                                         <?php } ?>
                                     </select>
@@ -108,10 +108,10 @@
                                             data-live-search="true" data-width="100%"
                                             data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>"
                                             <?php if (isset($project_id)) { ?> data-auto-project="true"
-                                            data-project-userid="<?php echo $userid; ?>" <?php } ?>>
+                                            data-project-userid="<?php echo e($userid); ?>" <?php } ?>>
                                             <?php if (isset($project_id)) { ?>
-                                            <option value="<?php echo $project_id; ?>" selected>
-                                                <?php echo '#' . $project_id . ' - ' . get_project_name_by_id($project_id); ?>
+                                            <option value="<?php echo e($project_id); ?>" selected>
+                                                <?php echo '#' . $project_id . ' - ' . e(get_project_name_by_id($project_id)); ?>
                                             </option>
                                             <?php } ?>
                                         </select>
@@ -137,8 +137,8 @@
                                                     data-live-search="true" class="selectpicker"
                                                     data-title="<?php echo _l('ticket_single_insert_predefined_reply'); ?>">
                                                     <?php foreach ($predefined_replies as $predefined_reply) { ?>
-                                                    <option value="<?php echo $predefined_reply['id']; ?>">
-                                                        <?php echo $predefined_reply['name']; ?></option>
+                                                    <option value="<?php echo e($predefined_reply['id']); ?>">
+                                                        <?php echo e($predefined_reply['name']); ?></option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
@@ -155,10 +155,10 @@
                                                     <option value=""></option>
                                                     <?php foreach ($groups as $group) { ?>
                                                     <?php if (count($group['articles']) > 0) { ?>
-                                                    <optgroup label="<?php echo $group['name']; ?>">
+                                                    <optgroup label="<?php echo e($group['name']); ?>">
                                                         <?php foreach ($group['articles'] as $article) { ?>
-                                                        <option value="<?php echo $article['articleid']; ?>">
-                                                            <?php echo $article['subject']; ?>
+                                                        <option value="<?php echo e($article['articleid']); ?>">
+                                                            <?php echo e($article['subject']); ?>
                                                         </option>
                                                         <?php } ?>
                                                     </optgroup>

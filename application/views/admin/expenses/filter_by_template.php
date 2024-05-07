@@ -31,33 +31,33 @@ foreach($payment_modes as $mode){
 
     <ul class="dropdown-menu dropdown-menu-right width300">
         <li>
-            <a href="#" data-cview="all" onclick="dt_custom_view('','<?php echo $filter_table_name; ?>',''); return false;">
+            <a href="#" data-cview="all" onclick="dt_custom_view('','<?php echo e($filter_table_name); ?>',''); return false;">
                 <?php echo _l('expenses_list_all'); ?>
             </a>
         </li>
         <li class="divider"></li>
         <li>
-            <a href="#" data-cview="billable" onclick="dt_custom_view('billable','<?php echo $filter_table_name; ?>','billable'); return false;">
+            <a href="#" data-cview="billable" onclick="dt_custom_view('billable','<?php echo e($filter_table_name); ?>','billable'); return false;">
                 <?php echo _l('expenses_list_billable'); ?>
             </a>
         </li>
         <li>
-            <a href="#" data-cview="non-billable" onclick="dt_custom_view('non-billable','<?php echo $filter_table_name; ?>','non-billable'); return false;">
+            <a href="#" data-cview="non-billable" onclick="dt_custom_view('non-billable','<?php echo e($filter_table_name); ?>','non-billable'); return false;">
                 <?php echo _l('expenses_list_non_billable'); ?>
             </a>
         </li>
         <li>
-        <a href="#" data-cview="invoiced" onclick="dt_custom_view('invoiced','<?php echo $filter_table_name; ?>','invoiced'); return false;">
+        <a href="#" data-cview="invoiced" onclick="dt_custom_view('invoiced','<?php echo e($filter_table_name); ?>','invoiced'); return false;">
                 <?php echo _l('expenses_list_invoiced'); ?>
             </a>
         </li>
         <li>
-            <a href="#" data-cview="unbilled" onclick="dt_custom_view('unbilled','<?php echo $filter_table_name; ?>','unbilled'); return false;">
+            <a href="#" data-cview="unbilled" onclick="dt_custom_view('unbilled','<?php echo e($filter_table_name); ?>','unbilled'); return false;">
                 <?php echo _l('expenses_list_unbilled'); ?>
             </a>
         </li>
         <li>
-            <a href="#" data-cview="recurring" onclick="dt_custom_view('recurring','<?php echo $filter_table_name; ?>','recurring'); return false;">
+            <a href="#" data-cview="recurring" onclick="dt_custom_view('recurring','<?php echo e($filter_table_name); ?>','recurring'); return false;">
                 <?php echo _l('expenses_list_recurring'); ?>
             </a>
         </li>
@@ -65,7 +65,7 @@ foreach($payment_modes as $mode){
             <li class="divider years-divider"></li>
             <?php foreach($years as $year){ ?>
                 <li class="active expenses-filter-year">
-                    <a href="#" data-cview="year_<?php echo $year['year']; ?>" onclick="dt_custom_view(<?php echo $year['year']; ?>,'<?php echo $filter_table_name; ?>','year_<?php echo $year['year']; ?>'); return false;"><?php echo $year['year']; ?></a>
+                    <a href="#" data-cview="year_<?php echo e($year['year']); ?>" onclick="dt_custom_view(<?php echo e($year['year']); ?>,'<?php echo e($filter_table_name); ?>','year_<?php echo e($year['year']); ?>'); return false;"><?php echo e($year['year']); ?></a>
                 </li>
                 <?php } ?>
                 <?php } ?>
@@ -77,7 +77,7 @@ foreach($payment_modes as $mode){
                      <ul class="dropdown-menu dropdown-menu-left">
                         <?php foreach($categories as $category){ ?>
                             <li>
-                                <a href="#" data-cview="expenses_by_category_<?php echo $category['id']; ?>" onclick="dt_custom_view(<?php echo $category['id']; ?>,'<?php echo $filter_table_name; ?>','expenses_by_category_<?php echo $category['id']; ?>'); return false;"><?php echo $category['name']; ?></a>
+                                <a href="#" data-cview="expenses_by_category_<?php echo e($category['id']); ?>" onclick="dt_custom_view(<?php echo e($category['id']); ?>,'<?php echo e($filter_table_name); ?>','expenses_by_category_<?php echo e($category['id']); ?>'); return false;"><?php echo e($category['name']); ?></a>
                             </li>
                             <?php } ?>
                         </ul>
@@ -89,7 +89,7 @@ foreach($payment_modes as $mode){
                       <a href="#" tabindex="-1"><?php echo _l('months'); ?></a>
                       <ul class="dropdown-menu dropdown-menu-left">
                         <?php for ($m = 1; $m <= 12; $m++) { ?>
-                          <li class="expenses-filter-month"><a href="#" data-cview="expenses_by_month_<?php echo $m; ?>" onclick="dt_custom_view(<?php echo $m; ?>,'<?php echo $filter_table_name; ?>','expenses_by_month_<?php echo $m; ?>'); return false;"><?php echo _l(date('F', mktime(0, 0, 0, $m, 1))); ?></a></li>
+                          <li class="expenses-filter-month"><a href="#" data-cview="expenses_by_month_<?php echo e($m); ?>" onclick="dt_custom_view(<?php echo e($m); ?>,'<?php echo e($filter_table_name); ?>','expenses_by_month_<?php echo e($m); ?>'); return false;"><?php echo _l(date('F', mktime(0, 0, 0, $m, 1))); ?></a></li>
                           <?php } ?>
                       </ul>
                   </li>
@@ -101,7 +101,7 @@ foreach($payment_modes as $mode){
                     if(total_rows(db_prefix().'expenses',array('paymentmode'=>$mode['id'])) == 0){continue;}
                     ?>
                     <li>
-                        <a href="#" data-cview="expense_payments_by_<?php echo $mode['id']; ?>" onclick="dt_custom_view('<?php echo $mode['id']; ?>','<?php echo $filter_table_name; ?>','expense_payments_by_<?php echo $mode['id']; ?>'); return false;">
+                        <a href="#" data-cview="expense_payments_by_<?php echo e($mode['id']); ?>" onclick="dt_custom_view('<?php echo e($mode['id']); ?>','<?php echo e($filter_table_name); ?>','expense_payments_by_<?php echo e($mode['id']); ?>'); return false;">
                             <?php echo _l('expenses_list_made_payment_by',$mode['name']); ?>
                         </a>
                     </li>

@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
-<div class="modal fade" id="sync_data_proposal_data" data-rel-type="<?php echo $rel_type; ?>" tabindex="-1" role="dialog">
+<div class="modal fade" id="sync_data_proposal_data" data-rel-type="<?php echo e($rel_type); ?>" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -13,8 +13,8 @@
             $lang_key = 'client_lowercase';
         }
         ?>
-        <p><?php echo _l('proposal_sync_1_info', [_l($lang_key), _l($lang_key)]); ?></p>
-        <p><?php echo _l('proposal_sync_2_info', _l($lang_key)); ?></p>
+        <p><?php echo e(_l('proposal_sync_1_info', [_l($lang_key), _l($lang_key)])); ?></p>
+        <p><?php echo e(_l('proposal_sync_2_info', _l($lang_key))); ?></p>
         <?php echo render_textarea('address', 'proposal_address', $related->address); ?>
         <div class="row">
           <div class="col-md-6">
@@ -35,7 +35,7 @@
    </div>
    <div class="modal-footer">
 
-    <button type="button" class="btn btn-primary" onclick="sync_proposals_data(<?php echo $rel_id; ?>,'<?php echo $rel_type; ?>');"><?php echo _l('sync_now'); ?></button>
+    <button type="button" class="btn btn-primary" onclick="sync_proposals_data(<?php echo e($rel_id); ?>,'<?php echo e($rel_type); ?>');"><?php echo _l('sync_now'); ?></button>
   </div>
 </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->

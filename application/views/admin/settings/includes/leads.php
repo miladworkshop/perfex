@@ -40,8 +40,8 @@ $validationFields = hooks()->apply_filters('lead_available_dupicate_validation_f
   <select class="selectpicker" name="settings[lead_unique_validation][]" id="lead_unique_validation" data-width="100%" multiple="true" data-none-selected-text="<?php echo _l('no_validation'); ?>">
     <?php foreach($validationFields as $leadField) {
       ?>
-      <option value="<?php echo $leadField['value']; ?>"<?php if(in_array($leadField['value'], $savedValidation)){echo ' selected';} ?>>
-        <?php echo $leadField['name']; ?>
+      <option value="<?php echo e($leadField['value']); ?>"<?php if(in_array($leadField['value'], $savedValidation)){echo ' selected';} ?>>
+        <?php echo e($leadField['name']); ?>
       </option>
       <?php
     }

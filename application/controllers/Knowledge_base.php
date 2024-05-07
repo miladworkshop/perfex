@@ -30,7 +30,6 @@ class Knowledge_base extends ClientsController
     public function search()
     {
         $this->checkKnowledgeBaseAccess();
-
         $q = $this->input->get('q');
 
         $data['articles']              = get_all_knowledge_base_articles_grouped(true, [], $q);
@@ -42,8 +41,12 @@ class Knowledge_base extends ClientsController
         $this->layout();
     }
 
-    public function article($slug)
+    public function article($slug = '')
     {
+        if(!$slug) {
+            show_404();
+        }
+        
         $this->checkKnowledgeBaseAccess();
 
         $data['article'] = $this->knowledge_base_model->get(false, $slug);

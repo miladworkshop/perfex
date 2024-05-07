@@ -38,18 +38,18 @@
                     </td>
                     <td>
                         <?php if (empty($subscription['status'])) {
-        echo _l('subscription_not_subscribed');
+        echo e(_l('subscription_not_subscribed'));
     } else {
-        echo _l('subscription_' . $subscription['status'], '', false);
+        echo e(_l('subscription_' . $subscription['status'], '', false));
     } ?>
                     </td>
-                    <td data-order="<?php echo $subscription['next_billing_cycle']; ?>">
+                    <td data-order="<?php echo e($subscription['next_billing_cycle']); ?>">
                         <?php echo $subscription['next_billing_cycle'] ? _d(date('Y-m-d', $subscription['next_billing_cycle'])) : '-'; ?>
                     </td>
                     <?php if ($show_projects) { ?>
                     <td>
                         <a href="<?php echo site_url('clients/project/' . $subscription['project_id']); ?>">
-                            <?php echo get_project_name_by_id($subscription['project_id']); ?>
+                            <?php echo e(get_project_name_by_id($subscription['project_id'])); ?>
                         </a>
                     </td>
                     <?php } ?>
@@ -85,8 +85,7 @@
                         <?php } ?>
                     </td>
                 </tr>
-                <?php
-} ?>
+                <?php } ?>
             </tbody>
         </table>
     </div>

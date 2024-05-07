@@ -34,9 +34,9 @@
     } else {
         $subtext .= ' (every ' . $plan->interval_count . ' ' . $plan->interval . 's)';
     } ?>
-                    <option value="<?php echo $plan->id; ?>" data-interval-count="<?php echo $plan->interval_count; ?>"
-                        data-interval="<?php echo $plan->interval; ?>" data-amount="<?php echo $plan->amount; ?>"
-                        data-subtext="<?php echo $subtext; ?>" <?php echo $selected; ?>>
+                    <option value="<?php echo e($plan->id); ?>" data-interval-count="<?php echo e($plan->interval_count); ?>"
+                        data-interval="<?php echo e($plan->interval); ?>" data-amount="<?php echo e($plan->amount); ?>"
+                        data-subtext="<?php echo e($subtext); ?>" <?php echo e($selected); ?>>
                         <?php
                 if (!empty($plan->nickname)) {
                     echo $plan->nickname;
@@ -112,7 +112,7 @@
                     data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                     <?php
                      if (isset($subscription) && $subscription->project_id) {
-                         echo '<option value="' . $subscription->project_id . '" selected>' . get_project_name_by_id($subscription->project_id) . '</option>';
+                         echo '<option value="' . $subscription->project_id . '" selected>' . e(get_project_name_by_id($subscription->project_id)) . '</option>';
                      }
                    ?>
                 </select>
@@ -163,13 +163,13 @@
                   continue;
               }
           } ?>
-                        <option value="<?php echo $tax->id; ?>"
+                        <option value="<?php echo e($tax->id); ?>"
                             data-subtext="<?php echo !empty($tax->country) ? $tax->country : ''; ?>" <?php if (isset($subscription) && $subscription->stripe_tax_id == $tax->id) {
               echo ' selected';
           } ?>>
-                            <?php echo $tax->display_name; ?>
+                            <?php echo e($tax->display_name); ?>
                             <?php echo !empty($tax->jurisdiction) ? ' - ' . $tax->jurisdiction . ' ' : ''; ?>
-                            (<?php echo $tax->percentage; ?>%)
+                            (<?php echo e($tax->percentage); ?>%)
                         </option>
                         <?php
       } ?>
@@ -195,13 +195,13 @@
                   continue;
               }
           } ?>
-                        <option value="<?php echo $tax->id; ?>"
+                        <option value="<?php echo e($tax->id); ?>"
                             data-subtext="<?php echo !empty($tax->country) ? $tax->country : ''; ?>" <?php if (isset($subscription) && $subscription->stripe_tax_id_2 == $tax->id) {
               echo ' selected';
           } ?>>
-                            <?php echo $tax->display_name; ?>
+                            <?php echo e($tax->display_name); ?>
                             <?php echo !empty($tax->jurisdiction) ? ' - ' . $tax->jurisdiction . ' ' : ''; ?>
-                            (<?php echo $tax->percentage; ?>%)
+                            (<?php echo e($tax->percentage); ?>%)
                         </option>
                         <?php
       } ?>

@@ -19,8 +19,8 @@
                             </div>
                             <?php foreach ($credit_notes_statuses as $status) { ?>
                             <div class="radio radio-primary">
-                                <input type="radio" value="<?php echo $status['id']; ?>" id="crn_<?php echo $status['id']; ?>" name="credit_note_zip_status">
-                                <label for="crn_<?php echo $status['id']; ?>"><?php echo $status['name']; ?></label>
+                                <input type="radio" value="<?php echo e($status['id']); ?>" id="crn_<?php echo e($status['id']); ?>" name="credit_note_zip_status">
+                                <label for="crn_<?php echo e($status['id']); ?>"><?php echo e($status['name']); ?></label>
                             </div>
                             <?php } ?>
                         </div>

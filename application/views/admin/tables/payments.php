@@ -58,14 +58,13 @@ foreach ($rResult as $aRow) {
 
     $link = admin_url('payments/payment/' . $aRow['id']);
 
-
     $options = icon_btn('payments/payment/' . $aRow['id'], 'fa-regular fa-pen-to-square');
 
     if ($hasPermissionDelete) {
         $options .= icon_btn('payments/delete/' . $aRow['id'], 'fa fa-remove', 'btn-danger _delete');
     }
 
-    $numberOutput = '<a href="' . $link . '">' . $aRow['id'] . '</a>';
+    $numberOutput = '<a href="' . $link . '">' . e($aRow['id']) . '</a>';
 
     $numberOutput .= '<div class="row-options">';
     $numberOutput .= '<a href="' . $link . '">' . _l('view') . '</a>';
@@ -76,31 +75,31 @@ foreach ($rResult as $aRow) {
 
     $row[] = $numberOutput;
 
-    $row[] = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['invoiceid']) . '">' . format_invoice_number($aRow['invoiceid']) . '</a>';
+    $row[] = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['invoiceid']) . '">' . e(format_invoice_number($aRow['invoiceid'])) . '</a>';
 
-    $outputPaymentMode = $aRow['payment_mode_name'];
+    $outputPaymentMode = e($aRow['payment_mode_name']);
 
     // Since version 1.0.1
     if (is_null($aRow['paymentmodeid'])) {
         foreach ($payment_gateways as $gateway) {
             if ($aRow['paymentmode'] == $gateway['id']) {
-                $outputPaymentMode = $gateway['name'];
+                $outputPaymentMode = e($gateway['name']);
             }
         }
     }
 
     if (!empty($aRow['paymentmethod'])) {
-        $outputPaymentMode .= ' - ' . $aRow['paymentmethod'];
+        $outputPaymentMode .= ' - ' . e($aRow['paymentmethod']);
     }
     $row[] = $outputPaymentMode;
 
-    $row[] = $aRow['transactionid'];
+    $row[] = e($aRow['transactionid']);
 
-    $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . $aRow['company'] . '</a>';
+    $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . e($aRow['company']) . '</a>';
 
-    $row[] = app_format_money($aRow['amount'], $aRow['currency_name']);
+    $row[] = e(app_format_money($aRow['amount'], $aRow['currency_name']));
 
-    $row[] = _d($aRow['date']);
+    $row[] = e(_d($aRow['date']));
 
     $row['DT_RowClass'] = 'has-row-options';
 

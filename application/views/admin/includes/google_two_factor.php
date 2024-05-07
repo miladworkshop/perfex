@@ -6,9 +6,9 @@
         </div>
         <div class="col-md-8 col-md-offset-2 google_auth_qr">
             <figure class="text-center tw-mt-8">
-                <img src="<?php echo $qrURL; ?>" alt="QR Image">
+                <img src="<?php echo e($qrURL); ?>" alt="QR Image">
                 <figcaption>
-                    <strong class="bold"><?php echo $secret; ?></strong> <br />
+                    <strong class="bold"><?php echo e($secret); ?></strong> <br />
                     <small class="text-muted"><?php echo _l('google_2fa_manul_input_secret') ?></small>
                 </figcaption>
             </figure>

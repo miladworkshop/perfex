@@ -7,11 +7,11 @@
                     <div class="tw-flex tw-items-center">
                         <h3 class="tw-font-semibold tw-text-xl tw-my-0 tw-flex tw-items-center">
                             <?php if (
-                     $project->settings->edit_tasks == 1 &&
-                     $view_task->is_added_from_contact == 1 &&
-                     $view_task->addedfrom == get_contact_user_id() &&
-                     $view_task->billed == 0
-                     ) { ?>
+                                $project->settings->edit_tasks == 1 &&
+                                $view_task->is_added_from_contact == 1 &&
+                                $view_task->addedfrom == get_contact_user_id() &&
+                                $view_task->billed == 0
+                            ) { ?>
                             <a href="<?php echo site_url('clients/project/' . $project->id . '?group=edit_task&taskid=' . $view_task->id); ?>"
                                 class="tw-text-neutral-500 hover:tw-text-neutral-700 active:tw-text-neutral-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -20,7 +20,7 @@
                                         d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                                 </svg>
                             </a>
-                            <?php } ?> <?php echo $view_task->name; ?>
+                            <?php } ?> <?php echo e($view_task->name); ?>
                         </h3>
                         <span class="task-single-status tw-ml-3 tw-mt-0.5">
                             <?php echo format_task_status($view_task->status); ?>
@@ -30,12 +30,12 @@
                     <div class="task-info pull-left no-p-left">
                         <h5 class="no-margin">
                             <?php echo _l('task_single_priority'); ?>:
-                            <?php echo task_priority($view_task->priority); ?>
+                            <?php echo e(task_priority($view_task->priority)); ?>
                         </h5>
                     </div>
                     <div class="text-success task-info pull-left">
                         <h5 class="no-margin">
-                            <?php echo _l('task_single_start_date'); ?>: <?php echo _d($view_task->startdate); ?>
+                            <?php echo _l('task_single_start_date'); ?>: <?php echo e(_d($view_task->startdate)); ?>
                         </h5>
                     </div>
                     <div class="task-info pull-left <?php if (!$view_task->status != Tasks_model::STATUS_COMPLETE) {
@@ -46,13 +46,13 @@
                          echo ' hide';
                      } ?>">
                         <h5 class="no-margin">
-                            <?php echo _l('task_single_due_date'); ?>: <?php echo _d($view_task->duedate); ?>
+                            <?php echo _l('task_single_due_date'); ?>: <?php echo e(_d($view_task->duedate)); ?>
                         </h5>
                     </div>
                     <?php if ($view_task->status == Tasks_model::STATUS_COMPLETE) { ?>
                     <div class="pull-left task-info text-success">
                         <h5 class="no-margin">
-                            <?php echo _l('task_single_finished'); ?>: <?php echo _dt($view_task->datefinished); ?>
+                            <?php echo _l('task_single_finished'); ?>: <?php echo e(_dt($view_task->datefinished)); ?>
                         </h5>
                     </div>
                     <?php } ?>
@@ -60,14 +60,15 @@
                     <div class="pull-left task-info">
                         <h5 class="no-margin">
                             <?php echo _l('task_total_logged_time'); ?>
-                            <?php echo seconds_to_time_format($this->tasks_model->calc_task_total_time($view_task->id)); ?>
+                            <?php echo e(seconds_to_time_format($this->tasks_model->calc_task_total_time($view_task->id))); ?>
                         </h5>
                     </div>
                     <?php } ?>
                     <?php if ($view_task->billed == 1) { ?>
-                    <div class="clearfix"></div>
-                    <p class="no-mbot mtop15">
-                        <?php echo _l('task_is_billed', format_invoice_number($view_task->invoice_id)); ?></p>
+                        <div class="clearfix"></div>
+                        <p class="no-mbot mtop15">
+                            <?php echo e(_l('task_is_billed', format_invoice_number($view_task->invoice_id))); ?>
+                        </p>
                     <?php } ?>
                 </div>
             </div>
@@ -84,7 +85,7 @@
                   $_assignees = '';
                   foreach ($view_task->assignees as $assignee) {
                       $_assignees .= '
-                    <div data-toggle="tooltip" class="pull-left mleft5 task-user" data-title="' . get_staff_full_name($assignee['assigneeid']) . '">'
+                    <div data-toggle="tooltip" class="pull-left mleft5 task-user" data-title="' . e(get_staff_full_name($assignee['assigneeid'])) . '">'
                     . staff_profile_image($assignee['assigneeid'], [
                       'staff-profile-image-small',
                     ]) . '</div>';
@@ -111,7 +112,7 @@
                   } else {
                       echo 'text-muted';
                   } ?>"><i class="fa fa-check"></i></span>&nbsp;
-                <?php echo $list['description']; ?>
+                <?php echo e($list['description']); ?>
             </p>
             <?php } ?>
             <?php } ?>
@@ -125,7 +126,7 @@
                    continue;
                } $custom_fields_found = true; ?>
                 <div class="col-md-9">
-                    <span class="bold"><?php echo ucfirst($field['name']); ?></span>
+                    <span class="bold"><?php echo e(ucfirst($field['name'])); ?></span>
                     <br />
                     <div class="text-left">
                         <?php echo $value; ?>
@@ -156,18 +157,18 @@
                 ob_start(); ?>
                         <div class="col-md-4 task-attachment-col<?php if ($i > $show_more_link_task_attachments) {
                     echo ' task-attachment-col-more';
-                } ?>" data-num="<?php echo $i; ?>" <?php if ($i > $show_more_link_task_attachments) {
+                } ?>" data-num="<?php echo e($i); ?>" <?php if ($i > $show_more_link_task_attachments) {
                     echo 'style="display:none;"';
                 } ?>>
                             <ul class="list-unstyled">
                                 <li class="mbot10 task-attachment">
                                     <div class="mbot10 pull-right task-attachment-user">
                                         <?php
-                                 echo _l('project_file_uploaded_by') . ' ' . (
-                    $attachment['staffid'] != 0
-                                    ? get_staff_full_name($attachment['staffid'])
-                                    : get_contact_full_name($attachment['contact_id'])
-                ); ?>
+                                 echo e(_l('project_file_uploaded_by') . ' ' . (
+                                    $attachment['staffid'] != 0
+                                                    ? get_staff_full_name($attachment['staffid'])
+                                                    : get_contact_full_name($attachment['contact_id'])
+                                )); ?>
                                         <?php if (get_option('allow_contact_to_delete_files') == 1 && $attachment['contact_id'] == get_contact_user_id()) { ?>
                                         <a href="<?php echo site_url('clients/delete_file/' . $attachment['id'] . '/task?project_id=' . $project->id); ?>"
                                             class="text-danger _delete pull-right"><i class="fa fa-remove"></i></a>
@@ -192,11 +193,11 @@
                     $href_url = $attachment['external_link'];
                 }
                 if (!empty($attachment['external']) && $attachment['external'] == 'dropbox' && $is_image) { ?>
-                                    <a href="<?php echo $href_url; ?>" target="_blank" class="open-in-external"
+                                    <a href="<?php echo e($href_url); ?>" target="_blank" class="open-in-external"
                                         data-toggle="tooltip" data-title="<?php echo _l('open_in_dropbox'); ?>"><i
                                             class="fa fa-dropbox" aria-hidden="true"></i></a>
                                     <?php } elseif (!empty($attachment['external']) && $attachment['external'] == 'gdrive') { ?>
-                                    <a href="<?php echo $href_url; ?>" target="_blank" class="open-in-external"
+                                    <a href="<?php echo e($href_url); ?>" target="_blank" class="open-in-external"
                                         data-toggle="tooltip" data-title="<?php echo _l('open_in_google'); ?>"><i
                                             class="fa-brands fa-google" aria-hidden="true"></i></a>
                                     <?php } ?>
@@ -213,7 +214,7 @@
                 } ?>">
                                             <?php } ?>
                                             <?php if ($is_image) { ?>
-                                            <img src="<?php echo $img_url; ?>" class="img img-responsive">
+                                            <img src="<?php echo e($img_url); ?>" class="img img-responsive">
                                             <?php } elseif ($isHtml5Video) { ?>
                                             <video width="100%" height="100%"
                                                 src="<?php echo site_url('download/preview_video?path=' . protected_file_url_by_path($path) . '&type=' . $attachment['filetype']); ?>"
@@ -222,10 +223,10 @@
                                             </video>
                                             <?php } else { ?>
                                             <i class="<?php echo get_mime_class($attachment['filetype']); ?>"></i>
-                                            <?php echo $attachment['file_name']; ?>
+                                            <?php echo e($attachment['file_name']); ?>
                                             <?php } ?>
                                             <?php if (!$isHtml5Video) { ?>
-                                        </a>
+                                            </a>
                                         <?php } ?>
                                     </div>
                                     <div class="clearfix"></div>
@@ -266,7 +267,7 @@
             <hr />
             <?php echo form_open_multipart(site_url('clients/project/' . $project->id), ['class' => 'dropzone mtop15', 'id' => 'task-file-upload']); ?>
             <input type="file" name="file" multiple class="hide" />
-            <input type="hidden" name="task_id" value="<?php echo $view_task->id; ?>" class="hide" />
+            <input type="hidden" name="task_id" value="<?php echo e($view_task->id); ?>" class="hide" />
             <?php echo form_close(); ?>
             <div class="tw-flex tw-justify-end tw-items-center tw-space-x-2 mtop15">
                 <button class="gpicker" data-on-pick="taskFileGoogleDriveSave">
@@ -295,48 +296,49 @@
             if (count($view_task->comments) > 0) {
                 echo '<div id="task-comments">';
                 foreach ($view_task->comments as $comment) { ?>
-            <div class="mbot10 mtop10 task-comment" data-commentid="<?php echo $comment['id']; ?>"
-                id="comment_<?php echo $comment['id']; ?>">
+            <div class="mbot10 mtop10 task-comment" data-commentid="<?php echo e($comment['id']); ?>"
+                id="comment_<?php echo e($comment['id']); ?>">
                 <?php if ($comment['staffid'] != 0) { ?>
                 <?php echo staff_profile_image($comment['staffid'], [
                'staff-profile-image-small',
                'media-object img-circle pull-left mright10',
                ]); ?>
                 <?php } else { ?>
-                <img src="<?php echo contact_profile_image_url($comment['contact_id']); ?>"
+                <img src="<?php echo e(contact_profile_image_url($comment['contact_id'])); ?>
+"
                     class="client-profile-image-small media-object img-circle pull-left mright10">
                 <?php } ?>
                 <div class="media-body">
                     <?php if ($comment['staffid'] != 0) { ?>
-                    <span class="bold"><?php echo $comment['staff_full_name']; ?></span><br />
+                    <span class="bold"><?php echo e($comment['staff_full_name']); ?></span><br />
                     <?php } else { ?>
                     <span class="pull-left bold">
-                        <?php echo get_contact_full_name($comment['contact_id']); ?></span>
+                        <?php echo e(get_contact_full_name($comment['contact_id'])); ?></span>
                     <br />
                     <?php } ?>
-                    <small class="mtop10 text-muted"><?php echo _dt($comment['dateadded']); ?></small><br />
+                    <small class="mtop10 text-muted"><?php echo e(_dt($comment['dateadded'])); ?></small><br />
                     <?php if ($comment['contact_id'] != 0) { ?>
                     <?php
                   $comment_added = strtotime($comment['dateadded']);
                   $minus_1_hour  = strtotime('-1 hours');
                   if (get_option('client_staff_add_edit_delete_task_comments_first_hour') == 0 || (get_option('client_staff_add_edit_delete_task_comments_first_hour') == 1 && $comment_added >= $minus_1_hour)) { ?>
-                    <a href="#" onclick="remove_task_comment(<?php echo $comment['id']; ?>); return false;"
+                    <a href="#" onclick="remove_task_comment(<?php echo e($comment['id']); ?>); return false;"
                         class="pull-right">
                         <i class="fa fa-times text-danger"></i>
                     </a>
-                    <a href="#" onclick="edit_task_comment(<?php echo $comment['id']; ?>); return false;"
+                    <a href="#" onclick="edit_task_comment(<?php echo e($comment['id']); ?>); return false;"
                         class="pull-right mright5">
                         <i class="fa-regular fa-pen-to-square"></i>
                     </a>
-                    <div data-edit-comment="<?php echo $comment['id']; ?>" class="hide">
+                    <div data-edit-comment="<?php echo e($comment['id']); ?>" class="hide">
                         <textarea rows="5"
                             class="form-control mtop10 mbot10"><?php echo clear_textarea_breaks($comment['content']); ?></textarea>
                         <button type="button" class="btn btn-primary pull-right"
-                            onclick="save_edited_comment(<?php echo $comment['id']; ?>)">
+                            onclick="save_edited_comment(<?php echo e($comment['id']); ?>)">
                             <?php echo _l('submit'); ?>
                         </button>
                         <button type="button" class="btn btn-default pull-right mright5"
-                            onclick="cancel_edit_comment(<?php echo $comment['id']; ?>)">
+                            onclick="cancel_edit_comment(<?php echo e($comment['id']); ?>)">
                             <?php echo _l('cancel'); ?>
                         </button>
                     </div>

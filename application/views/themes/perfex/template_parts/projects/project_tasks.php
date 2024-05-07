@@ -9,7 +9,7 @@
         onchange="dt_custom_view('.table-tasks', 3, $(this).selectpicker('val'));" multiple="true"
         data-none-selected-text="<?php echo _l('filter_by'); ?>">
         <?php foreach ($tasks_statuses as $status) { ?>
-        <option value="<?php echo $status['name']; ?>"><?php echo $status['name']; ?></option>
+        <option value="<?php echo e($status['name']); ?>"><?php echo e($status['name']); ?></option>
         <?php } ?>
     </select>
 </div>
@@ -66,12 +66,12 @@
                     data-title="<?php echo _l('milestone_description'); ?>" data-html="true"
                     data-content="<?php echo htmlspecialchars($milestone['description']); ?>"></i>&nbsp;
                 <?php } ?>
-                <span class="bold tw-text-sm"><?php echo $milestone['name']; ?></span>
+                <span class="bold tw-text-sm"><?php echo e($milestone['name']); ?></span>
                 <span class="tw-text-xs">
-                    <?php echo $milestone['id'] != 0 ? (' | ' . _d($milestone['start_date']) . ' - ' . _d($milestone['due_date'])) : ''; ?>
+                    <?php echo $milestone['id'] != 0 ? (' | ' . e(_d($milestone['start_date']) . ' - ' . _d($milestone['due_date']))) : ''; ?>
                 </span>
                 <?php if ($project->settings->view_task_total_logged_time == 1) { ?>
-                <?php echo '<br /><small>' . _l('milestone_total_logged_time') . ': ' . seconds_to_time_format($milestone['total_logged_time']) . '</small>';
+                <?php echo '<br /><small>' . _l('milestone_total_logged_time') . ': ' . e(seconds_to_time_format($milestone['total_logged_time'])) . '</small>';
                } ?>
             </div>
             <div class="panel-body">
@@ -85,10 +85,10 @@
           } ?>">
                     <div class="media-body">
                         <a href="<?php echo site_url('clients/project/' . $project->id . '?group=project_tasks&taskid=' . $task['id']); ?>"
-                            class="task_milestone tw-mb-1 pull-left<?php if ($task['status'] == Tasks_model::STATUS_COMPLETE) {
+                            class="task_milestone tw-truncate tw-max-w-64 tw-min-w-0 tw-block tw-mb-1 pull-left<?php if ($task['status'] == Tasks_model::STATUS_COMPLETE) {
               echo ' line-throught text-muted';
           } ?>">
-                            <?php echo $task['name']; ?>
+                            <?php echo e($task['name']); ?>
 
                         </a>
 
@@ -108,11 +108,11 @@
                             <?php echo format_task_status($task['status'], true); ?>
                         </p>
                         <p class="tw-mb-0 tw-text-xs tw-text-neutral-500"><?php echo _l('tasks_dt_datestart'); ?>:
-                            <b><?php echo _d($task['startdate']); ?></b>
+                            <b><?php echo e(_d($task['startdate'])); ?></b>
                         </p>
                         <?php if (is_date($task['duedate'])) { ?>
                         <p class="tw-mb-0 tw-text-xs tw-text-neutral-500">
-                            <?php echo _l('task_duedate'); ?>: <b><?php echo _d($task['duedate']); ?></b>
+                            <?php echo _l('task_duedate'); ?>: <b><?php echo e(_d($task['duedate'])); ?></b>
                         </p>
                         <?php } ?>
                     </div>
@@ -122,7 +122,7 @@
             <div class="panel-footer">
                 <div class="progress tw-my-0">
                     <div class="progress-bar progress-bar-default" role="progressbar" aria-valuenow="40"
-                        aria-valuemin="0" aria-valuemax="100" style="width: 0%" data-percent="<?php echo $percent; ?>">
+                        aria-valuemin="0" aria-valuemax="100" style="width: 0%" data-percent="<?php echo e($percent); ?>">
                     </div>
                 </div>
             </div>
@@ -154,7 +154,7 @@
                 <?php
                $custom_fields = get_custom_fields('tasks', ['show_on_client_portal' => 1]);
                foreach ($custom_fields as $field) { ?>
-                <th><?php echo $field['name']; ?></th>
+                <th><?php echo e($field['name']); ?></th>
                 <?php } ?>
             </tr>
         </thead>
@@ -175,19 +175,19 @@
                     <?php } ?>
                     <a
                         href="<?php echo site_url('clients/project/' . $project->id . '?group=project_tasks&taskid=' . $task['id']); ?>">
-                        <?php echo $task['name']; ?></a>
+                        <?php echo e($task['name']); ?></a>
                 </td>
-                <td data-order="<?php echo $task['startdate']; ?>"><?php echo _d($task['startdate']); ?></td>
-                <td data-order="<?php echo $task['duedate']; ?>"><?php echo _d($task['duedate']); ?></td>
-                <td data-order="<?php echo $task['status']; ?>">
+                <td data-order="<?php echo e($task['startdate']); ?>"><?php echo e(_d($task['startdate'])); ?></td>
+                <td data-order="<?php echo e($task['duedate']); ?>"><?php echo e(_d($task['duedate'])); ?></td>
+                <td data-order="<?php echo e($task['status']); ?>">
                     <?php echo format_task_status($task['status']); ?>
                 </td>
                 <?php if ($project->settings->view_milestones == 1) { ?>
-                <td data-order="<?php echo $task['milestone_name']; ?>"><?php if ($task['milestone'] != 0) {
-                      echo $task['milestone_name'];
+                <td data-order="<?php echo e($task['milestone_name']); ?>"><?php if ($task['milestone'] != 0) {
+                      echo e($task['milestone_name']);
                   } ?></td>
                 <?php } ?>
-                <td data-order="<?php echo $task['billable']; ?>">
+                <td data-order="<?php echo e($task['billable']); ?>">
                     <?php
                   if ($task['billable'] == 1) {
                       $billable = _l('task_billable_yes');
@@ -197,7 +197,7 @@
                   echo $billable;
                   ?>
                 </td>
-                <td data-order="<?php echo $task['billed']; ?>">
+                <td data-order="<?php echo e($task['billed']); ?>">
                     <?php
                   if ($task['billed'] == 1) {
                       $billed = '<span class="label label-success pull-left">' . _l('task_billed_yes') . '</span>';

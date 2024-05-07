@@ -10,7 +10,7 @@
       <?php
       $custom_fields = get_custom_fields('contracts',array('show_on_client_portal'=>1));
       foreach($custom_fields as $field){ ?>
-        <th><?php echo $field['name']; ?></th>
+        <th><?php echo e($field['name']); ?></th>
       <?php } ?>
     </tr>
   </thead>
@@ -27,10 +27,10 @@
       <tr class="<?php echo $expiry_class; ?>">
         <td>
           <?php
-          echo '<a href="'.site_url('contract/'.$contract['id'].'/'.$contract['hash']).'" class="td-contract-url">'.$contract['subject'].'</a>';
+          echo '<a href="'.site_url('contract/'.$contract['id'].'/'.$contract['hash']).'" class="td-contract-url">'.e($contract['subject']).'</a>';
           ?>
         </td>
-        <td><?php echo $contract['type_name']; ?></td>
+        <td><?php echo e($contract['type_name']); ?></td>
         <td>
           <?php
           if(!empty($contract['signature']) || $contract['marked_as_signed'] == '1') {
@@ -40,10 +40,10 @@
          }
          ?>
        </td>
-       <td data-order="<?php echo $contract['datestart']; ?>"><?php echo _d($contract['datestart']); ?></td>
-       <td data-order="<?php echo $contract['dateend']; ?>"><?php echo _d($contract['dateend']); ?></td>
+       <td data-order="<?php echo e($contract['datestart']); ?>"><?php echo e(_d($contract['datestart'])); ?></td>
+       <td data-order="<?php echo e($contract['dateend']); ?>"><?php echo e(_d($contract['dateend'])); ?></td>
        <?php foreach($custom_fields as $field){ ?>
-         <td><?php echo get_custom_field_value($contract['id'],$field['id'],'contracts'); ?></td>
+         <td><?php echo get_custom_field_value($contract['id'], $field['id'], 'contracts'); ?></td>
        <?php } ?>
      </tr>
    <?php } ?>

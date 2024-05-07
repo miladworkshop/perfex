@@ -18,7 +18,7 @@ $totalTags = count($tags);
                         <div class="input-group-addon">
                             <?php echo total_rows(db_prefix() . 'taggables', ['tag_id' => $tag['id']]); ?>
                         </div>
-                        <input type="text" name="tags[<?php echo $tag['id']; ?>]" value="<?php echo $tag['name']; ?>"
+                        <input type="text" name="tags[<?php echo e($tag['id']); ?>]" value="<?php echo e($tag['name']); ?>"
                             class="form-control">
                         <div class="input-group-btn">
                             <a class="btn btn-danger _delete"

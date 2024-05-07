@@ -17,7 +17,7 @@ if (isset($client)) {
             echo '<ul class="dropdown-menu width300">';
             foreach ($contacts as $contact) {
                 if ($contact['active'] == 1) {
-                    echo '<li><a href="' . admin_url('tickets/add?contact_id=' . $contact['id'] . '&userid=' . $client->userid) . '"> ' . $contact['firstname'] . ' ' . $contact['lastname'] . ' (' . $contact['email'] . ')</a></li>';
+                    echo '<li><a href="' . admin_url('tickets/add?contact_id=' . $contact['id'] . '&userid=' . $client->userid) . '"> ' . e($contact['firstname'] . ' ' . $contact['lastname']) . ' (' . e($contact['email']) . ')</a></li>';
                 }
             }
             echo '</ul>';

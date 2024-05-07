@@ -66,7 +66,7 @@
                         $project_id = $invoice->project_id;
                     }
                     if ($project_id) {
-                        echo '<option value="' . $project_id . '" selected>' . get_project_name_by_id($project_id) . '</option>';
+                        echo '<option value="' . $project_id . '" selected>' . e(get_project_name_by_id($project_id)) . '</option>';
                     }
                    ?>
                         </select>
@@ -86,24 +86,24 @@
                             <span class="billing_street">
                                 <?php $billing_street = (isset($invoice) ? $invoice->billing_street : '--'); ?>
                                 <?php $billing_street = ($billing_street == '' ? '--' :$billing_street); ?>
-                                <?php echo $billing_street; ?></span><br>
+                                <?php echo process_text_content_for_display($billing_street); ?></span><br>
                             <span class="billing_city">
                                 <?php $billing_city = (isset($invoice) ? $invoice->billing_city : '--'); ?>
                                 <?php $billing_city = ($billing_city == '' ? '--' :$billing_city); ?>
-                                <?php echo $billing_city; ?></span>,
+                                <?php echo e($billing_city); ?></span>,
                             <span class="billing_state">
                                 <?php $billing_state = (isset($invoice) ? $invoice->billing_state : '--'); ?>
                                 <?php $billing_state = ($billing_state == '' ? '--' :$billing_state); ?>
-                                <?php echo $billing_state; ?></span>
+                                <?php echo e($billing_state); ?></span>
                             <br />
                             <span class="billing_country">
                                 <?php $billing_country = (isset($invoice) ? get_country_short_name($invoice->billing_country) : '--'); ?>
                                 <?php $billing_country = ($billing_country == '' ? '--' :$billing_country); ?>
-                                <?php echo $billing_country; ?></span>,
+                                <?php echo e($billing_country); ?></span>,
                             <span class="billing_zip">
                                 <?php $billing_zip = (isset($invoice) ? $invoice->billing_zip : '--'); ?>
                                 <?php $billing_zip = ($billing_zip == '' ? '--' :$billing_zip); ?>
-                                <?php echo $billing_zip; ?></span>
+                                <?php echo e($billing_zip); ?></span>
                         </address>
                     </div>
                     <div class="col-md-6">
@@ -112,24 +112,24 @@
                             <span class="shipping_street">
                                 <?php $shipping_street = (isset($invoice) ? $invoice->shipping_street : '--'); ?>
                                 <?php $shipping_street = ($shipping_street == '' ? '--' :$shipping_street); ?>
-                                <?php echo $shipping_street; ?></span><br>
+                                <?php echo process_text_content_for_display($shipping_street); ?></span><br>
                             <span class="shipping_city">
                                 <?php $shipping_city = (isset($invoice) ? $invoice->shipping_city : '--'); ?>
                                 <?php $shipping_city = ($shipping_city == '' ? '--' :$shipping_city); ?>
-                                <?php echo $shipping_city; ?></span>,
+                                <?php echo e($shipping_city); ?></span>,
                             <span class="shipping_state">
                                 <?php $shipping_state = (isset($invoice) ? $invoice->shipping_state : '--'); ?>
                                 <?php $shipping_state = ($shipping_state == '' ? '--' :$shipping_state); ?>
-                                <?php echo $shipping_state; ?></span>
+                                <?php echo e($shipping_state); ?></span>
                             <br />
                             <span class="shipping_country">
                                 <?php $shipping_country = (isset($invoice) ? get_country_short_name($invoice->shipping_country) : '--'); ?>
                                 <?php $shipping_country = ($shipping_country == '' ? '--' :$shipping_country); ?>
-                                <?php echo $shipping_country; ?></span>,
+                                <?php echo e($shipping_country); ?></span>,
                             <span class="shipping_zip">
                                 <?php $shipping_zip = (isset($invoice) ? $invoice->shipping_zip : '--'); ?>
                                 <?php $shipping_zip = ($shipping_zip == '' ? '--' :$shipping_zip); ?>
-                                <?php echo $shipping_zip; ?></span>
+                                <?php echo e($shipping_zip); ?></span>
                         </address>
                     </div>
                 </div>
@@ -198,7 +198,7 @@
                             <?php if (isset($invoice)) { ?>
                             <a href="#" onclick="return false;" data-toggle="popover"
                                 data-container='._transaction_form' data-html="true"
-                                data-content="<label class='control-label'><?php echo _l('settings_sales_invoice_prefix'); ?></label><div class='input-group'><input name='s_prefix' type='text' class='form-control' value='<?php echo $invoice->prefix; ?>'></div><button type='button' onclick='save_sales_number_settings(this); return false;' data-url='<?php echo admin_url('invoices/update_number_settings/' . $invoice->id); ?>' class='btn btn-primary btn-block mtop15'><?php echo _l('submit'); ?></button>">
+                                data-content="<label class='control-label'><?php echo _l('settings_sales_invoice_prefix'); ?></label><div class='input-group'><input name='s_prefix' type='text' class='form-control' value='<?php echo e($invoice->prefix); ?>'></div><button type='button' onclick='save_sales_number_settings(this); return false;' data-url='<?php echo admin_url('invoices/update_number_settings/' . $invoice->id); ?>' class='btn btn-primary btn-block mtop15'><?php echo _l('submit'); ?></button>">
                                 <i class="fa fa-cog"></i>
                             </a>
                             <?php }
@@ -207,18 +207,18 @@
                         </span>
                         <input type="text" name="number" class="form-control"
                             value="<?php echo ($_is_draft) ? 'DRAFT' : $_invoice_number; ?>"
-                            data-isedit="<?php echo $isedit; ?>"
-                            data-original-number="<?php echo $data_original_number; ?>"
+                            data-isedit="<?php echo e($isedit); ?>"
+                            data-original-number="<?php echo e($data_original_number); ?>"
                             <?php echo ($_is_draft) ? 'disabled' : '' ?>>
                         <?php if ($format == 3) { ?>
                         <span class="input-group-addon">
-                            <span id="prefix_year" class="format-n-yy"><?php echo $yy; ?></span>
+                            <span id="prefix_year" class="format-n-yy"><?php echo e($yy); ?></span>
                         </span>
                         <?php } elseif ($format == 4) { ?>
                         <span class="input-group-addon">
-                            <span id="prefix_month" class="format-mm-yyyy"><?php echo $mm; ?></span>
+                            <span id="prefix_month" class="format-mm-yyyy"><?php echo e($mm); ?></span>
                             /
-                            <span id="prefix_year" class="format-mm-yyyy"><?php echo $yyyy; ?></span>
+                            <span id="prefix_year" class="format-mm-yyyy"><?php echo e($yyyy); ?></span>
                         </span>
                         <?php } ?>
                     </div>
@@ -302,8 +302,8 @@
                            $selected = ' selected';
                        }
                    } ?>
-                            <option value="<?php echo $mode['id']; ?>" <?php echo $selected; ?>>
-                                <?php echo $mode['name']; ?></option>
+                            <option value="<?php echo e($mode['id']); ?>" <?php echo e($selected); ?>>
+                                <?php echo e($mode['name']); ?></option>
                             <?php
                } ?>
                         </select>
@@ -388,8 +388,8 @@
                                   $reccuring_string = _l('invoice_add_edit_recurring_months', $i);
                               }
                               ?>
-                                    <option value="<?php echo $i; ?>" <?php echo $selected; ?>>
-                                        <?php echo $reccuring_string; ?></option>
+                                    <option value="<?php echo e($i); ?>" <?php echo e($selected); ?>>
+                                        <?php echo e($reccuring_string); ?></option>
                                     <?php } ?>
                                     <option value="custom" <?php if (isset($invoice) && $invoice->recurring != 0 && $invoice->custom_recurring == 1) {
                                   echo 'selected';
@@ -452,15 +452,15 @@
                                 <div class="form-group recurring-cycles">
                                     <label for="cycles"><?php echo _l('recurring_total_cycles'); ?>
                                         <?php if (isset($invoice) && $invoice->total_cycles > 0) {
-                                  echo '<small>' . _l('cycles_passed', $invoice->total_cycles) . '</small>';
+                                  echo '<small>' . e(_l('cycles_passed', $invoice->total_cycles)) . '</small>';
                               }
                             ?>
                                     </label>
                                     <div class="input-group">
                                         <input type="number" class="form-control" <?php if ($value == 0) {
                                 echo ' disabled';
-                            } ?> name="cycles" id="cycles" value="<?php echo $value; ?>" <?php if (isset($invoice) && $invoice->total_cycles > 0) {
-                                echo 'min="' . ($invoice->total_cycles) . '"';
+                            } ?> name="cycles" id="cycles" value="<?php echo e($value); ?>" <?php if (isset($invoice) && $invoice->total_cycles > 0) {
+                                echo 'min="' . e($invoice->total_cycles) . '"';
                             } ?>>
                                         <div class="input-group-addon">
                                             <div class="checkbox">
@@ -500,13 +500,13 @@
                             data-none-selected-text="<?php echo _l('bill_tasks'); ?>">
                             <option value=""></option>
                             <?php foreach ($billable_tasks as $task_billable) { ?>
-                            <option value="<?php echo $task_billable['id']; ?>"
+                            <option value="<?php echo e($task_billable['id']); ?>"
                                 <?php if ($task_billable['started_timers'] == true) { ?>disabled class="text-danger"
                                 data-subtext="<?php echo _l('invoice_task_billable_timers_found'); ?>" <?php } else {
                                 $task_rel_data  = get_relation_data($task_billable['rel_type'], $task_billable['rel_id']);
                                 $task_rel_value = get_relation_values($task_rel_data, $task_billable['rel_type']); ?>
                                 data-subtext="<?php echo $task_billable['rel_type'] == 'project' ? '' : $task_rel_value['name']; ?>" <?php
-                            } ?>><?php echo $task_billable['name']; ?></option>
+                            } ?>><?php echo e($task_billable['name']); ?></option>
                             <?php } ?>
                         </select>
                         <div class="input-group-addon input-group-addon-bill-tasks-help">
@@ -575,7 +575,7 @@
                         <?php
                   $custom_fields = get_custom_fields('items');
                   foreach ($custom_fields as $cf) {
-                      echo '<th width="15%" align="left" class="custom_field">' . $cf['name'] . '</th>';
+                      echo '<th width="15%" align="left" class="custom_field">' . e($cf['name']) . '</th>';
                   }
                      $qty_heading = _l('invoice_table_quantity_heading');
                      if (isset($invoice) && $invoice->show_quantity_as == 2 || isset($hours_quantity)) {
@@ -584,7 +584,7 @@
                          $qty_heading = _l('invoice_table_quantity_heading') . '/' . _l('invoice_table_hours_heading');
                      }
                      ?>
-                        <th width="10%" align="right" class="qty"><?php echo $qty_heading; ?></th>
+                        <th width="10%" align="right" class="qty"><?php echo e($qty_heading); ?></th>
                         <th width="15%" align="right"><?php echo _l('invoice_table_rate_heading'); ?></th>
                         <th width="20%" align="right"><?php echo _l('invoice_table_tax_heading'); ?></th>
                         <th width="10%" align="right"><?php echo _l('invoice_table_amount_heading'); ?></th>
@@ -641,7 +641,7 @@
                         }
                         ?>
                             <button type="button"
-                                onclick="add_item_to_table('undefined','undefined',<?php echo $new_item; ?>); return false;"
+                                onclick="add_item_to_table('undefined','undefined',<?php echo e($new_item); ?>); return false;"
                                 class="btn pull-right btn-primary"><i class="fa fa-check"></i></button>
                         </td>
                     </tr>

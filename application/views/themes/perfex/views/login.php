@@ -23,9 +23,9 @@
                         data-live-search="true">
                         <?php $selected = (get_contact_language() != '') ? get_contact_language() : get_option('active_language'); ?>
                         <?php foreach ($this->app->get_available_languages() as $availableLanguage) { ?>
-                        <option value="<?php echo $availableLanguage; ?>"
+                        <option value="<?php echo e($availableLanguage); ?>"
                             <?php echo ($availableLanguage == $selected) ? 'selected' : '' ?>>
-                            <?php echo ucfirst($availableLanguage); ?>
+                            <?php echo e(ucfirst($availableLanguage)); ?>
                         </option>
                         <?php } ?>
                     </select>

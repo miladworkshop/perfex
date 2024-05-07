@@ -43,7 +43,7 @@
                     <?php
                   $custom_fields = get_custom_fields('items');
                   foreach ($custom_fields as $cf) {
-                      echo '<th width="15%" align="left" class="custom_field">' . $cf['name'] . '</th>';
+                      echo '<th width="15%" align="left" class="custom_field">' . e($cf['name']) . '</th>';
                   }
 
                   $qty_heading = _l('estimate_table_quantity_heading');
@@ -53,7 +53,7 @@
                       $qty_heading = _l('estimate_table_quantity_heading') . '/' . _l('estimate_table_hours_heading');
                   }
                   ?>
-                    <th width="10%" class="qty" align="right"><?php echo $qty_heading; ?></th>
+                    <th width="10%" class="qty" align="right"><?php echo e($qty_heading); ?></th>
                     <th width="15%" align="right"><?php echo _l('estimate_table_rate_heading'); ?></th>
                     <th width="20%" align="right"><?php echo _l('estimate_table_tax_heading'); ?></th>
                     <th width="10%" align="right"><?php echo _l('estimate_table_amount_heading'); ?></th>
@@ -109,7 +109,7 @@
                      }
                      ?>
                         <button type="button"
-                            onclick="add_item_to_table('undefined','undefined',<?php echo $new_item; ?>); return false;"
+                            onclick="add_item_to_table('undefined','undefined',<?php echo e($new_item); ?>); return false;"
                             class="btn pull-right btn-primary"><i class="fa fa-check"></i></button>
                     </td>
                 </tr>

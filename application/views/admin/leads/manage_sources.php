@@ -22,10 +22,10 @@
                             <tbody>
                                 <?php foreach ($sources as $source) { ?>
                                 <tr>
-                                    <td><?php echo $source['id']; ?></td>
+                                    <td><?php echo e($source['id']); ?></td>
                                     <td><a href="#"
-                                            onclick="edit_source(this,<?php echo $source['id']; ?>); return false"
-                                            data-name="<?php echo $source['name']; ?>"><?php echo $source['name']; ?></a><br />
+                                            onclick="edit_source(this,<?php echo e($source['id']); ?>); return false"
+                                            data-name="<?php echo e($source['name']); ?>"><?php echo e($source['name']); ?></a><br />
                                         <span class="text-muted">
                                             <?php echo _l('leads_table_total', total_rows(db_prefix() . 'leads', ['source' => $source['id']])); ?>
                                         </span>
@@ -33,8 +33,8 @@
                                     <td>
                                         <div class="tw-flex tw-items-center tw-space-x-3">
                                             <a href="#"
-                                                onclick="edit_source(this,<?php echo $source['id']; ?>); return false"
-                                                data-name="<?php echo $source['name']; ?>"
+                                                onclick="edit_source(this,<?php echo e($source['id']); ?>); return false"
+                                                data-name="<?php echo e($source['name']); ?>"
                                                 class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700">
                                                 <i class="fa-regular fa-pen-to-square fa-lg"></i>
                                             </a>

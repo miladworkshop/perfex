@@ -112,13 +112,9 @@ class Tasks extends AdminController
         $this->session->set_userdata([
             'tasks_kanban_view' => $set,
         ]);
+        
         if ($manual == false) {
-            // clicked on VIEW KANBAN from projects area and will redirect again to the same view
-            if (strpos($_SERVER['HTTP_REFERER'], 'project_id') !== false) {
-                redirect(admin_url('tasks'));
-            } else {
-                redirect($_SERVER['HTTP_REFERER']);
-            }
+            redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
         }
     }
 
@@ -700,7 +696,7 @@ class Tasks extends AdminController
         $files = $this->tasks_model->get_task_attachments($task_id, $taskWhere);
 
         if (count($files) == 0) {
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
         }
 
         $path = get_upload_path_by_type('task') . $task_id;
@@ -954,13 +950,12 @@ class Tasks extends AdminController
             set_alert('warning', $message);
         }
 
-        if (strpos($_SERVER['HTTP_REFERER'], 'tasks/index') !== false || strpos($_SERVER['HTTP_REFERER'], 'tasks/view') !== false) {
+        if (empty($_SERVER['HTTP_REFERER']) || 
+            strpos($_SERVER['HTTP_REFERER'], 'tasks/index') !== false || 
+            strpos($_SERVER['HTTP_REFERER'], 'tasks/view') !== false) {
             redirect(admin_url('tasks'));
-        } elseif (preg_match("/projects\/view\/[1-9]+/", $_SERVER['HTTP_REFERER'])) {
-            $project_url = explode('?', $_SERVER['HTTP_REFERER']);
-            redirect($project_url[0] . '?group=project_tasks');
         } else {
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
         }
     }
 
@@ -1047,7 +1042,7 @@ class Tasks extends AdminController
                 set_alert('success', $message);
             }
             if (!$this->input->is_ajax_request()) {
-                redirect($_SERVER['HTTP_REFERER']);
+                redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
             }
         }
     }
@@ -1246,7 +1241,7 @@ class Tasks extends AdminController
             $members = $this->tasks_model->get_staff_members_that_can_access_task($taskId);
             $members = array_map(function ($member) {
                 $_member['id'] = $member['staffid'];
-                $_member['name'] = $member['firstname'] . ' ' . $member['lastname'];
+                $_member['name'] = e($member['firstname'] . ' ' . $member['lastname']);
 
                 return $_member;
             }, $members);

@@ -12,9 +12,9 @@
                     <select class="selectpicker" data-none-selected-text="<?php echo _l('all'); ?>" name="status[]"
                         data-width="100%" multiple="true">
                         <?php foreach ($statuses as $status) { ?>
-                        <option value="<?php echo $status['id']; ?>"
+                        <option value="<?php echo e($status['id']); ?>"
                             <?php echo in_array($status['id'], $selected_statuses) ? ' selected' : ''; ?>>
-                            <?php echo $status['name']; ?>
+                            <?php echo e($status['name']); ?>
                         </option>
                         <?php } ?>
                     </select>
@@ -30,9 +30,9 @@
                         data-title="<?php echo _l('project_member'); ?>" name="member" data-width="100%">
                         <option value=""></option>
                         <?php foreach ($project_members as $member) { ?>
-                        <option value="<?php echo $member['staff_id']; ?>"
+                        <option value="<?php echo e($member['staff_id']); ?>"
                             <?php echo $selectedMember == $member['staff_id'] ? ' selected' : ''; ?>>
-                            <?php echo $member['firstname'] . ' ' . $member['lastname']; ?>
+                            <?php echo e($member['firstname'] . ' ' . $member['lastname']); ?>
                         </option>
                         <?php } ?>
                         </option>

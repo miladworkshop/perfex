@@ -6,7 +6,7 @@
      <label for="credit_note_status"><?php echo _l('credit_note_status'); ?></label>
      <select name="credit_note_status" class="selectpicker" multiple data-width="100%" data-none-selected-text="<?php echo _l('invoice_status_report_all'); ?>">
       <?php foreach($credit_notes_statuses as $status){ ?>
-        <option value="<?php echo $status['id']; ?>"><?php echo format_credit_note_status($status['id'],false) ?></option>
+        <option value="<?php echo e($status['id']); ?>"><?php echo format_credit_note_status($status['id'],false) ?></option>
       <?php } ?>
     </select>
   </div>
@@ -23,7 +23,7 @@
     <th><?php echo _l('report_invoice_amount_with_tax'); ?></th>
     <th><?php echo _l('report_invoice_total_tax'); ?></th>
     <?php foreach($credit_note_taxes as $tax){ ?>
-      <th><?php echo $tax['taxname']; ?> <small><?php echo $tax['taxrate']; ?>%</small></th>
+      <th><?php echo e($tax['taxname']); ?> <small><?php echo e($tax['taxrate']); ?>%</small></th>
     <?php } ?>
     <th><?php echo _l('invoice_discount'); ?></th>
     <th><?php echo _l('invoice_adjustment'); ?></th>
@@ -43,7 +43,7 @@
   <td class="total"></td>
   <td class="total_tax"></td>
   <?php foreach($credit_note_taxes as $key => $tax){ ?>
-    <td class="total_tax_single_<?php echo $key; ?>"></td>
+    <td class="total_tax_single_<?php echo e($key); ?>"></td>
   <?php } ?>
   <td class="discount_total"></td>
   <td class="adjustment"></td>

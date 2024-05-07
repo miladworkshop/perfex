@@ -165,8 +165,8 @@
     if ($currency['isdefault'] == 1) {
         $selected = 'selected';
     } ?>
-                        <option value="<?php echo $currency['id']; ?>" <?php echo $selected; ?>>
-                            <?php echo $currency['name']; ?></option>
+                        <option value="<?php echo e($currency['id']); ?>" <?php echo e($selected); ?>>
+                            <?php echo e($currency['name']); ?></option>
                         <?php
 } ?>
                     </select>
@@ -178,10 +178,10 @@
                         onchange="total_income_bar_report();"
                         data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                         <?php foreach ($payments_years as $year) { ?>
-                        <option value="<?php echo $year['year']; ?>" <?php if ($year['year'] == date('Y')) {
+                        <option value="<?php echo e($year['year']); ?>" <?php if ($year['year'] == date('Y')) {
         echo 'selected';
     } ?>>
-                            <?php echo $year['year']; ?>
+                            <?php echo e($year['year']); ?>
                         </option>
                         <?php } ?>
                     </select>
