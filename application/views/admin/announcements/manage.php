@@ -6,12 +6,12 @@
             <div class="col-md-12">
                 <?php if (is_admin()) { ?>
                 <a href="<?php echo admin_url('announcements/announcement'); ?>"
-                    class="btn btn-primary tw-mb-2 sm:tw-mb-4">
+                    class="btn btn-primary tw-mb-2">
                     <i class="fa-regular fa-plus tw-mr-1"></i>
                     <?php echo _l('new_announcement'); ?>
                 </a>
                 <?php } else { ?>
-                <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700">
+                <h4 class="tw-mt-0 tw-font-bold tw-text-lg tw-text-neutral-700">
                     <?php echo _l('announcements'); ?>
                 </h4>
                 <?php } ?>

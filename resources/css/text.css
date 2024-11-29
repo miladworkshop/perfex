@@ -3,6 +3,11 @@
     @apply tw-text-neutral-500;
   }
 
+  a.text-muted:hover,
+  a.text-muted:focus {
+    @apply tw-text-neutral-700;
+  }
+
   .text-primary {
     @apply tw-text-primary-600;
   }

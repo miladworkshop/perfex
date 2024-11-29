@@ -7,8 +7,8 @@
 ?>
 <div class="panel_s">
     <div class="panel-body">
-        <div class="tasks-table panel-table-full">
-            <?php init_relation_tasks_table([ 'data-new-rel-id' => $project->id, 'data-new-rel-type' => 'project']); ?>
+        <div class="tasks-table panel-table-full" id="vueApp">
+            <?php init_relation_tasks_table(['data-new-rel-id' => $project->id, 'data-new-rel-type' => 'project'], 'vueApp', true); ?>
         </div>
     </div>
 </div>

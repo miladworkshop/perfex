@@ -201,6 +201,7 @@ class Credit_notes_model extends App_Model
         $this->db->insert(db_prefix() . 'creditnotes', $data);
         $insert_id = $this->db->insert_id();
         if ($insert_id) {
+            $this->save_formatted_number($insert_id);
 
             // Update next credit note number in settings
             $this->db->where('name', 'next_credit_note_number');
@@ -288,8 +289,9 @@ class Credit_notes_model extends App_Model
 
         $this->db->where('id', $id);
         $this->db->update(db_prefix() . 'creditnotes', $data);
-
+        
         if ($this->db->affected_rows() > 0) {
+            $this->save_formatted_number($id);
             $affectedRows++;
         }
 
@@ -617,8 +619,9 @@ class Credit_notes_model extends App_Model
             $key++;
         }
         $id = $this->add($new_credit_note_data);
+
         if ($id) {
-            if ($_invoice->status != 2) {
+            if ($_invoice->status != Invoices_model::STATUS_PAID) {
                 if ($_invoice->status == Invoices_model::STATUS_DRAFT) {
                     $this->invoices_model->change_invoice_number_when_status_draft($invoice_id);
                 }
@@ -626,9 +629,16 @@ class Credit_notes_model extends App_Model
                 if ($this->apply_credits($id, ['invoice_id' => $invoice_id, 'amount' => $_invoice->total_left_to_pay])) {
                     update_invoice_status($invoice_id, true);
                 }
+
+                $this->invoices_model->save_formatted_number($invoice_id);
             }
 
-            log_activity('Created Credit Note From Invoice [Invoice: ' . format_invoice_number($_invoice->id) . ', Credit Note: ' . format_credit_note_number($id) . ']');
+            $invoiceNumber = format_invoice_number($_invoice->id);
+
+            $this->db->where('id',$id);
+            $this->db->update('creditnotes', ['reference_no' => $invoiceNumber]);
+
+            log_activity('Created Credit Note From Invoice [Invoice: ' . $invoiceNumber . ', Credit Note: ' . format_credit_note_number($id) . ']');
 
             hooks()->do_action('created_credit_note_from_invoice', ['invoice_id' => $invoice_id, 'credit_note_id' => $id]);
 
@@ -780,6 +790,7 @@ class Credit_notes_model extends App_Model
                 // update invoice number for invoice with draft - V2.7.2
                 $this->load->model('invoices_model');
                 $this->invoices_model->change_invoice_number_when_status_draft($invoice->id);
+                $this->invoices_model->save_formatted_number($invoice->id);
             }
 
             $this->db->select(db_prefix() . 'currencies.name as currency_name');
@@ -914,6 +925,15 @@ class Credit_notes_model extends App_Model
         }
 
         return $available_total;
+    }
+
+    
+    public function save_formatted_number($id) 
+    {
+        $formattedNumber = format_credit_note_number($id);
+
+        $this->db->where('id', $id);
+        $this->db->update('creditnotes', ['formatted_number' => $formattedNumber]);
     }
 
     public function get_credits_years()

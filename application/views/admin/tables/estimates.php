@@ -1,11 +1,12 @@
 <?php
 
 defined('BASEPATH') or exit('No direct script access allowed');
+
 $this->ci->load->model('estimates_model');
 
 return App_table::find('estimates')
     ->outputUsing(function ($params) {
-        $clientid = $params['clientid'];
+        $clientid            = $params['clientid'];
         $customFieldsColumns = $params['customFieldsColumns'];
 
         $project_id = $this->ci->input->post('project_id');
@@ -42,7 +43,7 @@ return App_table::find('estimates')
             array_push($join, 'LEFT JOIN ' . db_prefix() . 'customfieldsvalues as ctable_' . $key . ' ON ' . db_prefix() . 'estimates.id = ctable_' . $key . '.relid AND ctable_' . $key . '.fieldto="' . $field['fieldto'] . '" AND ctable_' . $key . '.fieldid=' . $field['id']);
         }
 
-        $where  = [];
+        $where = [];
 
         if ($filtersWhere = $this->getWhereFromRules()) {
             $where[] = $filtersWhere;
@@ -73,6 +74,7 @@ return App_table::find('estimates')
             db_prefix() . 'estimates.clientid',
             db_prefix() . 'estimates.invoiceid',
             db_prefix() . 'currencies.name as currency_name',
+            'formatted_number',
             'project_id',
             'deleted_customer_name',
             'hash',
@@ -82,35 +84,41 @@ return App_table::find('estimates')
         $rResult = $result['rResult'];
 
         foreach ($rResult as $aRow) {
+            $formattedNumber = format_estimate_number($aRow['id']);
+
+            if(empty($aRow['formatted_number']) || $formattedNumber !== $aRow['formatted_number']) {
+                $this->ci->estimates_model->save_formatted_number($aRow['id']);
+            }
+
             $row = [];
 
             $numberOutput = '';
             // If is from client area table or projects area request
             if (is_numeric($clientid) || $project_id) {
-                $numberOutput = '<a href="' . admin_url('estimates/list_estimates/' . $aRow['id']) . '" target="_blank">' . e(format_estimate_number($aRow['id'])) . '</a>';
+                $numberOutput = '<a href="' . admin_url('estimates/list_estimates/' . $aRow['id']) . '" target="_blank" class="tw-font-medium">' . e($formattedNumber) . '</a>';
             } else {
-                $numberOutput = '<a href="' . admin_url('estimates/list_estimates/' . $aRow['id']) . '" onclick="init_estimate(' . $aRow['id'] . '); return false;">' . e(format_estimate_number($aRow['id'])) . '</a>';
+                $numberOutput = '<a href="' . admin_url('estimates/list_estimates/' . $aRow['id']) . '" onclick="init_estimate(' . $aRow['id'] . '); return false;" class="tw-font-medium">' . e($formattedNumber) . '</a>';
             }
 
             $numberOutput .= '<div class="row-options">';
 
             $numberOutput .= '<a href="' . site_url('estimate/' . $aRow['id'] . '/' . $aRow['hash']) . '" target="_blank">' . _l('view') . '</a>';
-            if (staff_can('edit',  'estimates')) {
+            if (staff_can('edit', 'estimates')) {
                 $numberOutput .= ' | <a href="' . admin_url('estimates/estimate/' . $aRow['id']) . '">' . _l('edit') . '</a>';
             }
             $numberOutput .= '</div>';
 
             $row[] = $numberOutput;
 
-            $amount = e(app_format_money($aRow['total'], $aRow['currency_name']));
+            $amount = '<span class="tw-font-medium">' . e(app_format_money($aRow['total'], $aRow['currency_name'])) . '</span>';
 
             if ($aRow['invoiceid']) {
-                $amount .= '<br /><span class="hide"> - </span><span class="text-success tw-text-sm">' . _l('estimate_invoiced') . '</span>';
+                $amount .= '<br /><span class="hide"> - </span><span class="text-success tw-text-sm tw-font-medium">' . _l('estimate_invoiced') . '</span>';
             }
 
             $row[] = $amount;
 
-            $row[] = e(app_format_money($aRow['total_tax'], $aRow['currency_name']));
+            $row[] = '<span class="tw-font-medium">' . e(app_format_money($aRow['total_tax'], $aRow['currency_name'])) . '</span>';
 
             $row[] = $aRow['year'];
 
@@ -143,6 +151,7 @@ return App_table::find('estimates')
 
             $output['aaData'][] = $row;
         }
+
         return $output;
     })->setRules([
         App_table_filter::new('number', 'NumberRule')->label(_l('estimate_add_edit_number')),
@@ -153,14 +162,14 @@ return App_table::find('estimates')
         App_table_filter::new('expirydate', 'DateRule')
             ->label(_l('estimate_dt_table_heading_expirydate'))
             ->withEmptyOperators(),
-        App_table_filter::new('sent', 'BooleanRule')->label(_l('estimate_status_sent'))->raw(function($value) {
-            if($value == '1') {
+        App_table_filter::new('sent', 'BooleanRule')->label(_l('estimate_status_sent'))->raw(function ($value) {
+            if ($value == '1') {
                 return 'sent = 1';
-            } else {
-                return 'sent = 0 and '.db_prefix().'estimates.status NOT IN (2,3,4)';
             }
+
+            return 'sent = 0 and ' . db_prefix() . 'estimates.status NOT IN (2,3,4)';
         }),
-        App_table_filter::new('invoiced', 'BooleanRule')->label(_l('estimate_invoiced'))->raw(function($value) {
+        App_table_filter::new('invoiced', 'BooleanRule')->label(_l('estimate_invoiced'))->raw(function ($value) {
             return $value == '1' ? 'invoiceid IS NOT NULL' : 'invoiceid IS NULL';
         }),
         App_table_filter::new('signed', 'BooleanRule')->label(_l('contracts_view_signed'))
@@ -175,7 +184,7 @@ return App_table::find('estimates')
                 return collect($ci->estimates_model->get_sale_agents())->map(function ($data) {
                     return [
                         'value' => $data['sale_agent'],
-                        'label' => get_staff_full_name($data['sale_agent'])
+                        'label' => get_staff_full_name($data['sale_agent']),
                     ];
                 })->all();
             }),
@@ -193,10 +202,10 @@ return App_table::find('estimates')
             ->label(_l('year'))
             ->raw(function ($value, $operator) {
                 if ($operator == 'in') {
-                    return "YEAR(date) IN (" . implode(',', $value) . ")";
-                } else {
-                    return "YEAR(date) NOT IN (" . implode(',', $value) . ")";
+                    return 'YEAR(date) IN (' . implode(',', $value) . ')';
                 }
+
+                return 'YEAR(date) NOT IN (' . implode(',', $value) . ')';
             })
             ->options(function ($ci) {
                 return collect($ci->estimates_model->get_estimates_years())->map(fn ($data) => [

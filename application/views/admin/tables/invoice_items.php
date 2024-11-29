@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 $aColumns = [];
 
-if (staff_can('delete',  'items')) {
+if (staff_can('delete', 'items')) {
     $aColumns[] = '1';
 }
 
@@ -16,7 +16,7 @@ $aColumns = array_merge($aColumns, [
     't2.taxrate as taxrate_2',
     'unit',
     db_prefix() . 'items_groups.name as group_name',
-    ]);
+]);
 
 $sIndexColumn = 'id';
 $sTable       = db_prefix() . 'items';
@@ -25,7 +25,7 @@ $join = [
     'LEFT JOIN ' . db_prefix() . 'taxes t1 ON t1.id = ' . db_prefix() . 'items.tax',
     'LEFT JOIN ' . db_prefix() . 'taxes t2 ON t2.id = ' . db_prefix() . 'items.tax2',
     'LEFT JOIN ' . db_prefix() . 'items_groups ON ' . db_prefix() . 'items_groups.id = ' . db_prefix() . 'items.group_id',
-    ];
+];
 $additionalSelect = [
     db_prefix() . 'items.id',
     't1.name as taxname_1',
@@ -33,7 +33,7 @@ $additionalSelect = [
     't1.id as tax_id_1',
     't2.id as tax_id_2',
     'group_id',
-    ];
+];
 
 $custom_fields = get_custom_fields('items');
 
@@ -60,18 +60,18 @@ foreach ($rResult as $aRow) {
     $row[] = '<div class="checkbox"><input type="checkbox" value="' . $aRow['id'] . '"><label></label></div>';
 
     $descriptionOutput = '';
-    $descriptionOutput = '<a href="#" data-toggle="modal" data-target="#sales_item_modal" data-id="' . $aRow['id'] . '">' . e($aRow['description']) . '</a>';
+    $descriptionOutput = '<a href="#" data-toggle="modal" data-target="#sales_item_modal" data-id="' . $aRow['id'] . '" class="tw-font-medium">' . e($aRow['description']) . '</a>';
     $descriptionOutput .= '<div class="row-options">';
 
-    if (staff_can('edit',  'items')) {
+    if (staff_can('edit', 'items')) {
         $descriptionOutput .= '<a href="#" data-toggle="modal" data-target="#sales_item_modal" data-id="' . $aRow['id'] . '">' . _l('edit') . '</a>';
     }
 
-    if (staff_can('delete',  'items')) {
-        $descriptionOutput .= ' | <a href="' . admin_url('invoice_items/delete/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+    if (staff_can('delete', 'items')) {
+        $descriptionOutput .= ' | <a href="' . admin_url('invoice_items/delete/' . $aRow['id']) . '" class="_delete">' . _l('delete') . '</a>';
     }
 
-    if (staff_can('create',  'items')) {
+    if (staff_can('create', 'items')) {
         $descriptionOutput .= ' | <a href="' . admin_url('invoice_items/copy/' . $aRow['id']) . '" class=" _edit_item">' . _l('copy') . '</a>';
     }
 
@@ -81,14 +81,14 @@ foreach ($rResult as $aRow) {
 
     $row[] = e($aRow['long_description']);
 
-    $row[] = e(app_format_money($aRow['rate'], get_base_currency()));
+    $row[] = '<span class="tw-font-medium">' . e(app_format_money($aRow['rate'], get_base_currency())) . '</span>';
 
-    $aRow['taxrate_1'] = $aRow['taxrate_1'] ?? 0;
-    $row[]             = '<span data-toggle="tooltip" title="' . e($aRow['taxname_1']) . '" data-taxid="' . $aRow['tax_id_1'] . '">' . e(app_format_number($aRow['taxrate_1'])) . '%' . '</span>';
+    $aRow['taxrate_1'] ??= 0;
+    $row[] = '<span data-toggle="tooltip" title="' . e($aRow['taxname_1']) . '" data-taxid="' . $aRow['tax_id_1'] . '">' . e(app_format_number($aRow['taxrate_1'])) . '%</span>';
 
-    $aRow['taxrate_2'] = $aRow['taxrate_2'] ?? 0;
-    $row[]             = '<span data-toggle="tooltip" title="' . e($aRow['taxname_2']) . '" data-taxid="' . $aRow['tax_id_2'] . '">' . e(app_format_number($aRow['taxrate_2'])) . '%' . '</span>';
-    $row[]             = $aRow['unit'];
+    $aRow['taxrate_2'] ??= 0;
+    $row[] = '<span data-toggle="tooltip" title="' . e($aRow['taxname_2']) . '" data-taxid="' . $aRow['tax_id_2'] . '">' . e(app_format_number($aRow['taxrate_2'])) . '%</span>';
+    $row[] = $aRow['unit'];
 
     $row[] = e($aRow['group_name']);
 

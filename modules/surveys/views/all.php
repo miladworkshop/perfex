@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-12">
                 <?php if (staff_can('create',  'surveys') || staff_can('view',  'surveys')) { ?>
-                <div class="_buttons tw-mb-2 sm:tw-mb-4">
+                <div class="_buttons tw-mb-2">
                     <?php if (staff_can('create',  'surveys')) { ?>
                     <a href="<?php echo admin_url('surveys/survey'); ?>"
                         class="btn btn-primary pull-left display-block">

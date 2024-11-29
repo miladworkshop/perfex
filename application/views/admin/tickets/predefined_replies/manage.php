@@ -4,7 +4,7 @@
     <div class="content">
         <div class="row">
             <div class="col-md-12">
-                <div class="tw-mb-2 sm:tw-mb-4">
+                <div class="tw-mb-2">
                     <a href="<?php echo admin_url('tickets/predefined_reply'); ?>" class="btn btn-primary">
                         <i class="fa-regular fa-plus tw-mr-1"></i>
                         <?php echo _l('new_predefined_reply'); ?>

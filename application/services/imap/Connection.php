@@ -2,15 +2,18 @@
 
 namespace app\services\imap;
 
-use Ddeboer\Imap\MailboxInterface;
 use Ddeboer\Imap\ConnectionInterface;
-use Ddeboer\Imap\ImapResourceInterface;
-use Ddeboer\Imap\Exception\ImapQuotaException;
-use Ddeboer\Imap\Exception\ImapNumMsgException;
 use Ddeboer\Imap\Exception\CreateMailboxException;
 use Ddeboer\Imap\Exception\DeleteMailboxException;
 use Ddeboer\Imap\Exception\ImapGetmailboxesException;
+use Ddeboer\Imap\Exception\ImapNumMsgException;
+use Ddeboer\Imap\Exception\ImapQuotaException;
 use Ddeboer\Imap\Exception\MailboxDoesNotExistException;
+use Ddeboer\Imap\ImapResourceInterface;
+use Ddeboer\Imap\MailboxInterface;
+use InvalidArgumentException;
+use ReturnTypeWillChange;
+use stdClass;
 
 /**
  * A connection to an IMAP server that is authenticated for a user.
@@ -18,23 +21,22 @@ use Ddeboer\Imap\Exception\MailboxDoesNotExistException;
 class Connection implements ConnectionInterface
 {
     private ImapResourceInterface $resource;
-
     private string $server;
 
     /**
-     * @var null|MailboxInterface[]
+     * @var MailboxInterface[]|null
      */
     private ?array $mailboxes = null;
 
     /**
-     * @var null|array<int|string, \stdClass>
+     * @var array<int|string, stdClass>|null
      */
     private ?array $mailboxNames = null;
 
     /**
      * Constructor.
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(ImapResourceInterface $resource, string $server)
     {
@@ -65,7 +67,7 @@ class Connection implements ConnectionInterface
         $errorNumber  = 0;
         \set_error_handler(static function ($nr, $message) use (&$errorMessage, &$errorNumber): bool {
             $errorMessage = $message;
-            $errorNumber = $nr;
+            $errorNumber  = $nr;
 
             return true;
         });
@@ -95,6 +97,7 @@ class Connection implements ConnectionInterface
 
         if (null === $this->mailboxes) {
             $this->mailboxes = [];
+
             foreach ($this->mailboxNames as $mailboxName => $mailboxInfo) {
                 $this->mailboxes[(string) $mailboxName] = $this->getMailbox((string) $mailboxName);
             }
@@ -121,7 +124,7 @@ class Connection implements ConnectionInterface
         return new Mailbox($this->resource, $name, $this->mailboxNames[$name]);
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function count()
     {
         $return = \imap_num_msg($this->resource->getStream());
@@ -168,7 +171,7 @@ class Connection implements ConnectionInterface
 
         $this->mailboxNames = [];
         $mailboxesInfo      = \imap_getmailboxes($this->resource->getStream(), $this->server, '*');
-        if (!\is_array($mailboxesInfo)) {
+        if (! \is_array($mailboxesInfo)) {
             throw new ImapGetmailboxesException('imap_getmailboxes failed');
         }
 

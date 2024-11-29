@@ -1,19 +1,19 @@
 @layer components {
   .panel,
   .panel_s {
-    @apply tw-bg-white tw-mb-[25px] tw-rounded-md tw-border tw-border-solid tw-border-neutral-200 tw-shadow-sm;
+    @apply tw-bg-white tw-mb-[25px] tw-rounded-lg tw-border tw-border-solid tw-border-neutral-300/60 tw-shadow-md;
   }
   .panel-body {
     @apply tw-p-6 tw-relative tw-bg-white tw-rounded-md;
   }
   .panel-heading {
-    @apply tw-px-6 tw-py-2.5 tw-rounded-t-md tw-border-b-neutral-200;
+    @apply tw-px-6 tw-py-2.5 tw-rounded-t-md tw-border-b-neutral-200 tw-bg-neutral-50;
   }
   .panel-heading > .dropdown .dropdown-toggle {
     @apply tw-text-inherit;
   }
   .panel-title {
-    @apply tw-my-0 tw-text-base tw-text-inherit tw-font-semibold;
+    @apply tw-my-0 tw-text-base tw-text-inherit tw-font-bold;
   }
   .panel-title > a,
   .panel-title > small,
@@ -457,7 +457,7 @@
 }
 
 .panel-table-full .dataTables_wrapper .table-responsive {
-  @apply -tw-mx-6 tw-border-b tw-border-solid tw-border-neutral-200/70 tw-mb-4;
+  @apply -tw-mx-6 tw-border-b tw-border-solid tw-border-neutral-200/70;
 }
 
 .panel-table-full .dataTables_wrapper.app_dt_empty .table-responsive {
@@ -476,6 +476,10 @@
   border-right: 0 !important;
 }
 
+.horizontal-scrollable-tabs .horizontal-tabs .nav-tabs-horizontal {
+ @apply tw-bg-neutral-100;
+}
+
 .panel-full-width-tabs {
   @apply !-tw-mx-6;
 }
@@ -484,17 +488,25 @@
   @apply !-tw-mt-6 tw-rounded-t-md tw-px-6;
 }
 
+[dir="rtl"] .panel-full-width-tabs .nav  {
+  @apply tw-px-0 tw-bg-neutral-100;
+}
+
 .panel-full-width-tabs .nav li a,
 .panel-full-width-tabs.horizontal-scrollable-tabs .scroller {
-  @apply tw-py-3.5;
+  @apply tw-py-3.5 tw-bg-neutral-100;
+}
+
+.panel-full-width-tabs .nav li a .badge {
+  @apply tw-bg-neutral-200;
 }
 
 .modal .panel-full-width-tabs {
-  @apply !-tw-mx-4;
+  @apply !-tw-mx-5;
 }
 
 .modal .panel-full-width-tabs .nav {
-  @apply tw-px-4;
+  @apply tw-px-5;
 }
 
 .panel-full-width-tabs
@@ -539,4 +551,8 @@
 .panel > .hr-panel-heading,
 .panel > .hr-panel-separator {
   @apply tw-mx-0;
+}
+
+.panel-body:has(.panel-table-full) {
+  @apply tw-pb-2.5;
 }

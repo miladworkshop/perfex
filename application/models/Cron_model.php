@@ -1692,9 +1692,9 @@ class Cron_model extends App_Model
                             $body = $parsedBody;
                         }
                     }
-                  
+
                     $body = $this->prepare_imap_email_body_html($body);
-            
+
                     $data['attachments'] = [];
 
                     foreach ($message->getAttachments() as $attachment) {
@@ -1753,22 +1753,17 @@ class Cron_model extends App_Model
 
                     $data = hooks()->apply_filters('imap_auto_import_ticket_data', $data, $message);
 
-                  
-
                     try {
-                        $status = $this->tickets_model->insert_piped_ticket($data);
-
-                        if ($status == 'Ticket Imported Successfully' || $status == 'Ticket Reply Imported Successfully') {
-                            if ($dept['delete_after_import'] == 0) {
-                                $message->markAsSeen();
-                            } else {
-                                $message->delete();
-                                $connection->expunge();
-                            }
-                        } else {
-                            // Set unseen message in all cases to prevent looping throught the message again
+                        // Perform any cleanup before trying to insert the ticket
+                        // In case of any weird errors, helps not re-importing the ticket hundreds of times.
+                        if ($dept['delete_after_import'] == 0) {
                             $message->markAsSeen();
+                        } else {
+                            $message->delete();
+                            $connection->expunge();
                         }
+
+                        $this->tickets_model->insert_piped_ticket($data);
                     } catch (\Exception $e) {
                         // Set unseen message in all cases to prevent looping throught the message again
                         $message->markAsSeen();
@@ -1776,12 +1771,13 @@ class Cron_model extends App_Model
                 } catch (MessageDoesNotExistException $e) {
                     continue;
                 } catch (UnexpectedEncodingException|UnsupportedCharsetException $e) {
-                    log_activity('Failed to auto importing tickets for department ' . $dept['email'] . '. Error:' . $e->getMessage());
+                    log_activity('Failed to auto importing tickets for department ' . $dept['email'] . '. Error: ' . $e->getMessage());
                     $message->markAsSeen();
 
                     continue;
                 }
             }
+
             $this->currentImapMessage = null;
         }
     }
@@ -1917,18 +1913,24 @@ class Cron_model extends App_Model
         return ($this->lock_handle && flock($this->lock_handle, LOCK_EX | LOCK_NB))
             || (defined('APP_DISABLE_CRON_LOCK') && APP_DISABLE_CRON_LOCK);
     }
-    
+
     private function prepare_imap_email_body_html($body)
     {
-        $body = trim($body);        
-        $body = str_replace('&nbsp;', ' ', $body);        
+        $body = trim($body);
+        $body = str_replace('&nbsp;', ' ', $body);
         $body = trim(remove_html_invisible_tags($body));
         // Remove opening <html> tag.
         $body = preg_replace('/^<html[^>]*>/', '', $body);
         // Remove everything before and including the opening <body> tag, and everything after and including the closing </body> tag.
         $body = preg_replace('/.*<body[^>]*>(.*?)<\/body>.*/is', '$1', $body);
+        $body = trim($body);
+        // Remove duplicate new lines
+        $body = preg_replace("/[\r\n]+/", "\n", $body);
+        // new lines with <br />
+        $body = preg_replace('/\n(\s*\n)+/', '<br />', $body);
+        $body = preg_replace('/\n/', '<br>', $body);
 
-        return trim($body);
+        return $body;
     }
 
     private function shouldRunAutomations($auto_operation_hour)

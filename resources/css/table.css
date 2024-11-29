@@ -49,7 +49,7 @@
 .table > tbody > tr.active > th,
 .table > tfoot > tr.active > th {
   background-color: theme("colors.neutral.100");
-  color: theme("colors.neutral.600");
+  color: theme("colors.neutral.700");
 }
 .table-hover > tbody > tr > td.active:hover,
 .table-hover > tbody > tr > th.active:hover,
@@ -198,7 +198,7 @@
 
 .table > tbody > tr > td,
 .table > tfoot > tr > td {
-  color: theme("colors.neutral.500");
+  color: theme("colors.neutral.600");
 }
 
 [dir="rtl"] .table thead th {
@@ -270,29 +270,13 @@ div.dataTables_wrapper div.dataTables_processing {
 }
 
 .dataTables_filter input {
-  margin-left: 0 !important;
-  width: 80px !important;
-  transition: width 0.3s ease;
-  font-size: 14px;
-}
-
-.dataTables_filter input:focus {
-  width: 160px !important;
-}
-
-.dataTables_filter label {
-  text-align: right;
+  @apply !tw-ml-0 tw-w-[130px] tw-text-sm;
 }
 
 @media (max-width: 768px) {
   .table-responsive {
     padding: 15px 0 15px 0;
     /* border: 1px solid theme('colors.neutral.200'); */
-  }
-
-  .dataTables_filter input,
-  .dataTables_filter input:focus {
-    width: 100% !important;
   }
 }
 
@@ -354,7 +338,7 @@ table.dataTable tbody td {
 }
 
 table.dataTable thead > tr > th {
-  @apply tw-whitespace-nowrap tw-text-[13.5px] tw-text-neutral-600 tw-bg-neutral-50;
+  @apply tw-whitespace-nowrap tw-text-neutral-700 tw-bg-neutral-100/70;
 }
 
 .table.dataTable > thead:first-child > tr:first-child > th,
@@ -382,8 +366,7 @@ table.dataTable thead > tr > th.sorting_asc,
 table.dataTable thead > tr > th.sorting_desc,
 table.dataTable thead > tr > td.sorting_asc,
 table.dataTable thead > tr > td.sorting_desc {
-  background: theme("colors.neutral.100");
-  color: theme("colors.neutral.700");
+  @apply tw-bg-neutral-200/60 tw-text-neutral-800 tw-font-semibold;
 }
 
 table.dataTable > tbody > tr.danger > td,
@@ -422,6 +405,10 @@ table.dataTable > tbody > tr.success + tr:not(.success) > td {
 
 ul.dt-button-collection.dropdown-menu {
   z-index: 20005;
+}
+
+[dir="rtl"] .dt-buttons > button {
+  @apply first:!tw-rounded-r-md first:!tw-rounded-l-none last:!tw-rounded-l-md last:!tw-rounded-r-none;
 }
 
 .dt-buttons.btn-group:empty {
@@ -507,6 +494,60 @@ ul.dt-button-collection.dropdown-menu {
   right: -1.6em;
 }
 
-.table .checkbox {
-  padding-left: 10px;
+.dataTables_wrapper table tbody a:not(.text-muted,.text-primary,.text-danger,.text-warning,.text-success,.text-info) {
+  @apply tw-text-neutral-700 hover:tw-text-neutral-900 active:tw-text-neutral-900 focus:tw-text-neutral-900;
 }
+
+div.dataTables_wrapper .dt-buttons .btn-default, 
+.dataTables_length select, 
+.dataTables_filter input,
+.dataTables_filter .input-group-addon {
+  @apply tw-bg-white;
+}
+
+
+div.dataTables_wrapper .btn-dt-reload:hover,
+div.dataTables_wrapper .btn-dt-reload {
+  @apply !tw-rounded-tr !tw-rounded-br;
+}
+
+table.dataTable tbody > tr > td > .onoffswitch {
+  @apply tw-ml-3;
+}
+
+table.dataTable:has(.mass_select_all_wrap) tbody > tr > td:first-child {
+  @apply tw-border-r tw-border-solid tw-border-neutral-100;
+}
+
+table.dataTable tbody tr.has-border-left {
+  @apply tw-relative after:tw-content-[''] after:tw-border-l after:tw-border-solid after:tw-border-transparent after:tw-h-full after:tw-block after:tw-absolute after:tw-left-0;
+}
+
+table.dataTable tbody tr.has-border-left.row-border-danger {
+  @apply after:tw-border-danger-500;
+}
+
+table.dataTable tbody tr.has-border-left.row-border-info {
+  @apply after:tw-border-info-500;
+}
+
+table.dataTable tbody tr.has-border-left.row-border-warning {
+  @apply after:tw-border-warning-500;
+}
+
+table.dataTable tbody tr:has(.checkbox) > td:first-child,
+table.dataTable thead:has(.checkbox) th:first-child {
+  @apply sm:tw-px-2;
+}
+
+table.dataTable tbody tr:has(.checkbox) > td > .checkbox,
+table.dataTable thead:has(.checkbox) th > .checkbox {
+  @apply sm:-tw-mt-[3px] sm:tw-pl-[13px];
+}
+
+table.dataTable tbody tr.has-border-left > td > .checkbox,
+table.dataTable:has(tr.has-border-left) thead th > .checkbox {
+  padding-left: 15px;
+  margin-right: -5px;
+}
+

@@ -22,14 +22,14 @@ return App_table::find('proposals')
             db_prefix() . 'proposals.status as proposal_status',
         ];
 
-        if (!$project_id) {
+        if (! $project_id) {
             $aColumns[] = 'project_id';
         }
 
         $sIndexColumn = 'id';
         $sTable       = db_prefix() . 'proposals';
 
-        $where  = [];
+        $where = [];
 
         if ($filtersWhere = $this->getWhereFromRules()) {
             $where[] = $filtersWhere;
@@ -70,6 +70,7 @@ return App_table::find('proposals')
             'rel_type',
             'invoice_id',
             'hash',
+            'CONCAT("'.get_option('proposal_number_prefix').'", \'\', LPAD('.db_prefix().'proposals.id, '.get_option('number_padding_prefixes').', 0)) as formatted_number',
             db_prefix() . 'projects.name as project_name',
         ]);
 
@@ -79,12 +80,12 @@ return App_table::find('proposals')
         foreach ($rResult as $aRow) {
             $row = [];
 
-            $numberOutput = '<a href="' . admin_url('proposals/list_proposals/' . $aRow[db_prefix() . 'proposals.id']) . '"' . ($project_id ? 'target="_blank"' : 'onclick="init_proposal(' . $aRow[db_prefix() . 'proposals.id'] . '); return false;"') . '>' . e(format_proposal_number($aRow[db_prefix() . 'proposals.id'])) . '</a>';
+            $numberOutput = '<a href="' . admin_url('proposals/list_proposals/' . $aRow[db_prefix() . 'proposals.id']) . '"' . ($project_id ? 'target="_blank"' : 'onclick="init_proposal(' . $aRow[db_prefix() . 'proposals.id'] . '); return false;"') . ' class="tw-font-medium">' . e(format_proposal_number($aRow[db_prefix() . 'proposals.id'])) . '</a>';
 
             $numberOutput .= '<div class="row-options">';
 
             $numberOutput .= '<a href="' . site_url('proposal/' . $aRow[db_prefix() . 'proposals.id'] . '/' . $aRow['hash']) . '" target="_blank">' . _l('view') . '</a>';
-            if (staff_can('edit',  'proposals')) {
+            if (staff_can('edit', 'proposals')) {
                 $numberOutput .= ' | <a href="' . admin_url('proposals/proposal/' . $aRow[db_prefix() . 'proposals.id']) . '"' . ($project_id ? 'target="_blank"' : '') . '>' . _l('edit') . '</a>';
             }
             $numberOutput .= '</div>';
@@ -101,10 +102,10 @@ return App_table::find('proposals')
 
             $row[] = $toOutput;
 
-            $amount = e(app_format_money($aRow['total'], ($aRow['currency'] != 0 ? get_currency($aRow['currency']) : $baseCurrency)));
+            $amount = '<span class="tw-font-medium">' . e(app_format_money($aRow['total'], ($aRow['currency'] != 0 ? get_currency($aRow['currency']) : $baseCurrency))) . '</span>';
 
             if ($aRow['invoice_id']) {
-                $amount .= '<br /> <span class="hide"> - </span><span class="text-success tw-text-sm">' . _l('estimate_invoiced') . '</span>';
+                $amount .= '<br /> <span class="hide"> - </span><span class="text-success tw-text-sm tw-font-medium">' . _l('estimate_invoiced') . '</span>';
             }
 
             $row[] = $amount;
@@ -113,7 +114,7 @@ return App_table::find('proposals')
 
             $row[] = e(_d($aRow['open_till']));
 
-            if (!$project_id) {
+            if (! $project_id) {
                 $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '" target="_blank">' . e($aRow['project_name']) . '</a>';
             }
 
@@ -134,6 +135,7 @@ return App_table::find('proposals')
 
             $output['aaData'][] = $row;
         }
+
         return $output;
     })->setRules([
         App_table_filter::new('subject', 'TextRule')->label(_l('proposal_subject')),
@@ -148,18 +150,18 @@ return App_table::find('proposals')
             ->raw(function ($value) {
                 if ($value == '1') {
                     return 'signature IS NOT NULL';
-                } else {
-                    return 'signature IS NULL';
                 }
+
+                return 'signature IS NULL';
             }),
 
         App_table_filter::new('expired', 'BooleanRule')->label(_l('proposal_expired'))
             ->raw(function ($value) {
                 if ($value == '1') {
                     return 'open_till IS NOT NULL AND open_till <"' . date('Y-m-d') . '" AND ' . db_prefix() . 'proposals.status NOT IN(2,3)';
-                } else {
-                    return 'open_till IS NOT NULL AND open_till >"' . date('Y-m-d') . '" AND ' . db_prefix() . 'proposals.status NOT IN(2,3)';
                 }
+
+                return 'open_till IS NOT NULL AND open_till >"' . date('Y-m-d') . '" AND ' . db_prefix() . 'proposals.status NOT IN(2,3)';
             }),
 
         App_table_filter::new('rel_type', 'SelectRule')
@@ -167,7 +169,7 @@ return App_table::find('proposals')
             ->options(function () {
                 return [
                     ['value' => 'lead', 'label' => _l('proposal_for_lead')],
-                    ['value' => 'customer', 'label' => _l('proposal_for_customer')]
+                    ['value' => 'customer', 'label' => _l('proposal_for_customer')],
                 ];
             }),
 
@@ -179,7 +181,7 @@ return App_table::find('proposals')
                 return collect($ci->proposals_model->get_sale_agents())->map(function ($data) {
                     return [
                         'value' => $data['sale_agent'],
-                        'label' => get_staff_full_name($data['sale_agent'])
+                        'label' => get_staff_full_name($data['sale_agent']),
                     ];
                 })->all();
             }),
@@ -197,10 +199,10 @@ return App_table::find('proposals')
             ->label(_l('year'))
             ->raw(function ($value, $operator) {
                 if ($operator == 'in') {
-                    return "YEAR(date) IN (" . implode(',', $value) . ")";
-                } else {
-                    return "YEAR(date) NOT IN (" . implode(',', $value) . ")";
+                    return 'YEAR(date) IN (' . implode(',', $value) . ')';
                 }
+
+                return 'YEAR(date) NOT IN (' . implode(',', $value) . ')';
             })
             ->options(function ($ci) {
                 return collect($ci->proposals_model->get_proposals_years())->map(fn ($data) => [

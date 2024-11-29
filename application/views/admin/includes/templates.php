@@ -2,33 +2,40 @@
 $len = count($templates);
 $i   = 0;
 ?>
-<div id="templates-wrapper" class="ptop15" data-total="<?php echo e($len); ?>">
+<div id="templates-wrapper" class="ptop15"
+    data-total="<?= e($len); ?>">
 
     <?php foreach ($templates as $template) { ?>
-    <div class="media templates-wrapper <?php if ($i == 0) {
-    echo 'mtop15';
-} ?>">
+    <div
+        class="media templates-wrapper<?= $i == 0 ? ' mtop15' : ''; ?>">
         <div class="media-body">
-            <?php if ($template['addedfrom'] == get_staff_user_id() || is_admin()) { ?>
-            <button class="btn pull-right btn-danger"
-                onclick="delete_template(this,'<?php echo e($rel_type) ?>',<?php echo e($template['id']); ?>, <?php echo e($rel_id) ?>);return false;"><i
-                    class="fa fa fa-times"></i></button>
-            <button class="btn pull-right btn-primary mright5 "
-                onclick="edit_template('<?php echo e($rel_type) ?>',<?php echo e($template['id']); ?>, <?php echo e($rel_id) ?>);return false;"><i
-                    class="fa-regular fa-pen-to-square"></i></button>
-            <?php } ?>
-            <button class="btn pull-right btn-default mright5"
-                onclick="insert_template(this,'<?php echo e($rel_type) ?>',<?php echo e($template['id']); ?>);return false;"><?php echo _l('insert_template') ?></button>
-            <div data-template-content="<?php echo e($template['id']); ?>" class="bold">
-                <?php echo check_for_links($template['name']); ?>
+            <div class="tw-flex tw-items-center pull-right tw-space-x-2">
+                <a class="text-muted tw-mr-1 tw-font-semibold" href="#"
+                    onclick="insert_template(this,'<?= e($rel_type) ?>',<?= e($template['id']); ?>);return false;">
+                    <?= _l('insert_template') ?>
+                </a>
+                <?php if ($template['addedfrom'] == get_staff_user_id() || is_admin()) { ?>
+                <a class="text-muted tw-mr-1" href="#"
+                    onclick="edit_template('<?= e($rel_type) ?>',<?= e($template['id']); ?>, <?= e($rel_id) ?>);return false;">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                </a>
+                <a class="text-muted" href="#"
+                    onclick="delete_template(this,'<?= e($rel_type) ?>',<?= e($template['id']); ?>, <?= e($rel_id) ?>);return false;">
+                    <i class="fa-regular fa-trash-can"></i>
+                </a>
+                <?php } ?>
+            </div>
+            <div data-template-content="<?= e($template['id']); ?>"
+                class="bold">
+                <?= check_for_links($template['name']); ?>
             </div>
         </div>
         <?php if ($i >= 0 && $i != $len - 1) {
-    echo '<hr />';
-}
-    ?>
+            echo '<hr />';
+        }
+        ?>
     </div>
     <?php
 $i++;
-} ?>
+    } ?>
 </div>

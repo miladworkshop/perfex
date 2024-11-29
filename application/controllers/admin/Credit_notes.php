@@ -50,19 +50,16 @@ class Credit_notes extends AdminController
             'success' => false,
             'message' => '',
         ];
+
         if (staff_can('edit',  'credit_notes')) {
             if ($this->input->post('prefix')) {
-                $affected_rows = 0;
-
                 $this->db->where('id', $id);
                 $this->db->update(db_prefix() . 'creditnotes', [
                     'prefix' => $this->input->post('prefix'),
                 ]);
-                if ($this->db->affected_rows() > 0) {
-                    $affected_rows++;
-                }
 
-                if ($affected_rows > 0) {
+                if ($this->db->affected_rows() > 0) {
+                    $this->credit_notes_model->save_formatted_number($id);
                     $response['success'] = true;
                     $response['message'] = _l('updated_successfully', _l('credit_note'));
                 }
@@ -125,7 +122,7 @@ class Credit_notes extends AdminController
             }
         }
         if ($id == '') {
-            $title = _l('add_new', _l('credit_note_lowercase'));
+            $title = _l('add_new', _l('credit_note'));
         } else {
             $credit_note = $this->credit_notes_model->get($id);
 
@@ -135,7 +132,7 @@ class Credit_notes extends AdminController
 
             $data['credit_note'] = $credit_note;
             $data['edit']        = true;
-            $title               = _l('edit', _l('credit_note_lowercase')) . ' - ' . format_credit_note_number($credit_note->id);
+            $title               = _l('edit', _l('credit_note')) . ' - ' . format_credit_note_number($credit_note->id);
         }
 
         if ($this->input->get('customer_id')) {

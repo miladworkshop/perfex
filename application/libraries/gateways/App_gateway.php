@@ -359,4 +359,9 @@ class App_gateway
     {
         return $this->getSetting($name);
     }
+
+    public function markAsInactive()
+    {
+        update_option('paymentmethod_' . $this->getId() . '_active', '0');
+    }
 }

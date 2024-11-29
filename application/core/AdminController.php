@@ -172,7 +172,7 @@ class AdminController extends App_Controller
                 'onclick' => 'init_lead(); return false;',
             ],
             'position' => 45,
-            'icon'     => 'fa-solid fa-tty',
+            'icon'     => 'fa-solid fa-crosshairs',
         ]);
 
         $this->app->add_quick_actions_link([

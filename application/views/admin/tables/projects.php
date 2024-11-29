@@ -72,9 +72,9 @@ return App_table::find('projects')
 
             $link = admin_url('projects/view/' . $aRow['id']);
 
-            $row[] = '<a href="' . $link . '">' . $aRow['id'] . '</a>';
+            $row[] = '<a href="' . $link . '" class="tw-font-medium">' . $aRow['id'] . '</a>';
 
-            $name = '<a href="' . $link . '">' . e($aRow['name']) . '</a>';
+            $name = '<a href="' . $link . '" class="tw-font-medium">' . e($aRow['name']) . '</a>';
 
             $name .= '<div class="row-options">';
 
@@ -89,7 +89,7 @@ return App_table::find('projects')
             }
 
             if ($hasPermissionDelete) {
-                $name .= ' | <a href="' . admin_url('projects/delete/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+                $name .= ' | <a href="' . admin_url('projects/delete/' . $aRow['id']) . '" class="_delete">' . _l('delete') . '</a>';
             }
 
             $name .= '</div>';

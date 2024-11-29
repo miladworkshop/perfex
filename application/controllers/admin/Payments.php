@@ -29,13 +29,15 @@ class Payments extends AdminController
 			show_404();
 		}
 
-		if (staff_cant('create', 'payment')) {
+		if (staff_cant('create', 'payments')) {
 			access_denied('Create Payment');
 		}
 		$totalAdded = $this->payments_model->add_batch_payment($this->input->post());
         if ($totalAdded > 0) {
             set_alert('success', _l('batch_payment_added_successfully', $totalAdded));
-            return redirect(admin_url('payments'));
+            if (staff_can('view', 'payments') || staff_can('view_own', 'payments')) {
+                return redirect(admin_url('payments'));
+            }
         }
         return redirect(admin_url('invoices'));
 	}

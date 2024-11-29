@@ -1,8 +1,9 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <h4 class="no-mtop">
-    <?php echo _l('gdpr_right_to_be_informed'); ?>
+    <?= _l('gdpr_right_to_be_informed'); ?>
     <small>
-        <a href="https://ico.org.uk/for-organisations/guide-to-the-general-data-protection-regulation-gdpr/individual-rights/right-to-be-informed/" target="_blank"><?php echo _l('learn_more'); ?></a>
+        <a href="https://ico.org.uk/for-organisations/guide-to-the-general-data-protection-regulation-gdpr/individual-rights/right-to-be-informed/"
+            target="_blank"><?= _l('learn_more'); ?></a>
     </small>
 </h4>
 <hr class="hr-panel-separator" />
@@ -17,15 +18,18 @@
 <?php render_yes_no_option('gdpr_enable_terms_and_conditions_estimate_request_form', 'Enable Terms & Conditions for estimate request forms'); ?>
 <hr class="hr-panel-separator" />
 <p class="">
-    <?php echo _l('terms_and_conditions') ?>
+    <?= _l('terms_and_conditions') ?>
     <br />
-    <a href="<?php echo terms_url(); ?>" target="_blank"><?php echo terms_url(); ?></a>
+    <a href="<?= terms_url(); ?>"
+        target="_blank"><?= terms_url(); ?></a>
 </p>
-<?php echo render_textarea('settings[terms_and_conditions]', '', get_option('terms_and_conditions'), [], [], '', 'tinymce'); ?>
+<?= render_textarea('settings[terms_and_conditions]', '', get_option('terms_and_conditions'), [], [], '', 'tinymce'); ?>
 <hr />
 <p class="">
-    <i class="fa-regular fa-circle-question" data-toggle="tooltip" data-title="You may want to include the privacy policy in your terms and condtions content."></i> Privacy Policy
+    <i class="fa-regular fa-circle-question" data-toggle="tooltip"
+        data-title="You may want to include the privacy policy in your terms and condtions content."></i> Privacy Policy
     <br />
-    <a href="<?php echo privacy_policy_url(); ?>" target="_blank"><?php echo privacy_policy_url(); ?></a>
+    <a href="<?= privacy_policy_url(); ?>"
+        target="_blank"><?= privacy_policy_url(); ?></a>
 </p>
-<?php echo render_textarea('settings[privacy_policy]', '', get_option('privacy_policy'), [], [], '', 'tinymce'); ?>
+<?= render_textarea('settings[privacy_policy]', '', get_option('privacy_policy'), [], [], '', 'tinymce'); ?>

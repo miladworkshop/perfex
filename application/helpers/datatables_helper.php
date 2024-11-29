@@ -4,23 +4,24 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * General function for all datatables, performs search,additional select,join,where,orders
- * @param  array $aColumns           table columns
- * @param  mixed $sIndexColumn       main column in table for bettter performing
- * @param  string $sTable            table name
- * @param  array  $join              join other tables
- * @param  array  $where             perform where in query
- * @param  array  $additionalSelect  select additional fields
- * @param  string $sGroupBy group results
+ *
+ * @param array  $aColumns         table columns
+ * @param mixed  $sIndexColumn     main column in table for bettter performing
+ * @param string $sTable           table name
+ * @param array  $join             join other tables
+ * @param array  $where            perform where in query
+ * @param array  $additionalSelect select additional fields
+ * @param string $sGroupBy         group results
+ * @param mixed  $searchAs
+ *
  * @return array
  */
 function data_tables_init($aColumns, $sIndexColumn, $sTable, $join = [], $where = [], $additionalSelect = [], $sGroupBy = '', $searchAs = [])
 {
-    $CI          = &get_instance();
-    $data      = $CI->input->post();
+    $CI   = &get_instance();
+    $data = $CI->input->post();
 
-    /*
-     * Paging
-     */
+    // Paging
     $sLimit = '';
     if ((is_numeric($CI->input->post('start'))) && $CI->input->post('length') != '-1') {
         $sLimit = 'LIMIT ' . intval($CI->input->post('start')) . ', ' . intval($CI->input->post('length'));
@@ -47,21 +48,20 @@ function data_tables_init($aColumns, $sIndexColumn, $sTable, $join = [], $where 
         }
     }
 
-    /*
-     * Ordering
-     */
+    // Ordering
     $nullColumnsAsLast = get_null_columns_that_should_be_sorted_as_last();
 
     $sOrder = '';
     if ($CI->input->post('order')) {
         $sOrder = 'ORDER BY ';
+
         foreach ($CI->input->post('order') as $key => $val) {
             $columnName = $aColumns[intval($data['order'][$key]['column'])];
             $dir        = strtoupper($data['order'][$key]['dir']);
             $type       = $data['order'][$key]['type'] ?? null;
 
             // Security
-            if (!in_array($dir, ['ASC', 'DESC'])) {
+            if (! in_array($dir, ['ASC', 'DESC'])) {
                 $dir = 'ASC';
             }
 
@@ -79,7 +79,7 @@ function data_tables_init($aColumns, $sIndexColumn, $sTable, $join = [], $where 
             } else {
                 // Custom fields sorting support for number type custom fields
                 if ($type === 'number') {
-                    $sOrder .= hooks()->apply_filters('datatables_query_order_column', 'CAST(' . $columnName . ' as SIGNED)', $sTable);
+                    $sOrder .= hooks()->apply_filters('datatables_query_order_column', 'CAST(' . $columnName . ' as DECIMAL(10, ' . get_decimal_places() . '))', $sTable);
                 } elseif ($type === 'date_picker') {
                     $sOrder .= hooks()->apply_filters('datatables_query_order_column', 'CAST(' . $columnName . ' as DATE)', $sTable);
                 } elseif ($type === 'date_picker_time') {
@@ -106,6 +106,7 @@ function data_tables_init($aColumns, $sIndexColumn, $sTable, $join = [], $where 
             // https://stackoverflow.com/questions/11195692/json-encode-sparse-php-array-as-json-array-not-json-object
 
             $indexedOnly = [];
+
             foreach ($CI->input->post('order') as $row) {
                 $indexedOnly[] = array_values($row);
             }
@@ -149,7 +150,7 @@ function data_tables_init($aColumns, $sIndexColumn, $sTable, $join = [], $where 
                     if ($useMatchForCustomFieldsTableSearch === 'true' && startsWith($columnName, 'ctable_')) {
                         $sMatchCustomFields[] = $columnName;
                     } else {
-                        $sWhere .= 'convert(' . $columnName . ' USING utf8)' . " LIKE '%" . $CI->db->escape_like_str($search_value) . "%' ESCAPE '!' OR ";
+                        $sWhere .= 'convert(' . $columnName . " USING utf8) LIKE '%" . $CI->db->escape_like_str($search_value) . "%' ESCAPE '!' OR ";
                     }
                 }
             }
@@ -157,6 +158,7 @@ function data_tables_init($aColumns, $sIndexColumn, $sTable, $join = [], $where 
 
         if (count($sMatchCustomFields) > 0) {
             $s = $CI->db->escape_str($search_value);
+
             foreach ($sMatchCustomFields as $matchCustomField) {
                 $sWhere .= "MATCH ({$matchCustomField}) AGAINST (CONVERT(BINARY('{$s}') USING utf8)) OR ";
             }
@@ -170,7 +172,7 @@ function data_tables_init($aColumns, $sIndexColumn, $sTable, $join = [], $where 
 
                 if (stripos($columnName, 'AVG(') === false && stripos($columnName, 'SUM(') === false) {
                     // Use index
-                    $sWhere .= 'convert(' . $searchAdditionalField . ' USING utf8)' . " LIKE '%" . $CI->db->escape_like_str($search_value) . "%'ESCAPE '!' OR ";
+                    $sWhere .= 'convert(' . $searchAdditionalField . " USING utf8) LIKE '%" . $CI->db->escape_like_str($search_value) . "%'ESCAPE '!' OR ";
                 }
             }
         }
@@ -185,7 +187,7 @@ function data_tables_init($aColumns, $sIndexColumn, $sTable, $join = [], $where 
         foreach ($aColumns as $i => $column) {
             if (isset($data['columns'][$i]) && $data['columns'][$i]['searchable'] == 'true') {
                 $search_value = $data['columns'][$i]['search']['value'];
-                $columnName = $column;
+                $columnName   = $column;
 
                 if (strpos($columnName, ' as ') !== false) {
                     $columnName = strbefore($columnName, ' as');
@@ -194,12 +196,12 @@ function data_tables_init($aColumns, $sIndexColumn, $sTable, $join = [], $where 
                 if ($search_value != '') {
                     // Add condition for current column
                     $likeClause = $CI->db->escape_like_str($search_value);
-                    $sWhere .= "convert($columnName USING utf8) LIKE '%$likeClause%' ESCAPE '!' OR ";
+                    $sWhere .= "convert({$columnName} USING utf8) LIKE '%{$likeClause}%' ESCAPE '!' OR ";
 
                     // Process additional select fields if any
                     if (count($additionalSelect) > 0) {
                         foreach ($additionalSelect as $searchAdditionalField) {
-                            $sWhere .= "convert($searchAdditionalField USING utf8) LIKE '%$likeClause%' ESCAPE '!' OR ";
+                            $sWhere .= "convert({$searchAdditionalField} USING utf8) LIKE '%{$likeClause}%' ESCAPE '!' OR ";
                         }
                     }
 
@@ -243,13 +245,13 @@ function data_tables_init($aColumns, $sIndexColumn, $sTable, $join = [], $where 
 
     $resultQuery = '
     SELECT ' . str_replace(' , ', ' ', implode(', ', $allColumns)) . ' ' . $additionalColumns . "
-    FROM $sTable
+    FROM {$sTable}
     " . $join . "
-    $sWhere
+    {$sWhere}
     " . $where . "
-    $sGroupBy
-    $sOrder
-    $sLimit
+    {$sGroupBy}
+    {$sOrder}
+    {$sLimit}
     ";
 
     $rResult = hooks()->apply_filters(
@@ -262,22 +264,22 @@ function data_tables_init($aColumns, $sIndexColumn, $sTable, $join = [], $where 
         ]
     );
 
-    /* Data set length after filtering */
+    // Data set length after filtering
     $iFilteredTotal = $CI->db->query("
         SELECT COUNT(*) as iFilteredTotal
-        FROM $sTable
+        FROM {$sTable}
         " . $join . "
-        $sWhere
+        {$sWhere}
         " . $where . "
-        $sGroupBy
-    ")->row()->iFilteredTotal;
+        {$sGroupBy}
+    ")->row()?->iFilteredTotal;
 
     if (startsWith($where, 'AND')) {
         $where = 'WHERE ' . substr($where, 3);
     }
 
-    /* Total data set length */
-    $iTotal = $CI->db->query("SELECT COUNT(*) as iTotal from $sTable $join $where")->row()->iTotal;
+    // Total data set length
+    $iTotal = $CI->db->query("SELECT COUNT(*) as iTotal from {$sTable} {$join} {$where}")->row()->iTotal;
 
     return [
         'rResult' => $rResult,
@@ -293,6 +295,7 @@ function data_tables_init($aColumns, $sIndexColumn, $sTable, $join = [], $where 
 /**
  * Used in data_tables_init function to fix sorting problems when duedate is null
  * Null should be always last
+ *
  * @return array
  */
 function get_null_columns_that_should_be_sorted_as_last()
@@ -308,18 +311,23 @@ function get_null_columns_that_should_be_sorted_as_last()
 }
 /**
  * Render table used for datatables
- * @param  array  $headings           [description]
- * @param  string $class              table class / added prefix table-$class
- * @param  array  $additional_classes
- * @return string                     formatted table
+ *
+ * @param array  $headings           [description]
+ * @param string $class              table class / added prefix table-$class
+ * @param array  $additional_classes
+ * @param mixed  $table_attributes
+ *
+ * @return string formatted table
  */
 /**
  * Render table used for datatables
- * @param  array   $headings
- * @param  string  $class              table class / add prefix eq.table-$class
- * @param  array   $additional_classes additional table classes
- * @param  array   $table_attributes   table attributes
- * @param  boolean $tfoot              includes blank tfoot
+ *
+ * @param array  $headings
+ * @param string $class              table class / add prefix eq.table-$class
+ * @param array  $additional_classes additional table classes
+ * @param array  $table_attributes   table attributes
+ * @param bool   $tfoot              includes blank tfoot
+ *
  * @return string
  */
 function render_datatable($headings = [], $class = '', $additional_classes = [''], $table_attributes = [])
@@ -337,20 +345,21 @@ function render_datatable($headings = [], $class = '', $additional_classes = [''
     }
 
     foreach ($table_attributes as $key => $val) {
-        $_table_attributes .= $key . '=' . '"' . $val . '" ';
+        $_table_attributes .= $key . '="' . $val . '" ';
     }
 
     $table = '<div class="' . $IEfix . '"><table' . $_table_attributes . 'class="dt-table-loading table table-' . $class . '' . $_additional_classes . '">';
     $table .= '<thead>';
     $table .= '<tr>';
+
     foreach ($headings as $heading) {
-        if (!is_array($heading)) {
+        if (! is_array($heading)) {
             $table .= '<th>' . $heading . '</th>';
         } else {
             $th_attrs = '';
             if (isset($heading['th_attrs'])) {
                 foreach ($heading['th_attrs'] as $key => $val) {
-                    $th_attrs .= $key . '=' . '"' . $val . '" ';
+                    $th_attrs .= $key . '="' . $val . '" ';
                 }
             }
             $th_attrs = ($th_attrs != '' ? ' ' . $th_attrs : $th_attrs);
@@ -367,15 +376,16 @@ function render_datatable($headings = [], $class = '', $additional_classes = [''
 /**
  * Translated datatables language based on app languages
  * This feature is used on both admin and customer area
+ *
  * @return array
  */
 function get_datatables_language_array()
 {
     $lang = [
-        'emptyTable'        => preg_replace("/{(\d+)}/", _l('dt_entries'), _l('dt_empty_table')),
-        'info'              => preg_replace("/{(\d+)}/", _l('dt_entries'), _l('dt_info')),
-        'infoEmpty'         => preg_replace("/{(\d+)}/", _l('dt_entries'), _l('dt_info_empty')),
-        'infoFiltered'      => preg_replace("/{(\d+)}/", _l('dt_entries'), _l('dt_info_filtered')),
+        'emptyTable'        => preg_replace('/{(\\d+)}/', _l('dt_entries'), _l('dt_empty_table')),
+        'info'              => preg_replace('/{(\\d+)}/', _l('dt_entries'), _l('dt_info')),
+        'infoEmpty'         => preg_replace('/{(\\d+)}/', _l('dt_entries'), _l('dt_info_empty')),
+        'infoFiltered'      => preg_replace('/{(\\d+)}/', _l('dt_entries'), _l('dt_info_filtered')),
         'lengthMenu'        => '_MENU_',
         'loadingRecords'    => _l('dt_loading_records'),
         'processing'        => '<div class="dt-loader"></div>',
@@ -400,7 +410,9 @@ function get_datatables_language_array()
 /**
  * Function that will parse filters for datatables and will return based on a couple conditions.
  * The returned result will be pushed inside the $where variable in the table SQL
- * @param  array $filter
+ *
+ * @param array $filter
+ *
  * @return string
  */
 function prepare_dt_filter($filter)
@@ -416,7 +428,9 @@ function prepare_dt_filter($filter)
 }
 /**
  * Get table last order
- * @param  string $tableID table unique identifier id
+ *
+ * @param string $tableID table unique identifier id
+ *
  * @return string
  */
 function get_table_last_order($tableID)

@@ -13,7 +13,7 @@ $aColumns = [
     '(SELECT GROUP_CONCAT(name SEPARATOR ",") FROM ' . db_prefix() . 'taggables JOIN ' . db_prefix() . 'tags ON ' . db_prefix() . 'taggables.tag_id = ' . db_prefix() . 'tags.id WHERE rel_id = ' . db_prefix() . 'proposals.id and rel_type="proposal" ORDER by tag_order ASC) as tags',
     'datecreated',
     'status',
-    ];
+];
 
 $sIndexColumn = 'id';
 $sTable       = db_prefix() . 'proposals';
@@ -35,7 +35,7 @@ if ($rel_type == 'customer') {
     $this->ci->db->where('userid', $rel_id);
     $customer = $this->ci->db->get(db_prefix() . 'clients')->row();
     if ($customer) {
-        if (!is_null($customer->leadid)) {
+        if (! is_null($customer->leadid)) {
             $where .= ' OR rel_type="lead" AND rel_id=' . $customer->leadid;
         }
     }
@@ -71,7 +71,7 @@ foreach ($rResult as $aRow) {
     $numberOutput .= '<div class="row-options">';
 
     $numberOutput .= '<a href="' . site_url('proposal/' . $aRow['id'] . '/' . $aRow['hash']) . '" target="_blank">' . _l('view') . '</a>';
-    if (staff_can('edit',  'proposals')) {
+    if (staff_can('edit', 'proposals')) {
         $numberOutput .= ' | <a href="' . admin_url('proposals/proposal/' . $aRow['id']) . '">' . _l('edit') . '</a>';
     }
     $numberOutput .= '</div>';
@@ -80,7 +80,7 @@ foreach ($rResult as $aRow) {
 
     $row[] = '<a href="' . admin_url('proposals/list_proposals/' . $aRow['id']) . '">' . e($aRow['subject']) . '</a>';
 
-    $amount = e(app_format_money($aRow['total'], ($aRow['currency'] != 0 ? get_currency($aRow['currency']) : $baseCurrency)));
+    $amount = '<span class="tw-font-medium">' . e(app_format_money($aRow['total'], ($aRow['currency'] != 0 ? get_currency($aRow['currency']) : $baseCurrency))) . '</span>';
 
     if ($aRow['invoice_id']) {
         $amount .= '<br /> <span class="hide"> - </span><span class="text-success">' . _l('estimate_invoiced') . '</span>';

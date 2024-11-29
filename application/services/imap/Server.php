@@ -2,17 +2,16 @@
 
 namespace app\services\imap;
 
-use Ddeboer\Imap\ServerInterface;
 use Ddeboer\Imap\ConnectionInterface;
 use Ddeboer\Imap\Exception\AuthenticationFailedException;
 use Ddeboer\Imap\Exception\ResourceCheckFailureException;
+use Ddeboer\Imap\ServerInterface;
+use RuntimeException;
 
 class Server implements ServerInterface
 {
     private string $hostname;
-
     private string $port;
-
     private string $flags;
 
     /**
@@ -21,7 +20,6 @@ class Server implements ServerInterface
     private array $parameters;
 
     private int $options;
-
     private int $retries;
 
     /**
@@ -43,8 +41,8 @@ class Server implements ServerInterface
         int $options = 0,
         int $retries = 1
     ) {
-        if (!\function_exists('imap_open')) {
-            throw new \RuntimeException('IMAP extension must be enabled');
+        if (! \function_exists('imap_open')) {
+            throw new RuntimeException('IMAP extension must be enabled');
         }
 
         $this->hostname   = $hostname;
@@ -69,7 +67,7 @@ class Server implements ServerInterface
         $errorNumber  = 0;
         \set_error_handler(static function ($nr, $message) use (&$errorMessage, &$errorNumber): bool {
             $errorMessage = $message;
-            $errorNumber = $nr;
+            $errorNumber  = $nr;
 
             return true;
         });

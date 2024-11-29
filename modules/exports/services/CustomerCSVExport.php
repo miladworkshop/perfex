@@ -32,7 +32,11 @@ class CustomerCSVExport extends CSVExport
     {
         $select = get_sql_select_client_company('company_name')
             . ',' . db_prefix() . 'leads.name as lead_name,' . db_prefix() . 'currencies.name as default_currency'
-            . ',CONCAT(' . db_prefix() . 'staff.firstname, " ", ' . db_prefix() . 'staff.lastname) as created_by';
+            . ',CONCAT(' . db_prefix() . 'staff.firstname, " ", ' . db_prefix() . 'staff.lastname) as created_by'
+            . ',CONCAT(' . db_prefix() . 'contacts.firstname, " ", ' . db_prefix() . 'contacts.lastname) as primary_contact_name'
+            . ',' . db_prefix() . 'contacts.email as primary_contact_email'
+            . ', (SELECT GROUP_CONCAT(' . db_prefix() . 'customers_groups.name) from ' . db_prefix() . 'customer_groups Join ' . db_prefix() . 'customers_groups ON ' . db_prefix() . 'customer_groups.groupid = ' . db_prefix() . 'customers_groups.id where ' . db_prefix() . 'customer_groups.customer_id = ' . db_prefix() . 'clients.userid) as customer_groups'
+         ;
         $this->ci->db->select(prefixed_table_fields_array(db_prefix() . 'clients', true, $this->excludedFields) . ',' . $select);
         $this->selectCustomFields(db_prefix() . 'clients.userid');
         $this->ci->db->join(db_prefix() . 'contacts', db_prefix() . 'contacts.userid = ' . db_prefix() . 'clients.userid AND is_primary = 1', 'left');

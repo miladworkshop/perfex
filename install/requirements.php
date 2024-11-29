@@ -2,70 +2,70 @@
 
 $error = false;
 
-if (version_compare(PHP_VERSION, '8.0') >= 0) {
+if (version_compare(PHP_VERSION, '8.1') >= 0) {
     $requirement1 = "<span class='label label-success'>v." . PHP_VERSION . '</span>';
 } else {
     $error        = true;
     $requirement1 = "<span class='label label-danger'>Your PHP version is " . PHP_VERSION . '</span>';
 }
 
-if (!extension_loaded('mysqli')) {
+if (! extension_loaded('mysqli')) {
     $error        = true;
     $requirement2 = "<span class='label label-danger'>Not enabled</span>";
 } else {
     $requirement2 = "<span class='label label-success'>Enabled</span>";
 }
 
-if (!extension_loaded('pdo')) {
+if (! extension_loaded('pdo')) {
     $error        = true;
     $requirement3 = "<span class='label label-danger'>Not enabled</span>";
 } else {
     $requirement3 = "<span class='label label-success'>Enabled</span>";
 }
 
-if (!extension_loaded('curl')) {
+if (! extension_loaded('curl')) {
     $error        = true;
     $requirement4 = "<span class='label label-danger'>Not enabled</span>";
 } else {
     $requirement4 = "<span class='label label-success'>Enabled</span>";
 }
 
-if (!extension_loaded('openssl')) {
+if (! extension_loaded('openssl')) {
     $error        = true;
     $requirement5 = "<span class='label label-danger'>Not enabled</span>";
 } else {
     $requirement5 = "<span class='label label-success'>Enabled</span>";
 }
 
-if (!extension_loaded('mbstring')) {
+if (! extension_loaded('mbstring')) {
     $error        = true;
     $requirement6 = "<span class='label label-danger'>Not enabled</span>";
 } else {
     $requirement6 = "<span class='label label-success'>Enabled</span>";
 }
 
-if (!extension_loaded('iconv') && !function_exists('iconv')) {
+if (! extension_loaded('iconv') && ! function_exists('iconv')) {
     $error        = true;
     $requirement7 = "<span class='label label-danger'>Not enabled</span>";
 } else {
     $requirement7 = "<span class='label label-success'>Enabled</span>";
 }
 
-if (!extension_loaded('imap')) {
+if (! extension_loaded('imap')) {
     $error        = true;
     $requirement8 = "<span class='label label-danger'>Not enabled</span>";
 } else {
     $requirement8 = "<span class='label label-success'>Enabled</span>";
 }
 
-if (!extension_loaded('gd')) {
+if (! extension_loaded('gd')) {
     $error        = true;
     $requirement9 = "<span class='label label-danger'>Not enabled</span>";
 } else {
     $requirement9 = "<span class='label label-success'>Enabled</span>";
 }
 
-if (!extension_loaded('zip')) {
+if (! extension_loaded('zip')) {
     $error         = true;
     $requirement10 = "<span class='label label-danger'>Zip Extension is not enabled</span>";
 } else {
@@ -93,48 +93,48 @@ if ($url_f_open != '1'
     </thead>
     <tbody>
         <tr>
-            <td class="tw-font-medium">PHP >= 8.0</td>
-            <td><?php echo $requirement1; ?></td>
+            <td class="tw-font-medium">PHP >= 8.1</td>
+            <td><?= $requirement1; ?></td>
         </tr>
         <tr>
             <td class="tw-font-medium">MySQLi PHP Extension</td>
-            <td><?php echo $requirement2; ?></td>
+            <td><?= $requirement2; ?></td>
         </tr>
         <tr>
             <td class="tw-font-medium">PDO PHP Extension</td>
-            <td><?php echo $requirement3; ?></td>
+            <td><?= $requirement3; ?></td>
         </tr>
         <tr>
             <td class="tw-font-medium">cURL PHP Extension</td>
-            <td><?php echo $requirement4; ?></td>
+            <td><?= $requirement4; ?></td>
         </tr>
         <tr>
             <td class="tw-font-medium">OpenSSL PHP Extension</td>
-            <td><?php echo $requirement5; ?></td>
+            <td><?= $requirement5; ?></td>
         </tr>
         <tr>
             <td class="tw-font-medium">MBString PHP Extension</td>
-            <td><?php echo $requirement6; ?></td>
+            <td><?= $requirement6; ?></td>
         </tr>
         <tr>
             <td class="tw-font-medium">iconv PHP Extension</td>
-            <td><?php echo $requirement7; ?></td>
+            <td><?= $requirement7; ?></td>
         </tr>
         <tr>
             <td class="tw-font-medium">IMAP PHP Extension</td>
-            <td><?php echo $requirement8; ?></td>
+            <td><?= $requirement8; ?></td>
         </tr>
         <tr>
             <td class="tw-font-medium">GD PHP Extension</td>
-            <td><?php echo $requirement9; ?></td>
+            <td><?= $requirement9; ?></td>
         </tr>
         <tr>
             <td class="tw-font-medium">Zip PHP Extension</td>
-            <td><?php echo $requirement10; ?></td>
+            <td><?= $requirement10; ?></td>
         </tr>
         <tr>
             <td class="tw-font-medium">allow_url_fopen</td>
-            <td><?php echo $requirement11; ?></td>
+            <td><?= $requirement11; ?></td>
         </tr>
     </tbody>
 </table>
@@ -151,3 +151,4 @@ if ($url_f_open != '1'
     echo '</form>';
     echo '</div>';
 }
+?>

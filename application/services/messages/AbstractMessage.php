@@ -14,7 +14,7 @@ abstract class AbstractMessage
 
     public function openHtml()
     {
-        return '<div class="col-md-12">
+        return '<div class="col-md-12 tw-mt-1">
             <div class="alert alert-' . $this->alertClass . '" font-medium>';
     }
 

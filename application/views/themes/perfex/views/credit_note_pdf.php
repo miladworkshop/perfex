@@ -1,4 +1,6 @@
-<?php defined('BASEPATH') or exit('No direct script access allowed');
+<?php
+
+defined('BASEPATH') or exit('No direct script access allowed');
 
 $dimensions = $pdf->getPageDimensions();
 
@@ -27,7 +29,7 @@ $organization_info .= '</div>';
 // Bill to
 $credit_note_info = '<b>' . _l('credit_note_bill_to') . '</b>';
 $credit_note_info .= '<div style="color:#424242;">';
-    $credit_note_info .= format_customer_info($credit_note, 'credit_note', 'billing');
+$credit_note_info .= format_customer_info($credit_note, 'credit_note', 'billing');
 $credit_note_info .= '</div>';
 
 // ship to to
@@ -44,7 +46,7 @@ $credit_note_info .= '<br />' . _l('credit_note_date') . ': ' . _d($credit_note-
 
 $credit_note_info = hooks()->apply_filters('credit_note_pdf_header_after_date', $credit_note_info, $credit_note);
 
-if (!empty($credit_note->reference_no)) {
+if (! empty($credit_note->reference_no)) {
     $credit_note_info .= _l('reference_no') . ': ' . $credit_note->reference_no . '<br />';
     $credit_note_info = hooks()->apply_filters('credit_note_pdf_header_after_reference_no', $credit_note_info, $credit_note);
 }
@@ -128,7 +130,7 @@ if ($credit_note->credits_used) {
     $tbltotal .= '
     <tr>
         <td align="right" width="85%"><strong>' . _l('credits_used') . '</strong></td>
-        <td align="right" width="15%">' . '-' . app_format_money($credit_note->credits_used, $credit_note->currency_name) . '</td>
+        <td align="right" width="15%">-' . app_format_money($credit_note->credits_used, $credit_note->currency_name) . '</td>
     </tr>';
 }
 
@@ -136,7 +138,7 @@ if ($credit_note->total_refunds) {
     $tbltotal .= '
     <tr>
         <td align="right" width="85%"><strong>' . _l('refund') . '</strong></td>
-        <td align="right" width="15%">' . '-' . app_format_money($credit_note->total_refunds, $credit_note->currency_name) . '</td>
+        <td align="right" width="15%">-' . app_format_money($credit_note->total_refunds, $credit_note->currency_name) . '</td>
     </tr>';
 }
 
@@ -159,7 +161,7 @@ if (get_option('total_to_words_enabled') == 1) {
     $pdf->Ln(4);
 }
 
-if (!empty($credit_note->clientnote)) {
+if (! empty($credit_note->clientnote)) {
     $pdf->Ln(4);
     $pdf->SetFont($font_name, 'B', $font_size);
     $pdf->Cell(0, 0, _l('credit_note_client_note'), 0, 1, 'L', 0, '', 0);
@@ -168,7 +170,7 @@ if (!empty($credit_note->clientnote)) {
     $pdf->writeHTMLCell('', '', '', '', $credit_note->clientnote, 0, 1, false, true, 'L', true);
 }
 
-if (!empty($credit_note->terms)) {
+if (! empty($credit_note->terms)) {
     $pdf->Ln(4);
     $pdf->SetFont($font_name, 'B', $font_size);
     $pdf->Cell(0, 0, _l('terms_and_conditions'), 0, 1, 'L', 0, '', 0);

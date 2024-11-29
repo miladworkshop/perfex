@@ -110,7 +110,7 @@ function app_init_project_tabs()
 
     $CI->app_tabs->add_project_tab('sales', [
         'name'     => _l('sales_string'),
-        'icon'     => 'fa-solid fa-receipt',
+        'icon'     => 'fa-solid fa-scale-unbalanced-flip',
         'position' => 50,
         'collapse' => true,
         'visible'  => (staff_can('view',  'estimates') || staff_can('view_own',  'estimates') || (get_option('allow_staff_view_estimates_assigned') == 1 && staff_has_assigned_estimates()))

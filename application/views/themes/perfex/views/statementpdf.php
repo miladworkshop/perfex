@@ -61,7 +61,6 @@ $summary .= '
 
 $pdf->writeHTMLCell(($dimensions['wk'] / 2) - $dimensions['rm'] - 15, '', '', '', $summary, 0, 1, false, true, 'R', true);
 
-
 $summary_info = '
 <div style="text-align: center;">
     ' . _l('customer_statement_info', [
@@ -95,6 +94,7 @@ $tblhtml = '<table width="100%" cellspacing="0" cellpadding="8" border="0">
      <td align="right">' . app_format_money($statement['beginning_balance'], $statement['currency'], true) . '</td>
  </tr>';
 $count = 0;
+
 foreach ($statement['result'] as $data) {
     $tblhtml .= '<tr' . (++$count % 2 ? ' bgcolor="#f6f5f5"' : '') . '>
   <td width="13%">' . _d($data['date']) . '</td>
@@ -146,7 +146,7 @@ foreach ($statement['result'] as $data) {
     } elseif (isset($data['credit_note_refund_id'])) {
         $tmpBeginningBalance = ($tmpBeginningBalance + $data['refund_amount']);
     }
-    if (!isset($data['credit_id'])) {
+    if (! isset($data['credit_id'])) {
         $tblhtml .= app_format_money($tmpBeginningBalance, $statement['currency'], true);
     }
 

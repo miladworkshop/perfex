@@ -5,7 +5,7 @@
     <div class="content">
         <div class="row">
             <div class="col-md-12 tw-mb-6">
-                <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700 tw-mr-4">
+                <h4 class="tw-mt-0 tw-font-bold tw-text-lg tw-text-neutral-700 tw-mr-4">
                     <?php echo _l('reports_choose_kb_group'); ?>
                 </h4>
                 <div class="row">

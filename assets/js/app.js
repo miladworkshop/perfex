@@ -355,6 +355,7 @@ function _simple_editor_config() {
     toolbar: "blocks image media alignleft aligncenter alignright bullist numlist restoredraft",
     quickbars_insert_toolbar: 'image quicktable | hr',
     quickbars_selection_toolbar: "bold italic | forecolor backcolor | quicklink | h2 h3 | codesample",
+    browser_spellcheck: true,
   };
 }
 
@@ -1370,7 +1371,7 @@ function init_tinymce_inline_editor(options = {}, selector) {
   selector = selector || 'div.editable'
 
   tinymce.remove(selector);
-  
+
   function saveContent(manual) {
     if(options.saveUsing) {
       options.saveUsing(manual);
@@ -1408,6 +1409,7 @@ function init_tinymce_inline_editor(options = {}, selector) {
     quickbars_selection_toolbar:
     "bold italic underline superscript | forecolor backcolor link | alignleft aligncenter alignright alignjustify | fontfamily fontsize | h2 h3",
     contextmenu: "paste pastetext searchreplace | visualblocks pagebreak | code",
+    browser_spellcheck: true,
     setup: function (editor) {
       if(options.onSetup) {
         options.onSetup(editor)
@@ -1416,9 +1418,9 @@ function init_tinymce_inline_editor(options = {}, selector) {
       editor.addCommand("mceSave", function () {
         saveContent(true);
       });
-      
+
       editor.addShortcut("Meta+S", "", "mceSave");
-      
+
       editor.on("MouseLeave blur", function () {
         if (tinymce.activeEditor.isDirty()) {
           saveContent();
@@ -1442,7 +1444,7 @@ function init_tinymce_inline_editor(options = {}, selector) {
       }
     });
   }
-  
+
   tinymce.init(settings);
 }
 
@@ -1463,4 +1465,25 @@ function _tinymce_mobile_toolbar() {
     "forecolor",
     "fontsizeselect",
   ];
+}
+
+function getHeaderScrolledPixels() {
+  var header = document.getElementById('header');
+
+  var headerRect = header.getBoundingClientRect();
+  var headerHeight = header.offsetHeight;
+
+  var scrolledOut = Math.max(0, -headerRect.top);
+
+  // Make sure it doesn't exceed the header's height
+  var scrolledPixels = Math.min(headerHeight, scrolledOut);
+
+  return scrolledPixels;
+}
+
+function getTotalHorizontalMargin(element) {
+  const style = window.getComputedStyle(element);
+  const marginLeft = parseFloat(style.marginLeft) || 0;
+  const marginRight = parseFloat(style.marginRight) || 0;
+  return marginLeft + marginRight;
 }

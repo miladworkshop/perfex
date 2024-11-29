@@ -3,6 +3,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 $this->ci->load->model('credit_notes_model');
+
 $remainingAmountSelect = '(SELECT ' . db_prefix() . 'creditnotes.total - (
     (SELECT COALESCE(SUM(amount),0) FROM ' . db_prefix() . 'credits WHERE ' . db_prefix() . 'credits.credit_id=' . db_prefix() . 'creditnotes.id)
     +
@@ -11,7 +12,7 @@ $remainingAmountSelect = '(SELECT ' . db_prefix() . 'creditnotes.total - (
   )';
 
 return App_table::find('credit_notes')
-    ->outputUsing(function ($params) use($remainingAmountSelect) {
+    ->outputUsing(function ($params) use ($remainingAmountSelect) {
         extract($params);
 
         $aColumns = [
@@ -22,7 +23,7 @@ return App_table::find('credit_notes')
             db_prefix() . 'projects.name as project_name',
             'reference_no',
             'total',
-            $remainingAmountSelect.' as remaining_amount',
+            $remainingAmountSelect . ' as remaining_amount',
         ];
 
         $join = [
@@ -43,7 +44,7 @@ return App_table::find('credit_notes')
             array_push($join, 'LEFT JOIN ' . db_prefix() . 'customfieldsvalues as ctable_' . $key . ' ON ' . db_prefix() . 'creditnotes.id = ctable_' . $key . '.relid AND ctable_' . $key . '.fieldto="' . $field['fieldto'] . '" AND ctable_' . $key . '.fieldid=' . $field['id']);
         }
 
-        $where  = [];
+        $where = [];
 
         if ($filtersWhere = $this->getWhereFromRules()) {
             $where[] = $filtersWhere;
@@ -70,6 +71,7 @@ return App_table::find('credit_notes')
             db_prefix() . 'creditnotes.id',
             db_prefix() . 'creditnotes.clientid',
             db_prefix() . 'currencies.name as currency_name',
+            'formatted_number',
             'project_id',
             'deleted_customer_name',
         ]);
@@ -78,19 +80,25 @@ return App_table::find('credit_notes')
         $rResult = $result['rResult'];
 
         foreach ($rResult as $aRow) {
+            $formattedNumber = format_credit_note_number($aRow['id']);
+
+            if(empty($aRow['formatted_number']) || $formattedNumber !== $aRow['formatted_number']) {
+                $this->ci->credit_notes_model->save_formatted_number($aRow['id']);
+            }
+
             $row = [];
 
             $numberOutput = '';
             // If is from client area table
             if (is_numeric($clientid) || $project_id) {
-                $numberOutput = '<a href="' . admin_url('credit_notes/list_credit_notes/' . $aRow['id']) . '" target="_blank">' . e(format_credit_note_number($aRow['id'])) . '</a>';
+                $numberOutput = '<a href="' . admin_url('credit_notes/list_credit_notes/' . $aRow['id']) . '" target="_blank" class="tw-font-medium">' . e($formattedNumber) . '</a>';
             } else {
-                $numberOutput = '<a href="' . admin_url('credit_notes/list_credit_notes/' . $aRow['id']) . '" onclick="init_credit_note(' . $aRow['id'] . '); return false;">' . e(format_credit_note_number($aRow['id'])) . '</a>';
+                $numberOutput = '<a href="' . admin_url('credit_notes/list_credit_notes/' . $aRow['id']) . '" onclick="init_credit_note(' . $aRow['id'] . '); return false;" class="tw-font-medium">' . e($formattedNumber) . '</a>';
             }
 
             $numberOutput .= '<div class="row-options">';
 
-            if (staff_can('edit',  'credit_notes')) {
+            if (staff_can('edit', 'credit_notes')) {
                 $numberOutput .= '<a href="' . admin_url('credit_notes/credit_note/' . $aRow['id']) . '">' . _l('edit') . '</a>';
             }
             $numberOutput .= '</div>';
@@ -111,9 +119,9 @@ return App_table::find('credit_notes')
 
             $row[] = e($aRow['reference_no']);
 
-            $row[] = e(app_format_money($aRow['total'], $aRow['currency_name']));
+            $row[] = '<span class="tw-font-medium">' . e(app_format_money($aRow['total'], $aRow['currency_name'])) . '</span>';
 
-            $row[] = e(app_format_money($aRow['remaining_amount'], $aRow['currency_name']));
+            $row[] = '<span class="tw-font-medium">' . e(app_format_money($aRow['remaining_amount'], $aRow['currency_name'])) . '</span>';
 
             // Custom fields add values
             foreach ($customFieldsColumns as $customFieldColumn) {
@@ -148,10 +156,10 @@ return App_table::find('credit_notes')
             ->label(_l('year'))
             ->raw(function ($value, $operator) {
                 if ($operator == 'in') {
-                    return "YEAR(date) IN (" . implode(',', $value) . ")";
-                } else {
-                    return "YEAR(date) NOT IN (" . implode(',', $value) . ")";
+                    return 'YEAR(date) IN (' . implode(',', $value) . ')';
                 }
+
+                return 'YEAR(date) NOT IN (' . implode(',', $value) . ')';
             })
 
             ->options(function ($ci) {

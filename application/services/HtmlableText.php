@@ -35,9 +35,14 @@ class HtmlableText
         // Remove any inline styles
         $html = str_get_html($text);
 
+        if ($html === false) {
+            return $text;
+        }
+
         foreach ($html->find('*[style]') as $item) {
             $item->style = null;
         }
+
         foreach ($html->find('a') as $item) {
             $item->setAttribute('target', '_blank');
             $item->setAttribute('rel', 'nofollow');

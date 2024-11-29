@@ -19,26 +19,30 @@ $right_info = $swap == '1' ? $company_info : $client_details;
 
 pdf_multi_row($left_info, $right_info, $pdf, ($dimensions['wk'] / 2) - $dimensions['lm']);
 
+$pdf->setFillColor([209, 213, 219]);
 $pdf->SetFontSize(15);
 
-$receit_heading = '<div style="text-align:center">' . mb_strtoupper(_l('payment_receipt'), 'UTF-8') . '</div>';
+$receipt_heading = '<div style="font-weight: bold;">' . mb_strtoupper(_l('payment_receipt'), 'UTF-8') . '</div>';
+
 $pdf->Ln(20);
-$pdf->writeHTMLCell(0, '', '', '', $receit_heading, 0, 1, false, true, 'L', true);
+$pdf->writeHTMLCell(0, '', '', '', $receipt_heading, 0, 1, false, true, 'L', true);
 $pdf->SetFontSize($font_size);
-$pdf->Ln(20);
+$pdf->Ln(10);
 $pdf->Cell(0, 0, _l('payment_date') . ' ' . _d($payment->date), 0, 1, 'L', 0, '', 0);
 $pdf->Ln(3);
-$pdf->Line($pdf->getX(), $pdf->getY(), 90, $pdf->getY());
+$pdf->Line($pdf->getX(), $pdf->getY(), 90, $pdf->getY(), [
+    'color' => [209, 213, 219],
+]);
 $pdf->Ln(3);
 $payment_name = $payment->name;
 
-if (!empty($payment->paymentmethod)) {
+if (! empty($payment->paymentmethod)) {
     $payment_name .= ' - ' . $payment->paymentmethod;
 }
 
 $pdf->Cell(0, 0, _l('payment_view_mode') . ' ' . $payment_name, 0, 1, 'L', 0, '', 0);
 
-if (!empty($payment->transactionid)) {
+if (! empty($payment->transactionid)) {
     $pdf->Ln(3);
     $pdf->Line($pdf->getX(), $pdf->getY(), 90, $pdf->getY());
     $pdf->Ln(3);
@@ -47,32 +51,32 @@ if (!empty($payment->transactionid)) {
 
 $pdf->Ln(3);
 $pdf->Line($pdf->getX(), $pdf->getY(), 90, $pdf->getY());
-$pdf->Ln(3);
-$pdf->SetFillColor(132, 197, 41);
-$pdf->SetTextColor(255);
-$pdf->SetFontSize(12);
-$pdf->Ln(3);
-$pdf->Cell(80, 10, _l('payment_total_amount'), 0, 1, 'C', '1');
-$pdf->SetFontSize(11);
-$pdf->Cell(80, 10, app_format_money($payment->amount, $payment->invoice_data->currency_name), 0, 1, 'C', '1');
+$pdf->Ln(5);
+$pdf->RoundedRect($pdf->getX(), $pdf->getY(), 80.5, 20, 2, '1111', 'FD', ['color' => [229, 231, 235]], [243, 244, 246]);
+$pdf->Ln(0.5);
+$pdf->SetFont($font_name, '', 11);
+$pdf->Cell(80, 8, '   ' . _l('payment_total_amount'), 0, 1, 'L', '0', '', 0, true, 'T', 'B');
+$pdf->SetFont($font_name, 'B', 11);
+$pdf->Cell(80, 11, '   ' . app_format_money($payment->amount, $payment->invoice_data->currency_name), 0, 1, 'L', '0');
 
 $pdf->Ln(10);
 $pdf->SetTextColor(0);
-$pdf->SetFont($font_name, 'B', 14);
+$pdf->SetFont($font_name, 'B', 12);
 $pdf->Cell(0, 0, _l('payment_for_string'), 0, 1, 'L', 0, '', 0);
 $pdf->SetFont($font_name, '', $font_size);
-$pdf->Ln(5);
+$pdf->Ln(3);
 
 // Header
 $tblhtml = '<table width="100%" bgcolor="#fff" cellspacing="0" cellpadding="5" border="0">
-<tr height="30" style="color:#fff;" bgcolor="#3A4656">
+<tr height="30" style="color:#030712;" bgcolor="#f3f4f6">
     <th width="' . ($amountDue ? 20 : 25) . '%;">' . _l('payment_table_invoice_number') . '</th>
     <th width="' . ($amountDue ? 20 : 25) . '%;">' . _l('payment_table_invoice_date') . '</th>
     <th width="' . ($amountDue ? 20 : 25) . '%;">' . _l('payment_table_invoice_amount_total') . '</th>
     <th width="' . ($amountDue ? 20 : 25) . '%;">' . _l('payment_table_payment_amount_total') . '</th>';
-    if ($amountDue) {
-        $tblhtml .= '<th width="20%">' . _l('invoice_amount_due') . '</th>';
-    }
+
+if ($amountDue) {
+    $tblhtml .= '<th width="20%">' . _l('invoice_amount_due') . '</th>';
+}
 
 $tblhtml .= '</tr>';
 

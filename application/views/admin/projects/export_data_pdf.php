@@ -10,7 +10,7 @@ $html = '<h1>' . _l('project_name') . ': ' . $project->name . '</h1>';
 // project overview heading
 $html .= '<h3>' . ucwords(_l('project_overview')) . '</h3>';
 
-if (!empty($project->description)) {
+if (! empty($project->description)) {
     // Project description
     $html .= '<p><b style="background-color:#f0f0f0;">' . _l('project_description') . '</b><br /><br /> ' . $project->description . '</p>';
 }
@@ -134,6 +134,7 @@ $html .= '</td>';
 // Custom fields
 if (count($custom_fields) > 0) {
     $html .= '<td><br /><br />';
+
     foreach ($custom_fields as $field) {
         $value = get_custom_field_value($project->id, $field['id'], 'projects');
         $value = $value === '' ? '/' : $value;
@@ -149,29 +150,29 @@ $html .= '<td><br /><br />';
 $html .= '<b>' . $project->client_data->company . '</b><br />';
 $html .= $project->client_data->address . '<br />';
 
-if (!empty($project->client_data->city)) {
+if (! empty($project->client_data->city)) {
     $html .= $project->client_data->city;
 }
 
-if (!empty($project->client_data->state)) {
+if (! empty($project->client_data->state)) {
     $html .= ', ' . $project->client_data->state;
 }
 
 $country = get_country_short_name($project->client_data->country);
 
-if (!empty($country)) {
+if (! empty($country)) {
     $html .= '<br />' . $country;
 }
 
-if (!empty($project->client_data->zip)) {
+if (! empty($project->client_data->zip)) {
     $html .= ', ' . $project->client_data->zip;
 }
 
-if (!empty($project->client_data->phonenumber)) {
+if (! empty($project->client_data->phonenumber)) {
     $html .= '<br />' . $project->client_data->phonenumber;
 }
 
-if (!empty($project->client_data->vat)) {
+if (! empty($project->client_data->vat)) {
     $html .= '<br />' . _l('client_vat_number') . ': ' . $project->client_data->vat;
 }
 
@@ -203,6 +204,7 @@ $html .= '<th width="12.5%"><b>' . _l('time_decimal') . '</b></th>';
 $html .= '</tr>';
 $html .= '</thead>';
 $html .= '<tbody>';
+
 foreach ($members as $member) {
     $html .= '<tr style="color:#4a4a4a;">';
     $html .= '<td>' . get_staff_full_name($member['staff_id']) . '</td>';
@@ -213,6 +215,7 @@ foreach ($members as $member) {
     $html .= '<td>' . total_rows(db_prefix() . 'project_files', ['staffid' => $member['staff_id'], 'project_id' => $project->id]) . '</td>';
     $member_tasks_assigned = $this->ci->tasks_model->get_tasks_by_staff_id($member['staff_id'], ['rel_id' => $project->id, 'rel_type' => 'project']);
     $seconds               = 0;
+
     foreach ($member_tasks_assigned as $member_task) {
         $seconds += $this->ci->tasks_model->calc_task_total_time($member_task['id'], ' AND staff_id=' . $member['staff_id']);
     }
@@ -243,13 +246,14 @@ $html .= '<th width="10%"><b>' . _l('time_decimal') . '</b></th>';
 $html .= '</tr>';
 $html .= '</thead>';
 $html .= '<tbody>';
+
 foreach ($tasks as $task) {
     $html .= '<tr style="color:#4a4a4a;">';
     $html .= '<td width="26.12%">' . $task['name'] . '</td>';
     $html .= '<td width="12%">' . total_rows(db_prefix() . 'task_assigned', ['taskid' => $task['id']]) . '</td>';
     $html .= '<td width="12%">' . total_rows(db_prefix() . 'task_followers', ['taskid' => $task['id']]) . '</td>';
     $html .= '<td width="9.28%">' . _d($task['startdate']) . '</td>';
-    $html .= '<td width="9.28%">' . (is_date($task['duedate']) ? _d($task['duedate']): '') . '</td>';
+    $html .= '<td width="9.28%">' . (is_date($task['duedate']) ? _d($task['duedate']) : '') . '</td>';
     $html .= '<td width="7%">' . format_task_status($task['status'], true, true) . '</td>';
     $html .= '<td width="14.28%">' . seconds_to_time_format($task['total_logged_time']) . '</td>';
     $html .= '<td width="10%">' . sec2qty($task['total_logged_time']) . '</td>';
@@ -277,12 +281,13 @@ $html .= '<th width="16.66%"><b>' . _l('time_decimal') . '</b></th>';
 $html .= '</tr>';
 $html .= '</thead>';
 $html .= '<tbody>';
+
 foreach ($timesheets as $timesheet) {
     $html .= '<tr style="color:#4a4a4a;">';
     $html .= '<td>' . get_staff_full_name($timesheet['staff_id']) . '</td>';
     $html .= '<td>' . $timesheet['task_data']->name . '</td>';
     $html .= '<td>' . _dt($timesheet['start_time'], true) . '</td>';
-    $html .= '<td>' . (!is_null($timesheet['end_time']) ? _dt($timesheet['end_time'], true) : '') . '</td>';
+    $html .= '<td>' . (! is_null($timesheet['end_time']) ? _dt($timesheet['end_time'], true) : '') . '</td>';
     $html .= '<td>' . seconds_to_time_format($timesheet['total_spent']) . '</td>';
     $html .= '<td>' . sec2qty($timesheet['total_spent']) . '</td>';
 
@@ -308,6 +313,7 @@ $html .= '<th width="20%"><b>' . _l('milestone_total_logged_time') . '</b></th>'
 $html .= '</tr>';
 $html .= '</thead>';
 $html .= '<tbody>';
+
 foreach ($milestones as $milestone) {
     $html .= '<tr style="color:#4a4a4a;">';
     $html .= '<td width="20%">' . $milestone['name'] . '</td>';

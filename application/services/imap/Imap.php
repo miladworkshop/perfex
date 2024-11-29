@@ -3,7 +3,6 @@
 namespace app\services\imap;
 
 use Exception;
-use app\services\imap\ConnectionErrorException;
 
 class Imap
 {
@@ -23,7 +22,7 @@ class Imap
     protected $encryption;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $validateCertificate;
 
@@ -36,11 +35,18 @@ class Imap
      * @var \Ddeboer\Imap\Connection
      */
     protected $connection;
-    
+
     protected $password;
 
     /**
      * Create new IMAP instance
+     *
+     * @param mixed $username
+     * @param mixed $password
+     * @param mixed $host
+     * @param mixed $encryption
+     * @param mixed $port
+     * @param mixed $validateCertificate
      */
     public function __construct($username, $password, $host, $encryption, $port = '', $validateCertificate = false)
     {
@@ -124,13 +130,12 @@ class Imap
                 $flags .= '/tls';
             }
 
-            if (!$this->validateCertificate) {
+            if (! $this->validateCertificate) {
                 $flags .= '/novalidate-cert';
             } else {
                 $flags .= '/validate-cert';
             }
         }
-
 
         return $flags;
     }

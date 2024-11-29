@@ -40,11 +40,15 @@
   @apply tw-text-neutral-400;
 }
 
+.form-group:has(.bootstrap-select.disabled) label {
+  @apply tw-opacity-60 tw-text-neutral-500;
+}
+
 .bootstrap-select.btn-group.disabled,
 .bootstrap-select.btn-group > .disabled,
 .bootstrap-select.disabled,
 .bootstrap-select > .disabled {
-  @apply tw-bg-neutral-100 tw-pointer-events-none;
+  @apply tw-bg-neutral-100 tw-border-neutral-900/10 tw-pointer-events-none tw-text-neutral-400 tw-cursor-not-allowed;
 }
 
 /* Not support for other button sizes? */
@@ -187,4 +191,8 @@
 
 .bootstrap-select .dropdown-menu li.active small {
   @apply !tw-text-neutral-500;
+}
+
+.bootstrap-select .btn-default {
+  @apply tw-bg-neutral-50/70;
 }

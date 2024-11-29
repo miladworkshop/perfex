@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Estimate_request_model extends App_Model
 {
-    const STATUS_PROCESSING = 2;
+    public const STATUS_PROCESSING = 2;
 
     public function __construct()
     {
@@ -28,14 +28,13 @@ class Estimate_request_model extends App_Model
 
         if ($this->db->affected_rows() > 0) {
             if ($_current_assigned != $_old_assigned && $_old_assigned != '') {
-                $_log_message = 'not_estimate_request_activity_assigned_updated';
-
                 hooks()->do_action('estimate_request_assigned_changed', [
                     'estimate_request_id' => $data['requestid'],
                     'old_staff'           => $_old_assigned,
                     'new_staff'           => $_current_assigned,
                 ]);
-                log_activity($_log_message . ' staff [id:  ' . $_current_assigned->assigned . ']');
+
+                log_activity(sprintf('Estimate Request Assigned to %s', get_staff_full_name($_current_assigned->assigned)) . ' [ID:  ' . $data['requestid'] . ']');
             }
 
             if ($_current_assigned == $_old_assigned) {
@@ -106,7 +105,10 @@ class Estimate_request_model extends App_Model
 
     /**
      * Get estimate_request
-     * @param string $id Optional - estimate_requestid
+     *
+     * @param string $id    Optional - estimate_requestid
+     * @param mixed  $where
+     *
      * @return mixed
      */
     public function get($id = '', $where = [])
@@ -170,7 +172,7 @@ class Estimate_request_model extends App_Model
         $this->db->where('id', $id);
         $this->db->update(db_prefix() . 'estimate_request_forms', $data);
 
-        return ($this->db->affected_rows() > 0 ? true : false);
+        return $this->db->affected_rows() > 0 ? true : false;
     }
 
     public function delete_form($id)
@@ -243,8 +245,10 @@ class Estimate_request_model extends App_Model
 
     /**
      * Delete estimate request  from database and all connections
+     *
      * @param mixed $id estimate request id
-     * @return boolean
+     *
+     * @return bool
      */
     public function delete($id)
     {
@@ -258,6 +262,7 @@ class Estimate_request_model extends App_Model
             log_activity('Estimate Request Deleted [Deleted by: ' . get_staff_full_name() . ', ID: ' . $id . ']');
 
             $attachments = $this->get_estimate_request_attachments($id);
+
             foreach ($attachments as $attachment) {
                 $this->delete_estimate_request_attachment($attachment['id']);
             }
@@ -277,8 +282,11 @@ class Estimate_request_model extends App_Model
 
     /**
      * Get estimate_request statuses
-     * @param mixed $id status id
-     * @return mixed      object if id passed else array
+     *
+     * @param mixed $id    status id
+     * @param mixed $where
+     *
+     * @return mixed object if id passed else array
      */
     public function get_status($id = '', $where = [])
     {
@@ -291,7 +299,7 @@ class Estimate_request_model extends App_Model
 
         $statuses = $this->app_object_cache->get('estimate-request-all-statuses');
 
-        if (!$statuses) {
+        if (! $statuses) {
             $this->db->order_by('statusorder', 'asc');
 
             $statuses = $this->db->get(db_prefix() . 'estimate_request_status')->result_array();
@@ -303,6 +311,7 @@ class Estimate_request_model extends App_Model
 
     /**
      * Add new estimate_request status
+     *
      * @param array $data estimate_request status data
      */
     public function add_status($data)
@@ -311,7 +320,7 @@ class Estimate_request_model extends App_Model
             $data['color'] = hooks()->apply_filters('default_estimate_request_status_color', '#757575');
         }
 
-        if (!isset($data['statusorder'])) {
+        if (! isset($data['statusorder'])) {
             $data['statusorder'] = total_rows(db_prefix() . 'estimate_request_status') + 1;
         }
 
@@ -326,7 +335,12 @@ class Estimate_request_model extends App_Model
         return false;
     }
 
-    /** Update statuses */
+    /**
+     * Update statuses
+     *
+     * @param mixed $data
+     * @param mixed $id
+     */
     public function update_status($data, $id)
     {
         $this->db->where('id', $id);
@@ -342,8 +356,10 @@ class Estimate_request_model extends App_Model
 
     /**
      * Delete estimate_request status from database
+     *
      * @param mixed $id status id
-     * @return boolean
+     *
+     * @return bool
      */
     public function delete_status($id)
     {
@@ -374,14 +390,19 @@ class Estimate_request_model extends App_Model
 
     /**
      * Get estimate_request attachments
-     * @param mixed $id estimate_request id
+     *
+     * @param mixed $id            estimate_request id
+     * @param mixed $attachment_id
+     * @param mixed $where
+     *
      * @return array
+     *
      * @since Version 1.0.4
      */
     public function get_estimate_request_attachments($id = '', $attachment_id = '', $where = [])
     {
         $this->db->where($where);
-        $idIsHash = !is_numeric($attachment_id) && strlen($attachment_id) == 32;
+        $idIsHash = ! is_numeric($attachment_id) && strlen($attachment_id) == 32;
         if (is_numeric($attachment_id) || $idIsHash) {
             $this->db->where($idIsHash ? 'attachment_key' : 'id', $attachment_id);
 
@@ -401,8 +422,10 @@ class Estimate_request_model extends App_Model
 
     /**
      * Delete estimate_request attachment
+     *
      * @param mixed $id attachment id
-     * @return boolean
+     *
+     * @return bool
      */
     public function delete_estimate_request_attachment($id)
     {
@@ -435,7 +458,7 @@ class Estimate_request_model extends App_Model
 
     public function assigned_member_notification($estimate_request_id, $assigned)
     {
-        if ((!empty($assigned) && $assigned != 0)) {
+        if ((! empty($assigned) && $assigned != 0)) {
             $notified = add_notification([
                 'description'     => 'estimate_request_assigned_to_staff',
                 'touserid'        => $assigned,

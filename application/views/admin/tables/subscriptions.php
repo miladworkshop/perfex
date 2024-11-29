@@ -59,7 +59,7 @@ return App_table::find('subscriptions')
             $row[] = $aRow['id'];
 
             $link       = admin_url('subscriptions/edit/' . $aRow['id']);
-            $outputName = '<a href="' . $link . '">' . e($aRow['name']) . '</a>';
+            $outputName = '<a href="' . $link . '" class="tw-font-medium">' . e($aRow['name']) . '</a>';
 
             $outputName .= '<div class="row-options">';
 
@@ -73,7 +73,7 @@ return App_table::find('subscriptions')
                         && $aRow['in_test_environment'] == 1))
                 && staff_can('delete',  'subscriptions')
             ) {
-                $outputName .= ' | <a href="' . admin_url('subscriptions/delete/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+                $outputName .= ' | <a href="' . admin_url('subscriptions/delete/' . $aRow['id']) . '" class="_delete">' . _l('delete') . '</a>';
             }
             $outputName .= '</div>';
 

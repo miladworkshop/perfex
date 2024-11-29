@@ -2,10 +2,10 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-$has_permission_view_own = staff_can('view_own',  'estimate_request');
-$has_permission_view     = staff_can('view',  'estimate_request');
-$has_permission_edit     = staff_can('edit',  'estimate_request');
-$has_permission_delete   = staff_can('delete',  'estimate_request');
+$has_permission_view_own = staff_can('view_own', 'estimate_request');
+$has_permission_view     = staff_can('view', 'estimate_request');
+$has_permission_edit     = staff_can('edit', 'estimate_request');
+$has_permission_delete   = staff_can('delete', 'estimate_request');
 $statuses                = $this->ci->estimate_request_model->get_status();
 
 $aColumns = [
@@ -30,12 +30,11 @@ $join = [
 $where  = [];
 $filter = false;
 
-
-if (!$has_permission_view) {
+if (! $has_permission_view) {
     array_push($where, 'AND assigned =' . get_staff_user_id());
 }
 
-if (staff_can('view',  'estimate_request') && $this->ci->input->post('assigned')) {
+if (staff_can('view', 'estimate_request') && $this->ci->input->post('assigned')) {
     array_push($where, 'AND assigned =' . $this->ci->db->escape_str($this->ci->input->post('assigned')));
 }
 
@@ -46,7 +45,6 @@ if (
 ) {
     array_push($where, 'AND status IN (' . implode(',', $this->ci->db->escape_str($this->ci->input->post('status'))) . ')');
 }
-
 
 $aColumns = hooks()->apply_filters('estimate_request_table_sql_columns', $aColumns);
 
@@ -69,7 +67,7 @@ foreach ($rResult as $aRow) {
     $hrefAttr = 'href="' . admin_url('estimate_request/view/' . e($aRow['id'])) . '"';
     $row[]    = '<a ' . $hrefAttr . '>' . e($aRow['id']) . '</a>';
 
-    $nameRow = '<a ' . $hrefAttr . '>' . e($aRow['email']) . '</a>';
+    $nameRow = '<a ' . $hrefAttr . ' class="tw-font-medium">' . e($aRow['email']) . '</a>';
 
     $nameRow .= '<div class="row-options">';
     $nameRow .= '<a ' . $hrefAttr . '>' . _l('view') . '</a>';
@@ -78,7 +76,6 @@ foreach ($rResult as $aRow) {
         $nameRow .= ' | <a href="' . admin_url('estimate_request/delete/' . e($aRow['id'])) . '" class="_delete text-danger">' . _l('delete') . '</a>';
     }
     $nameRow .= '</div>';
-
 
     $row[] = $nameRow;
 
@@ -97,7 +94,7 @@ foreach ($rResult as $aRow) {
     }
 
     $row[] = $assignedOutput;
-    if (!$has_permission_edit) {
+    if (! $has_permission_edit) {
         $outputStatus = '<span class="label estimate_request-status-' . $aRow['status'] . '" style="color:' . $aRow['color'] . ';border:1px solid ' . adjust_hex_brightness($aRow['color'], 0.4) . ';background: ' . adjust_hex_brightness($aRow['color'], 0.04) . ';">' . e($aRow['status_name']);
 
         $outputStatus .= '<div class="dropdown inline-block mleft5 table-export-exclude">';
@@ -106,6 +103,7 @@ foreach ($rResult as $aRow) {
         $outputStatus .= '</a>';
 
         $outputStatus .= '<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="tableestimate_requestsStatus-' . $aRow['id'] . '">';
+
         foreach ($statuses as $_status) {
             if ($aRow['status'] != $_status['id']) {
                 $outputStatus .= '<li>
@@ -122,7 +120,6 @@ foreach ($rResult as $aRow) {
         $outputStatus = '<span class="label estimate_request-status-' . $aRow['status'] . '" style="color:' . $aRow['color'] . ';border:1px solid ' . adjust_hex_brightness($aRow['color'], 0.4) . ';background: ' . adjust_hex_brightness($aRow['color'], 0.04) . ';">' . e($aRow['status_name']) . '</span>';
     }
     $row[] = $outputStatus;
-
 
     $row[] = '<span data-toggle="tooltip" data-title="' . e(_dt($aRow['date_added'])) . '" class="text-has-action is-date">' . e(time_ago($aRow['date_added'])) . '</span>';
 

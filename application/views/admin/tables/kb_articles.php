@@ -6,7 +6,7 @@ $aColumns = [
     'subject',
     'articlegroup',
     'datecreated',
-    ];
+];
 $sIndexColumn     = 'articleid';
 $sTable           = db_prefix() . 'knowledge_base';
 $additionalSelect = [
@@ -15,16 +15,17 @@ $additionalSelect = [
     'articleid',
     'slug',
     'staff_article',
-     db_prefix() . 'knowledge_base.description',
-    ];
+    db_prefix() . 'knowledge_base.description',
+];
 $join = [
     'LEFT JOIN ' . db_prefix() . 'knowledge_base_groups ON ' . db_prefix() . 'knowledge_base_groups.groupid = ' . db_prefix() . 'knowledge_base.articlegroup',
-    ];
+];
 
 $where   = [];
 $filter  = [];
 $groups  = $this->ci->knowledge_base_model->get_kbg();
 $_groups = [];
+
 foreach ($groups as $group) {
     if ($this->ci->input->post('kb_group_' . $group['groupid'])) {
         array_push($_groups, $group['groupid']);
@@ -47,6 +48,7 @@ $rResult = $result['rResult'];
 
 foreach ($rResult as $aRow) {
     $row = [];
+
     for ($i = 0; $i < count($aColumns); $i++) {
         $_data = $aRow[$aColumns[$i]];
         if ($aColumns[$i] == 'articlegroup') {
@@ -57,10 +59,10 @@ foreach ($rResult as $aRow) {
                 $link = site_url('knowledge-base/article/' . $aRow['slug']);
             }
 
-            if (staff_can('edit',  'knowledge_base')) {
-                $_data = '<a href="' . admin_url('knowledge_base/article/' . $aRow['articleid']) . '">' . $_data . '</a>';
+            if (staff_can('edit', 'knowledge_base')) {
+                $_data = '<a href="' . admin_url('knowledge_base/article/' . $aRow['articleid']) . '" class="tw-font-medium">' . $_data . '</a>';
             } else {
-                $_data = '<a href="' . $link . '" target="_blank">' . $_data . '</a>';
+                $_data = '<a href="' . $link . '" target="_blank" class="tw-font-medium">' . $_data . '</a>';
             }
 
             if ($aRow['staff_article'] == 1) {
@@ -71,11 +73,11 @@ foreach ($rResult as $aRow) {
 
             $_data .= '<a href="' . $link . '" target="_blank">' . _l('view') . '</a>';
 
-            if (staff_can('edit',  'knowledge_base')) {
+            if (staff_can('edit', 'knowledge_base')) {
                 $_data .= ' | <a href="' . admin_url('knowledge_base/article/' . $aRow['articleid']) . '">' . _l('edit') . '</a>';
             }
 
-            if (staff_can('delete',  'knowledge_base')) {
+            if (staff_can('delete', 'knowledge_base')) {
                 $_data .= ' | <a href="' . admin_url('knowledge_base/delete_article/' . $aRow['articleid']) . '" class="_delete text-danger">' . _l('delete') . '</a>';
             }
 

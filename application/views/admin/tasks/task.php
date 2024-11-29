@@ -25,7 +25,7 @@
                       $rel_type = isset($task) ? $task->rel_type : $this->input->get('rel_type');
                   }
                    if (isset($task) && $task->billed == 1) {
-                       echo '<div class="alert alert-success text-center no-margin">' . _l('task_is_billed', '<a href="' . admin_url('invoices/list_invoices/' . $task->invoice_id) . '" target="_blank">' . e(format_invoice_number($task->invoice_id))) . '</a></div><br />';
+                       echo '<div class="alert alert-success text-center no-margin">' . _l('task_is_billed', '<a href="' . admin_url('invoices/list_invoices/' . $task->invoice_id) . '" target="_blank" class="alert-link">' . e(format_invoice_number($task->invoice_id))) . '</a></div><br />';
                    }
                   ?>
                         <?php if (isset($task)) { ?>

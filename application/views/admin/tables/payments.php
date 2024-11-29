@@ -2,7 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-$hasPermissionDelete = staff_can('delete',  'payments');
+$hasPermissionDelete = staff_can('delete', 'payments');
 
 $aColumns = [
     db_prefix() . 'invoicepaymentrecords.id as id',
@@ -12,14 +12,14 @@ $aColumns = [
     get_sql_select_client_company(),
     'amount',
     db_prefix() . 'invoicepaymentrecords.date as date',
-    ];
+];
 
 $join = [
     'LEFT JOIN ' . db_prefix() . 'invoices ON ' . db_prefix() . 'invoices.id = ' . db_prefix() . 'invoicepaymentrecords.invoiceid',
     'LEFT JOIN ' . db_prefix() . 'clients ON ' . db_prefix() . 'clients.userid = ' . db_prefix() . 'invoices.clientid',
     'LEFT JOIN ' . db_prefix() . 'currencies ON ' . db_prefix() . 'currencies.id = ' . db_prefix() . 'invoices.currency',
     'LEFT JOIN ' . db_prefix() . 'payment_modes ON ' . db_prefix() . 'payment_modes.id = ' . db_prefix() . 'invoicepaymentrecords.paymentmode',
-    ];
+];
 
 $where = [];
 if ($clientid != '') {
@@ -45,7 +45,7 @@ $result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [
     db_prefix() . 'payment_modes.name as payment_mode_name',
     db_prefix() . 'payment_modes.id as paymentmodeid',
     'paymentmethod',
-    ]);
+]);
 
 $output  = $result['output'];
 $rResult = $result['rResult'];
@@ -64,12 +64,12 @@ foreach ($rResult as $aRow) {
         $options .= icon_btn('payments/delete/' . $aRow['id'], 'fa fa-remove', 'btn-danger _delete');
     }
 
-    $numberOutput = '<a href="' . $link . '">' . e($aRow['id']) . '</a>';
+    $numberOutput = '<a href="' . $link . '" class="tw-font-medium">' . e($aRow['id']) . '</a>';
 
     $numberOutput .= '<div class="row-options">';
     $numberOutput .= '<a href="' . $link . '">' . _l('view') . '</a>';
     if ($hasPermissionDelete) {
-        $numberOutput .= ' | <a href="' . admin_url('payments/delete/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+        $numberOutput .= ' | <a href="' . admin_url('payments/delete/' . $aRow['id']) . '" class="_delete">' . _l('delete') . '</a>';
     }
     $numberOutput .= '</div>';
 
@@ -88,7 +88,7 @@ foreach ($rResult as $aRow) {
         }
     }
 
-    if (!empty($aRow['paymentmethod'])) {
+    if (! empty($aRow['paymentmethod'])) {
         $outputPaymentMode .= ' - ' . e($aRow['paymentmethod']);
     }
     $row[] = $outputPaymentMode;
@@ -97,7 +97,7 @@ foreach ($rResult as $aRow) {
 
     $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . e($aRow['company']) . '</a>';
 
-    $row[] = e(app_format_money($aRow['amount'], $aRow['currency_name']));
+    $row[] = '<span class="tw-font-medium">' . e(app_format_money($aRow['amount'], $aRow['currency_name'])) . '</span>';
 
     $row[] = e(_d($aRow['date']));
 

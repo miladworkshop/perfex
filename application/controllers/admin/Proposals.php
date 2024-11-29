@@ -166,7 +166,7 @@ class Proposals extends AdminController
             }
         }
         if ($id == '') {
-            $title = _l('add_new', _l('proposal_lowercase'));
+            $title = _l('add_new', _l('proposal'));
         } else {
             $data['proposal'] = $this->proposals_model->get($id);
 
@@ -176,7 +176,7 @@ class Proposals extends AdminController
 
             $data['estimate']    = $data['proposal'];
             $data['is_proposal'] = true;
-            $title               = _l('edit', _l('proposal_lowercase'));
+            $title               = _l('edit', _l('proposal'));
         }
 
         $this->load->model('taxes_model');

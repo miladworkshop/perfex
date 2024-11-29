@@ -226,7 +226,21 @@ $(function () {
     return true;
   });
 
-  // Change ticket status without replying
+    // Change ticket status without replying (new)
+  $('.change-ticket-status').on("click", function () {
+    var status = $(this).data('status');
+    var ticketid = $('input[name="ticketid"]').val();
+    requestGetJSON(
+      "tickets/change_status_ajax/" + ticketid + "/" + status
+    ).done(function (response) {
+      alert_float(response.alert, response.message);
+      setTimeout(function(){
+        window.location.reload()
+      }, 1500)
+    });
+  });
+
+  // Change ticket status without replying (old)
   $('select[name="status_top"]').on("change", function () {
     var status = $(this).val();
     var ticketid = $('input[name="ticketid"]').val();
@@ -393,7 +407,7 @@ function show_ticket_no_contact_email_warning(userid, contactid) {
         userid +
         "?contactid=" +
         contactid +
-        '" target="_blank">here</a>.</div>'
+        '" target="_blank" class="alert-link">here</a>.</div>'
     );
   }
 }

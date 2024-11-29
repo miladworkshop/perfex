@@ -4,7 +4,7 @@
     <div class="content">
         <div class="row">
             <div class="col-md-<?php echo !isset($goal) ? '8 col-md-offset-2' : 6; ?>">
-                <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700"><?php echo e($title); ?></h4>
+                <h4 class="tw-mt-0 tw-font-bold tw-text-lg tw-text-neutral-700"><?php echo e($title); ?></h4>
                 <?php echo form_open($this->uri->uri_string()); ?>
                 <div class="panel_s">
                     <div class="panel-body">
@@ -103,7 +103,7 @@
 
               ?>
             <div class="col-md-6">
-                <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700">
+                <h4 class="tw-mt-0 tw-font-bold tw-text-lg tw-text-neutral-700">
                     <?php echo _l('goal_achievement'); ?>
                     <?php
                     if ($show_acchievement_label == true) {

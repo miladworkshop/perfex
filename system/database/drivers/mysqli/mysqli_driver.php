@@ -233,7 +233,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	public function reconnect()
 	{
-		if ($this->conn_id !== FALSE && $this->conn_id->ping() === FALSE)
+		if ($this->conn_id !== FALSE && mysqli_query( $this->conn_id, 'DO 1' ) === FALSE)
 		{
 			$this->conn_id = FALSE;
 		}

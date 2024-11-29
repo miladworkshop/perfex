@@ -1,9 +1,9 @@
 <?php
 
-#  Version 2.3.0
+//  Version 2.3.0
 $lang['theme_style'] = 'Estilo de Tema';
 
-# Version 2.3.5
+// Version 2.3.5
 $lang['theme_style_reset_info']            = 'This action does not reset the Custom CSS section.';
 $lang['theme_style_admin']                 = 'Admin Area';
 $lang['theme_style_customers']             = 'Customers Area';
@@ -18,8 +18,8 @@ $lang['theme_style_modal_body']            = 'Modal Body';
 $lang['theme_style_customers_and_admin']   = 'Customers and Admin Area';
 $lang['theme_style_ca_info']               = 'Custom CSS to use in both admin and customers area.';
 
-# Be careful how you translate the translations below to prevent any confusions
-# if you don't know what you are doing, leave them un-translated
+// Be careful how you translate the translations below to prevent any confusions
+// if you don't know what you are doing, leave them un-translated
 
 $lang['theme_style_sidebar_bg_color']                    = 'Sidebar Menu/Setup Menu Background Color';
 $lang['theme_style_sidebar_open_bg_color']               = 'Sidebar Menu/Setup Menu Submenu Open Background Color';
@@ -61,3 +61,9 @@ $lang['theme_style_button_success']                      = 'Button Success';
 $lang['theme_style_button_danger']                       = 'Button Danger';
 $lang['theme_style_modal_header_text_color']             = 'Modal Header Text Color';
 $lang['theme_style_button_primary']                      = 'Button Primary';
+
+// Version 3.2.1
+$lang['theme_style_content_background_color']      = 'Main Content Background Color';
+$lang['theme_style_tables']                        = 'Tables';
+$lang['theme_style_table_links_color']             = 'Table Links Color';
+$lang['theme_style_table_links_hover_focus_color'] = 'Table Links Hover/Focus Color';

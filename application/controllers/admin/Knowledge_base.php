@@ -56,7 +56,7 @@ class Knowledge_base extends AdminController
             }
         }
         if ($id == '') {
-            $title = _l('add_new', _l('kb_article_lowercase'));
+            $title = _l('add_new', _l('kb_article'));
         } else {
             $article         = $this->knowledge_base_model->get($id);
             $data['article'] = $article;

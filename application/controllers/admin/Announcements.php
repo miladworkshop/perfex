@@ -44,10 +44,10 @@ class Announcements extends AdminController
             }
         }
         if ($id == '') {
-            $title = _l('add_new', _l('announcement_lowercase'));
+            $title = _l('add_new', _l('announcement'));
         } else {
             $data['announcement'] = $this->announcements_model->get($id);
-            $title                = _l('edit', _l('announcement_lowercase'));
+            $title                = _l('edit', _l('announcement'));
         }
         $data['title'] = $title;
         $this->load->view('admin/announcements/announcement', $data);

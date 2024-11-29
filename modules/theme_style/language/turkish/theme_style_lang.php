@@ -1,9 +1,9 @@
 <?php
 
-#  Version 2.3.0
+//  Version 2.3.0
 $lang['theme_style'] = 'Tema Yapılandırıcı';
 
-# Version 2.3.5
+// Version 2.3.5
 $lang['theme_style_reset_info']            = 'Bu işlem, Özel CSS bölümünü sıfırlamaz.';
 $lang['theme_style_admin']                 = 'Yönetim Arayüzü';
 $lang['theme_style_customers']             = 'Müşteri Arayüzü';
@@ -18,8 +18,8 @@ $lang['theme_style_modal_body']            = 'Örnek içerik';
 $lang['theme_style_customers_and_admin']   = 'Müşteri ve Yönetici Arayüzü';
 $lang['theme_style_ca_info']               = 'Hem yönetici hem de müşteriler arayüzünde kullanılacak özel CSS.';
 
-# Be careful how you translate the translations below to prevent any confusions
-# if you don't know what you are doing, leave them un-translated
+// Be careful how you translate the translations below to prevent any confusions
+// if you don't know what you are doing, leave them un-translated
 
 $lang['theme_style_sidebar_bg_color']                    = 'Yan Menü/Ayarlar Menüsü Arkaplan Rengi';
 $lang['theme_style_sidebar_open_bg_color']               = 'Yan Menü/Ayarlar Menüsü Açık Altmenü Arkaplan Rengi';
@@ -61,3 +61,9 @@ $lang['theme_style_button_success']                      = 'Buton Başarılı';
 $lang['theme_style_button_danger']                       = 'Buton Başarısız';
 $lang['theme_style_modal_header_text_color']             = 'Modal Header Text Color';
 $lang['theme_style_button_primary']                      = 'Button Primary';
+
+// Version 3.2.1
+$lang['theme_style_content_background_color']      = 'Main Content Background Color';
+$lang['theme_style_tables']                        = 'Tables';
+$lang['theme_style_table_links_color']             = 'Table Links Color';
+$lang['theme_style_table_links_hover_focus_color'] = 'Table Links Hover/Focus Color';

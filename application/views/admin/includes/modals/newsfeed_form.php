@@ -8,30 +8,35 @@
     <div class="col-md-6 col-md-offset-3">
         <div class="panel_s">
             <div class="panel-body">
-                <?php echo form_open_multipart('admin/newsfeed/add_post', ['class' => 'dropzone', 'id' => 'new-post-form']); ?>
-                <a href="<?php echo admin_url('profile'); ?>">
-                    <?php echo staff_profile_image($current_user->staffid, ['staff-profile-image-small']); ?>
-                    <?php echo e($current_user->firstname . ' ' . $current_user->lastname); ?></a>
+                <?= form_open_multipart('admin/newsfeed/add_post', ['class' => 'dropzone', 'id' => 'new-post-form']); ?>
+                <a
+                    href="<?= admin_url('profile'); ?>">
+                    <?= staff_profile_image($current_user->staffid, ['staff-profile-image-small']); ?>
+                    <?= e($current_user->firstname . ' ' . $current_user->lastname); ?></a>
                 <textarea name="content" id="post" rows="5" class="form-control"
-                    placeholder="<?php echo _l('whats_on_your_mind'); ?>"></textarea>
+                    placeholder="<?= _l('whats_on_your_mind'); ?>"></textarea>
                 <hr />
-                <button type="submit" class="btn btn-primary pull-right"><?php echo _l('new_post'); ?></button>
+                <button type="submit"
+                    class="btn btn-primary pull-right"><?= _l('new_post'); ?></button>
                 <a href="#" class="btn btn-default add-post-attachments"><i data-toggle="tooltip"
-                        title="<?php echo _l('newsfeed_upload_tooltip'); ?>" class="fa-solid fa-file"></i></a>
+                        title="<?= _l('newsfeed_upload_tooltip'); ?>"
+                        class="fa-solid fa-file"></i></a>
                 <select id="post-visibility" class="selectpicker" multiple name="visibility[]" data-width="60%"
-                    data-none-selected-text="<?php echo _l('newsfeed_all_departments'); ?>">
+                    data-none-selected-text="<?= _l('newsfeed_all_departments'); ?>">
 
                     <?php foreach ($departments as $department) { ?>
-                    <option value="<?php echo e($department['departmentid']); ?>"><?php echo e($department['name']); ?>
+                    <option
+                        value="<?= e($department['departmentid']); ?>">
+                        <?= e($department['name']); ?>
                     </option>
                     <?php } ?>
                 </select>
                 <div class="dz-message" data-dz-message><span></span></div>
                 <div class="dropzone-previews mtop25"></div>
-                <?php echo form_close(); ?>
+                <?= form_close(); ?>
             </div>
         </div>
-        <?php echo form_hidden('total_pages_newsfeed', hooks()->apply_filters('total_pages_newsfeed', total_rows(db_prefix() . 'newsfeed_posts') / 10)); ?>
+        <?= form_hidden('total_pages_newsfeed', hooks()->apply_filters('total_pages_newsfeed', total_rows(db_prefix() . 'newsfeed_posts') / 10)); ?>
         <div id="newsfeed_data"></div>
     </div>
 </div>

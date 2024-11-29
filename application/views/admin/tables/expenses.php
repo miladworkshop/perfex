@@ -40,7 +40,7 @@ return App_table::find('expenses')
             array_push($join, 'LEFT JOIN ' . db_prefix() . 'customfieldsvalues as ctable_' . $key . ' ON ' . db_prefix() . 'expenses.id = ctable_' . $key . '.relid AND ctable_' . $key . '.fieldto="' . $field['fieldto'] . '" AND ctable_' . $key . '.fieldid=' . $field['id']);
         }
 
-        $where  = [];
+        $where = [];
 
         if ($filtersWhere = $this->getWhereFromRules()) {
             $where[] = $filtersWhere;
@@ -88,22 +88,22 @@ return App_table::find('expenses')
             $categoryOutput = '';
 
             if (is_numeric($clientid)) {
-                $categoryOutput = '<a href="' . admin_url('expenses/list_expenses/' . $aRow['id']) . '">' . e($aRow['category_name']) . '</a>';
+                $categoryOutput = '<a href="' . admin_url('expenses/list_expenses/' . $aRow['id']) . '" class="tw-font-medium">' . e($aRow['category_name']) . '</a>';
             } else {
-                $categoryOutput = '<a href="' . admin_url('expenses/list_expenses/' . $aRow['id']) . '" onclick="init_expense(' . $aRow['id'] . ');return false;">' . e($aRow['category_name']) . '</a>';
+                $categoryOutput = '<a href="' . admin_url('expenses/list_expenses/' . $aRow['id']) . '" onclick="init_expense(' . $aRow['id'] . ');return false;" class="tw-font-medium">' . e($aRow['category_name']) . '</a>';
             }
 
             if ($aRow['billable'] == 1) {
                 if ($aRow['invoiceid'] == null) {
-                    $categoryOutput .= ' <p class="text-danger tw-text-sm tw-mb-1">' . _l('expense_list_unbilled') . '</p>';
+                    $categoryOutput .= ' <p class="text-danger tw-text-sm tw-mb-1 tw-font-medium">' . _l('expense_list_unbilled') . '</p>';
                 } else {
                     if (total_rows(db_prefix() . 'invoices', [
-                        'id' => $aRow['invoiceid'],
+                        'id'     => $aRow['invoiceid'],
                         'status' => 2,
                     ]) > 0) {
-                        $categoryOutput .= ' <p class="text-success tw-text-sm tw-mb-1">' . _l('expense_list_billed') . '</p>';
+                        $categoryOutput .= ' <p class="text-success tw-text-sm tw-mb-1 tw-font-medium">' . _l('expense_list_billed') . '</p>';
                     } else {
-                        $categoryOutput .= ' <p class="text-success tw-text-sm tw-mb-1">' . _l('expense_list_invoice') . '</p>';
+                        $categoryOutput .= ' <p class="text-success tw-text-sm tw-mb-1 tw-font-medium">' . _l('expense_list_invoice') . '</p>';
                     }
                 }
             }
@@ -116,12 +116,12 @@ return App_table::find('expenses')
 
             $categoryOutput .= '<a href="' . admin_url('expenses/list_expenses/' . $aRow['id']) . '" onclick="init_expense(' . $aRow['id'] . ');return false;">' . _l('view') . '</a>';
 
-            if (staff_can('edit',  'expenses')) {
+            if (staff_can('edit', 'expenses')) {
                 $categoryOutput .= ' | <a href="' . admin_url('expenses/expense/' . $aRow['id']) . '">' . _l('edit') . '</a>';
             }
 
-            if (staff_can('delete',  'expenses')) {
-                $categoryOutput .= ' | <a href="' . admin_url('expenses/delete/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+            if (staff_can('delete', 'expenses')) {
+                $categoryOutput .= ' | <a href="' . admin_url('expenses/delete/' . $aRow['id']) . '" class="_delete">' . _l('delete') . '</a>';
             }
 
             $categoryOutput .= '</div>';
@@ -145,7 +145,7 @@ return App_table::find('expenses')
 
             $outputReceipt = '';
 
-            if (!empty($aRow['file_name'])) {
+            if (! empty($aRow['file_name'])) {
                 $outputReceipt = '<a href="' . site_url('download/file/expense/' . $aRow['id']) . '">' . e($aRow['file_name']) . '</a>';
             }
 
@@ -167,7 +167,7 @@ return App_table::find('expenses')
 
             $paymentModeOutput = '';
 
-            if ($aRow['paymentmode'] != '0' && !empty($aRow['paymentmode'])) {
+            if ($aRow['paymentmode'] != '0' && ! empty($aRow['paymentmode'])) {
                 $payment_mode = $this->ci->payment_modes_model->get($aRow['paymentmode'], [], false, true);
                 if ($payment_mode) {
                     $paymentModeOutput = e($payment_mode->name);
@@ -187,6 +187,7 @@ return App_table::find('expenses')
 
             $output['aaData'][] = $row;
         }
+
         return $output;
     })->setRules([
         App_table_filter::new('expense_name', 'TextRule')->label(_l('expense_name')),
@@ -195,10 +196,10 @@ return App_table::find('expenses')
             ->label(_l('year'))
             ->raw(function ($value, $operator) {
                 if ($operator == 'in') {
-                    return "YEAR(date) IN (" . implode(',', $value) . ")";
-                } else {
-                    return "YEAR(date) NOT IN (" . implode(',', $value) . ")";
+                    return 'YEAR(date) IN (' . implode(',', $value) . ')';
                 }
+
+                return 'YEAR(date) NOT IN (' . implode(',', $value) . ')';
             })
             ->options(function ($ci) {
                 return collect($ci->expenses_model->get_expenses_years())->map(fn ($data) => [
@@ -217,7 +218,7 @@ return App_table::find('expenses')
             }),
         App_table_filter::new('billable', 'BooleanRule')->label(_l('expenses_list_billable')),
         App_table_filter::new('unbilled', 'BooleanRule')->label(_l('expenses_list_unbilled'))->raw(function ($value) {
-            return $value == "1" ? 'invoiceid IS NULL' : 'invoiceid IS NOT NULL';
+            return $value == '1' ? 'invoiceid IS NULL' : 'invoiceid IS NOT NULL';
         }),
         App_table_filter::new('recurring', 'BooleanRule')->label(_l('expenses_list_recurring')),
         App_table_filter::new('paymentmode', 'SelectRule')->label(_l('payment_mode'))->options(function ($ci) {

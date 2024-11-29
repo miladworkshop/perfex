@@ -8,7 +8,7 @@ class Spam_filters extends AdminController
     {
         parent::__construct();
 
-        if (!is_admin()) {
+        if (! is_admin()) {
             access_denied('Spam Filters');
         }
 
@@ -30,20 +30,22 @@ class Spam_filters extends AdminController
             ]);
             $output  = $result['output'];
             $rResult = $result['rResult'];
+
             foreach ($rResult as $aRow) {
                 $row = [];
+
                 for ($i = 0; $i < count($aColumns); $i++) {
                     $_data = $aRow[$aColumns[$i]];
                     $row[] = e($_data);
                 }
 
-                $options = '<div class="tw-flex tw-items-center tw-space-x-3">';
+                $options = '<div class="tw-flex tw-items-center tw-space-x-2">';
                 $options .= '<a href="#" class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700" data-type="' . $filter_type . '" data-value="' . e($aRow['value']) . '" onclick="edit_spam_filter(this,' . $aRow['id'] . '); return false;">
                     <i class="fa-regular fa-pen-to-square fa-lg"></i>
                 </a>';
 
                 $options .= '<a href="' . admin_url('spam_filters/delete/' . $aRow['id'] . '/' . $rel_type) . '"
-                class="tw-mt-px tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700 _delete">
+                class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700 _delete">
                     <i class="fa-regular fa-trash-can fa-lg"></i>
                 </a>';
                 $options .= '</div>';
@@ -52,7 +54,8 @@ class Spam_filters extends AdminController
                 $output['aaData'][] = $row;
             }
             echo json_encode($output);
-            die();
+
+            exit();
         }
 
         $data['rel_type'] = $rel_type;
@@ -78,9 +81,9 @@ class Spam_filters extends AdminController
             }
         }
         echo json_encode([
-                    'success' => $success,
-                    'message' => $message,
-                ]);
+            'success' => $success,
+            'message' => $message,
+        ]);
     }
 
     public function delete($id, $type)

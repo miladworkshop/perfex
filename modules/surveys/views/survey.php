@@ -6,7 +6,7 @@
             <div class="col-md-5" id="survey-add-edit-wrapper">
                 <div class="row">
                     <div class="col-md-12">
-                        <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700">
+                        <h4 class="tw-mt-0 tw-font-bold tw-text-lg tw-text-neutral-700">
                             <?php echo e($title); ?>
                         </h4>
                         <?php echo form_open($this->uri->uri_string(), ['id' => 'survey_form']); ?>

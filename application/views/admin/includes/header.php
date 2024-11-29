@@ -1,18 +1,45 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <div id="header">
-    <div class="hide-menu tw-ml-1"><i class="fa fa-align-left"></i></div>
-
+    <button type="button"
+        class="hide-menu tw-inline-flex tw-bg-transparent tw-border-0 tw-p-1 tw-mt-4 hover:tw-bg-neutral-600/10 tw-text-neutral-600 hover:tw-text-neutral-800 focus:tw-text-neutral-800 focus:tw-outline-none tw-rounded-md tw-mx-4 ltr:md:tw-ml-4 rtl:md:tw-mr-4 ltr:tw-float-left  rtl:tw-float-right">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="tw-h-4 tw-w-4 tw-text-current">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M2.25 18.003h19.5m-19.5-6h19.5m-19.5-6h19.5"></path>
+        </svg>
+    </button>
     <nav>
         <div class="tw-flex tw-justify-between">
+            <div class="tw-overflow-hidden tw-shrink-0">
+                <div id="logo"
+                    class="tw-h-[57px] tw-hidden md:tw-flex tw-items-center [&_img]:tw-h-9 [&_img]:tw-w-auto">
+                    <?php $logo = get_admin_header_logo_url(); ?>
+                    <?php if (! $logo) { ?>
+                    <a class="logo logo-text tw-text-2xl tw-font-semibold"
+                        href="<?= hooks()->apply_filters('admin_header_logo_href', admin_url()); ?>">
+                        <?= e(get_option('companyname')); ?>
+                    </a>
+                    <?php } else { ?>
+                    <a class="logo"
+                        href="<?= hooks()->apply_filters('admin_header_logo_href', admin_url()); ?>">
+                        <img src="<?= e($logo); ?>"
+                            class="img-responsive"
+                            alt="<?= e(get_option('companyname')); ?>" />
+                    </a>
+                    <?php } ?>
+                </div>
+            </div>
             <div class="tw-flex tw-flex-1 sm:tw-flex-initial">
                 <div id="top_search"
-                    class="tw-inline-flex tw-relative dropdown sm:tw-ml-1.5 sm:tw-mr-3 tw-max-w-xl tw-flex-auto"
-                    data-toggle="tooltip" data-placement="bottom" data-title="<?php echo _l('search_by_tags'); ?>">
+                    class="tw-inline-flex tw-relative dropdown sm:tw-ml-1.5 sm:tw-mr-3 tw-max-w-xl tw-flex-auto tw-group/top-search"
+                    data-toggle="tooltip" data-placement="bottom"
+                    data-title="<?= _l('search_by_tags'); ?>">
                     <input type="search" id="search_input"
-                        class="tw-px-4 tw-ml-1 tw-mt-2.5 focus:!tw-ring-0 tw-w-full !tw-placeholder-neutral-400 !tw-shadow-none tw-text-neutral-800 focus:!tw-placeholder-neutral-600 hover:!tw-placeholder-neutral-600 sm:tw-w-[400px] tw-h-[40px] tw-bg-neutral-300/30 hover:tw-bg-neutral-300/50 !tw-border-0"
-                        placeholder="<?php echo _l('top_search_placeholder'); ?>" autocomplete="off">
-                    <div id="top_search_button" class="tw-absolute rtl:tw-left-0 -tw-mt-2 tw-top-1.5 ltr:tw-right-1">
-                        <button class="tw-outline-none tw-border-0 tw-text-neutral-600">
+                        class="ltr:tw-pr-4 ltr:tw-pl-9 rtl:tw-pr-9 rtl:tw-pl-4 tw-ml-1 tw-mt-2 focus:!tw-ring-0 tw-w-full !tw-placeholder-neutral-500 !tw-shadow-none tw-text-neutral-800 focus:!tw-placeholder-neutral-600 hover:!tw-placeholder-neutral-600 sm:tw-w-[350px] tw-h-[38px] tw-border-0 tw-border-solid !tw-border-white !tw-bg-neutral-100 !tw-rounded-xl"
+                        placeholder="<?= _l('top_search_placeholder'); ?>"
+                        autocomplete="off">
+                    <div id="top_search_button" class="tw-absolute rtl:tw-right-2 ltr:tw-left-2 tw-top-2.5">
+                        <button
+                            class="tw-outline-none tw-border-0 tw-p-2 tw-text-neutral-400 group-focus-within/top-search:tw-text-neutral-600 tw-bg-transparent">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
@@ -23,13 +50,12 @@
 
                 </div>
                 <ul class="nav navbar-nav visible-md visible-lg">
-                    <?php
-                    $quickActions = collect($this->app->get_quick_actions_links())->reject(function ($action) {
+                    <?php $quickActions = collect($this->app->get_quick_actions_links())->reject(function ($action) {
                         return isset($action['permission']) && staff_cant('create', $action['permission']);
-                    });
-                ?>
+                    }); ?>
                     <?php if ($quickActions->isNotEmpty()) { ?>
-                    <li class="icon tw-relative ltr:tw-mr-1.5 rtl:tw-ml-1.5" title="<?php echo _l('quick_create'); ?>"
+                    <li class="icon tw-relative ltr:tw-mr-1.5 rtl:tw-ml-1.5 -tw-mt-1"
+                        title="<?= _l('quick_create'); ?>"
                         data-toggle="tooltip" data-placement="bottom">
                         <a href="#" class="!tw-px-0 tw-group !tw-text-white" data-toggle="dropdown">
                             <span
@@ -39,40 +65,41 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right animated fadeIn tw-text-base">
                             <li class="dropdown-header tw-mb-1">
-                                <?php echo _l('quick_create'); ?>
+                                <?= _l('quick_create'); ?>
                             </li>
                             <?php foreach ($quickActions as $key => $item) {
-                    $url = '';
-                    if (isset($item['permission'])) {
-                        if (staff_cant('create', $item['permission'])) {
-                            continue;
-                        }
-                    }
-                    if (isset($item['custom_url'])) {
-                        $url = $item['url'];
-                    } else {
-                        $url = admin_url('' . $item['url']);
-                    }
-                    $href_attributes = '';
-                    if (isset($item['href_attributes'])) {
-                        foreach ($item['href_attributes'] as $key => $val) {
-                            $href_attributes .= $key . '=' . '"' . $val . '"';
-                        }
-                    } ?>
+                                $url = '';
+                                if (isset($item['permission'])) {
+                                    if (staff_cant('create', $item['permission'])) {
+                                        continue;
+                                    }
+                                }
+                                if (isset($item['custom_url'])) {
+                                    $url = $item['url'];
+                                } else {
+                                    $url = admin_url('' . $item['url']);
+                                }
+                                $href_attributes = '';
+                                if (isset($item['href_attributes'])) {
+                                    foreach ($item['href_attributes'] as $key => $val) {
+                                        $href_attributes .= $key . '="' . $val . '"';
+                                    }
+                                } ?>
                             <li>
-                                <a href="<?php echo e($url); ?>" <?php echo $href_attributes; ?>
+                                <a href="<?= e($url); ?>"
+                                    <?= $href_attributes; ?>
                                     class="tw-group tw-inline-flex tw-space-x-0.5 tw-text-neutral-700">
                                     <?php if (isset($item['icon'])) { ?>
                                     <i
-                                        class="<?php echo e($item['icon']); ?> tw-text-neutral-400 group-hover:tw-text-neutral-600 tw-h-5 tw-w-5"></i>
+                                        class="<?= e($item['icon']); ?> tw-text-neutral-400 group-hover:tw-text-neutral-600 tw-h-5 tw-w-5"></i>
                                     <?php } ?>
                                     <span>
-                                        <?php echo e($item['name']); ?>
+                                        <?= e($item['name']); ?>
                                     </span>
                                 </a>
                             </li>
                             <?php
-                } ?>
+                            } ?>
                         </ul>
                     </li>
                     <?php } ?>
@@ -81,7 +108,7 @@
 
             <div class="mobile-menu tw-shrink-0 ltr:tw-ml-4 rtl:tw-mr-4">
                 <button type="button"
-                    class="navbar-toggle visible-md visible-sm visible-xs mobile-menu-toggle collapsed tw-ml-1.5"
+                    class="navbar-toggle visible-md visible-sm visible-xs mobile-menu-toggle collapsed tw-ml-1.5 tw-text-neutral-600 hover:tw-text-neutral-800"
                     data-toggle="collapse" data-target="#mobile-collapse" aria-expanded="false">
                     <i class="fa fa-chevron-down fa-lg"></i>
                 </button>
@@ -89,20 +116,16 @@
                     <?php
                // To prevent not loading the timers twice
             if (is_mobile()) { ?>
-                    <li
-                        class="dropdown notifications-wrapper header-notifications tw-block ltr:tw-mr-1.5 rtl:tw-ml-1.5">
+                    <li class="dropdown notifications-wrapper header-notifications tw-block ltr:tw-mr-3 rtl:tw-ml-3">
                         <?php $this->load->view('admin/includes/notifications'); ?>
                     </li>
                     <li class="header-timers ltr:tw-mr-1.5 rtl:tw-ml-1.5">
                         <a href="#" id="top-timers" class="dropdown-toggle top-timers tw-block tw-h-5 tw-w-5"
                             data-toggle="dropdown">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                stroke="currentColor" class="tw-w-5 tw-h-5 tw-shrink-0">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+                            <i
+                                class="fa-regular fa-clock fa-lg tw-text-neutral-400 group-hover:tw-text-neutral-800 tw-shrink-0<?= count($startedTimers) > 0 ? ' tw-animate-spin-slow' : ''; ?>"></i>
                             <span
-                                class="tw-leading-none tw-px-1 tw-py-0.5 tw-text-xs bg-success tw-z-10 tw-absolute tw-rounded-full -tw-right-3 -tw-top-2 tw-min-w-[18px] tw-min-h-[18px] tw-inline-flex tw-items-center tw-justify-center icon-started-timers<?php echo $totalTimers = count($startedTimers) == 0 ? ' hide' : ''; ?>"><?php echo count($startedTimers); ?></span>
+                                class="tw-leading-none tw-px-1 tw-py-0.5 tw-text-xs bg-success tw-z-10 tw-absolute tw-rounded-full -tw-right-3 -tw-top-2 tw-min-w-[18px] tw-min-h-[18px] tw-inline-flex tw-items-center tw-justify-center icon-started-timers<?= $totalTimers = count($startedTimers) == 0 ? ' hide' : ''; ?>"><?= count($startedTimers); ?></span>
                         </a>
                         <ul class="dropdown-menu animated fadeIn started-timers-top width300" id="started-timers-top">
                             <?php $this->load->view('admin/tasks/started_timers', ['startedTimers' => $startedTimers]); ?>
@@ -113,43 +136,65 @@
                 <div class="mobile-navbar collapse" id="mobile-collapse" aria-expanded="false" style="height: 0px;"
                     role="navigation">
                     <ul class="nav navbar-nav">
-                        <li class="header-my-profile"><a href="<?php echo admin_url('profile'); ?>">
-                                <?php echo _l('nav_my_profile'); ?>
+                        <li class="header-my-profile"><a
+                                href="<?= admin_url('profile'); ?>">
+                                <?= _l('nav_my_profile'); ?>
                             </a>
                         </li>
-                        <li class="header-my-timesheets"><a href="<?php echo admin_url('staff/timesheets'); ?>">
-                                <?php echo _l('my_timesheets'); ?>
+                        <li class="header-my-timesheets"><a
+                                href="<?= admin_url('staff/timesheets'); ?>">
+                                <?= _l('my_timesheets'); ?>
                             </a>
                         </li>
-                        <li class="header-edit-profile"><a href="<?php echo admin_url('staff/edit_profile'); ?>">
-                                <?php echo _l('nav_edit_profile'); ?>
+                        <li class="header-edit-profile"><a
+                                href="<?= admin_url('staff/edit_profile'); ?>">
+                                <?= _l('nav_edit_profile'); ?>
                             </a>
                         </li>
                         <?php if (is_staff_member()) { ?>
                         <li class="header-newsfeed">
                             <a href="#" class="open_newsfeed mobile">
-                                <?php echo _l('whats_on_your_mind'); ?>
+                                <?= _l('whats_on_your_mind'); ?>
                             </a>
                         </li>
                         <?php } ?>
                         <li class="header-logout">
                             <a href="#" onclick="logout(); return false;">
-                                <?php echo _l('nav_logout'); ?>
+                                <?= _l('nav_logout'); ?>
                             </a>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right -tw-mt-px">
                 <?php do_action_deprecated('after_render_top_search', [], '3.0.0', 'admin_navbar_start'); ?>
                 <?php hooks()->do_action('admin_navbar_start'); ?>
+                <?php if (staff_can('view', 'settings')) { ?>
+                <li>
+                    <a
+                        href="<?= admin_url('settings'); ?>">
+                        <span class="tw-flex tw-items-center tw-gap-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="tw-size-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            </svg>
+                            <span><?= _l('settings'); ?></span>
+                        </span>
+                    </a>
+                </li>
+                <?php } ?>
                 <?php if (is_staff_member()) { ?>
-                <li class="icon header-newsfeed">
+                <li class="icon header-newsfeed -tw-mr-1.5">
                     <a href="#" class="open_newsfeed desktop" data-toggle="tooltip"
-                        title="<?php echo _l('whats_on_your_mind'); ?>" data-placement="bottom">
+                        title="<?= _l('whats_on_your_mind'); ?>"
+                        data-placement="bottom">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="tw-w-5 tw-h-5">
+                            stroke="currentColor"
+                            class="tw-w-[calc(theme(spacing.5)-1px)] tw-h-[calc(theme(spacing.5)-1px)]">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
                         </svg>
@@ -158,75 +203,29 @@
                 <?php } ?>
 
                 <li class="icon header-todo">
-                    <a href="<?php echo admin_url('todo'); ?>" data-toggle="tooltip"
-                        title="<?php echo _l('nav_todo_items'); ?>" data-placement="bottom" class="">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="tw-w-5 tw-h-5 tw-shrink-0">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                        </svg>
-
+                    <a href="<?= admin_url('todo'); ?>"
+                        data-toggle="tooltip"
+                        title="<?= _l('nav_todo_items'); ?>"
+                        data-placement="bottom" class="">
+                        <i class="fa-regular fa-square-check fa-lg tw-shrink-0"></i>
                         <span
-                            class="tw-leading-none tw-px-1 tw-py-0.5 tw-text-xs bg-warning tw-z-10 tw-absolute tw-rounded-full tw-right-1 tw-top-2.5 tw-min-w-[18px] tw-min-h-[18px] tw-inline-flex tw-items-center tw-justify-center nav-total-todos<?php echo $current_user->total_unfinished_todos == 0 ? ' hide' : ''; ?>">
-                            <?php echo e($current_user->total_unfinished_todos); ?>
+                            class="tw-leading-none tw-px-1 tw-py-0.5 tw-text-xs bg-warning tw-z-10 tw-absolute tw-rounded-full -tw-right-0.5 tw-top-2 tw-min-w-[18px] tw-min-h-[18px] tw-inline-flex tw-items-center tw-justify-center nav-total-todos<?= $current_user->total_unfinished_todos == 0 ? ' hide' : ''; ?>">
+                            <?= e($current_user->total_unfinished_todos); ?>
                         </span>
                     </a>
-                </li>
-
-                <li class="icon header-user-profile" data-toggle="tooltip" title="<?php echo e(get_staff_full_name()); ?>"
-                    data-placement="bottom">
-                    <a href="#" class="dropdown-toggle profile tw-block rtl:!tw-px-0.5 !tw-py-1" data-toggle="dropdown"
-                        aria-expanded="false">
-                        <?php echo staff_profile_image($current_user->staffid, ['img', 'img-responsive', 'staff-profile-image-small', 'tw-ring-1 tw-ring-offset-2 tw-ring-primary-500 tw-mx-1 tw-mt-2.5']); ?>
-                    </a>
-                    <ul class="dropdown-menu animated fadeIn">
-                        <li class="header-my-profile"><a
-                                href="<?php echo admin_url('profile'); ?>"><?php echo _l('nav_my_profile'); ?></a></li>
-                        <li class="header-my-timesheets"><a
-                                href="<?php echo admin_url('staff/timesheets'); ?>"><?php echo _l('my_timesheets'); ?></a>
-                        </li>
-                        <li class="header-edit-profile"><a
-                                href="<?php echo admin_url('staff/edit_profile'); ?>"><?php echo _l('nav_edit_profile'); ?></a>
-                        </li>
-                        <?php if (!is_language_disabled()) { ?>
-                        <li class="dropdown-submenu pull-left header-languages">
-                            <a href="#" tabindex="-1"><?php echo _l('language'); ?></a>
-                            <ul class="dropdown-menu dropdown-menu">
-                                <li class="<?php echo $current_user->default_language == '' ? 'active' : ''; ?>">
-                                    <a href="<?php echo admin_url('staff/change_language'); ?>">
-                                        <?php echo _l('system_default_string'); ?>
-                                    </a>
-                                </li>
-                                <?php foreach ($this->app->get_available_languages() as $user_lang) { ?>
-                                <li
-                                    class="<?php echo $current_user->default_language == $user_lang ? 'active' : ''; ?>">
-                                    <a href="<?php echo admin_url('staff/change_language/' . $user_lang); ?>">
-                                        <?php echo e(ucfirst($user_lang)); ?>
-                                    </a>
-                                    <?php } ?>
-                            </ul>
-                        </li>
-                        <?php } ?>
-                        <li class="header-logout">
-                            <a href="#" onclick="logout(); return false;"><?php echo _l('nav_logout'); ?></a>
-                        </li>
-                    </ul>
                 </li>
 
                 <li class="icon header-timers timer-button tw-relative ltr:tw-mr-1.5 rtl:tw-ml-1.5"
-                    data-placement="bottom" data-toggle="tooltip" data-title="<?php echo _l('my_timesheets'); ?>">
+                    data-placement="bottom" data-toggle="tooltip"
+                    data-title="<?= _l('my_timesheets'); ?>">
                     <a href="#" id="top-timers" class="top-timers !tw-px-0 tw-group" data-toggle="dropdown">
-                        <span
-                            class="tw-rounded-md tw-border tw-border-solid tw-border-neutral-200/60 tw-inline-flex tw-items-center tw-justify-center tw-h-8 tw-w-9 -tw-mt-1.5 group-hover:!tw-bg-neutral-100/60">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                stroke="currentColor"
-                                class="tw-w-5 tw-h-5 tw-text-neutral-900 tw-shrink-0<?php echo  count($startedTimers) > 0 ? ' tw-animate-spin-slow' : ''; ?>">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+                        <span class="tw-inline-flex tw-items-center tw-justify-center tw-h-8 tw-w-9 -tw-mt-1.5">
+                            <i
+                                class="fa-regular fa-clock fa-lg tw-text-neutral-400 group-hover:tw-text-neutral-800 tw-shrink-0<?= count($startedTimers) > 0 ? ' tw-animate-spin-slow' : ''; ?>"></i>
                         </span>
                         <span
-                            class="tw-leading-none tw-px-1 tw-py-0.5 tw-text-xs bg-success tw-z-10 tw-absolute tw-rounded-full -tw-right-1.5 tw-top-2 tw-min-w-[18px] tw-min-h-[18px] tw-inline-flex tw-items-center tw-justify-center icon-started-timers<?php echo $totalTimers = count($startedTimers) == 0 ? ' hide' : ''; ?>">
-                            <?php echo count($startedTimers); ?>
+                            class="tw-leading-none tw-px-1 tw-py-0.5 tw-text-xs bg-success tw-z-10 tw-absolute tw-rounded-full -tw-right-1.5 tw-top-2 tw-min-w-[18px] tw-min-h-[18px] tw-inline-flex tw-items-center tw-justify-center icon-started-timers<?= $totalTimers = count($startedTimers) == 0 ? ' hide' : ''; ?>">
+                            <?= count($startedTimers); ?>
                         </span>
                     </a>
                     <ul class="dropdown-menu animated fadeIn started-timers-top width300" id="started-timers-top">
@@ -235,7 +234,9 @@
                 </li>
 
                 <li class="icon dropdown tw-relative tw-block notifications-wrapper header-notifications rtl:tw-ml-3"
-                    data-toggle="tooltip" title="<?php echo _l('nav_notifications'); ?>" data-placement="bottom">
+                    data-toggle="tooltip"
+                    title="<?= _l('nav_notifications'); ?>"
+                    data-placement="bottom">
                     <?php $this->load->view('admin/includes/notifications'); ?>
                 </li>
 

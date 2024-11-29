@@ -99,7 +99,7 @@ class Projects extends AdminController
             }
         }
         if ($id == '') {
-            $title                            = _l('add_new', _l('project_lowercase'));
+            $title                            = _l('add_new', _l('project'));
             $data['auto_select_billing_type'] = $this->projects_model->get_most_used_billing_type();
 
             if ($this->input->get('via_estimate_id')) {
@@ -388,7 +388,7 @@ class Projects extends AdminController
 
             $data['other_projects'] = $this->projects_model->get('', $other_projects_where);
             $data['title']          = $data['project']->name;
-            $data['bodyclass'] .= 'project invoices-total-manual estimates-total-manual';
+            $data['bodyclass'] .= 'project estimates-total-manual';
             $data['project_status'] = get_project_status_by_id($project->status);
 
             $this->load->view('admin/projects/view', $data);

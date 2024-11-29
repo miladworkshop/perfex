@@ -2,7 +2,7 @@
 if (count($articles) > 0) { ?>
 <div class="col-md-12 kb-search-results">
     <h2 class="tw-font-medium tw-text-lg tw-mt-0">
-        <?php echo e($title); ?>
+        <?= e($title); ?>
     </h2>
 </div>
 <?php

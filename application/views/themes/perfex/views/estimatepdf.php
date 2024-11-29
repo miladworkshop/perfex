@@ -22,7 +22,7 @@ pdf_multi_row($info_left_column, $info_right_column, $pdf, ($dimensions['wk'] / 
 $pdf->ln(10);
 
 $organization_info = '<div style="color:#424242;">';
-    $organization_info .= format_organization_info();
+$organization_info .= format_organization_info();
 $organization_info .= '</div>';
 
 // Estimate to
@@ -41,11 +41,11 @@ if ($estimate->include_shipping == 1 && $estimate->show_shipping_on_estimate == 
 
 $estimate_info .= '<br />' . _l('estimate_data_date') . ': ' . _d($estimate->date) . '<br />';
 
-if (!empty($estimate->expirydate)) {
+if (! empty($estimate->expirydate)) {
     $estimate_info .= _l('estimate_data_expiry_date') . ': ' . _d($estimate->expirydate) . '<br />';
 }
 
-if (!empty($estimate->reference_no)) {
+if (! empty($estimate->reference_no)) {
     $estimate_info .= _l('reference_no') . ': ' . $estimate->reference_no . '<br />';
 }
 
@@ -64,6 +64,8 @@ foreach ($pdf_custom_fields as $field) {
     }
     $estimate_info .= $field['name'] . ': ' . $value . '<br />';
 }
+
+$organization_info = hooks()->apply_filters('estimatepdf_organization_info', $organization_info, $estimate);
 
 $left_info  = $swap == '1' ? $estimate_info : $organization_info;
 $right_info = $swap == '1' ? $organization_info : $estimate_info;
@@ -109,7 +111,7 @@ foreach ($items->taxes() as $tax) {
 </tr>';
 }
 
-if ((int)$estimate->adjustment != 0) {
+if ((int) $estimate->adjustment != 0) {
     $tbltotal .= '<tr>
     <td align="right" width="85%"><strong>' . _l('estimate_adjustment') . '</strong></td>
     <td align="right" width="15%">' . app_format_money($estimate->adjustment, $estimate->currency_name) . '</td>
@@ -135,7 +137,7 @@ if (get_option('total_to_words_enabled') == 1) {
     $pdf->Ln(4);
 }
 
-if (!empty($estimate->clientnote)) {
+if (! empty($estimate->clientnote)) {
     $pdf->Ln(4);
     $pdf->SetFont($font_name, 'B', $font_size);
     $pdf->Cell(0, 0, _l('estimate_note'), 0, 1, 'L', 0, '', 0);
@@ -144,10 +146,10 @@ if (!empty($estimate->clientnote)) {
     $pdf->writeHTMLCell('', '', '', '', $estimate->clientnote, 0, 1, false, true, 'L', true);
 }
 
-if (!empty($estimate->terms)) {
+if (! empty($estimate->terms)) {
     $pdf->Ln(4);
     $pdf->SetFont($font_name, 'B', $font_size);
-    $pdf->Cell(0, 0, _l('terms_and_conditions') . ":", 0, 1, 'L', 0, '', 0);
+    $pdf->Cell(0, 0, _l('terms_and_conditions') . ':', 0, 1, 'L', 0, '', 0);
     $pdf->SetFont($font_name, '', $font_size);
     $pdf->Ln(2);
     $pdf->writeHTMLCell('', '', '', '', $estimate->terms, 0, 1, false, true, 'L', true);

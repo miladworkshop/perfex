@@ -81,7 +81,8 @@ return App_table::find('contracts')
 
             $row[] = $aRow['id'];
 
-            $subjectOutput = '<a href="' . admin_url('contracts/contract/' . $aRow['id']) . '"' . ($projectId ? ' target="_blank"' : '') . ' class="tw-truncate tw-max-w-sm tw-block tw-w-full">' . e($aRow['subject']) . '</a>';
+            $subjectOutput = '<a href="' . admin_url('contracts/contract/' . $aRow['id']) . '"' . ($projectId ? ' target="_blank"' : '') . ' class="tw-truncate tw-max-w-xs tw-block tw-w-full tw-font-medium" title="' . e($aRow['subject']) . '">' . e($aRow['subject']) . '</a>';
+
             if ($aRow['trash'] == 1) {
                 $subjectOutput .= '<span class="label label-danger pull-right">' . _l('contract_trash') . '</span>';
             }
@@ -90,12 +91,12 @@ return App_table::find('contracts')
 
             $subjectOutput .= '<a href="' . site_url('contract/' . $aRow['id'] . '/' . $aRow['hash']) . '" target="_blank">' . _l('view') . '</a>';
 
-            if (staff_can('edit',  'contracts')) {
+            if (staff_can('edit', 'contracts')) {
                 $subjectOutput .= ' | <a href="' . admin_url('contracts/contract/' . $aRow['id']) . '">' . _l('edit') . '</a>';
             }
 
-            if (staff_can('delete',  'contracts')) {
-                $subjectOutput .= ' | <a href="' . admin_url('contracts/delete/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+            if (staff_can('delete', 'contracts')) {
+                $subjectOutput .= ' | <a href="' . admin_url('contracts/delete/' . $aRow['id']) . '" class="_delete">' . _l('delete') . '</a>';
             }
 
             $subjectOutput .= '</div>';
@@ -105,7 +106,7 @@ return App_table::find('contracts')
 
             $row[] = e($aRow['type_name']);
 
-            $row[] = e(app_format_money($aRow['contract_value'], $base_currency));
+            $row[] = '<span class="tw-font-medium">' . e(app_format_money($aRow['contract_value'], $base_currency)) . '</span>';
 
             $row[] = e(_d($aRow['datestart']));
 
@@ -114,22 +115,22 @@ return App_table::find('contracts')
             $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '">' . e($aRow['project_name']) . '</a>';
 
             if ($aRow['marked_as_signed'] == 1) {
-                $row[] = '<span class="text-success">' . _l('marked_as_signed') . '</span>';
-            } elseif (!empty($aRow['signature'])) {
-                $row[] = '<span class="text-success">' . _l('is_signed') . '</span>';
+                $row[] = '<span class="text-success tw-font-medium">' . _l('marked_as_signed') . '</span>';
+            } elseif (! empty($aRow['signature'])) {
+                $row[] = '<span class="text-success tw-font-medium">' . _l('is_signed') . '</span>';
             } else {
-                $row[] = '<span class="text-muted">' . _l('is_not_signed') . '</span>';
+                $row[] = '<span class="text-muted tw-font-medium">' . _l('is_not_signed') . '</span>';
             }
 
             // Custom fields add values
             foreach ($customFieldsColumns as $customFieldColumn) {
                 $row[] = (strpos($customFieldColumn, 'date_picker_') !== false ? _d($aRow[$customFieldColumn]) : $aRow[$customFieldColumn]);
             }
-
-            if (!empty($aRow['dateend']) && $aRow['marked_as_signed'] == 0 && empty($aRow['signature'])) {
+            $row['DT_RowClass'] = 'has-border-left';
+            if (! empty($aRow['dateend']) && $aRow['marked_as_signed'] == 0 && empty($aRow['signature'])) {
                 $_date_end = date('Y-m-d', strtotime($aRow['dateend']));
                 if ($_date_end < date('Y-m-d')) {
-                    $row['DT_RowClass'] = 'danger';
+                    $row['DT_RowClass'] .= ' row-border-danger';
                 }
             }
 
@@ -143,6 +144,7 @@ return App_table::find('contracts')
 
             $output['aaData'][] = $row;
         }
+
         return $output;
     })->setRules([
         App_table_filter::new('subject', 'TextRule')->label(_l('contract_subject')),
@@ -155,9 +157,9 @@ return App_table::find('contracts')
         App_table_filter::new('expired', 'BooleanRule')->label(_l('contracts_view_expired'))->raw(function ($value) {
             if ($value == '1') {
                 return 'dateend IS NOT NULL AND dateend < "' . date('Y-m-d') . '" and trash = 0';
-            } else {
-                return 'dateend IS NOT NULL AND dateend > "' . date('Y-m-d') . '" and trash = 0';
             }
+
+            return 'dateend IS NOT NULL AND dateend > "' . date('Y-m-d') . '" and trash = 0';
         }),
         App_table_filter::new('contract_type', 'MultiSelectRule')
             ->label(_l('contract_type'))
@@ -171,10 +173,10 @@ return App_table::find('contracts')
             ->label(_l('year'))
             ->raw(function ($value, $operator) {
                 if ($operator == 'in') {
-                    return "YEAR(datestart) IN (" . implode(',', $value) . ")";
-                } else {
-                    return "YEAR(datestart) NOT IN (" . implode(',', $value) . ")";
+                    return 'YEAR(datestart) IN (' . implode(',', $value) . ')';
                 }
+
+                return 'YEAR(datestart) NOT IN (' . implode(',', $value) . ')';
             })
             ->options(function ($ci) {
                 return collect($ci->contracts_model->get_contracts_years())->map(fn ($data) => [

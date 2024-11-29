@@ -78,7 +78,7 @@ class Contracts extends AdminController
             }
         }
         if ($id == '') {
-            $title = _l('add_new', _l('contract_lowercase'));
+            $title = _l('add_new', _l('contract'));
         } else {
             $data['contract']                 = $this->contracts_model->get($id, [], true);
             $data['contract_renewal_history'] = $this->contracts_model->get_contract_renewal_history($id);

@@ -6,20 +6,21 @@
             <div class="col-md-12">
                 <div class="tw-mb-6">
                     <a href="#__todo" data-toggle="modal" class="btn btn-primary">
-                        <?php echo _l('new_todo'); ?>
+                        <?= _l('new_todo'); ?>
                     </a>
                 </div>
                 <div class="clearfix"></div>
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="events animated fadeIn tw-bg-white">
+                        <div class="events animated fadeIn tw-bg-white shadow-sm tw-rounded-lg">
                             <div class="todo-body">
-                                <h4 class="tw-text-base bg-warning tw-text-white tw-p-3 tw-font-semibold tw-rounded-t">
+                                <h4 class="tw-text-base tw-bg-warning-400 tw-text-white tw-p-3 tw-font-semibold tw-rounded-t-lg tw-space-x-2">
                                     <i class="fa fa-warning"></i>
-                                    <?php echo _l('unfinished_todos_title'); ?></h4>
+                                    <?= _l('unfinished_todos_title'); ?>
+                                </h4>
                                 <ul class="list-unstyled todo unfinished-todos todos-sortable">
                                     <li class="no-todos hide ui-state-disabled tw-neutral-500 tw-opacity-80">
-                                        <?php echo _l('no_unfinished_todos_found'); ?>
+                                        <?= _l('no_unfinished_todos_found'); ?>
                                     </li>
                                 </ul>
                             </div>
@@ -27,19 +28,20 @@
                         <div class="row">
                             <div class="col-md-12 text-center padding">
                                 <a href="#"
-                                    class="btn btn-default text-center unfinished-loader"><?php echo _l('load_more'); ?></a>
+                                    class="btn btn-default text-center unfinished-loader"><?= _l('load_more'); ?></a>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="animated fadeIn tw-bg-white">
+                        <div class="animated fadeIn tw-bg-white shadow-sm tw-rounded-lg">
                             <div class="todo-body">
-                                <h4 class="tw-text-base bg-info tw-text-white tw-p-3 tw-font-semibold tw-rounded-t"><i
-                                        class="fa fa-check"></i>
-                                    <?php echo _l('finished_todos_title'); ?></h4>
+                                <h4 class="tw-text-base bg-info tw-text-white tw-p-3 tw-font-semibold tw-rounded-t-lg">
+                                    <i class="fa fa-check"></i>
+                                    <?= _l('finished_todos_title'); ?>
+                                </h4>
                                 <ul class="list-unstyled todo finished-todos todos-sortable">
                                     <li class="no-todos hide ui-state-disabled tw-neutral-500 tw-opacity-80">
-                                        <?php echo _l('no_finished_todos_found'); ?>
+                                        <?= _l('no_finished_todos_found'); ?>
                                     </li>
                                 </ul>
                             </div>
@@ -47,7 +49,7 @@
                         <div class="row">
                             <div class="col-md-12 text-center padding">
                                 <a href="#" class="btn btn-default text-center finished-loader">
-                                    <?php echo _l('load_more'); ?>
+                                    <?= _l('load_more'); ?>
                                 </a>
                             </div>
                         </div>
@@ -64,8 +66,8 @@
 <?php init_tail(); ?>
 <script>
 $(function() {
-    var total_pages_unfinished = '<?php echo e($total_pages_unfinished); ?>';
-    var total_pages_finished = '<?php echo e($total_pages_finished); ?>';
+    var total_pages_unfinished = '<?= e($total_pages_unfinished); ?>';
+    var total_pages_finished = '<?= e($total_pages_finished); ?>';
     var page_unfinished = 0;
     var page_finished = 0;
     $('.unfinished-loader').on('click', function(e) {

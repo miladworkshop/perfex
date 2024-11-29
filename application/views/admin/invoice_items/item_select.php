@@ -1,19 +1,25 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <div
-    class="form-group mbot25 items-wrapper select-placeholder<?php echo staff_can('create', 'items') ? ' input-group-select' : ''; ?>">
-    <div class="<?php echo staff_can('create', 'items') ? 'input-group input-group-select' : ''; ?>">
+    class="form-group mbot25 items-wrapper select-placeholder<?= staff_can('create', 'items') ? ' input-group-select' : ''; ?>">
+    <div
+        class="<?= staff_can('create', 'items') ? 'input-group input-group-select' : ''; ?>">
         <div class="items-select-wrapper">
             <select name="item_select"
-                class="selectpicker no-margin<?php echo $ajaxItems == true ? ' ajax-search' : ''; ?><?php echo staff_can('create', 'items') ? ' _select_input_group' : ''; ?>"
-                data-width="false" id="item_select" data-none-selected-text="<?php echo _l('add_item'); ?>"
+                class="selectpicker no-margin<?= $ajaxItems == true ? ' ajax-search' : ''; ?><?= staff_can('create', 'items') ? ' _select_input_group' : ''; ?>"
+                data-width="false" id="item_select"
+                data-none-selected-text="<?= _l('add_item'); ?>"
                 data-live-search="true">
                 <option value=""></option>
                 <?php foreach ($items as $group_id => $_items) { ?>
-                <optgroup data-group-id="<?php echo e($group_id); ?>" label="<?php echo $_items[0]['group_name']; ?>">
+                <optgroup data-group-id="<?= e($group_id); ?>"
+                    label="<?= $_items[0]['group_name']; ?>">
                     <?php foreach ($_items as $item) { ?>
-                    <option value="<?php echo e($item['id']); ?>"
-                        data-subtext="<?php echo strip_tags(mb_substr($item['long_description'], 0, 200)) . '...'; ?>">
-                        (<?php echo e(app_format_number($item['rate'])); ?>) <?php echo e($item['description']); ?></option>
+                    <option
+                        value="<?= e($item['id']); ?>"
+                        data-subtext="<?= strip_tags(mb_substr($item['long_description'], 0, 200)) . '...'; ?>">
+                        (<?= e(app_format_number($item['rate'])); ?>)
+                        <?= e($item['description']); ?>
+                    </option>
                     <?php } ?>
                 </optgroup>
                 <?php } ?>

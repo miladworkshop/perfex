@@ -4,7 +4,7 @@
         <h3 id="greeting" class="tw-font-semibold tw-mt-0"></h3>
         <?php if (has_contact_permission('projects')) { ?>
         <h3 class="projects-summary-heading tw-text-neutral-700 tw-font-medium tw-text-lg tw-mt-7">
-            <?php echo _l('projects_summary'); ?>
+            <?= _l('projects_summary'); ?>
         </h3>
         <?php get_template_part('projects/project_summary'); ?>
         <?php } ?>
@@ -13,11 +13,12 @@
             if (has_contact_permission('invoices')) { ?>
         <div class="tw-mb-3">
             <h3 class="invoices-quick-info-heading tw-text-neutral-700 tw-font-medium tw-text-lg tw-mt-7 tw-mb-0">
-                <?php echo _l('clients_quick_invoice_info'); ?>
+                <?= _l('clients_quick_invoice_info'); ?>
             </h3>
             <?php if (has_contact_permission('invoices')) { ?>
-            <a href="<?php echo site_url('clients/statement'); ?>" class="tw-text-sm">
-                <?php echo _l('view_account_statement'); ?>
+            <a href="<?= site_url('clients/statement'); ?>"
+                class="tw-text-sm">
+                <?= _l('view_account_statement'); ?>
             </a>
             <?php } ?>
         </div>
@@ -29,15 +30,18 @@
                     <div class="col-md-3">
                         <?php if (count($payments_years) > 0) { ?>
                         <div class="form-group">
-                            <select data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>"
+                            <select
+                                data-none-selected-text="<?= _l('dropdown_non_selected_tex'); ?>"
                                 class="form-control" id="payments_year" name="payments_years" data-width="100%"
                                 onchange="total_income_bar_report();"
-                                data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
+                                data-none-selected-text="<?= _l('dropdown_non_selected_tex'); ?>">
                                 <?php foreach ($payments_years as $year) { ?>
-                                <option value="<?php echo e($year['year']); ?>" <?php if ($year['year'] == date('Y')) {
-                echo 'selected';
-            } ?>>
-                                    <?php echo e($year['year']); ?>
+                                <option
+                                    value="<?= e($year['year']); ?>"
+                                    <?php if ($year['year'] == date('Y')) {
+                                        echo 'selected';
+                                    } ?>>
+                                    <?= e($year['year']); ?>
                                 </option>
                                 <?php } ?>
                             </select>
@@ -45,18 +49,24 @@
                         <?php } ?>
                         <?php if (is_client_using_multiple_currencies()) { ?>
                         <div id="currency" class="form-group mtop15" data-toggle="tooltip"
-                            title="<?php echo _l('clients_home_currency_select_tooltip'); ?>">
-                            <select data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>"
+                            title="<?= _l('clients_home_currency_select_tooltip'); ?>">
+                            <select
+                                data-none-selected-text="<?= _l('dropdown_non_selected_tex'); ?>"
                                 class="form-control" name="currency">
                                 <?php foreach ($currencies as $currency) {
-                $selected = '';
-                if ($currency['isdefault'] == 1) {
-                    $selected = 'selected';
-                } ?>
-                                <option value="<?php echo e($currency['id']); ?>" <?php echo e($selected); ?>>
-                                    <?php echo e($currency['symbol']); ?> - <?php echo e($currency['name']); ?></option>
+                                    $selected = '';
+                                    if ($currency['isdefault'] == 1) {
+                                        $selected = 'selected';
+                                    } ?>
+                                <option
+                                    value="<?= e($currency['id']); ?>"
+                                    <?= e($selected); ?>>
+                                    <?= e($currency['symbol']); ?>
+                                    -
+                                    <?= e($currency['name']); ?>
+                                </option>
                                 <?php
-            } ?>
+                                } ?>
                             </select>
                         </div>
                         <?php } ?>
@@ -75,19 +85,19 @@
         <?php hooks()->do_action('client_area_dashboard_end'); ?>
     </div>
     <script>
-    var greetDate = new Date();
-    var hrsGreet = greetDate.getHours();
+        var greetDate = new Date();
+        var hrsGreet = greetDate.getHours();
 
-    var greet;
-    if (hrsGreet < 12)
-        greet = "<?php echo _l('good_morning'); ?>";
-    else if (hrsGreet >= 12 && hrsGreet <= 17)
-        greet = "<?php echo _l('good_afternoon'); ?>";
-    else if (hrsGreet >= 17 && hrsGreet <= 24)
-        greet = "<?php echo _l('good_evening'); ?>";
+        var greet;
+        if (hrsGreet < 12)
+            greet = "<?= _l('good_morning'); ?>";
+        else if (hrsGreet >= 12 && hrsGreet <= 17)
+            greet = "<?= _l('good_afternoon'); ?>";
+        else if (hrsGreet >= 17 && hrsGreet <= 24)
+            greet = "<?= _l('good_evening'); ?>";
 
-    if (greet) {
-        document.getElementById('greeting').innerHTML =
-            '<b>' + greet + ' <?php echo e($contact->firstname); ?>!</b>';
-    }
+        if (greet) {
+            document.getElementById('greeting').innerHTML =
+                '<b>' + greet + ' <?= e($contact->firstname); ?>!</b>';
+        }
     </script>

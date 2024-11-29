@@ -45,12 +45,12 @@ class Roles extends AdminController
             }
         }
         if ($id == '') {
-            $title = _l('add_new', _l('role_lowercase'));
+            $title = _l('add_new', _l('role'));
         } else {
             $data['role_staff'] = $this->roles_model->get_role_staff($id);
             $role               = $this->roles_model->get($id);
             $data['role']       = $role;
-            $title              = _l('edit', _l('role_lowercase')) . ' ' . $role->name;
+            $title              = _l('edit', _l('role')) . ' ' . $role->name;
         }
         $data['title'] = $title;
         $this->load->view('admin/roles/role', $data);

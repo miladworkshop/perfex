@@ -131,7 +131,7 @@ class Clients extends AdminController
         $data['groups'] = $this->clients_model->get_groups();
 
         if ($id == '') {
-            $title = _l('add_new', _l('client_lowercase'));
+            $title = _l('add_new', _l('client'));
         } else {
             $client                = $this->clients_model->get($id);
             $data['customer_tabs'] = get_customer_profile_tabs($id);
@@ -319,7 +319,10 @@ class Clients extends AdminController
                 ->get('clients')->row()->country ?? null;
 
             $clientCountry = get_country($clientCountryId);
-            $callingCode   = $clientCountry ? '+' . ltrim($clientCountry->calling_code, '+') : null;
+            
+            $callingCode   = $clientCountry->calling_code ? 
+                ($clientCountry ? '+' . ltrim($clientCountry->calling_code, '+') : null) : 
+                null;
         } else {
             $callingCode = null;
         }
@@ -419,7 +422,7 @@ class Clients extends AdminController
         $data['calling_code'] = $callingCode;
 
         if ($contact_id == '') {
-            $title = _l('add_new', _l('contact_lowercase'));
+            $title = _l('add_new', _l('contact'));
         } else {
             $data['contact'] = $this->clients_model->get_contact($contact_id);
 

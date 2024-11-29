@@ -129,7 +129,7 @@ class Estimates extends AdminController
 
             $data['estimate'] = $estimate;
             $data['edit']     = true;
-            $title            = _l('edit', _l('estimate_lowercase'));
+            $title            = _l('edit', _l('estimate'));
         }
 
         if ($this->input->get('customer_id')) {
@@ -179,12 +179,16 @@ class Estimates extends AdminController
             'success' => false,
             'message' => '',
         ];
+        
         if (staff_can('edit',  'estimates')) {
             $this->db->where('id', $id);
             $this->db->update(db_prefix() . 'estimates', [
                 'prefix' => $this->input->post('prefix'),
             ]);
+
             if ($this->db->affected_rows() > 0) {
+                $this->estimates_model->save_formatted_number($id);
+
                 $response['success'] = true;
                 $response['message'] = _l('updated_successfully', _l('estimate'));
             }

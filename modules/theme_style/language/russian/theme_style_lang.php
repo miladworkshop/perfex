@@ -1,10 +1,10 @@
 <?php
 
-#  Version 2.3.0
+//  Version 2.3.0
 
 $lang['theme_style'] = 'Стиль темы';
 
-# Version 2.3.5
+// Version 2.3.5
 
 $lang['theme_style_reset_info']            = 'Это действие не сбрасывает пользовательские стили CSS.';
 $lang['theme_style_admin']                 = 'Административная панель';
@@ -58,5 +58,11 @@ $lang['theme_style_button_default']                      = 'Кнопка Default
 $lang['theme_style_button_info']                         = 'Кнопка Info';
 $lang['theme_style_button_success']                      = 'Кнопка Success';
 $lang['theme_style_button_danger']                       = 'Кнопка Danger';
-$lang['theme_style_modal_header_text_color']             = 'Modal Header Text Color';
-$lang['theme_style_button_primary']                      = 'Button Primary';
+$lang['theme_style_modal_header_text_color']             = 'Цвет текста модального заголовка';
+$lang['theme_style_button_primary']                      = 'Кнопка Primary';
+
+// Version 3.2.1
+$lang['theme_style_content_background_color']      = 'Main Content Background Color';
+$lang['theme_style_tables']                        = 'Tables';
+$lang['theme_style_table_links_color']             = 'Table Links Color';
+$lang['theme_style_table_links_hover_focus_color'] = 'Table Links Hover/Focus Color';

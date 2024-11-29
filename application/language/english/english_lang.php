@@ -10,7 +10,7 @@ $lang['submit']               = 'Save';
 $lang['added_successfully']   = '%s added successfully.';
 $lang['updated_successfully'] = '%s updated successfully.';
 $lang['edit']                 = 'Edit %s';
-$lang['add_new']              = 'Add new %s';
+$lang['add_new']              = 'Add New %s';
 $lang['deleted']              = '%s deleted';
 $lang['problem_deleting']     = 'Problem deleting %s';
 $lang['is_referenced']        = 'The ID of the %s is already using.';
@@ -2318,7 +2318,7 @@ $lang['expense_repeat_every']                    = 'Repeat every';
 
 # Version 1.1.2
 $lang['leads_switch_to_kanban']                   = 'Switch to Kanban';
-$lang['contract_content']                         = 'Contract';
+$lang['contract_content']                         = 'Content';
 $lang['contract_save']                            = 'Save Contract';
 $lang['contract_send_to_email']                   = 'Send to email';
 $lang['contract_send_to_client_modal_heading']    = 'Send contract to email';
@@ -3938,3 +3938,23 @@ $lang['allow_non_admin_members_to_edit_ticket_messages'] = 'Allow non-admin staf
 $lang['proposal_auto_convert_to_invoice_on_client_accept'] = 'Auto convert the proposal to invoice after client accept (only customers related proposals)';
 $lang['invoice_activity_auto_converted_from_proposal']      = 'Invoice auto created from proposal with number %s';
 $lang['clients_proposal_invoiced_successfully'] = 'Thank you for accepting the proposal. Please review the created invoice for the proposal';
+
+# Version 3.2.0
+$lang['ideal_payment_failure_message'] = 'The payment failed or was canceled.';
+$lang['ideal_api_publishable_key'] = 'Stripe Publishable Key';
+$lang['ideal_api_secret_key'] = 'Stripe API Secret Key';
+$lang['filters'] = 'Filters';
+$lang['view_financial_stats'] = 'View Financial Stats';
+$lang['timesheet_summary'] = 'Timesheet Summary';
+$lang['timesheet_detailed_overview'] = 'Detailed Overview of Logged Timesheets and Hours';
+$lang['ticket_request_history'] = 'Request History';
+$lang['integrations'] = 'Integrations';
+$lang['settings_group_other'] = 'Other';
+$lang['settings_group_configure_features'] = 'Configure Features';
+$lang['disable_ticket_public_url'] = 'Disable Ticket Public URL';
+
+# Version 3.2.1
+$lang['ideal_gateway_keys_not_configured'] = 'iDEAL Payment Gateway API not configured.';
+$lang['ideal_gateway_cannot_be_activated_keys_not_configured'] = 'iDEAL Payment Gateway cannot be activated as the Stripe Publishable/API key is not configured.';
+$lang['company_logo_light'] = 'Company Logo Light';
+$lang['welcome_back_sign_in'] = 'Welcome, please sign in to your dashboard';

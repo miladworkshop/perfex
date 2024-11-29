@@ -32,8 +32,8 @@ $rules = [
     App_table_filter::new('lead_value', 'NumberRule')->label(_l('lead_add_edit_lead_value')),
     App_table_filter::new('status', 'MultiSelectRule')->label(_l('lead_status'))->options(function () use ($statuses) {
         return collect($statuses)->map(fn ($status) => [
-            'value' => $status['id'],
-            'label' => $status['name'],
+            'value'   => $status['id'],
+            'label'   => $status['name'],
             'subtext' => $status['isdefault'] == 1 ? _l('leads_converted_to_client') : null,
         ]);
     }),
@@ -55,11 +55,10 @@ $rules[] = App_table_filter::new('assigned', 'SelectRule')->label(_l('leads_dt_a
         return collect($staff)->map(function ($staff) {
             return [
                 'value' => $staff['staffid'],
-                'label' => $staff['firstname'] . ' ' . $staff['lastname']
+                'label' => $staff['firstname'] . ' ' . $staff['lastname'],
             ];
         })->all();
     });
-
 
 if (isset($consent_purposes)) {
     $rules[] = App_table_filter::new('gdpr_content', 'SelectRule')
@@ -67,7 +66,7 @@ if (isset($consent_purposes)) {
         ->options(function () use ($consent_purposes) {
             return collect($consent_purposes)->map(fn ($purpose) => [
                 'value' => $purpose['id'],
-                'label' => $purpose['name']
+                'label' => $purpose['name'],
             ]);
         })->raw(function ($value, $operator, $sql_operator) {
             return db_prefix() . 'leads.id ' . $sql_operator . ' (SELECT lead_id FROM ' . db_prefix() . 'consents WHERE purpose_id=' . $value . ' and action="opt-in" AND date IN (SELECT MAX(date) FROM ' . db_prefix() . 'consents WHERE purpose_id=' . $value . ' AND lead_id=' . db_prefix() . 'leads.id))';
@@ -79,7 +78,7 @@ return App_table::find('leads')
         extract($params);
 
         $lockAfterConvert      = get_option('lead_lock_after_convert_to_customer');
-        $has_permission_delete = staff_can('delete',  'leads');
+        $has_permission_delete = staff_can('delete', 'leads');
         $custom_fields         = get_table_custom_fields('leads');
         $consentLeads          = get_option('gdpr_enable_consent_for_leads');
 
@@ -120,7 +119,7 @@ return App_table::find('leads')
             array_push($join, 'LEFT JOIN ' . db_prefix() . 'customfieldsvalues as ctable_' . $key . ' ON ' . db_prefix() . 'leads.id = ctable_' . $key . '.relid AND ctable_' . $key . '.fieldto="' . $field['fieldto'] . '" AND ctable_' . $key . '.fieldid=' . $field['id']);
         }
 
-        $where  = [];
+        $where = [];
 
         if ($filtersWhere = $this->getWhereFromRules()) {
             $where[] = $filtersWhere;
@@ -160,9 +159,9 @@ return App_table::find('leads')
             $row[] = '<div class="checkbox"><input type="checkbox" value="' . $aRow['id'] . '"><label></label></div>';
 
             $hrefAttr = 'href="' . admin_url('leads/index/' . $aRow['id']) . '" onclick="init_lead(' . $aRow['id'] . ');return false;"';
-            $row[]    = '<a ' . $hrefAttr . '>' . $aRow['id'] . '</a>';
+            $row[]    = '<a ' . $hrefAttr . ' class="tw-font-medium">' . $aRow['id'] . '</a>';
 
-            $nameRow = '<a ' . $hrefAttr . '>' . e($aRow['name']) . '</a>';
+            $nameRow = '<a ' . $hrefAttr . ' class="tw-font-medium">' . e($aRow['name']) . '</a>';
 
             $nameRow .= '<div class="row-options">';
             $nameRow .= '<a ' . $hrefAttr . '>' . _l('view') . '</a>';
@@ -170,10 +169,10 @@ return App_table::find('leads')
             $locked = false;
 
             if ($aRow['is_converted'] > 0) {
-                $locked = ((!is_admin() && $lockAfterConvert == 1) ? true : false);
+                $locked = ((! is_admin() && $lockAfterConvert == 1) ? true : false);
             }
 
-            if (!$locked) {
+            if (! $locked) {
                 $nameRow .= ' | <a href="' . admin_url('leads/index/' . $aRow['id'] . '?edit=true') . '" onclick="init_lead(' . $aRow['id'] . ', true);return false;">' . _l('edit') . '</a>';
             }
 
@@ -182,7 +181,6 @@ return App_table::find('leads')
             }
             $nameRow .= '</div>';
 
-
             $row[] = $nameRow;
 
             if (is_gdpr() && $consentLeads == '1') {
@@ -190,7 +188,7 @@ return App_table::find('leads')
                 $consents    = $this->ci->gdpr_model->get_consent_purposes($aRow['id'], 'lead');
 
                 foreach ($consents as $consent) {
-                    $consentHTML .= '<p style="margin-bottom:0px;">' . e($consent['name']) . (!empty($consent['consent_given']) ? '<i class="fa fa-check text-success pull-right"></i>' : '<i class="fa fa-remove text-danger pull-right"></i>') . '</p>';
+                    $consentHTML .= '<p style="margin-bottom:0px;">' . e($consent['name']) . (! empty($consent['consent_given']) ? '<i class="fa fa-check text-success pull-right"></i>' : '<i class="fa fa-remove text-danger pull-right"></i>') . '</p>';
                 }
                 $row[] = $consentHTML;
             }
@@ -201,7 +199,7 @@ return App_table::find('leads')
             $row[] = ($aRow['phonenumber'] != '' ? '<a href="tel:' . e($aRow['phonenumber']) . '">' . e($aRow['phonenumber']) . '</a>' : '');
 
             $base_currency = get_base_currency();
-            $row[]         = e(($aRow['lead_value'] != 0 ? app_format_money($aRow['lead_value'], $base_currency->id) : ''));
+            $row[]         = '<span class="tw-font-medium">' . e(($aRow['lead_value'] != 0 ? app_format_money($aRow['lead_value'], $base_currency->id) : '')) . '</span>';
 
             $row[] .= render_tags($aRow['tags']);
 
@@ -219,6 +217,8 @@ return App_table::find('leads')
 
             $row[] = $assignedOutput;
 
+            $outputStatus = '';
+
             if ($aRow['status_name'] == null) {
                 if ($aRow['lost'] == 1) {
                     $outputStatus = '<span class="label label-danger">' . _l('lead_lost') . '</span>';
@@ -226,15 +226,15 @@ return App_table::find('leads')
                     $outputStatus = '<span class="label label-warning">' . _l('lead_junk') . '</span>';
                 }
             } else {
-                $outputStatus = '<span class="lead-status-' . $aRow['status'] . ' label' . (empty($aRow['color']) ? ' label-default' : '') . '" style="color:' . $aRow['color'] . ';border:1px solid ' . adjust_hex_brightness($aRow['color'], 0.4) . ';background: ' . adjust_hex_brightness($aRow['color'], 0.04) . ';">' . e($aRow['status_name']);
-
-                if (!$locked) {
-                    $outputStatus .= '<div class="dropdown inline-block mleft5 table-export-exclude">';
-                    $outputStatus .= '<a href="#" style="font-size:14px;vertical-align:middle;" class="dropdown-toggle text-dark" id="tableLeadsStatus-' . $aRow['id'] . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-                    $outputStatus .= '<span data-toggle="tooltip" title="' . _l('ticket_single_change_status') . '"><i class="fa-solid fa-chevron-down tw-opacity-70"></i></span>';
+                if (! $locked) {
+                    $outputStatus .= '<div class="dropdown inline-block table-export-exclude">';
+                    $outputStatus .= '<a href="#" class="dropdown-toggle tw-flex tw-items-center tw-gap-1 tw-flex-nowrap hover:tw-opacity-80 tw-align-middle lead-status-' . $aRow['status'] . ' label' . (empty($aRow['color']) ? ' label-default' : '') . '" style="color:' . $aRow['color'] . ';border:1px solid ' . adjust_hex_brightness($aRow['color'], 0.4) . ';background: ' . adjust_hex_brightness($aRow['color'], 0.04) . ';" id="tableLeadsStatus-' . $aRow['id'] . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+                    $outputStatus .= e($aRow['status_name']);
+                    $outputStatus .= '<i class="chevron"></i>';
                     $outputStatus .= '</a>';
 
                     $outputStatus .= '<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="tableLeadsStatus-' . $aRow['id'] . '">';
+
                     foreach ($statuses as $leadChangeStatus) {
                         if ($aRow['status'] != $leadChangeStatus['id']) {
                             $outputStatus .= '<li>
@@ -246,15 +246,16 @@ return App_table::find('leads')
                     }
                     $outputStatus .= '</ul>';
                     $outputStatus .= '</div>';
+                } else {
+                    $outputStatus = '<span class="lead-status-' . $aRow['status'] . ' label' . (empty($aRow['color']) ? ' label-default' : '') . '" style="color:' . $aRow['color'] . ';border:1px solid ' . adjust_hex_brightness($aRow['color'], 0.4) . ';background: ' . adjust_hex_brightness($aRow['color'], 0.04) . ';">' . e($aRow['status_name']) . '</span>';
                 }
-                $outputStatus .= '</span>';
             }
 
             $row[] = $outputStatus;
 
             $row[] = e($aRow['source_name']);
 
-            $row[] = ($aRow['lastcontact'] == '0000-00-00 00:00:00' || !is_date($aRow['lastcontact']) ? '' : '<span data-toggle="tooltip" data-title="' . e(_dt($aRow['lastcontact'])) . '" class="text-has-action is-date">' . e(time_ago($aRow['lastcontact'])) . '</span>');
+            $row[] = ($aRow['lastcontact'] == '0000-00-00 00:00:00' || ! is_date($aRow['lastcontact']) ? '' : '<span data-toggle="tooltip" data-title="' . e(_dt($aRow['lastcontact'])) . '" class="text-has-action is-date">' . e(time_ago($aRow['lastcontact'])) . '</span>');
 
             $row[] = '<span data-toggle="tooltip" data-title="' . e(_dt($aRow['dateadded'])) . '" class="text-has-action is-date">' . e(time_ago($aRow['dateadded'])) . '</span>';
 
@@ -263,10 +264,11 @@ return App_table::find('leads')
                 $row[] = (strpos($customFieldColumn, 'date_picker_') !== false ? _d($aRow[$customFieldColumn]) : $aRow[$customFieldColumn]);
             }
 
-            $row['DT_RowId'] = 'lead_' . $aRow['id'];
+            $row['DT_RowId']    = 'lead_' . $aRow['id'];
+            $row['DT_RowClass'] = 'has-border-left';
 
             if ($aRow['assigned'] == get_staff_user_id()) {
-                $row['DT_RowClass'] = 'info';
+                $row['DT_RowClass'] .= ' row-border-info';
             }
 
             if (isset($row['DT_RowClass'])) {
@@ -279,5 +281,6 @@ return App_table::find('leads')
 
             $output['aaData'][] = $row;
         }
+
         return $output;
     })->setRules($rules);

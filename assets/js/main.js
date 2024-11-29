@@ -3136,7 +3136,7 @@ function _init_tasks_billable_select(tasks, project_id) {
 // Fix for height on the wrapper
 function mainWrapperHeightFix() {
   // Get and set current height
-  var headerH = 63;
+  var headerH = 57;
   var navigationH = side_bar.height();
   var contentH = $("#wrapper").find(".content").height();
   setup_menu.css(
@@ -3874,6 +3874,7 @@ function init_editor(selector, settings) {
     cache_suffix: '?v='+app.version,
     height: 250,
     min_height: 250,
+    statusbar: false,
     theme: "silver",
     paste_block_drop: true,
     language: app.tinymce_lang || 'en',
@@ -5103,10 +5104,14 @@ function print_lead_information() {
 
   $leadViewWrapper.find("h4").css("font-size", "100%");
 
-  $leadViewWrapper
-    .find(".lead-field-heading")
-    .css("color", "#777")
-    .css("margin-bottom", "3px");
+  $leadViewWrapper.find("dt").each(function() {
+      $(this).replaceWith("<p style='margin-bottom:5px; color:#777'><strong>" + $(this).text() + "</strong></p>");
+  });
+
+  $leadViewWrapper.find("dd").each(function() {
+      $(this).replaceWith("<div='margin-bottom:10px;'>" + $(this).text() + "</div>");
+  });
+  
   $leadViewWrapper.find(".lead-field-heading + p").css("margin-bottom", "15px");
 
   var mywindow = _create_print_window(name);
@@ -5766,7 +5771,7 @@ function recalculate_checklist_items_progress() {
   $(".task-total-checklist-completed").text(total_finished);
   if (total_checklist_items == 0) {
     // remove the heading for checklist items
-    $("body").find(".chk-heading").remove();
+    // $("body").find(".chk-heading").remove();
     $("#task-no-checklist-items").removeClass("hide");
   } else {
     $("#task-no-checklist-items").addClass("hide");
@@ -6559,8 +6564,8 @@ function _init_timers_top_html(data) {
     : $ttIcon.addClass("hide");
 
   data.total_timers > 0
-    ? $("#top-timers").find("svg").addClass("tw-animate-spin")
-    : $("#top-timers").find("svg").removeClass("tw-animate-spin");
+    ? $("#top-timers").find("i").addClass("tw-animate-spin-slow")
+    : $("#top-timers").find("i").removeClass("tw-animate-spin-slow");
 
   $("#started-timers-top").html(data.html);
 }
@@ -7267,7 +7272,7 @@ function add_item_to_table(data, itemid, merge_invoice, bill_expense) {
       "</td>";
 
     table_row +=
-      '<td><a href="#" class="btn btn-danger pull-left" onclick="delete_item(this,' +
+      '<td><a href="#" class="btn btn-danger pull-left !tw-px-3" onclick="delete_item(this,' +
       itemid +
       '); return false;"><i class="fa fa-trash"></i></a></td>';
 
@@ -7802,7 +7807,9 @@ function delete_proposal_attachment(id) {
 
 // Invoices quick total stats
 function init_invoices_total(manual) {
-  if ($("#invoices_total").length === 0) {
+  var _inv_total_wrapper = $("#invoices_total");
+
+  if (_inv_total_wrapper.length === 0) {
     return;
   }
   var _inv_total_inline = $(".invoices-total-inline");
@@ -7838,10 +7845,12 @@ function init_invoices_total(manual) {
   });
 
   var currency = $("body").find('select[name="total_currency"]').val();
+  
   var data = {
     currency: currency,
     years: years,
     init_total: true,
+    display_type: _inv_total_wrapper.attr('data-type')
   };
 
   var project_id = $('input[name="project_id"]').val();
@@ -7854,7 +7863,7 @@ function init_invoices_total(manual) {
   $.post(admin_url + "invoices/get_invoices_total", data).done(function (
     response
   ) {
-    $("#invoices_total").html(response);
+    _inv_total_wrapper.html(response);
   });
 }
 
@@ -9131,3 +9140,4 @@ function init_currency_symbol() {
   );
   init_currency();
 }
+

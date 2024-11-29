@@ -13,10 +13,11 @@
 </div>
 <?php init_tail(); ?>
 <script>
-$(function() {
-    initDataTable('.table-payments', admin_url + 'payments/table', undefined, undefined, 'undefined',
-        <?php echo hooks()->apply_filters('payments_table_default_order', json_encode([0, 'desc'])); ?>);
-});
+    $(function() {
+        initDataTable('.table-payments', admin_url + 'payments/table', undefined, undefined, 'undefined',
+            <?= hooks()->apply_filters('payments_table_default_order', json_encode([0, 'desc'])); ?>
+        );
+    });
 </script>
 </body>
 

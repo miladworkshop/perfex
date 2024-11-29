@@ -6,7 +6,7 @@
             <div class="col-md-12">
                 <?php if ($fixedlist == false) { ?>
                 <?php if (staff_can('create',  'surveys')) { ?>
-                <div class="_buttons tw-mb-2 sm:tw-mb-4">
+                <div class="_buttons tw-mb-2">
                     <a href="#" class="btn btn-default mright5" data-toggle="modal"
                         data-target="#import_emails"><?php echo _l('btn_import_emails'); ?></a>
                     <a href="#" class="btn btn-default" data-toggle="modal"

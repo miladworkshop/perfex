@@ -11,6 +11,14 @@
   box-shadow: theme("boxShadow.sm");
 }
 
+.xdsoft_datetimepicker .xdsoft_label>.xdsoft_select>div>.xdsoft_option.xdsoft_current {
+  @apply tw-shadow-none tw-bg-primary-600;
+}
+
+.xdsoft_datetimepicker .xdsoft_year {
+  @apply tw-flex;
+}
+
 .xdsoft_datetimepicker .xdsoft_calendar td,
 .xdsoft_datetimepicker .xdsoft_calendar th {
   @apply tw-text-neutral-700;

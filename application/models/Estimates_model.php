@@ -519,6 +519,8 @@ class Estimates_model extends App_Model
         $insert_id = $this->db->insert_id();
 
         if ($insert_id) {
+            $this->save_formatted_number($insert_id);
+            
             // Update next estimate number in settings
             $this->db->where('name', 'next_estimate_number');
             $this->db->set('value', 'value+1', false);
@@ -655,6 +657,8 @@ class Estimates_model extends App_Model
 
         $this->db->where('id', $id);
         $this->db->update(db_prefix() . 'estimates', $data);
+
+        $this->save_formatted_number($id);
 
         if ($this->db->affected_rows() > 0) {
             // Check for status change
@@ -1072,6 +1076,14 @@ class Estimates_model extends App_Model
         }
 
         return false;
+    }
+
+    public function save_formatted_number($id) 
+    {
+        $formattedNumber = format_estimate_number($id);
+
+        $this->db->where('id', $id);
+        $this->db->update('estimates', ['formatted_number' => $formattedNumber]);
     }
 
     /**

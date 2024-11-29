@@ -60,7 +60,7 @@ foreach ($rResult as $aRow) {
 
     if (staff_can('delete',  'customers') || is_customer_admin($aRow['userid'])) {
         if ($aRow['is_primary'] == 0 || ($aRow['is_primary'] == 1 && $total_client_contacts == 1)) {
-            $rowName .= ' | <a href="' . admin_url('clients/delete_contact/' . $aRow['userid'] . '/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+            $rowName .= ' | <a href="' . admin_url('clients/delete_contact/' . $aRow['userid'] . '/' . $aRow['id']) . '" class="_delete">' . _l('delete') . '</a>';
         }
     }
 

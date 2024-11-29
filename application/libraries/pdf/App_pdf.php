@@ -2,39 +2,30 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-include_once(__DIR__ . '/PDF_Signature.php');
+include_once __DIR__ . '/PDF_Signature.php';
 
 abstract class App_pdf extends TCPDF
 {
     use PDF_Signature;
 
-    public $font_size = '';
-
-    public $font_name = '';
-
-    public $image_scale = 1.53;
-
-    public $jpeg_quaility = 100;
-
-    public $pdf_author = '';
-
-    public $swap = false;
-
-    public $footerY = -15;
-
+    public $font_size        = '';
+    public $font_name        = '';
+    public $image_scale      = 1.53;
+    public $jpeg_quaility    = 100;
+    public $pdf_author       = '';
+    public $swap             = false;
+    public $footerY          = -15;
     protected $languageArray = [
         'a_meta_charset' => 'UTF-8',
     ];
-
-    protected $tag = '';
-
+    protected $tag       = '';
     protected $view_vars = [];
-
     private $formatArray = [];
 
     /**
      * This is true when last page is rendered
-     * @var boolean
+     *
+     * @var bool
      */
     protected $last_page_flag = false;
 
@@ -48,6 +39,7 @@ abstract class App_pdf extends TCPDF
 
         /**
          * If true print TCPDF meta link.
+         *
          * @protected
          * @since 2.3.2
          */
@@ -155,7 +147,7 @@ abstract class App_pdf extends TCPDF
     public function get_default_font_name()
     {
         $font = get_option('pdf_font');
-        if ($font != '' && !in_array($font, get_pdf_fonts_list())) {
+        if ($font != '' && ! in_array($font, get_pdf_fonts_list())) {
             $font = 'freesans';
         }
 
@@ -213,6 +205,10 @@ abstract class App_pdf extends TCPDF
 
     public function fix_editor_html($content)
     {
+        if (empty($content)) {
+            return $content;
+        }
+
         // Add <br /> tag and wrap over div element every image to prevent overlaping over text
         $content = preg_replace('/(<img[^>]+>(?:<\/img>)?)/i', '<div>$1</div>', $content);
         // Fix BLOG images from TinyMCE Mobile Upload, could help with desktop too
@@ -242,9 +238,7 @@ abstract class App_pdf extends TCPDF
         // Remove any inline definitions for font family as it's causing issue with
         // the PDF font, in this case, only the PDF font will be used to generate the PDF document
         // the inline defitions will be used for HTML view
-        $content = preg_replace('/font-family.+?;/m', '', $content);
-
-        return $content;
+        return preg_replace('/font-family.+?;/m', '', $content);
     }
 
     protected function load_language($client_id)
@@ -264,14 +258,13 @@ abstract class App_pdf extends TCPDF
         _bulk_pdf_export_maybe_tag($this->tag, $this);
 
         if ($path = $this->get_file_path()) {
-
             // Backwards compatible
             $pdf = $this;
             $CI  = $this->ci;
 
             // The view vars, also backwards compatible
             extract($this->view_vars);
-            include($path);
+            include $path;
         }
 
         if (ob_get_length() > 0 && ENVIRONMENT == 'production') {
@@ -293,23 +286,23 @@ abstract class App_pdf extends TCPDF
 
     public function with_number_to_word($client_id)
     {
-        $this->ci->load->library('app_number_to_word', [ 'clientid' => $client_id ], 'numberword');
+        $this->ci->load->library('app_number_to_word', ['clientid' => $client_id], 'numberword');
 
         return $this;
     }
 
     /**
-    * Unset all class variables except the following critical variables.
-    *
-    * @param $destroyall (boolean) if true destroys all class variables, otherwise preserves critical variables.
-    * @param $preserve_objcopy (boolean) if true preserves the objcopy variable
-    *
-    * @since 4.5.016 (2009-02-24)
-    */
+     * Unset all class variables except the following critical variables.
+     *
+     * @param $destroyall       (boolean) if true destroys all class variables, otherwise preserves critical variables.
+     * @param $preserve_objcopy (boolean) if true preserves the objcopy variable
+     *
+     * @since 4.5.016 (2009-02-24)
+     */
     public function _destroy($destroyall = false, $preserve_objcopy = false)
     {
         // restore internal encoding
-        if (isset($this->internal_encoding) and !empty($this->internal_encoding)) {
+        if (isset($this->internal_encoding) and ! empty($this->internal_encoding)) {
             mb_internal_encoding($this->internal_encoding);
         }
 
@@ -317,7 +310,7 @@ abstract class App_pdf extends TCPDF
             $destroyall = false;
         }
 
-        if ($destroyall and !$preserve_objcopy) {
+        if ($destroyall and ! $preserve_objcopy) {
             self::$cleaned_ids[$this->file_id] = true;
             // remove all temporary files
             if ($handle = @opendir(K_PATH_CACHE)) {
@@ -357,9 +350,9 @@ abstract class App_pdf extends TCPDF
         ];
 
         foreach (array_keys(get_object_vars($this)) as $val) {
-            if ($destroyall or !in_array($val, $preserve)) {
-                if ((!$preserve_objcopy or ($val != 'objcopy')) and ($val != 'file_id') and isset($this->$val)) {
-                    unset($this->$val);
+            if ($destroyall or ! in_array($val, $preserve)) {
+                if ((! $preserve_objcopy or ($val != 'objcopy')) and ($val != 'file_id') and isset($this->{$val})) {
+                    unset($this->{$val});
                 }
             }
         }

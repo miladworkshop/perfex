@@ -454,11 +454,11 @@ class Client_merge_fields extends App_merge_fields
         $contact = $this->ci->db->get(db_prefix() . 'contacts')->row();
 
         if ($contact) {
-            $fields['{contact_firstname}']          = e($contact->firstname);
-            $fields['{contact_lastname}']           = e($contact->lastname);
+            $fields['{contact_firstname}']          = e($contact->firstname, false);
+            $fields['{contact_lastname}']           = e($contact->lastname, false);
             $fields['{contact_email}']              = e($contact->email);
             $fields['{contact_phonenumber}']        = e($contact->phonenumber);
-            $fields['{contact_title}']              = e($contact->title);
+            $fields['{contact_title}']              = e($contact->title, false);
             $fields['{contact_public_consent_url}'] = contact_consent_url($contact->id);
             $fields['{email_verification_url}']     = site_url('verification/verify/' . $contact->id . '/' . $contact->email_verification_key);
         }
@@ -468,13 +468,13 @@ class Client_merge_fields extends App_merge_fields
         }
 
         $fields['{customer_profile_files_admin_link}'] = admin_url('clients/client/' . $client->userid . '?group=attachments');
-        $fields['{client_company}']                    = e($client->company);
+        $fields['{client_company}']                    = e($client->company, false);
         $fields['{client_phonenumber}']                = e($client->phonenumber);
         $fields['{client_country}']                    = e(get_country_short_name($client->country));
-        $fields['{client_city}']                       = e($client->city);
+        $fields['{client_city}']                       = e($client->city, false);
         $fields['{client_zip}']                        = e($client->zip);
-        $fields['{client_state}']                      = e($client->state);
-        $fields['{client_address}']                    = e($client->address);
+        $fields['{client_state}']                      = e($client->state, false);
+        $fields['{client_address}']                    = e($client->address, false);
         $fields['{client_website}']                    = e($client->website);
         $fields['{client_id}']                         = e($client_id);
 

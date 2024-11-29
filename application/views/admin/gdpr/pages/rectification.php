@@ -1,21 +1,24 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <h4 class="no-mtop">
-    <?php echo _l('gdpr_right_of_access'); ?>/<?php echo _l('gdpr_right_to_rectification'); ?>
+    <?= _l('gdpr_right_of_access'); ?>/<?= _l('gdpr_right_to_rectification'); ?>
     <small>
-        <a href="https://ico.org.uk/for-organisations/guide-to-the-general-data-protection-regulation-gdpr/individual-rights/right-of-access/" target="_blank"><?php echo _l('learn_more'); ?></a>
+        <a href="https://ico.org.uk/for-organisations/guide-to-the-general-data-protection-regulation-gdpr/individual-rights/right-of-access/"
+            target="_blank"><?= _l('learn_more'); ?></a>
     </small>
 </h4>
 <hr class="hr-panel-separator" />
 <h4 class="bold">Contacts</h4>
 <hr class="hr-panel-separator" />
 <p>
-    The customers area gives your customers access to login and view their personal information. Also the customers area provide with access to update their personal information like first name, last name, email address, phone etc...
+    The customers area gives your customers access to login and view their personal information. Also the customers area
+    provide with access to update their personal information like first name, last name, email address, phone etc...
 </p>
 <p>Below you can find <b>additional options</b> you may want to allow the contacts to modify.</p>
 <hr class="hr-panel-separator" />
 <p class="font-medium">Profile/Contact</p>
 <?php render_yes_no_option('allow_primary_contact_to_view_edit_billing_and_shipping', 'allow_primary_contact_to_view_edit_billing_and_shipping'); ?>
-<small>Updating billing and shipping details from customers area won't affect already created invoices, estimates, credit notes.</small></p>
+<small>Updating billing and shipping details from customers area won't affect already created invoices, estimates,
+    credit notes.</small></p>
 <hr />
 <?php render_yes_no_option('allow_contact_to_delete_files', 'allow_contact_to_delete_files'); ?>
 <hr class="hr-panel-separator" />

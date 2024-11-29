@@ -53,10 +53,10 @@ class Custom_fields extends AdminController
         }
 
         if ($id == '') {
-            $title = _l('add_new', _l('custom_field_lowercase'));
+            $title = _l('add_new', _l('custom_field'));
         } else {
             $data['custom_field'] = $this->custom_fields_model->get($id);
-            $title                = _l('edit', _l('custom_field_lowercase'));
+            $title                = _l('edit', _l('custom_field'));
         }
 
         $data['pdf_fields']             = $this->pdf_fields;

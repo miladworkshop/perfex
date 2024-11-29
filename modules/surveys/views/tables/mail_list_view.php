@@ -6,7 +6,7 @@ if (is_numeric($id)) {
     $aColumns = [
         'email',
         'dateadded',
-        ];
+    ];
     if (count($data['custom_fields']) > 0) {
         foreach ($data['custom_fields'] as $field) {
             array_push($aColumns, '(SELECT value FROM ' . db_prefix() . 'maillistscustomfieldvalues LEFT JOIN ' . db_prefix() . 'maillistscustomfields ON ' . db_prefix() . 'maillistscustomfields.customfieldid = ' . $field['customfieldid'] . ' WHERE ' . db_prefix() . 'maillistscustomfieldvalues.customfieldid ="' . $field['customfieldid'] . '" AND (' . db_prefix() . 'maillistscustomfieldvalues.emailid = ' . db_prefix() . 'listemails.emailid))');
@@ -16,13 +16,15 @@ if (is_numeric($id)) {
     $sTable       = db_prefix() . 'listemails';
     $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, [], [
         'WHERE listid =' . $id,
-        ], [
+    ], [
         'emailid',
     ]);
     $output  = $result['output'];
     $rResult = $result['rResult'];
+
     foreach ($rResult as $aRow) {
         $row = [];
+
         for ($i = 0; $i < count($aColumns); $i++) {
             $_data = $aRow[$aColumns[$i]];
 
@@ -34,10 +36,10 @@ if (is_numeric($id)) {
 
             $row[] = $_data;
         }
-        if (staff_can('delete',  'surveys')) {
+        if (staff_can('delete', 'surveys')) {
             $row[] = '<a href="' . admin_url('surveys/delete_mail_list/' . $aRow['emailid']) . '"
             onclick="remove_email_from_mail_list(this,' . $aRow['emailid'] . '); return false;"
-            class="tw-mt-px tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700 _delete">
+            class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700 _delete">
                 <i class="fa-regular fa-trash-can fa-lg"></i>
             </a>';
         } else {
@@ -48,7 +50,7 @@ if (is_numeric($id)) {
 } elseif ($id == 'clients' || $id == 'staff' || $id == 'leads') {
     $aColumns = [
         'email',
-        ];
+    ];
 
     if ($id == 'clients') {
         array_push($aColumns, 'firstname');
@@ -124,8 +126,10 @@ if (is_numeric($id)) {
     $result  = data_tables_init($aColumns, $sIndexColumn, $sTable, [], $where);
     $output  = $result['output'];
     $rResult = $result['rResult'];
+
     foreach ($rResult as $aRow) {
         $row = [];
+
         for ($i = 0; $i < count($aColumns); $i++) {
             $_data = $aRow[$aColumns[$i]];
             if ($aColumns[$i] == 'datecreated' || $aColumns[$i] == 'dateadded') {

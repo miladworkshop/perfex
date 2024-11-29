@@ -11,7 +11,7 @@ $aColumns = [
     'note',
     'end_time - start_time',
     'end_time - start_time',
-    ];
+];
 $sIndexColumn = 'id';
 $sTable       = db_prefix() . 'taskstimers';
 
@@ -55,10 +55,12 @@ $result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [
 
 $output  = $result['output'];
 $rResult = $result['rResult'];
+
 foreach ($rResult as $aRow) {
     $row = [];
+
     for ($i = 0; $i < count($aColumns); $i++) {
-        if (strpos($aColumns[$i], 'as') !== false && !isset($aRow[$aColumns[$i]])) {
+        if (strpos($aColumns[$i], 'as') !== false && ! isset($aRow[$aColumns[$i]])) {
             $_data = $aRow[strafter($aColumns[$i], 'as ')];
         } else {
             $_data = $aRow[$aColumns[$i]];
@@ -71,9 +73,9 @@ foreach ($rResult as $aRow) {
             $_data = '<div class="mtop5">';
             $_data .= '<a href="' . admin_url('staff/profile/' . $aRow['staff_id']) . '"> ' . staff_profile_image($aRow['staff_id'], [
                 'staff-profile-image-xs mright5',
-                ]) . '</a>';
+            ]) . '</a>';
 
-            if (staff_can('edit',  'staff')) {
+            if (staff_can('edit', 'staff')) {
                 $_data .= ' <a href="' . admin_url('staff/member/' . $aRow['staff_id']) . '"> ' . e($aRow['staff']) . '</a>';
             } else {
                 $_data .= e($aRow['staff']);
@@ -125,7 +127,7 @@ foreach ($rResult as $aRow) {
     }
     $task_is_billed = $this->ci->tasks_model->is_task_billed($aRow['task_id']);
 
-    $options = '<div class="tw-flex tw-items-center tw-space-x-3">';
+    $options = '<div class="tw-flex tw-items-center tw-space-x-2">';
 
     if (staff_can('edit_timesheet', 'tasks') || (staff_can('edit_own_timesheet', 'tasks') && $aRow['staff_id'] == get_staff_user_id())) {
         if ($aRow['end_time'] !== null) {
@@ -137,7 +139,7 @@ foreach ($rResult as $aRow) {
                 'data-timesheet_staff_id' => $aRow['staff_id'],
                 'data-tags'               => $aRow['tags'],
                 'data-note'               => $aRow['note'] ? htmlspecialchars(clear_textarea_breaks($aRow['note']), ENT_COMPAT) : '',
-                ];
+            ];
 
             if ($aRow['status'] == Tasks_model::STATUS_COMPLETE || $user_removed_as_assignee == true) {
                 $attrs['class'] .= ' tw-pointer-events-none tw-opacity-60';
@@ -156,7 +158,7 @@ foreach ($rResult as $aRow) {
         }
     }
 
-    if (!$task_is_billed) {
+    if (! $task_is_billed) {
         if ($aRow['end_time'] == null && ($aRow['staff_id'] == get_staff_user_id() || is_admin())) {
             $adminStop = $aRow['staff_id'] != get_staff_user_id() ? 1 : 0;
 
@@ -183,7 +185,7 @@ foreach ($rResult as $aRow) {
 
     if (staff_can('delete_timesheet', 'tasks') || staff_can('delete_own_timesheet', 'tasks') && $aRow['staff_id'] == get_staff_user_id()) {
         $attrs = [
-            'class' => 'tw-mt-px tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700 _delete',
+            'class' => 'tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700 _delete',
             'href'  => admin_url('tasks/delete_timesheet/' . $aRow['id']),
         ];
 

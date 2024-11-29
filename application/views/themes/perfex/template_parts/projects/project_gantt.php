@@ -2,23 +2,33 @@
 <div class="row">
     <div class="col-md-12">
         <?php if (count($gantt_data) > 0) { ?>
-            <div class="form-group pull-right">
-                <select class="selectpicker" name="gantt_view">
-                    <option value="Day"><?php echo _l('gantt_view_day'); ?></option>
-                    <option value="Week"><?php echo _l('gantt_view_week'); ?></option>
-                    <option value="Month" selected><?php echo _l('gantt_view_month'); ?></option>
-                    <option value="Year"><?php echo _l('gantt_view_year'); ?></option>
-                </select>
-            </div>
+        <div class="form-group pull-right">
+            <select class="selectpicker" name="gantt_view">
+                <option value="Day">
+                    <?= _l('gantt_view_day'); ?>
+                </option>
+                <option value="Week">
+                    <?= _l('gantt_view_week'); ?>
+                </option>
+                <option value="Month" selected>
+                    <?= _l('gantt_view_month'); ?>
+                </option>
+                <option value="Year">
+                    <?= _l('gantt_view_year'); ?>
+                </option>
+            </select>
+        </div>
         <?php } else { ?>
-            <p><?php echo _l('no_tasks_found'); ?></p>
+        <p>
+            <?= _l('no_tasks_found'); ?>
+        </p>
         <?php } ?>
     </div>
 </div>
 <svg id="gantt"></svg>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var gantt_data = <?php echo json_encode($gantt_data); ?>;
+        var gantt_data = <?= json_encode($gantt_data); ?> ;
 
         if (gantt_data.length > 0) {
             var gantt = new Gantt("#gantt", gantt_data, {
@@ -28,11 +38,13 @@
                 popup_trigger: 'click mouseover',
                 on_click: function(data) {
                     if (typeof(data.task_id) != 'undefined') {
-                        let projectViewUrl = '<?php echo admin_url('projects/view'); ?>';
+                        let projectViewUrl =
+                            '<?= admin_url('projects/view'); ?>';
                         let params = [];
                         params['group'] = 'project_tasks';
                         params['taskid'] = data.task_id;
-                        window.location.href = buildUrl(site_url + 'clients/project/' + project_id, params);
+                        window.location.href = buildUrl(site_url + 'clients/project/' + project_id,
+                            params);
                     }
                 }
             });

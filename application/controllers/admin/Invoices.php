@@ -36,7 +36,7 @@ class Invoices extends AdminController
         $data['invoices_sale_agents'] = $this->invoices_model->get_sale_agents();
         $data['invoices_statuses']    = $this->invoices_model->get_statuses();
         $data['invoices_table'] = App_table::find('invoices');
-        $data['bodyclass']            = 'invoices-total-manual';
+        
         $this->load->view('admin/invoices/manage', $data);
     }
 
@@ -117,22 +117,21 @@ class Invoices extends AdminController
             'success' => false,
             'message' => '',
         ];
-        if (staff_can('edit',  'invoices')) {
-            $affected_rows = 0;
 
+        if (staff_can('edit',  'invoices')) {
             $this->db->where('id', $id);
             $this->db->update(db_prefix() . 'invoices', [
                 'prefix' => $this->input->post('prefix'),
             ]);
+            
             if ($this->db->affected_rows() > 0) {
-                $affected_rows++;
-            }
-
-            if ($affected_rows > 0) {
+                $this->invoices_model->save_formatted_number($id);
+               
                 $response['success'] = true;
                 $response['message'] = _l('updated_successfully', _l('invoice'));
             }
         }
+        
         echo json_encode($response);
         die;
     }
@@ -377,7 +376,7 @@ class Invoices extends AdminController
             $data['edit']           = true;
             $data['billable_tasks'] = $this->tasks_model->get_billable_tasks($invoice->clientid, !empty($invoice->project_id) ? $invoice->project_id : '');
 
-            $title = _l('edit', _l('invoice_lowercase')) . ' - ' . format_invoice_number($invoice->id);
+            $title = _l('edit', _l('invoice')) . ' - ' . format_invoice_number($invoice->id);
         }
 
         if ($this->input->get('customer_id')) {

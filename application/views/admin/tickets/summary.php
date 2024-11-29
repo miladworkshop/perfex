@@ -1,10 +1,10 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
-<div class="row">
-<?php
+<div>
+    <?php
     $statuses = $this->tickets_model->get_ticket_status();
 ?>
-<div class="_filters _hidden_inputs hidden tickets_filters">
-<?php
+    <div class="_filters _hidden_inputs hidden tickets_filters">
+        <?php
   foreach ($statuses as $status) {
       $val = '';
       if ($chosen_ticket_status != '') {
@@ -19,37 +19,28 @@
       echo form_hidden('ticket_status_' . $status['ticketstatusid'], $val);
   } ?>
     </div>
-    <div class="col-md-12">
-        <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-flex tw-items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="tw-w-5 tw-h-5 tw-text-neutral-500 tw-mr-1.5">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-            </svg>
-
-            <span>
-                <?php echo _l('tickets_summary'); ?>
-            </span>
-        </h4>
-    </div>
-    <?php
+    <div
+        class="tw-mb-3 tw-flex tw-flex-col tw-gap-y-2 tw-order-1 sm:tw-flex-row sm:tw-gap-x-2 sm:-tw-order-none sm:tw-mr-2 md:tw-mb-0">
+        <?php
   $where = '';
-  if (!is_admin()) {
-      if (get_option('staff_access_only_assigned_departments') == 1) {
-          $departments_ids = [];
-          if (count($staff_deparments_ids) == 0) {
-              $departments = $this->departments_model->get();
-              foreach ($departments as $department) {
-                  array_push($departments_ids, $department['departmentid']);
-              }
-          } else {
-              $departments_ids = $staff_deparments_ids;
-          }
-          if (count($departments_ids) > 0) {
-              $where = 'AND department IN (SELECT departmentid FROM ' . db_prefix() . 'staff_departments WHERE departmentid IN (' . implode(',', $departments_ids) . ') AND staffid="' . get_staff_user_id() . '")';
-          }
-      }
-  }
+if (! is_admin()) {
+    if (get_option('staff_access_only_assigned_departments') == 1) {
+        $departments_ids = [];
+        if (count($staff_deparments_ids) == 0) {
+            $departments = $this->departments_model->get();
+
+            foreach ($departments as $department) {
+                array_push($departments_ids, $department['departmentid']);
+            }
+        } else {
+            $departments_ids = $staff_deparments_ids;
+        }
+        if (count($departments_ids) > 0) {
+            $where = 'AND department IN (SELECT departmentid FROM ' . db_prefix() . 'staff_departments WHERE departmentid IN (' . implode(',', $departments_ids) . ') AND staffid="' . get_staff_user_id() . '")';
+        }
+    }
+}
+
 foreach ($statuses as $status) {
     $_where = '';
     if ($where == '') {
@@ -61,18 +52,19 @@ foreach ($statuses as $status) {
         $_where = $_where . ' AND project_id=' . $project_id;
     }
     $_where = $_where . ' AND merged_ticket_id IS NULL'; ?>
-    <div class="col-md-2 col-xs-6 md:tw-border-r md:tw-border-solid md:tw-border-neutral-300 last:tw-border-r-0">
-        <a href="#" data-cview="ticket_status_<?php echo e($status['ticketstatusid']); ?>"
-            class="tw-text-neutral-600 hover:tw-opacity-70 tw-inline-flex tw-items-center"
-            <?php echo ($hrefAttrs ?? null instanceof Closure) ? $hrefAttrs($status) : ''; ?>>
-            <span class="tw-font-semibold tw-mr-3 rtl:tw-ml-3 tw-text-lg">
-                <?php echo total_rows(db_prefix() . 'tickets', $_where); ?>
+        <a href="#"
+            data-cview="ticket_status_<?= e($status['ticketstatusid']); ?>"
+            class="tw-bg-transparent tw-border tw-border-solid tw-border-neutral-300 tw-shadow-sm tw-py-1 tw-px-2 tw-rounded-lg tw-text-sm hover:tw-bg-neutral-200/60 tw-text-neutral-600 hover:tw-text-neutral-600 focus:tw-text-neutral-600"
+            <?= ($hrefAttrs ?? null instanceof Closure) ? $hrefAttrs($status) : ''; ?>>
+            <span class="tw-font-semibold tw-mr-1 rtl:tw-ml-1">
+                <?= total_rows(db_prefix() . 'tickets', $_where); ?>
             </span>
-            <span style="color:<?php echo e($status['statuscolor']); ?>">
-                <?php echo e(ticket_status_translate($status['ticketstatusid'])); ?>
+            <span
+                style="color:<?= e($status['statuscolor']); ?>">
+                <?= e(ticket_status_translate($status['ticketstatusid'])); ?>
             </span>
         </a>
-    </div>
-    <?php
+        <?php
 } ?>
+    </div>
 </div>

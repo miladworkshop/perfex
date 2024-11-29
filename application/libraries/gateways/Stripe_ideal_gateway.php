@@ -70,6 +70,7 @@ class Stripe_ideal_gateway extends App_gateway
         ]);
 
         hooks()->add_action('before_render_payment_gateway_settings', 'stripe_ideal_gateway_webhook_check');
+        hooks()->add_action('before_render_payment_gateway_settings', 'stripe_ideal_gateway_depreciation_notice');
     }
 
     /**
@@ -299,5 +300,17 @@ function stripe_ideal_gateway_webhook_check($gateway)
                 echo '</div>';
             }
         }
+    }
+}
+
+function stripe_ideal_gateway_depreciation_notice(array $gateway)
+{
+    if ($gateway['id'] === 'stripe_ideal') {
+        $moduleURL = admin_url('modules');
+        echo <<<HTML
+            <div class="alert alert-warning">
+                The Stripe iDEAL gateway is deprecated, and Stripe no longer supports its API. We recommend migrating to the new gateway (Stripe iDEAL V2), available as a module. Be sure to activate it in <a href="{$moduleURL}">Setup > Modules</a>
+            </div>
+        HTML;
     }
 }

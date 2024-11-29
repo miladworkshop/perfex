@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  * @since  2.3.0
  * Register module activation hook
  * @param  string $module   module system name
- * @param  mixed $function  function for the hook
+ * @param  callable|mixed $function  function for the hook
  * @return void
  */
 function register_activation_hook($module, $function)

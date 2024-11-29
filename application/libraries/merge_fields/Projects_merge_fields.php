@@ -28,13 +28,20 @@ class Projects_merge_fields extends App_merge_fields
                         'project',
                     ],
                 ],
-                [
-                    'name'      => 'Project Deadline',
-                    'key'       => '{project_deadline}',
-                    'available' => [
-                        'project',
-                    ],
+            [
+                'name'      => 'Project Deadline',
+                'key'       => '{project_deadline}',
+                'available' => [
+                    'project',
                 ],
+            ],
+            [
+                'name'      => 'Project Status',
+                'key'       => '{project_status}',
+                'available' => [
+                    'project',
+                ],
+            ],
                 [
                     'name'      => 'Project Link',
                     'key'       => '{project_link}',
@@ -150,6 +157,7 @@ class Projects_merge_fields extends App_merge_fields
         $fields['{discussion_subject}']     = '';
         $fields['{discussion_description}'] = '';
         $fields['{discussion_comment}']     = '';
+        $fields['{project_status}']           = '';
 
 
         $this->ci->db->where('id', $project_id);
@@ -159,6 +167,7 @@ class Projects_merge_fields extends App_merge_fields
         $fields['{project_deadline}']    = e(_d($project->deadline));
         $fields['{project_start_date}']  = e(_d($project->start_date));
         $fields['{project_description}'] = e($project->description);
+        $fields['{project_status}'] = get_project_status_by_id($project->status)['name'];
 
         $custom_fields = get_custom_fields('projects');
         foreach ($custom_fields as $field) {

@@ -1149,11 +1149,8 @@ class Misc_model extends App_Model
             if (is_numeric($q)) {
                 $q = trim($q);
                 $q = ltrim($q, '0');
-            } elseif (startsWith($q, get_option('invoice_prefix'))) {
-                $q = strafter($q, get_option('invoice_prefix'));
-                $q = trim($q);
-                $q = ltrim($q, '0');
-            }
+            } 
+
             $invoice_fields    = prefixed_table_fields_array(db_prefix() . 'invoices');
             $clients_fields    = prefixed_table_fields_array(db_prefix() . 'clients');
             $noPermissionQuery = get_invoices_where_sql_for_staff(get_staff_user_id());
@@ -1169,7 +1166,9 @@ class Misc_model extends App_Model
             }
             if (!startsWith($q, '#')) {
                 $this->db->where('(
-                ' . db_prefix() . 'invoices.number LIKE "' . $this->db->escape_like_str($q) . '"
+                ' . db_prefix() . 'invoices.formatted_number = "' . $this->db->escape_like_str($q) . '"
+                OR
+                ' . db_prefix() . 'invoices.number = "' . $this->db->escape_like_str($q) . '"
                 OR
                 ' . db_prefix() . 'clients.company LIKE "%' . $this->db->escape_like_str($q) . '%" ESCAPE \'!\'
                 OR
@@ -1260,11 +1259,8 @@ class Misc_model extends App_Model
             if (is_numeric($q)) {
                 $q = trim($q);
                 $q = ltrim($q, '0');
-            } elseif (startsWith($q, get_option('credit_note_prefix'))) {
-                $q = strafter($q, get_option('credit_note_prefix'));
-                $q = trim($q);
-                $q = ltrim($q, '0');
-            }
+            } 
+
             $credit_note_fields = prefixed_table_fields_array(db_prefix() . 'creditnotes');
             $clients_fields     = prefixed_table_fields_array(db_prefix() . 'clients');
             // Invoices
@@ -1279,7 +1275,9 @@ class Misc_model extends App_Model
             }
 
             $this->db->where('(
-                ' . db_prefix() . 'creditnotes.number LIKE "' . $this->db->escape_like_str($q) . '"
+                ' . db_prefix() . 'creditnotes.formatted_number = "' . $this->db->escape_like_str($q) . '"
+                OR
+                ' . db_prefix() . 'creditnotes.number = "' . $this->db->escape_like_str($q) . '"
                 OR
                 ' . db_prefix() . 'clients.company LIKE "%' . $this->db->escape_like_str($q) . '%" ESCAPE \'!\'
                 OR
@@ -1363,10 +1361,6 @@ class Misc_model extends App_Model
             if (is_numeric($q)) {
                 $q = trim($q);
                 $q = ltrim($q, '0');
-            } elseif (startsWith($q, get_option('estimate_prefix'))) {
-                $q = strafter($q, get_option('estimate_prefix'));
-                $q = trim($q);
-                $q = ltrim($q, '0');
             }
             // Estimates
             $estimates_fields  = prefixed_table_fields_array(db_prefix() . 'estimates');
@@ -1384,7 +1378,9 @@ class Misc_model extends App_Model
             }
 
             $this->db->where('(
-                ' . db_prefix() . 'estimates.number LIKE "' . $this->db->escape_like_str($q) . '"
+                ' . db_prefix() . 'estimates.formatted_number = "' . $this->db->escape_like_str($q) . '"
+                OR
+                ' . db_prefix() . 'estimates.number = "' . $this->db->escape_like_str($q) . '"
                 OR
                 ' . db_prefix() . 'clients.company LIKE "%' . $this->db->escape_like_str($q) . '%" ESCAPE \'!\'
                 OR

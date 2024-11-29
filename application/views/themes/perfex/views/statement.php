@@ -1,69 +1,82 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <div class="section-statement">
     <div>
-        <h4 class="customer-statement-heading"><?php echo _l('customer_statement'); ?></h4>
+        <h4 class="customer-statement-heading">
+            <?= _l('customer_statement'); ?>
+        </h4>
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
                     <select class="selectpicker" name="range" id="range" data-width="100%"
                         onchange="render_customer_statement();">
-                        <option value='<?php echo e($period_today); ?>' <?php if ($period_selected == $period_today) {
-    echo ' selected';
-} ?>>
-                            <?php echo _l('today'); ?>
+                        <option value='<?= e($period_today); ?>' <?php if ($period_selected == $period_today) {
+                            echo ' selected';
+                        } ?>>
+                            <?= _l('today'); ?>
                         </option>
-                        <option value='<?php echo e($period_this_week); ?>' <?php if ($period_selected == $period_this_week) {
-    echo ' selected';
-} ?>>
-                            <?php echo _l('this_week'); ?>
+                        <option value='<?= e($period_this_week); ?>'
+                            <?php if ($period_selected == $period_this_week) {
+                                echo ' selected';
+                            } ?>>
+                            <?= _l('this_week'); ?>
                         </option>
-                        <option value='<?php echo e($period_this_month); ?>' <?php if ($period_selected == $period_this_month) {
-    echo ' selected';
-} ?>>
-                            <?php echo _l('this_month'); ?>
+                        <option value='<?= e($period_this_month); ?>'
+                            <?php if ($period_selected == $period_this_month) {
+                                echo ' selected';
+                            } ?>>
+                            <?= _l('this_month'); ?>
                         </option>
-                        <option value='<?php echo e($period_last_month); ?>' <?php if ($period_selected == $period_last_month) {
-    echo ' selected';
-} ?>>
-                            <?php echo _l('last_month'); ?>
+                        <option value='<?= e($period_last_month); ?>'
+                            <?php if ($period_selected == $period_last_month) {
+                                echo ' selected';
+                            } ?>>
+                            <?= _l('last_month'); ?>
                         </option>
-                        <option value='<?php echo e($period_this_year); ?>' <?php if ($period_selected == $period_this_year) {
-    echo ' selected';
-} ?>>
-                            <?php echo _l('this_year'); ?>
+                        <option value='<?= e($period_this_year); ?>'
+                            <?php if ($period_selected == $period_this_year) {
+                                echo ' selected';
+                            } ?>>
+                            <?= _l('this_year'); ?>
                         </option>
-                        <option value='<?php echo e($period_last_year); ?>' <?php if ($period_selected == $period_last_year) {
-    echo ' selected';
-} ?>>
-                            <?php echo _l('last_year'); ?></option>
+                        <option value='<?= e($period_last_year); ?>'
+                            <?php if ($period_selected == $period_last_year) {
+                                echo ' selected';
+                            } ?>>
+                            <?= _l('last_year'); ?>
+                        </option>
                         <option value="period" <?php if ($custom_period) {
-    echo ' selected';
-} ?>><?php echo _l('period_datepicker'); ?></option>
+                            echo ' selected';
+                        } ?>><?= _l('period_datepicker'); ?>
+                        </option>
                     </select>
                 </div>
                 <div class="row mtop15">
-                    <div class="col-md-12 period<?php if (!$custom_period) {
-    echo ' hide';
-} ?>">
-                        <?php echo render_date_input('period-from', '', ($custom_period ? $from : ''), ['onchange' => 'render_customer_statement();']); ?>
+                    <div class="col-md-12 period<?php if (! $custom_period) {
+                        echo ' hide';
+                    } ?>">
+                        <?= render_date_input('period-from', '', ($custom_period ? $from : ''), ['onchange' => 'render_customer_statement();']); ?>
                     </div>
-                    <div class="col-md-12 period<?php if (!$custom_period) {
-    echo ' hide';
-} ?>">
-                        <?php echo render_date_input('period-to', '', ($custom_period ? $to : ''), ['onchange' => 'render_customer_statement();']); ?>
+                    <div class="col-md-12 period<?php if (! $custom_period) {
+                        echo ' hide';
+                    } ?>">
+                        <?= render_date_input('period-to', '', ($custom_period ? $to : ''), ['onchange' => 'render_customer_statement();']); ?>
                     </div>
                 </div>
             </div>
             <div class="col-md-8">
                 <div class="text-right _buttons pull-right">
-                    <a href="<?php echo site_url('clients/statement_pdf?from=' . urlencode($from) . '&to=' . urlencode($to) . '&print=true'); ?>"
-                        id="statement_print" target="_blank" class="btn btn-default btn-with-tooltip mright5"
-                        data-toggle="tooltip" title="<?php echo _l('print'); ?>" data-placement="bottom">
+                    <a href="<?= site_url('clients/statement_pdf?from=' . urlencode($from) . '&to=' . urlencode($to) . '&print=true'); ?>"
+                        id="statement_print" target="_blank"
+                        class="btn btn-default btn-with-tooltip sm:!tw-px-3 mright5" data-toggle="tooltip"
+                        title="<?= _l('print'); ?>"
+                        data-placement="bottom">
                         <i class="fa fa-print"></i>
                     </a>
-                    <a href="<?php echo site_url('clients/statement_pdf?from=' . urlencode($from) . '&to=' . urlencode($to)); ?>"
-                        id="statement_pdf" class="btn btn-default btn-with-tooltip mright5" data-toggle="tooltip"
-                        title="<?php echo _l('view_pdf'); ?>" data-placement="bottom">
+                    <a href="<?= site_url('clients/statement_pdf?from=' . urlencode($from) . '&to=' . urlencode($to)); ?>"
+                        id="statement_pdf" class="btn btn-default btn-with-tooltip sm:!tw-px-3 mright5"
+                        data-toggle="tooltip"
+                        title="<?= _l('view_pdf'); ?>"
+                        data-placement="bottom">
                         <i class="fa-regular fa-file-pdf"></i>
                     </a>
                 </div>
@@ -75,7 +88,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <address class="text-right">
-                                    <?php echo format_organization_info(); ?>
+                                    <?= format_organization_info(); ?>
                                 </address>
                             </div>
                             <div class="col-md-12">
@@ -83,38 +96,50 @@
                             </div>
                             <div class="col-md-7">
                                 <address>
-                                    <p><?php echo _l('statement_bill_to'); ?>:</p>
-                                    <?php echo format_customer_info($client, 'statement', 'billing'); ?>
+                                    <p><?= _l('statement_bill_to'); ?>:
+                                    </p>
+                                    <?= format_customer_info($client, 'statement', 'billing'); ?>
                                 </address>
                             </div>
                             <div class="col-md-5">
                                 <div class="text-right">
-                                    <h4 class="no-margin bold"><?php echo _l('account_summary'); ?></h4>
-                                    <p class="text-muted"><?php echo _l('statement_from_to', [$from, $to]); ?></p>
+                                    <h4 class="no-margin bold">
+                                        <?= _l('account_summary'); ?>
+                                    </h4>
+                                    <p class="text-muted">
+                                        <?= _l('statement_from_to', [$from, $to]); ?>
+                                    </p>
                                     <hr />
                                     <table class="table statement-account-summary">
                                         <tbody>
                                             <tr>
-                                                <td class="text-left"><?php echo _l('statement_beginning_balance'); ?>:
+                                                <td class="text-left">
+                                                    <?= _l('statement_beginning_balance'); ?>:
                                                 </td>
-                                                <td><?php echo e(app_format_money($statement['beginning_balance'], $statement['currency'])); ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-left"><?php echo _l('invoiced_amount'); ?>:</td>
-                                                <td><?php echo e(app_format_money($statement['invoiced_amount'], $statement['currency'])); ?>
+                                                <td><?= e(app_format_money($statement['beginning_balance'], $statement['currency'])); ?>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td class="text-left"><?php echo _l('amount_paid'); ?>:</td>
-                                                <td><?php echo e(app_format_money($statement['amount_paid'], $statement['currency'])); ?>
+                                                <td class="text-left">
+                                                    <?= _l('invoiced_amount'); ?>:
+                                                </td>
+                                                <td><?= e(app_format_money($statement['invoiced_amount'], $statement['currency'])); ?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-left">
+                                                    <?= _l('amount_paid'); ?>:
+                                                </td>
+                                                <td><?= e(app_format_money($statement['amount_paid'], $statement['currency'])); ?>
                                                 </td>
                                             </tr>
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td class="text-left"><b><?php echo _l('balance_due'); ?></b>:</td>
-                                                <td><?php echo e(app_format_money($statement['balance_due'], $statement['currency'])); ?>
+                                                <td class="text-left">
+                                                    <b><?= _l('balance_due'); ?></b>:
+                                                </td>
+                                                <td><?= e(app_format_money($statement['balance_due'], $statement['currency'])); ?>
                                                 </td>
                                             </tr>
                                         </tfoot>
@@ -123,72 +148,80 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="text-center bold">
-                                    <p class="mbot20"><?php echo _l('customer_statement_info', [$from, $to]); ?></p>
+                                    <p class="mbot20">
+                                        <?= _l('customer_statement_info', [$from, $to]); ?>
+                                    </p>
                                 </div>
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th><b><?php echo _l('statement_heading_date'); ?></b></th>
-                                                <th><b><?php echo _l('statement_heading_details'); ?></b></th>
-                                                <th class="text-right">
-                                                    <b><?php echo _l('statement_heading_amount'); ?></b>
+                                                <th><b><?= _l('statement_heading_date'); ?></b>
+                                                </th>
+                                                <th><b><?= _l('statement_heading_details'); ?></b>
                                                 </th>
                                                 <th class="text-right">
-                                                    <b><?php echo _l('statement_heading_payments'); ?></b></b>
+                                                    <b><?= _l('statement_heading_amount'); ?></b>
                                                 </th>
                                                 <th class="text-right">
-                                                    <b><?php echo _l('statement_heading_balance'); ?></b></b>
+                                                    <b><?= _l('statement_heading_payments'); ?></b></b>
+                                                </th>
+                                                <th class="text-right">
+                                                    <b><?= _l('statement_heading_balance'); ?></b></b>
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td><?php echo e($from); ?></td>
-                                                <td><?php echo _l('statement_beginning_balance'); ?></td>
+                                                <td><?= e($from); ?>
+                                                </td>
+                                                <td><?= _l('statement_beginning_balance'); ?>
+                                                </td>
                                                 <td class="text-right">
-                                                    <?php echo e(app_format_money($statement['beginning_balance'], $statement['currency'], true)); ?>
+                                                    <?= e(app_format_money($statement['beginning_balance'], $statement['currency'], true)); ?>
                                                 </td>
                                                 <td></td>
                                                 <td class="text-right">
-                                                    <?php echo e(app_format_money($statement['beginning_balance'], $statement['currency'], true)); ?>
+                                                    <?= e(app_format_money($statement['beginning_balance'], $statement['currency'], true)); ?>
                                                 </td>
                                             </tr>
                                             <?php
-                                    $tmpBeginningBalance = $statement['beginning_balance'];
-                                    foreach ($statement['result'] as $data) { ?>
+                                                        $tmpBeginningBalance = $statement['beginning_balance'];
+
+foreach ($statement['result'] as $data) { ?>
                                             <tr>
-                                                <td><?php echo e(_d($data['date'])); ?></td>
+                                                <td><?= e(_d($data['date'])); ?>
+                                                </td>
                                                 <td>
                                                     <?php
-                                          if (isset($data['invoice_id'])) {
-                                              echo _l('statement_invoice_details', ['<a href="' . site_url('invoice/' . $data['invoice_id']) . '/' . $data['hash'] . '" target="_blank">' . e(format_invoice_number($data['invoice_id'])) . '</a>', e(_d($data['duedate']))]);
-                                          } elseif (isset($data['payment_id'])) {
-                                              echo e(_l('statement_payment_details', ['#' . $data['payment_id'], format_invoice_number($data['payment_invoice_id'])]));
-                                          } elseif (isset($data['credit_note_id'])) {
-                                              echo e(_l('statement_credit_note_details', format_credit_note_number($data['credit_note_id'])));
-                                          } elseif (isset($data['credit_id'])) {
-                                              echo e(_l(
-                                                'statement_credits_applied_details',
-                                                [
-                                             format_credit_note_number($data['credit_applied_credit_note_id']),
-                                             app_format_money($data['credit_amount'], $statement['currency'], true),
-                                             format_invoice_number($data['credit_invoice_id']),
-                                          ]
-                                            ));
-                                          } elseif (isset($data['credit_note_refund_id'])) {
-                                              echo e(_l('statement_credit_note_refund', format_credit_note_number($data['refund_credit_note_id'])));
-                                          }
-                                          ?>
+      if (isset($data['invoice_id'])) {
+          echo _l('statement_invoice_details', ['<a href="' . site_url('invoice/' . $data['invoice_id']) . '/' . $data['hash'] . '" target="_blank">' . e(format_invoice_number($data['invoice_id'])) . '</a>', e(_d($data['duedate']))]);
+      } elseif (isset($data['payment_id'])) {
+          echo e(_l('statement_payment_details', ['#' . $data['payment_id'], format_invoice_number($data['payment_invoice_id'])]));
+      } elseif (isset($data['credit_note_id'])) {
+          echo e(_l('statement_credit_note_details', format_credit_note_number($data['credit_note_id'])));
+      } elseif (isset($data['credit_id'])) {
+          echo e(_l(
+              'statement_credits_applied_details',
+              [
+                  format_credit_note_number($data['credit_applied_credit_note_id']),
+                  app_format_money($data['credit_amount'], $statement['currency'], true),
+                  format_invoice_number($data['credit_invoice_id']),
+              ]
+          ));
+      } elseif (isset($data['credit_note_refund_id'])) {
+          echo e(_l('statement_credit_note_refund', format_credit_note_number($data['refund_credit_note_id'])));
+      }
+    ?>
                                                 </td>
                                                 <td class="text-right">
                                                     <?php
-                                          if (isset($data['invoice_id'])) {
-                                              echo e(app_format_money($data['invoice_amount'], $statement['currency'], true));
-                                          } elseif (isset($data['credit_note_id'])) {
-                                              echo e(app_format_money($data['credit_note_amount'], $statement['currency'], true));
-                                          }
-                                      ?>
+    if (isset($data['invoice_id'])) {
+        echo e(app_format_money($data['invoice_amount'], $statement['currency'], true));
+    } elseif (isset($data['credit_note_id'])) {
+        echo e(app_format_money($data['credit_note_amount'], $statement['currency'], true));
+    }
+    ?>
                                                 </td>
                                                 <td class="text-right">
                                                     <?php
@@ -197,7 +230,7 @@
                                     } elseif (isset($data['credit_note_refund_id'])) {
                                         echo e(app_format_money($data['refund_amount'], $statement['currency'], true));
                                     }
-                                  ?>
+    ?>
                                                 </td>
                                                 <td class="text-right">
                                                     <?php
@@ -210,10 +243,10 @@
                                  } elseif (isset($data['credit_note_refund_id'])) {
                                      $tmpBeginningBalance = ($tmpBeginningBalance + $data['refund_amount']);
                                  }
-                              if (!isset($data['credit_id'])) {
-                                  echo e(app_format_money($tmpBeginningBalance, $statement['currency'], true));
-                              }
-                           ?>
+    if (! isset($data['credit_id'])) {
+        echo e(app_format_money($tmpBeginningBalance, $statement['currency'], true));
+    }
+    ?>
                                                 </td>
                                             </tr>
                                             <?php } ?>
@@ -221,10 +254,10 @@
                                         <tfoot class="statement_tfoot">
                                             <tr>
                                                 <td colspan="3" class="text-right">
-                                                    <b><?php echo _l('balance_due'); ?></b>
+                                                    <b><?= _l('balance_due'); ?></b>
                                                 </td>
                                                 <td class="text-right" colspan="2">
-                                                    <b><?php echo e(app_format_money($statement['balance_due'], $statement['currency'])); ?></b>
+                                                    <b><?= e(app_format_money($statement['balance_due'], $statement['currency'])); ?></b>
                                                 </td>
                                             </tr>
                                         </tfoot>

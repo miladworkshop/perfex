@@ -13,15 +13,16 @@ $rResult = $result['rResult'];
 
 foreach ($rResult as $aRow) {
     $row = [];
+
     for ($i = 0; $i < count($aColumns); $i++) {
         $_data = $aRow[$aColumns[$i]];
         if ($aColumns[$i] == 'name') {
-            $_data = '<a href="' . admin_url('estimate_request/form/' . $aRow['id']) . '">' . e($_data) . '</a>';
+            $_data = '<a href="' . admin_url('estimate_request/form/' . $aRow['id']) . '" class="tw-font-medium">' . e($_data) . '</a>';
             $_data .= '<div class="row-options">';
             $_data .= '<a href="' . site_url('forms/quote/' . $aRow['form_key']) . '" target="_blank">' . _l('view') . '</a>';
             $_data .= ' | <a href="' . admin_url('estimate_request/form/' . $aRow['id']) . '">' . _l('edit') . '</a>';
             if (staff_can('delete', 'estimate_request')) {
-                $_data .= ' | <a href="' . admin_url('estimate_request/delete_form/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+                $_data .= ' | <a href="' . admin_url('estimate_request/delete_form/' . $aRow['id']) . '" class="_delete">' . _l('delete') . '</a>';
             }
             $_data .= '</div>';
         } elseif ($aColumns[$i] == 'dateadded') {

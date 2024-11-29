@@ -79,7 +79,7 @@ class Subscriptions extends AdminController
             $data['customer_id'] = $this->input->get('customer_id');
         }
 
-        $data['title'] = _l('add_new', _l('subscription_lowercase'));
+        $data['title'] = _l('add_new', _l('subscription'));
 
         $data['taxes']      = $this->taxes_model->get();
         $data['currencies'] = $this->currencies_model->get();

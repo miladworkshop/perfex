@@ -725,7 +725,7 @@ class Clients extends ClientsController
                     'custom_fields' => isset($data['custom_fields']) && is_array($data['custom_fields'])
                     ? $data['custom_fields']
                     : [],
-                    'message'   => $data['message'],
+                    'message'   => $this->input->post('message', false),
                     'contactid' => get_contact_user_id(),
                     'userid'    => get_client_user_id(),
                 ]);
@@ -768,16 +768,16 @@ class Clients extends ClientsController
             $this->form_validation->set_rules('message', _l('ticket_reply'), 'required');
 
             if ($this->form_validation->run() !== false) {
-                $data = $this->input->post();
-
                 $replyid = $this->tickets_model->add_reply([
-                    'message'   => $data['message'],
+                    'message'   => $this->input->post('message', false),
                     'contactid' => get_contact_user_id(),
                     'userid'    => get_client_user_id(),
                 ], $id);
+
                 if ($replyid) {
                     set_alert('success', _l('replied_to_ticket_successfully', $id));
                 }
+
                 redirect(site_url('clients/ticket/' . $id));
             }
         }

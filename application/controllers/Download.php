@@ -19,7 +19,7 @@ class Download extends App_Controller
 
         $pathinfo = pathinfo($path);
 
-        if (!file_exists($path) || !isset($pathinfo['extension']) || !in_array($pathinfo['extension'], $allowed_extensions)) {
+        if (! file_exists($path) || ! isset($pathinfo['extension']) || ! in_array($pathinfo['extension'], $allowed_extensions)) {
             $file_type = 'image/jpg';
             $path      = FCPATH . 'assets/images/preview-not-available.jpg';
         }
@@ -40,7 +40,7 @@ class Download extends App_Controller
 
         $file = fopen($path, 'rb');
         if ($file !== false) {
-            while (!feof($file)) {
+            while (! feof($file)) {
                 echo fread($file, 1024);
             }
             fclose($file);
@@ -63,7 +63,7 @@ class Download extends App_Controller
 
         $pathinfo = pathinfo($path);
 
-        if (!file_exists($path) || !isset($pathinfo['extension']) || !in_array($pathinfo['extension'], $allowed_extensions)) {
+        if (! file_exists($path) || ! isset($pathinfo['extension']) || ! in_array($pathinfo['extension'], $allowed_extensions)) {
             $file_type = 'image/jpg';
             $path      = FCPATH . 'assets/images/preview-not-available.jpg';
         }
@@ -83,7 +83,7 @@ class Download extends App_Controller
         hooks()->do_action('before_output_preview_image');
         $file = fopen($path, 'rb');
         if ($file !== false) {
-            while (!feof($file)) {
+            while (! feof($file)) {
                 echo fread($file, 1024);
             }
             fclose($file);
@@ -94,45 +94,48 @@ class Download extends App_Controller
     {
         $this->load->model('tickets_model');
         if ($folder_indicator == 'ticket') {
-            if (is_logged_in()) {
-                $this->db->where('id', $attachmentid);
-                $attachment = $this->db->get(db_prefix() . 'ticket_attachments')->row();
-                if (!$attachment) {
-                    show_404();
-                }
-                $ticket   = $this->tickets_model->get_ticket_by_id($attachment->ticketid);
-                $ticketid = $attachment->ticketid;
-                if ($ticket->userid == get_client_user_id() || is_staff_logged_in()) {
-                    if ($attachment->id != $attachmentid) {
-                        show_404();
-                    }
-                    $path = get_upload_path_by_type('ticket') . $ticketid . '/' . $attachment->file_name;
-                }
+            $ticket_key = $this->input->get('ticket_key');
+            if (! is_logged_in() && ! $ticket_key) {
+                show_404();
+            }
+
+            $this->db->where('id', $attachmentid);
+            $attachment = $this->db->get(db_prefix() . 'ticket_attachments')->row();
+
+            if (! $attachment) {
+                show_404();
+            }
+
+            $ticket   = $this->tickets_model->get_ticket_by_id($attachment->ticketid);
+            $ticketid = $attachment->ticketid;
+
+            if ($ticket->ticketkey == $ticket_key || $ticket->userid == get_client_user_id() || is_staff_logged_in()) {
+                $path = get_upload_path_by_type('ticket') . $ticketid . '/' . $attachment->file_name;
             }
         } elseif ($folder_indicator == 'newsfeed') {
             if (is_staff_logged_in()) {
-                if (!$attachmentid) {
+                if (! $attachmentid) {
                     show_404();
                 }
                 $this->db->where('id', $attachmentid);
                 $attachment = $this->db->get(db_prefix() . 'files')->row();
-                if (!$attachment) {
+                if (! $attachment) {
                     show_404();
                 }
                 $path = get_upload_path_by_type('newsfeed') . $attachment->rel_id . '/' . $attachment->file_name;
             }
         } elseif ($folder_indicator == 'contract') {
-            if (!$attachmentid) {
+            if (! $attachmentid) {
                 show_404();
             }
 
             $this->db->where('attachment_key', $attachmentid);
             $attachment = $this->db->get(db_prefix() . 'files')->row();
-            if (!$attachment) {
+            if (! $attachment) {
                 show_404();
             }
 
-            if (!is_staff_logged_in()) {
+            if (! is_staff_logged_in()) {
                 $this->db->select('not_visible_to_client');
                 $this->db->where('id', $attachment->rel_id);
                 $contract = $this->db->get(db_prefix() . 'contracts')->row();
@@ -143,40 +146,40 @@ class Download extends App_Controller
 
             $path = get_upload_path_by_type('contract') . $attachment->rel_id . '/' . $attachment->file_name;
         } elseif ($folder_indicator == 'taskattachment') {
-            if (!is_logged_in()) {
+            if (! is_logged_in()) {
                 show_404();
             }
 
             $this->db->where('attachment_key', $attachmentid);
             $attachment = $this->db->get(db_prefix() . 'files')->row();
 
-            if (!$attachment) {
+            if (! $attachment) {
                 show_404();
             }
             $path = get_upload_path_by_type('task') . $attachment->rel_id . '/' . $attachment->file_name;
         } elseif ($folder_indicator == 'sales_attachment') {
-            if (!is_staff_logged_in()) {
+            if (! is_staff_logged_in()) {
                 $this->db->where('visible_to_customer', 1);
             }
 
             $this->db->where('attachment_key', $attachmentid);
             $attachment = $this->db->get(db_prefix() . 'files')->row();
-            if (!$attachment) {
+            if (! $attachment) {
                 show_404();
             }
 
             $path = get_upload_path_by_type($attachment->rel_type) . $attachment->rel_id . '/' . $attachment->file_name;
         } elseif ($folder_indicator == 'expense') {
-            if (!is_staff_logged_in()) {
+            if (! is_staff_logged_in()) {
                 show_404();
             }
             $this->db->where('rel_id', $attachmentid);
             $this->db->where('rel_type', 'expense');
             $file = $this->db->get(db_prefix() . 'files')->row();
             $path = get_upload_path_by_type('expense') . $file->rel_id . '/' . $file->file_name;
-        // l_attachment_key is if request is coming from public form
+            // l_attachment_key is if request is coming from public form
         } elseif ($folder_indicator == 'lead_attachment' || $folder_indicator == 'l_attachment_key') {
-            if (!is_staff_logged_in() && strpos($_SERVER['HTTP_REFERER'], 'forms/l/') === false) {
+            if (! is_staff_logged_in() && strpos($_SERVER['HTTP_REFERER'], 'forms/l/') === false) {
                 show_404();
             }
 
@@ -190,7 +193,7 @@ class Download extends App_Controller
 
             $attachment = $this->db->get(db_prefix() . 'files')->row();
 
-            if (!$attachment) {
+            if (! $attachment) {
                 show_404();
             }
 
@@ -198,14 +201,14 @@ class Download extends App_Controller
         } elseif ($folder_indicator == 'client') {
             $this->db->where('attachment_key', $attachmentid);
             $attachment = $this->db->get(db_prefix() . 'files')->row();
-            if (!$attachment) {
+            if (! $attachment) {
                 show_404();
             }
-            if (staff_can('view',  'customers') || is_customer_admin($attachment->rel_id) || is_client_logged_in()) {
+            if (staff_can('view', 'customers') || is_customer_admin($attachment->rel_id) || is_client_logged_in()) {
                 $path = get_upload_path_by_type('customer') . $attachment->rel_id . '/' . $attachment->file_name;
             }
-        }  elseif ($folder_indicator == 'estimate_request_attachment') {
-            if (!is_staff_logged_in() && strpos($_SERVER['HTTP_REFERER'], 'forms/l/') === false) {
+        } elseif ($folder_indicator == 'estimate_request_attachment') {
+            if (! is_staff_logged_in() && strpos($_SERVER['HTTP_REFERER'], 'forms/l/') === false) {
                 show_404();
             }
 
@@ -219,13 +222,13 @@ class Download extends App_Controller
 
             $attachment = $this->db->get(db_prefix() . 'files')->row();
 
-            if (!$attachment) {
+            if (! $attachment) {
                 show_404();
             }
 
             $path = get_upload_path_by_type('estimate_request') . $attachment->rel_id . '/' . $attachment->file_name;
         } else {
-            die('folder not specified');
+            exit('folder not specified');
         }
 
         $path = hooks()->apply_filters('download_file_path', $path, [

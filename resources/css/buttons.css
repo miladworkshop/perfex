@@ -3,9 +3,13 @@
     @apply focus-within:tw-z-10;
   }
 
+  .btn {
+    @apply tw-shadow-[shadow:inset_0_1px_theme(colors.white/15%)];
+  }
+  
   .btn,
   .btn-group > .btn {
-    @apply tw-rounded-md tw-text-[13.45px] tw-leading-[20px] tw-font-medium;
+    @apply tw-rounded-lg tw-text-[13.45px] tw-leading-[20px] tw-font-medium tw-px-[calc(0.5rem+1px)];
   }
 
   .btn-xs,
@@ -90,7 +94,7 @@
   /* default */
 
   .btn-default {
-    @apply tw-text-neutral-700 tw-bg-white tw-border-neutral-300;
+    @apply tw-text-neutral-700 tw-bg-white tw-border-neutral-300 tw-shadow-sm;
   }
 
   .btn-default:focus,
@@ -188,22 +192,23 @@
   /* primary */
 
   .btn-primary {
-    @apply tw-text-white tw-bg-primary-600 tw-border-primary-600;
+    @apply tw-text-white tw-bg-neutral-800 tw-border-neutral-800;
+    
   }
 
   .btn-primary:focus,
   .btn-primary.focus {
-    @apply tw-ring-2 tw-ring-primary-500 tw-ring-offset-2 tw-bg-primary-700 tw-text-white tw-border-primary-600;
+    @apply tw-ring-2 tw-ring-primary-500 tw-ring-offset-2 tw-bg-neutral-900 tw-text-white tw-border-neutral-900;
   }
 
   .btn-primary:hover {
-    @apply tw-bg-primary-700 tw-text-white tw-border-primary-600;
+    @apply tw-bg-neutral-900 tw-text-white tw-border-neutral-900;
   }
 
   .btn-primary:active,
   .btn-primary.active,
   .open > .dropdown-toggle.btn-primary {
-    @apply tw-ring-2 tw-ring-primary-500 tw-ring-offset-2 tw-bg-primary-700 tw-text-white tw-border-primary-600 tw-bg-none;
+    @apply tw-ring-2 tw-ring-primary-500 tw-ring-offset-2 tw-bg-neutral-900 tw-text-white tw-border-neutral-900 tw-bg-none;
   }
 
   .btn-primary:active:hover,
@@ -215,7 +220,7 @@
   .btn-primary:active.focus,
   .btn-primary.active.focus,
   .open > .dropdown-toggle.btn-primary.focus {
-    @apply tw-ring-2 tw-ring-primary-500 tw-ring-offset-2 tw-bg-primary-700 tw-text-white tw-border-primary-600;
+    @apply tw-ring-2 tw-ring-primary-500 tw-ring-offset-2 tw-bg-neutral-900 tw-text-white tw-border-neutral-900;
   }
 
   .btn-primary.disabled:hover,
@@ -227,7 +232,7 @@
   .btn-primary.disabled.focus,
   .btn-primary[disabled].focus,
   fieldset[disabled] .btn-primary.focus {
-    @apply tw-bg-primary-600 tw-border-primary-600;
+    @apply tw-bg-neutral-900 tw-border-neutral-900;
   }
 
   .btn-primary .badge {
@@ -395,5 +400,9 @@
 
   .btn-danger .caret {
     @apply tw-border-white;
+  }
+
+  .btn > i:not(:last-child) {
+    @apply tw-mr-1;
   }
 }

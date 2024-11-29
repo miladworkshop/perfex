@@ -12,12 +12,14 @@ class Forms extends ClientsController
     /**
      * Estimate request form
      * User no need to see anything like estimate request in the url, this is the reason the method is named quote
-     * @param  string $key Estimate request form key identifier
+     *
+     * @param string $key Estimate request form key identifier
+     *
      * @return mixed
      */
     public function quote($key = '')
     {
-        if (!$key) {
+        if (! $key) {
             show_404();
         }
 
@@ -26,7 +28,7 @@ class Forms extends ClientsController
             'form_key' => $key,
         ]);
 
-        if (!$form) {
+        if (! $form) {
             show_404();
         }
 
@@ -35,12 +37,11 @@ class Forms extends ClientsController
         $GLOBALS['locale'] = get_locale_key($form->language);
 
         $data['form_fields'] = json_decode($form->form_data);
-        if (!$data['form_fields']) {
+        if (! $data['form_fields']) {
             $data['form_fields'] = [];
         }
 
         if ($this->input->post('key')) {
-
             if ($this->input->post('key') == $key) {
                 $post_data  = $this->input->post();
                 $required   = [];
@@ -50,19 +51,19 @@ class Forms extends ClientsController
                     if (isset($field->name)) {
                         if ($field->name == 'file-input') {
                             $submission[] = [
-                            'label' => $field->label,
-                            'name'  => $field->name,
-                            'value' => null,
+                                'label' => $field->label,
+                                'name'  => $field->name,
+                                'value' => null,
                             ];
 
                             continue;
                         }
 
-                        if (!isset($post_data[$field->name])) {
+                        if (! isset($post_data[$field->name])) {
                             $submission[] = [
-                            'label' => property_exists($field, 'label') ? $field->label : $field->name,
-                            'name'  => $field->name,
-                            'value' => '',
+                                'label' => property_exists($field, 'label') ? $field->label : $field->name,
+                                'name'  => $field->name,
+                                'value' => '',
                             ];
 
                             continue;
@@ -82,6 +83,7 @@ class Forms extends ClientsController
                         if (in_array($field->type, ['select', 'checkbox-group'])) {
                             if (is_array($post_data[$field->name])) {
                                 $value = '';
+
                                 foreach ($post_data[$field->name] as $selected) {
                                     $index = array_search($selected, array_column($field->values, 'value'));
                                     $value .= $field->values[$index]->label . '<br>';
@@ -140,19 +142,20 @@ class Forms extends ClientsController
                     if ($field == 'file-input') {
                         continue;
                     }
-                    if (!isset($post_data[$field]) || isset($post_data[$field]) && empty($post_data[$field])) {
+                    if (! isset($post_data[$field]) || isset($post_data[$field]) && empty($post_data[$field])) {
                         $this->output->set_status_header(422);
-                        die;
+
+                        exit;
                     }
                 }
 
-
                 if (show_recaptcha() && $form->recaptcha == 1) {
-                    if (!do_recaptcha_validation($post_data['g-recaptcha-response'])) {
+                    if (! do_recaptcha_validation($post_data['g-recaptcha-response'])) {
                         echo json_encode(['success' => false,
                             'message'               => _l('recaptcha_error'),
                         ]);
-                        die;
+
+                        exit;
                     }
                 }
 
@@ -196,7 +199,7 @@ class Forms extends ClientsController
 
                             if (is_array($ids) && count($ids) > 0) {
                                 $this->db->where('active', 1)
-                                ->where_in($form->notify_type == 'specific_staff' ? 'staffid' : 'role', $ids);
+                                    ->where_in($form->notify_type == 'specific_staff' ? 'staffid' : 'role', $ids);
 
                                 $staff = $this->db->get(db_prefix() . 'staff')->result_array();
                             }
@@ -213,15 +216,15 @@ class Forms extends ClientsController
 
                         foreach ($staff as $member) {
                             if (add_notification([
-                                    'description' => 'new_estimate_request_submitted_from_form',
-                                    'touserid' => $member['staffid'],
-                                    'fromcompany' => 1,
-                                    'fromuserid' => 0,
-                                    'additional_data' => serialize([
-                                        $form->name,
-                                    ]),
-                                    'link' => 'estimate_request/view/' . $estimate_request_id,
-                                ])) {
+                                'description'     => 'new_estimate_request_submitted_from_form',
+                                'touserid'        => $member['staffid'],
+                                'fromcompany'     => 1,
+                                'fromuserid'      => 0,
+                                'additional_data' => serialize([
+                                    $form->name,
+                                ]),
+                                'link' => 'estimate_request/view/' . $estimate_request_id,
+                            ])) {
                                 array_push($notifiedUsers, $member['staffid']);
                             }
 
@@ -236,7 +239,7 @@ class Forms extends ClientsController
             }
             // end insert_to_db
             if ($success == true) {
-                if (!isset($estimate_request_id)) {
+                if (! isset($estimate_request_id)) {
                     $estimate_request_id = 0;
                 }
 
@@ -253,7 +256,8 @@ class Forms extends ClientsController
             }
 
             echo json_encode($response);
-            die;
+
+            exit;
         }
         $data['form'] = $form;
         $this->load->view('forms/estimate_request', $data);
@@ -262,12 +266,14 @@ class Forms extends ClientsController
     /**
      * Web to lead form
      * User no need to see anything like LEAD in the url, this is the reason the method is named wtl
-     * @param  string $key web to lead form key identifier
+     *
+     * @param string $key web to lead form key identifier
+     *
      * @return mixed
      */
     public function wtl($key = '')
     {
-        if (!$key) {
+        if (! $key) {
             show_404();
         }
 
@@ -276,7 +282,7 @@ class Forms extends ClientsController
             'form_key' => $key,
         ]);
 
-        if (!$form) {
+        if (! $form) {
             show_404();
         }
 
@@ -304,19 +310,21 @@ class Forms extends ClientsController
                     if ($field == 'file-input') {
                         continue;
                     }
-                    if (!isset($post_data[$field]) || isset($post_data[$field]) && empty($post_data[$field])) {
+                    if (! isset($post_data[$field]) || isset($post_data[$field]) && empty($post_data[$field])) {
                         $this->output->set_status_header(422);
-                        die;
+
+                        exit;
                     }
                 }
 
                 if (show_recaptcha() && $form->recaptcha == 1) {
-                    if (!do_recaptcha_validation($post_data['g-recaptcha-response'])) {
+                    if (! do_recaptcha_validation($post_data['g-recaptcha-response'])) {
                         echo json_encode([
                             'success' => false,
                             'message' => _l('recaptcha_error'),
                         ]);
-                        die;
+
+                        exit;
                     }
                 }
 
@@ -328,6 +336,7 @@ class Forms extends ClientsController
 
                 $regular_fields = [];
                 $custom_fields  = [];
+
                 foreach ($post_data as $name => $val) {
                     if (strpos($name, 'form-cf-') !== false) {
                         array_push($custom_fields, [
@@ -337,7 +346,7 @@ class Forms extends ClientsController
                     } else {
                         if ($this->db->field_exists($name, db_prefix() . 'leads')) {
                             if ($name == 'country') {
-                                if (!is_numeric($val)) {
+                                if (! is_numeric($val)) {
                                     if ($val == '') {
                                         $val = 0;
                                     } else {
@@ -366,10 +375,10 @@ class Forms extends ClientsController
 
                 if ($form->allow_duplicate == 0) {
                     $where = [];
-                    if (!empty($form->track_duplicate_field) && isset($regular_fields[$form->track_duplicate_field])) {
+                    if (! empty($form->track_duplicate_field) && isset($regular_fields[$form->track_duplicate_field])) {
                         $where[$form->track_duplicate_field] = $regular_fields[$form->track_duplicate_field];
                     }
-                    if (!empty($form->track_duplicate_field_and) && isset($regular_fields[$form->track_duplicate_field_and])) {
+                    if (! empty($form->track_duplicate_field_and) && isset($regular_fields[$form->track_duplicate_field_and])) {
                         $where[$form->track_duplicate_field_and] = $regular_fields[$form->track_duplicate_field_and];
                     }
 
@@ -410,12 +419,14 @@ class Forms extends ClientsController
 
                                 $description          = '';
                                 $custom_fields_parsed = [];
+
                                 foreach ($custom_fields as $key => $field) {
                                     $custom_fields_parsed[$field['name']] = $field['value'];
                                 }
 
                                 $all_fields    = array_merge($regular_fields, $custom_fields_parsed);
                                 $fields_labels = [];
+
                                 foreach ($data['form_fields'] as $f) {
                                     if ($f->type != 'header' && $f->type != 'paragraph' && $f->type != 'file') {
                                         $fields_labels[$f->name] = $f->label;
@@ -423,6 +434,7 @@ class Forms extends ClientsController
                                 }
 
                                 $description .= $form->name . '<br /><br />';
+
                                 foreach ($all_fields as $name => $val) {
                                     if (isset($fields_labels[$name])) {
                                         if ($name == 'country' && is_numeric($val)) {
@@ -476,7 +488,7 @@ class Forms extends ClientsController
 
                 if ($insert_to_db == true) {
                     $regular_fields['status'] = $form->lead_status;
-                    if ((isset($regular_fields['name']) && empty($regular_fields['name'])) || !isset($regular_fields['name'])) {
+                    if ((isset($regular_fields['name']) && empty($regular_fields['name'])) || ! isset($regular_fields['name'])) {
                         $regular_fields['name'] = 'Unknown';
                     }
                     $regular_fields['name']         = $form->lead_name_prefix . $regular_fields['name'];
@@ -504,6 +516,7 @@ class Forms extends ClientsController
                         ]));
                         // /handle_custom_fields_post
                         $custom_fields_build['leads'] = [];
+
                         foreach ($custom_fields as $cf) {
                             $cf_id                                = strafter($cf['name'], 'form-cf-');
                             $custom_fields_build['leads'][$cf_id] = $cf['value'];
@@ -522,29 +535,30 @@ class Forms extends ClientsController
 
                                 if (is_array($ids) && count($ids) > 0) {
                                     $this->db->where('active', 1)
-                                    ->where_in($form->notify_type == 'specific_staff' ? 'staffid' : 'role', $ids);
+                                        ->where_in($form->notify_type == 'specific_staff' ? 'staffid' : 'role', $ids);
                                     $staff = $this->db->get(db_prefix() . 'staff')->result_array();
                                 }
                             } elseif ($form->responsible) {
                                 $staff = [
-                                [
-                                    'staffid' => $form->responsible,
-                                ],
-                            ];
+                                    [
+                                        'staffid' => $form->responsible,
+                                    ],
+                                ];
                             }
 
                             $notifiedUsers = [];
+
                             foreach ($staff as $member) {
                                 if (add_notification([
-                                        'description' => 'not_lead_imported_from_form',
-                                        'touserid' => $member['staffid'],
-                                        'fromcompany' => 1,
-                                        'fromuserid' => 0,
-                                        'additional_data' => serialize([
-                                            $form->name,
-                                        ]),
-                                        'link' => '#leadid=' . $lead_id,
-                                    ])) {
+                                    'description'     => 'not_lead_imported_from_form',
+                                    'touserid'        => $member['staffid'],
+                                    'fromcompany'     => 1,
+                                    'fromuserid'      => 0,
+                                    'additional_data' => serialize([
+                                        $form->name,
+                                    ]),
+                                    'link' => '#leadid=' . $lead_id,
+                                ])) {
                                     array_push($notifiedUsers, $member['staffid']);
                                 }
                             }
@@ -558,10 +572,10 @@ class Forms extends ClientsController
                     }
                 } // end insert_to_db
                 if ($success == true) {
-                    if (!isset($lead_id)) {
+                    if (! isset($lead_id)) {
                         $lead_id = 0;
                     }
-                    if (!isset($task_id)) {
+                    if (! isset($task_id)) {
                         $task_id = 0;
                     }
                     hooks()->do_action('web_to_lead_form_submitted', [
@@ -578,7 +592,8 @@ class Forms extends ClientsController
                 }
 
                 echo json_encode($response);
-                die;
+
+                exit;
             }
         }
 
@@ -589,12 +604,14 @@ class Forms extends ClientsController
     /**
      * Web to lead form
      * User no need to see anything like LEAD in the url, this is the reason the method is named eq lead
-     * @param  string $hash lead unique identifier
+     *
+     * @param string $hash lead unique identifier
+     *
      * @return mixed
      */
     public function l($hash = '')
     {
-        if (!$hash) {
+        if (! $hash) {
             show_404();
         }
 
@@ -605,7 +622,7 @@ class Forms extends ClientsController
         $this->load->model('gdpr_model');
         $lead = $this->leads_model->get('', ['hash' => $hash]);
 
-        if (!$lead || count($lead) > 1) {
+        if (! $lead || count($lead) > 1) {
             show_404();
         }
 
@@ -645,7 +662,7 @@ class Forms extends ClientsController
 
     public function public_ticket($key = '')
     {
-        if (!$key) {
+        if (! $key || get_option('disable_ticket_public_url') != '0') {
             show_404();
         }
 
@@ -657,17 +674,17 @@ class Forms extends ClientsController
 
         $ticket = $this->tickets_model->get_ticket_by_id($key);
 
-        if (!$ticket) {
+        if (! $ticket) {
             show_404();
         }
 
         hooks()->do_action('view_public_ticket', $ticket);
 
-        if (!empty($ticket->merged_ticket_id)) {
+        if (! empty($ticket->merged_ticket_id)) {
             redirect(site_url('forms/tickets/' . $this->tickets_model->get($ticket->merged_ticket_id)->ticketkey));
         }
 
-        if (!is_client_logged_in() && $ticket->userid) {
+        if (! is_client_logged_in() && $ticket->userid) {
             load_client_language($ticket->userid);
         }
 
@@ -739,19 +756,21 @@ class Forms extends ClientsController
             }
 
             foreach ($required as $field) {
-                if (!isset($post_data[$field]) || isset($post_data[$field]) && empty($post_data[$field])) {
+                if (! isset($post_data[$field]) || isset($post_data[$field]) && empty($post_data[$field])) {
                     $this->output->set_status_header(422);
-                    die;
+
+                    exit;
                 }
             }
 
             if (show_recaptcha() && $form->recaptcha == 1) {
-                if (!do_recaptcha_validation($post_data['g-recaptcha-response'])) {
+                if (! do_recaptcha_validation($post_data['g-recaptcha-response'])) {
                     echo json_encode([
                         'success' => false,
                         'message' => _l('recaptcha_error'),
                     ]);
-                    die;
+
+                    exit;
                 }
             }
 
@@ -778,8 +797,7 @@ class Forms extends ClientsController
             if ($result) {
                 $post_data['userid']    = $result->userid;
                 $post_data['contactid'] = $result->id;
-                unset($post_data['email']);
-                unset($post_data['name']);
+                unset($post_data['email'], $post_data['name']);
             }
 
             $this->load->model('tickets_model');
@@ -802,7 +820,7 @@ class Forms extends ClientsController
                 'message' => $form->success_submit_msg,
             ]);
 
-            die;
+            exit;
         }
 
         $this->load->model('tickets_model');

@@ -5,6 +5,11 @@ use app\services\tasks\TasksKanban;
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
+/**
+ * @property-read Staff_model $staff_model
+ * @property-read Tasks_model $tasks_model
+ * @property-read Projects_model $projects_model
+ */
 class Tasks extends AdminController
 {
     public function __construct()
@@ -112,7 +117,7 @@ class Tasks extends AdminController
         $this->session->set_userdata([
             'tasks_kanban_view' => $set,
         ]);
-        
+
         if ($manual == false) {
             redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
         }
@@ -363,13 +368,13 @@ class Tasks extends AdminController
         $data['milestones']         = [];
         $data['checklistTemplates'] = $this->tasks_model->get_checklist_templates();
         if ($id == '') {
-            $title = _l('add_new', _l('task_lowercase'));
+            $title = _l('add_new', _l('task'));
         } else {
             $data['task'] = $this->tasks_model->get($id);
             if ($data['task']->rel_type == 'project') {
                 $data['milestones'] = $this->projects_model->get_milestones($data['task']->rel_id);
             }
-            $title = _l('edit', _l('task_lowercase')) . ' ' . $data['task']->name;
+            $title = _l('edit', _l('task')) . ' ' . $data['task']->name;
         }
 
         $data['project_end_date_attrs'] = [];
@@ -382,7 +387,7 @@ class Tasks extends AdminController
                 ];
             }
         }
-        $data['members'] = $this->staff_model->get();
+        $data['members'] = $this->staff_model->get('', ['active' => 1]);
         $data['id']      = $id;
         $data['title']   = $title;
         $this->load->view('admin/tasks/task', $data);
@@ -950,8 +955,8 @@ class Tasks extends AdminController
             set_alert('warning', $message);
         }
 
-        if (empty($_SERVER['HTTP_REFERER']) || 
-            strpos($_SERVER['HTTP_REFERER'], 'tasks/index') !== false || 
+        if (empty($_SERVER['HTTP_REFERER']) ||
+            strpos($_SERVER['HTTP_REFERER'], 'tasks/index') !== false ||
             strpos($_SERVER['HTTP_REFERER'], 'tasks/view') !== false) {
             redirect(admin_url('tasks'));
         } else {

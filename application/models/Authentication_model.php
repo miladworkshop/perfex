@@ -1,8 +1,11 @@
 <?php
 
-defined('BASEPATH') or exit('No direct script access allowed');
+use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
 
-use Sonata\GoogleAuthenticator\GoogleAuthenticator;
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Authentication_model extends App_Model
 {
@@ -631,12 +634,16 @@ class Authentication_model extends App_Model
     public function get_qr($System_name)
     {
         $staff    = get_staff(get_staff_user_id());
-        $g        = new GoogleAuthenticator();
-        $secret   = $g->generateSecret();
-        $username = urlencode($staff->email);
-        $url      = \Sonata\GoogleAuthenticator\GoogleQrUrl::generate($username, $secret, $System_name);
-
-        return ['qrURL' => $url, 'secret' => $secret];
+        $google2fa = new PragmaRX\Google2FA\Google2FA();
+        $secret   = $google2fa->generateSecretKey();
+        $g2faUrl      = $google2fa->getQRCodeUrl($System_name, $staff->email, $secret);
+        $writer = new Writer(
+            new ImageRenderer(
+                new RendererStyle(200),
+                new ImagickImageBackEnd()
+            )
+        );
+        return ['qrURL' => base64_encode($writer->writeString($g2faUrl)), 'secret' => $secret];
     }
 
     public function set_google_two_factor($secret)
@@ -659,10 +666,10 @@ class Authentication_model extends App_Model
 
     public function is_google_two_factor_code_valid($code, $secret = null)
     {
-        $g = new GoogleAuthenticator();
+        $g = new PragmaRX\Google2FA\Google2FA();
 
         if (!is_null($secret)) {
-            return $g->checkCode($secret, $code);
+            return $g->verifyKey($secret, $code, 0);
         }
 
         $staffid = $this->session->userdata('tfa_staffid');
@@ -671,9 +678,10 @@ class Authentication_model extends App_Model
             ->where('staffid', $staffid);
 
         if ($staff = $this->db->get('staff')->row()) {
-            return $g->checkCode(
+            return $g->verifyKey(
                 $this->decrypt($staff->google_auth_secret),
-                $code
+                $code,
+                0
             );
         }
 

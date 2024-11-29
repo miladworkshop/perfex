@@ -6,10 +6,10 @@ return App_table::find('related_tasks')
     ->outputUsing(function ($params) {
         extract($params);
 
-        $hasPermissionEdit   = staff_can('edit',  'tasks');
-        $hasPermissionDelete = staff_can('delete',  'tasks');
+        $hasPermissionEdit   = staff_can('edit', 'tasks');
+        $hasPermissionDelete = staff_can('delete', 'tasks');
         $tasksPriorities     = get_tasks_priorities();
-        $task_statuses = $this->ci->tasks_model->get_statuses();
+        $task_statuses       = $this->ci->tasks_model->get_statuses();
 
         $aColumns = [
             '1', // bulk actions
@@ -31,12 +31,12 @@ return App_table::find('related_tasks')
         if ($filtersWhere = $this->getWhereFromRules()) {
             $where[] = $filtersWhere;
         }
-        
+
         if (staff_cant('view', 'tasks')) {
             $where[] = get_tasks_where_string();
         }
 
-        if (!$this->ci->input->post('tasks_related_to')) {
+        if (! $this->ci->input->post('tasks_related_to')) {
             array_push($where, 'AND rel_id="' . $this->ci->db->escape_str($rel_id) . '" AND rel_type="' . $this->ci->db->escape_str($rel_type) . '"');
         } else {
             // Used in the customer profile filters
@@ -44,6 +44,7 @@ return App_table::find('related_tasks')
             $rel_to_query     = 'AND (';
 
             $lastElement = end($tasks_related_to);
+
             foreach ($tasks_related_to as $rel_to) {
                 if ($rel_to == 'invoice') {
                     $rel_to_query .= '(rel_id IN (SELECT id FROM ' . db_prefix() . 'invoices WHERE clientid=' . $this->ci->db->escape_str($rel_id) . ')';
@@ -117,7 +118,7 @@ return App_table::find('related_tasks')
                 $outputName .= '<span class="pull-left text-danger"><i class="fa-regular fa-clock fa-fw tw-mr-1"></i></span>';
             }
 
-            $outputName .= '<a href="' . admin_url('tasks/view/' . $aRow['id']) . '" class="display-block main-tasks-table-href-name" onclick="init_task_modal(' . $aRow['id'] . '); return false;">' . e($aRow['task_name']) . '</a>';
+            $outputName .= '<a href="' . admin_url('tasks/view/' . $aRow['id']) . '" class="main-tasks-table-href-name tw-font-medium" onclick="init_task_modal(' . $aRow['id'] . '); return false;" title="' . e($aRow['task_name']) . '">' . e($aRow['task_name']) . '</a>';
 
             if ($aRow['recurring'] == 1) {
                 $outputName .= '<span class="label label-primary inline-block mtop4"> ' . _l('recurring_task') . '</span>';
@@ -129,14 +130,14 @@ return App_table::find('related_tasks')
             $style = '';
 
             $tooltip = '';
-            if ($aRow['billed'] == 1 || !$aRow['is_assigned'] || $aRow['status'] == Tasks_model::STATUS_COMPLETE) {
+            if ($aRow['billed'] == 1 || ! $aRow['is_assigned'] || $aRow['status'] == Tasks_model::STATUS_COMPLETE) {
                 $class = 'text-dark disabled';
                 $style = 'style="opacity:0.6;cursor: not-allowed;"';
                 if ($aRow['status'] == Tasks_model::STATUS_COMPLETE) {
                     $tooltip = ' data-toggle="tooltip" data-title="' . e(format_task_status($aRow['status'], false, true)) . '"';
                 } elseif ($aRow['billed'] == 1) {
                     $tooltip = ' data-toggle="tooltip" data-title="' . _l('task_billed_cant_start_timer') . '"';
-                } elseif (!$aRow['is_assigned']) {
+                } elseif (! $aRow['is_assigned']) {
                     $tooltip = ' data-toggle="tooltip" data-title="' . _l('task_start_timer_only_assignee') . '"';
                 }
             }
@@ -159,30 +160,19 @@ return App_table::find('related_tasks')
             $outputName .= '</div>';
 
             $row[]           = $outputName;
-            $canChangeStatus = ($aRow['current_user_is_creator'] != '0' || $aRow['current_user_is_assigned'] || staff_can('edit',  'tasks'));
+            $canChangeStatus = ($aRow['current_user_is_creator'] != '0' || $aRow['current_user_is_assigned'] || staff_can('edit', 'tasks'));
             $status          = get_task_status_by_id($aRow['status']);
             $outputStatus    = '';
 
-            $outputStatus .= '<span class="label" style="color:' . $status['color'] . ';border:1px solid ' . adjust_hex_brightness($status['color'], 0.4) . ';background: ' . adjust_hex_brightness($status['color'], 0.04) . ';" task-status-table="' . e($aRow['status']) . '">';
-
-            $outputStatus .= e($status['name']);
-
-            /*  if ($aRow['status'] == Tasks_model::STATUS_COMPLETE && $canChangeStatus) {
-       $outputStatus .= '<a href="#" onclick="unmark_complete(' . $aRow['id'] . '); return false;"><i class="fa fa-check task-icon task-finished-icon" data-toggle="tooltip" title="' . _l('task_unmark_as_complete') . '"></i></a>';
-    } else {
-       if ($canChangeStatus) {
-           $outputStatus .= '<a href="#" onclick="mark_complete(' . $aRow['id'] . '); return false;"><i class="fa fa-check task-icon task-unfinished-icon" data-toggle="tooltip" title="' . _l('task_single_mark_as_complete') . '"></i></a>';
-       }
-    }
-*/
-
             if ($canChangeStatus) {
-                $outputStatus .= '<div class="dropdown inline-block mleft5 table-export-exclude">';
-                $outputStatus .= '<a href="#" style="font-size:14px;vertical-align:middle;" class="dropdown-toggle text-dark" id="tableTaskStatus-' . $aRow['id'] . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-                $outputStatus .= '<span data-toggle="tooltip" title="' . _l('ticket_single_change_status') . '"><i class="fa-solid fa-chevron-down"></i></span>';
+                $outputStatus .= '<div class="dropdown inline-block table-export-exclude">';
+                $outputStatus .= '<a href="#" class="dropdown-toggle label tw-flex tw-items-center tw-gap-1 tw-flex-nowrap hover:tw-opacity-80 tw-align-middle" style="color:' . $status['color'] . ';border:1px solid ' . adjust_hex_brightness($status['color'], 0.4) . ';background: ' . adjust_hex_brightness($status['color'], 0.04) . ';" task-status-table="' . e($aRow['status']) . '" id="tableTaskStatus-' . $aRow['id'] . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+                $outputStatus .= e($status['name']);
+                $outputStatus .= '<i class="chevron tw-shrink-0"></i>';
                 $outputStatus .= '</a>';
 
-                $outputStatus .= '<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="tableTaskStatus-' . $aRow['id'] . '">';
+                $outputStatus .= '<ul class="dropdown-menu" aria-labelledby="tableTaskStatus-' . $aRow['id'] . '">';
+
                 foreach ($task_statuses as $taskChangeStatus) {
                     if ($aRow['status'] != $taskChangeStatus['id']) {
                         $outputStatus .= '<li>
@@ -194,9 +184,9 @@ return App_table::find('related_tasks')
                 }
                 $outputStatus .= '</ul>';
                 $outputStatus .= '</div>';
+            } else {
+                $outputStatus .= '<span class="label" style="color:' . $status['color'] . ';border:1px solid ' . adjust_hex_brightness($status['color'], 0.4) . ';background: ' . adjust_hex_brightness($status['color'], 0.04) . ';" task-status-table="' . e($aRow['status']) . '">' . e($status['name']) . '</span>';
             }
-
-            $outputStatus .= '</span>';
 
             $row[] = $outputStatus;
             $row[] = e(_d($aRow['startdate']));
@@ -207,15 +197,15 @@ return App_table::find('related_tasks')
 
             $row[] = render_tags($aRow['tags']);
 
-            $outputPriority = '<span style="color:' . e(task_priority_color($aRow['priority'])) . ';" class="inline-block">' . e(task_priority($aRow['priority']));
-
-            if (staff_can('edit',  'tasks') && $aRow['status'] != Tasks_model::STATUS_COMPLETE) {
-                $outputPriority .= '<div class="dropdown inline-block mleft5 table-export-exclude">';
-                $outputPriority .= '<a href="#" style="font-size:14px;vertical-align:middle;" class="dropdown-toggle text-dark" id="tableTaskPriority-' . $aRow['id'] . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-                $outputPriority .= '<span data-toggle="tooltip" title="' . _l('task_single_priority') . '"><i class="fa-solid fa-chevron-down"></i></span>';
+            if (staff_can('edit', 'tasks') && $aRow['status'] != Tasks_model::STATUS_COMPLETE) {
+                $outputPriority = '<div class="dropdown inline-block table-export-exclude">';
+                $outputPriority .= '<a href="#" style="color:' . e(task_priority_color($aRow['priority'])) . '" class="dropdown-toggle tw-flex tw-items-center tw-gap-1 tw-flex-nowrap hover:tw-opacity-80 tw-align-middle" id="tableTaskPriority-' . $aRow['id'] . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+                $outputPriority .= e(task_priority($aRow['priority']));
+                $outputPriority .= '<i class="chevron tw-shrink-0"></i>';
                 $outputPriority .= '</a>';
 
-                $outputPriority .= '<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="tableTaskPriority-' . $aRow['id'] . '">';
+                $outputPriority .= '<ul class="dropdown-menu" aria-labelledby="tableTaskPriority-' . $aRow['id'] . '">';
+
                 foreach ($tasksPriorities as $priority) {
                     if ($aRow['priority'] != $priority['id']) {
                         $outputPriority .= '<li>
@@ -227,9 +217,10 @@ return App_table::find('related_tasks')
                 }
                 $outputPriority .= '</ul>';
                 $outputPriority .= '</div>';
+            } else {
+                $outputPriority = '<span style="color:' . e(task_priority_color($aRow['priority'])) . ';" class="inline-block">' . e(task_priority($aRow['priority'])) . '</span>';
             }
 
-            $outputPriority .= '</span>';
             $row[] = $outputPriority;
 
             // Custom fields add values
@@ -237,16 +228,16 @@ return App_table::find('related_tasks')
                 $row[] = (strpos($customFieldColumn, 'date_picker_') !== false ? _d($aRow[$customFieldColumn]) : $aRow[$customFieldColumn]);
             }
 
+            $row['DT_RowClass'] = 'has-row-options has-border-left';
 
-            $row['DT_RowClass'] = 'has-row-options';
-
-            if ((!empty($aRow['duedate']) && $aRow['duedate'] < date('Y-m-d')) && $aRow['status'] != Tasks_model::STATUS_COMPLETE) {
-                $row['DT_RowClass'] .= ' danger';
+            if ((! empty($aRow['duedate']) && $aRow['duedate'] < date('Y-m-d')) && $aRow['status'] != Tasks_model::STATUS_COMPLETE) {
+                $row['DT_RowClass'] .= ' row-border-danger';
             }
 
             $row = hooks()->apply_filters('tasks_related_table_row_data', $row, $aRow);
 
             $output['aaData'][] = $row;
         }
+
         return $output;
     });

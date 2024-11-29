@@ -73,7 +73,7 @@ abstract class CSVExport
                     $line = [];
                     foreach ($row as $name => $value) {
                         if (!in_array($name, $this->excludedFields())) {
-                            $line[] = $enclosure . str_replace($enclosure, $enclosure . $enclosure, $this->formatRow($name, $value, $row)) . $enclosure;
+                            $line[] = $enclosure . str_replace($enclosure, $enclosure . $enclosure, $this->formatRow($name, $value, $row) ?? '') . $enclosure;
                         }
                     }
                     $result .= implode($delim, $line) . $newline;

@@ -11,25 +11,33 @@ class Settings extends AdminController
         $this->load->model('settings_model');
     }
 
-    /* View all settings */
+    // View all settings
     public function index()
     {
         if (staff_cant('view', 'settings')) {
             access_denied('settings');
         }
 
-        $tab = $this->input->get('group');
+        $group = $this->input->get('group');
+
+        // Pre 3.1.6
+        if ($group === 'sales') {
+            $group = 'sales_general';
+        }
 
         if ($this->input->post()) {
             if (staff_cant('edit', 'settings')) {
                 access_denied('settings');
             }
+
+            $post_data = $this->input->post();
+            hooks()->do_action('before_update_system_options', $post_data);
+
             $logo_uploaded     = (handle_company_logo_upload() ? true : false);
             $favicon_uploaded  = (handle_favicon_upload() ? true : false);
             $signatureUploaded = (handle_company_signature_upload() ? true : false);
 
-            $post_data = $this->input->post();
-            $tmpData   = $this->input->post(null, false);
+            $tmpData = $this->input->post(null, false);
 
             if (isset($post_data['settings']['email_header'])) {
                 $post_data['settings']['email_header'] = $tmpData['settings']['email_header'];
@@ -58,15 +66,17 @@ class Settings extends AdminController
             }
 
             // Do hard refresh on general for the logo
-            if ($tab == 'general') {
-                redirect(admin_url('settings?group=' . $tab), 'refresh');
+            if ($group == 'general') {
+                redirect(admin_url('settings?group=' . $group), 'refresh');
             } elseif ($signatureUploaded) {
                 redirect(admin_url('settings?group=pdf&tab=signature'));
             } else {
-                $redUrl = admin_url('settings?group=' . $tab);
+                $redUrl = admin_url('settings?group=' . $group);
+
                 if ($this->input->get('active_tab')) {
                     $redUrl .= '&tab=' . $this->input->get('active_tab');
                 }
+
                 redirect($redUrl);
             }
         }
@@ -87,26 +97,33 @@ class Settings extends AdminController
 
         $data['admin_tabs'] = ['update', 'info'];
 
-        if (!$tab || (in_array($tab, $data['admin_tabs']) && !is_admin())) {
-            $tab = 'general';
+        if (! $group || (in_array($group, $data['admin_tabs']) && ! is_admin())) {
+            $group = 'general';
         }
 
-        $data['tabs'] = $this->app_tabs->get_settings_tabs();
-        if (!in_array($tab, $data['admin_tabs'])) {
-            $data['tab'] = $this->app_tabs->filter_tab($data['tabs'], $tab);
+        // $data['tabs'] = $this->app_tabs->get_settings_tabs();
+        $data['sections'] = $this->app->get_settings_sections();
+        if (! in_array($group, $data['admin_tabs'])) {
+            $data['group'] = collect($data['sections'])->pluck('children')->flatten(1)->first(function ($sectionGroup) use ($group) {
+                return $sectionGroup['id'] == $group;
+            });
         } else {
             // Core tabs are not registered
-            $data['tab']['slug'] = $tab;
-            $data['tab']['view'] = 'admin/settings/includes/' . $tab;
-            $data['tab']['name'] = $tab === 'info' ? ' System/Server Info' : _l('settings_update');
+            $data['group']['id']       = $group;
+            $data['group']['view']     = 'admin/settings/includes/' . $group;
+            $data['group']['name']     = $group === 'info' ? ' System/Server Info' : _l('settings_update');
+            $data['group']['children'] = [];
+            if ($group === 'info') {
+                $data['group']['without_submit_button'] = true;
+            }
         }
 
-        if (!$data['tab']) {
+        if (! $data['group']) {
             show_404();
         }
 
-        if ($data['tab']['slug'] == 'update') {
-            if (!extension_loaded('curl')) {
+        if ($data['group']['id'] == 'update') {
+            if (! extension_loaded('curl')) {
                 $data['update_errors'][] = 'CURL Extension not enabled';
                 $data['latest_version']  = 0;
                 $data['update_info']     = json_decode('');
@@ -123,7 +140,7 @@ class Settings extends AdminController
                 }
             }
 
-            if (!extension_loaded('zip')) {
+            if (! extension_loaded('zip')) {
                 $data['update_errors'][] = 'ZIP Extension not enabled';
             }
 
@@ -138,7 +155,7 @@ class Settings extends AdminController
 
     public function delete_tag($id)
     {
-        if (!$id) {
+        if (! $id) {
             redirect(admin_url('settings?group=tags'));
         }
 
@@ -170,7 +187,7 @@ class Settings extends AdminController
         redirect(admin_url('settings?group=pdf&tab=signature'));
     }
 
-    /* Remove company logo from settings / ajax */
+    // Remove company logo from settings / ajax
     public function remove_company_logo($type = '')
     {
         hooks()->do_action('before_remove_company_logo');
@@ -225,6 +242,6 @@ class Settings extends AdminController
         $this->db->empty_table(db_prefix() . 'sessions');
 
         set_alert('success', 'Sessions Cleared');
-            redirect(admin_url('settings?group=info'));
+        redirect(admin_url('settings?group=info'));
     }
 }

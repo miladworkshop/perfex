@@ -12,6 +12,7 @@ function app_admin_head()
 
 /**
  * @since 2.3.2
+ *
  * @return null
  */
 function app_admin_footer()
@@ -27,7 +28,8 @@ function app_admin_footer()
 /**
  * @since  1.0.0
  * Init admin head
- * @param  boolean $aside should include aside
+ *
+ * @param bool $aside should include aside
  */
 function init_head($aside = true)
 {
@@ -50,7 +52,10 @@ function init_tail()
 }
 /**
  * Get admin url
+ *
  * @param string url to append (Optional)
+ * @param mixed $url
+ *
  * @return string admin url
  */
 function admin_url($url = '')
@@ -70,14 +75,16 @@ function admin_url($url = '')
 
 /**
  * @since 3.1.0
- * @param string $capability 
- * @param string $feature 
- * @param string $staff_id 
- * @return bool 
+ *
+ * @param string $capability
+ * @param string $feature
+ * @param string $staff_id
+ *
+ * @return bool
  */
-function staff_cant($capability, $feature = null, $staff_id = '') 
+function staff_cant($capability, $feature = null, $staff_id = '')
 {
-    return !staff_can($capability, $feature, $staff_id);
+    return ! staff_can($capability, $feature, $staff_id);
 }
 
 /**
@@ -85,8 +92,8 @@ function staff_cant($capability, $feature = null, $staff_id = '')
  * Helper function for checking staff capabilities, this function should be used instead of has_permission
  * Can be used e.q. staff_can('view', 'invoices');
  *
- * @param  string $capability         e.q. view | create | edit | delete | view_own | can_delete
- * @param  string $feature            the feature name e.q. invoices | estimates | contracts | my_module_name
+ * @param string $capability e.q. view | create | edit | delete | view_own | can_delete
+ * @param string $feature    the feature name e.q. invoices | estimates | contracts | my_module_name
  *
  *    NOTE: The $feature parameter is available as optional, but it's highly recommended always to be passed
  *    because of the uniqueness of the capability names.
@@ -94,10 +101,9 @@ function staff_cant($capability, $feature = null, $staff_id = '')
  *    In this case, if you don't pass the feature name, there may be inaccurate results
  *    If you are certain that your capability name is unique e.q. my_prefixed_capability_can_create , you don't need to pass the $feature
  *    and you can use this function as e.q. staff_can('my_prefixed_capability_can_create')
+ * @param mixed $staff_id staff id | if not passed, the logged in staff will be checked
  *
- * @param  mixed $staff_id            staff id | if not passed, the logged in staff will be checked
- *
- * @return boolean
+ * @return bool
  */
 function staff_can($capability, $feature = null, $staff_id = '')
 {
@@ -135,15 +141,15 @@ function staff_can($capability, $feature = null, $staff_id = '')
      * Get permissions for this staff
      * Permissions will be cached in object cache upon first request
      */
-    if (!$permissions) {
-        if (!class_exists('staff_model', false)) {
+    if (! $permissions) {
+        if (! class_exists('staff_model', false)) {
             $CI->load->model('staff_model');
         }
 
         $permissions = $CI->staff_model->get_staff_permissions($staff_id);
     }
 
-    if (!$feature) {
+    if (! $feature) {
         $retVal = in_array_multidimensional($permissions, 'capability', $capability);
 
         return hooks()->apply_filters('staff_can', $retVal, $capability, $feature, $staff_id);
@@ -162,10 +168,12 @@ function staff_can($capability, $feature = null, $staff_id = '')
 /**
  * @since  2.3.3
  * Check whether a role has specific permission applied
- * @param  mixed  $role_id    role id
- * @param  string  $capability e.q. view|create|read
- * @param  string  $feature    the feature, e.q. invoices|estimates etc...
- * @return boolean
+ *
+ * @param mixed  $role_id    role id
+ * @param string $capability e.q. view|create|read
+ * @param string $feature    the feature, e.q. invoices|estimates etc...
+ *
+ * @return bool
  */
 function has_role_permission($role_id, $capability, $feature)
 {
@@ -186,10 +194,12 @@ function has_role_permission($role_id, $capability, $feature)
  * @deprecated 3.1.0
  *
  * Check if staff user has permission
- * 
- * @param  string  $permission permission shortname
- * @param  mixed  $staffid if you want to check for particular staff
- * @return boolean
+ *
+ * @param string $permission permission shortname
+ * @param mixed  $staffid    if you want to check for particular staff
+ * @param mixed  $can
+ *
+ * @return bool
  */
 function has_permission($permission, $staffid = '', $can = '')
 {
@@ -199,20 +209,22 @@ function has_permission($permission, $staffid = '', $can = '')
 /**
  * @since  1.0.0
  * Load language in admin area
- * @param  string $staff_id
+ *
+ * @param string $staff_id
+ *
  * @return string return loaded language
  */
 function load_admin_language($staff_id = '')
 {
-    $CI = & get_instance();
+    $CI = &get_instance();
 
     $CI->lang->is_loaded = [];
     $CI->lang->language  = [];
 
     $language = get_option('active_language');
-    if ((is_staff_logged_in() || $staff_id != '') && !is_language_disabled()) {
+    if ((is_staff_logged_in() || $staff_id != '') && ! is_language_disabled()) {
         $staff_language = get_staff_default_language($staff_id);
-        if (!empty($staff_language)
+        if (! empty($staff_language)
             && file_exists(APPPATH . 'language/' . $staff_language)) {
             $language = $staff_language;
         }
@@ -228,10 +240,10 @@ function load_admin_language($staff_id = '')
     return $language;
 }
 
-
 /**
  * Return admin URI
  * CUSTOM_ADMIN_URL is not yet tested well, don't define it
+ *
  * @return string
  */
 function get_admin_uri()
@@ -242,16 +254,17 @@ function get_admin_uri()
 /**
  * @since  1.0.0
  * Check if current user is admin
- * @param  mixed $staffid
- * @return boolean if user is not admin
+ *
+ * @param mixed $staffid
+ *
+ * @return bool if user is not admin
  */
 function is_admin($staffid = '')
 {
-
     /**
      * Checking for current user?
      */
-    if (!is_numeric($staffid)) {
+    if (! is_numeric($staffid)) {
         if (isset($GLOBALS['current_user'])) {
             return $GLOBALS['current_user']->admin === '1';
         }
@@ -259,15 +272,15 @@ function is_admin($staffid = '')
         $staffid = get_staff_user_id();
     }
 
-    $CI = & get_instance();
+    $CI = &get_instance();
 
     if ($cache = $CI->app_object_cache->get('is-admin-' . $staffid)) {
         return $cache === 'yes';
     }
 
     $CI->db->select('1')
-    ->where('admin', 1)
-    ->where('staffid', $staffid);
+        ->where('admin', 1)
+        ->where('staffid', $staffid);
 
     $result = $CI->db->count_all_results(db_prefix() . 'staff') > 0 ? true : false;
     $CI->app_object_cache->add('is-admin-' . $staffid, $result ? 'yes' : 'no');
@@ -285,6 +298,7 @@ function get_admin_body_class($class = '')
     $classes   = [];
     $classes[] = 'app';
     $classes[] = 'admin';
+    $classes[] = 'h-full';
     $classes[] = $class;
 
     $ci = &get_instance();
@@ -296,12 +310,12 @@ function get_admin_body_class($class = '')
     $classes[] = $first_segment;
 
     // Not valid eq users/1 - ID
-    if ($second_segment != '' && !is_numeric($second_segment)) {
+    if ($second_segment != '' && ! is_numeric($second_segment)) {
         $classes[] = $second_segment;
     }
 
     // Not valid eq users/edit/1 - ID
-    if ($third_segment != '' && !is_numeric($third_segment)) {
+    if ($third_segment != '' && ! is_numeric($third_segment)) {
         $classes[] = $third_segment;
     }
 
@@ -325,9 +339,9 @@ function get_admin_body_class($class = '')
     return array_unique($classes);
 }
 
-
 /**
  * Feature that will render all JS necessary data in admin head
+ *
  * @return void
  */
 function render_admin_js_variables()
@@ -353,7 +367,7 @@ function render_admin_js_variables()
         'allowed_files'                               => get_option('allowed_files'),
         'desktop_notifications'                       => get_option('desktop_notifications'),
         'show_table_export_button'                    => get_option('show_table_export_button'),
-        'has_permission_tasks_checklist_items_delete' => staff_can('delete',  'checklist_templates'),
+        'has_permission_tasks_checklist_items_delete' => staff_can('delete', 'checklist_templates'),
         'show_setup_menu_item_only_on_hover'          => get_option('show_setup_menu_item_only_on_hover'),
         'newsfeed_maximum_files_upload'               => get_option('newsfeed_maximum_files_upload'),
         'dismiss_desktop_not_after'                   => get_option('auto_dismiss_desktop_notifications_after'),
@@ -420,48 +434,49 @@ function render_admin_js_variables()
         'lead'                                                    => _l('lead'),
         'create_reminder'                                         => _l('create_reminder'),
         'something_went_wrong'                                    => _l('something_went_wrong'),
-        
-        'filter_boolean_yes' => _l('filter_boolean_yes'),
-        'filter_boolean_no' => _l('filter_boolean_no'),
-        'filter_matchtype_and' => _l('filter_matchtype_and'),
-        'filter_matchtype_or' => _l('filter_matchtype_or'),
-        'filter_share' => _l('filter_share'),
-        'filter_mark_as_default' => _l('filter_mark_as_default'),
-        'filter_unmark_as_default' => _l('filter_unmark_as_default'),
-        'default_filter_info' => _l('default_filter_info'),
-        'filter_save' => _l('filter_save'),
-        'filter_name' => _l('filter_name'),
-        'filter_apply' => _l('filter_apply'),
-        'filter_apply_and_save' => _l('filter_apply_and_save'),
-        'filter_new' => _l('filter_new'),
-        'filter_clear_active' => _l('filter_clear_active'),
-        'filter_edit' => _l('filter_edit'),
-        'filter_create' => _l('filter_create'),
-        'filter_update' => _l('filter_update'),
-        'filter_delete' => _l('filter_delete'),
-        'filter_cannot_be_shared' => _l('filter_cannot_be_shared'),
-        'filter_add_rule' => _l('filter_add_rule'),
-        'filter_operator_is_empty' => _l('filter_operator_is_empty'),
-        'filter_operator_is_not_empty' => _l('filter_operator_is_not_empty'),
-        'filter_operator_equal' => _l('filter_operator_equal'),
-        'filter_operator_not_equal' => _l('filter_operator_not_equal'),
-        'filter_operator_begins_with' => _l('filter_operator_begins_with'),
-        'filter_operator_not_begins_with' => _l('filter_operator_not_begins_with'),
-        'filter_operator_contains' => _l('filter_operator_contains'),
-        'filter_operator_not_contains' => _l('filter_operator_not_contains'),
-        'filter_operator_ends_with' => _l('filter_operator_ends_with'),
-        'filter_operator_not_ends_with' => _l('filter_operator_not_ends_with'),
-        'filter_operator_in' => _l('filter_operator_in'),
-        'filter_operator_not_in' => _l('filter_operator_not_in'),
-        'filter_operator_between' => _l('filter_operator_between'),
-        'filter_operator_not_between' => _l('filter_operator_not_between'),
-        'filter_operator_dynamic' => _l('filter_operator_dynamic'),
-        'filter_operator_greater' => _l('filter_operator_greater'),
+
+        'filters'                          => _l('filters'),
+        'filter_boolean_yes'               => _l('filter_boolean_yes'),
+        'filter_boolean_no'                => _l('filter_boolean_no'),
+        'filter_matchtype_and'             => _l('filter_matchtype_and'),
+        'filter_matchtype_or'              => _l('filter_matchtype_or'),
+        'filter_share'                     => _l('filter_share'),
+        'filter_mark_as_default'           => _l('filter_mark_as_default'),
+        'filter_unmark_as_default'         => _l('filter_unmark_as_default'),
+        'default_filter_info'              => _l('default_filter_info'),
+        'filter_save'                      => _l('filter_save'),
+        'filter_name'                      => _l('filter_name'),
+        'filter_apply'                     => _l('filter_apply'),
+        'filter_apply_and_save'            => _l('filter_apply_and_save'),
+        'filter_new'                       => _l('filter_new'),
+        'filter_clear_active'              => _l('filter_clear_active'),
+        'filter_edit'                      => _l('filter_edit'),
+        'filter_create'                    => _l('filter_create'),
+        'filter_update'                    => _l('filter_update'),
+        'filter_delete'                    => _l('filter_delete'),
+        'filter_cannot_be_shared'          => _l('filter_cannot_be_shared'),
+        'filter_add_rule'                  => _l('filter_add_rule'),
+        'filter_operator_is_empty'         => _l('filter_operator_is_empty'),
+        'filter_operator_is_not_empty'     => _l('filter_operator_is_not_empty'),
+        'filter_operator_equal'            => _l('filter_operator_equal'),
+        'filter_operator_not_equal'        => _l('filter_operator_not_equal'),
+        'filter_operator_begins_with'      => _l('filter_operator_begins_with'),
+        'filter_operator_not_begins_with'  => _l('filter_operator_not_begins_with'),
+        'filter_operator_contains'         => _l('filter_operator_contains'),
+        'filter_operator_not_contains'     => _l('filter_operator_not_contains'),
+        'filter_operator_ends_with'        => _l('filter_operator_ends_with'),
+        'filter_operator_not_ends_with'    => _l('filter_operator_not_ends_with'),
+        'filter_operator_in'               => _l('filter_operator_in'),
+        'filter_operator_not_in'           => _l('filter_operator_not_in'),
+        'filter_operator_between'          => _l('filter_operator_between'),
+        'filter_operator_not_between'      => _l('filter_operator_not_between'),
+        'filter_operator_dynamic'          => _l('filter_operator_dynamic'),
+        'filter_operator_greater'          => _l('filter_operator_greater'),
         'filter_operator_greater_or_equal' => _l('filter_operator_greater_or_equal'),
-        'filter_operator_less' => _l('filter_operator_less'),
-        'filter_operator_less_or_equal' => _l('filter_operator_less_or_equal'),
-        'filter_use_dynamic_dates' => _l('filter_use_dynamic_dates'),
-        'no_filters_found' => _l('no_filters_found'),
+        'filter_operator_less'             => _l('filter_operator_less'),
+        'filter_operator_less_or_equal'    => _l('filter_operator_less_or_equal'),
+        'filter_use_dynamic_dates'         => _l('filter_use_dynamic_dates'),
+        'no_filters_found'                 => _l('no_filters_found'),
     ];
 
     echo '<script>';
@@ -504,7 +519,6 @@ function render_admin_js_variables()
     /**
      * @deprecated 2.3.2
      */
-
     $deprecated = [
         'app_language'                                => get_staff_default_language(), // done, prefix it
         'app_is_mobile'                               => is_mobile(), // done, prefix it
@@ -527,7 +541,7 @@ function render_admin_js_variables()
         'calendarIDs'                                 => '', // done, dont do nothing
         'is_admin'                                    => is_admin(), // done, dont do nothing
         'is_staff_member'                             => is_staff_member(), // done, dont do nothing
-        'has_permission_tasks_checklist_items_delete' => staff_can('delete',  'checklist_templates'), // done, dont do nothing
+        'has_permission_tasks_checklist_items_delete' => staff_can('delete', 'checklist_templates'), // done, dont do nothing
         'app_show_setup_menu_item_only_on_hover'      => get_option('show_setup_menu_item_only_on_hover'), // done, dont to nothing
         'app_newsfeed_maximum_files_upload'           => get_option('newsfeed_maximum_files_upload'), // done, dont to nothing
         'app_dismiss_desktop_not_after'               => get_option('auto_dismiss_desktop_notifications_after'), // done, dont to nothing
@@ -549,6 +563,7 @@ function render_admin_js_variables()
     echo rtrim($vars, ',') . ';';
 
     echo 'var appLang = {};';
+
     foreach ($lang as $key => $val) {
         echo 'appLang["' . $key . '"] = "' . $val . '";';
     }
@@ -558,7 +573,7 @@ function render_admin_js_variables()
 
 function _maybe_system_setup_warnings()
 {
-    if (!defined('DISABLE_APP_SYSTEM_HELP_MESSAGES') || (defined('DISABLE_APP_SYSTEM_HELP_MESSAGES') && DISABLE_APP_SYSTEM_HELP_MESSAGES)) {
+    if (! defined('DISABLE_APP_SYSTEM_HELP_MESSAGES') || (defined('DISABLE_APP_SYSTEM_HELP_MESSAGES') && DISABLE_APP_SYSTEM_HELP_MESSAGES)) {
         hooks()->add_action('ticket_created', [new PopupMessage('app\services\messages\FirstTicketCreated'), 'check']);
         hooks()->add_action('lead_created', [new PopupMessage('app\services\messages\FirstLeadCreated'), 'check']);
         hooks()->add_action('new_tag_created', [new PopupMessage('app\services\messages\FirstTagCreated'), 'check']);

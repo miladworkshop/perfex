@@ -6,72 +6,87 @@ class App
 {
     /**
      * Options autoload=1
+     *
      * @var array
      */
     private $options = [];
 
     /**
      * Quick actions create aside
+     *
      * @var array
      */
     private $quick_actions = [];
 
     /**
      * CI Instance
+     *
      * @deprecated 1.9.8 Use $this->ci instead
+     *
      * @var object
      */
     private $_instance;
 
     /**
      * CI Instance
+     *
      * @var object
      */
     private $ci;
 
     /**
      * Show or hide setup menu
-     * @var boolean
+     *
+     * @var bool
      */
     private $show_setup_menu = true;
 
     /**
      * Available reminders
+     *
      * @var array
      */
     private $available_reminders = [
-            'customer',
-            'lead',
-            'estimate',
-            'invoice',
-            'proposal',
-            'expense',
-            'credit_note',
-            'ticket',
-            'task',
+        'customer',
+        'lead',
+        'estimate',
+        'invoice',
+        'proposal',
+        'expense',
+        'credit_note',
+        'ticket',
+        'task',
     ];
 
     /**
      * Tables where currency id is used
+     *
      * @var array
      */
     private $tables_with_currency = [];
 
     /**
      * Media folder
+     *
      * @var string
      */
     private $media_folder;
 
     /**
+     * The registered settings sections.
+     */
+    protected array $settingsSections = [];
+
+    /**
      * Available languages
+     *
      * @var array
      */
     private $available_languages = [];
 
     public function __construct()
     {
-        $this->ci = & get_instance();
+        $this->ci = &get_instance();
         // @deprecated
         $this->_instance = $this->ci;
 
@@ -80,27 +95,74 @@ class App
         hooks()->do_action('app_base_after_construct_action');
     }
 
+    public function get_settings_sections()
+    {
+        $sections = $this->settingsSections;
+
+        foreach ($sections as $key => $section) {
+            $sections[$key]['children'] = app_sort_by_position($section['children']);
+        }
+
+        return $sections;
+    }
+
+    public function add_settings_section($id, $data)
+    {
+        if (array_key_exists($id, $this->settingsSections)) {
+            throw new Exception("Settings section with '{$id}' already exist.");
+        }
+
+        foreach ($data['children'] ?? [] as $key => $child) {
+            if (! isset($child['id'])) {
+                $data['children'][$key]['id'] = basename($child['view']);
+            }
+        }
+
+        $this->settingsSections[$id] = $data;
+
+        return $this;
+    }
+
+    public function add_settings_section_child($parent_id, $id, $data)
+    {
+        if (! array_key_exists($parent_id, $this->settingsSections)) {
+            throw new Exception("Settings section with '{$parent_id}' does not exist.");
+        }
+
+        if (! isset($this->settingsSections[$parent_id]['children'])) {
+            $this->settingsSections[$parent_id]['children'] = [];
+        }
+
+        if (! isset($data['id'])) {
+            $data['id'] = $id;
+        }
+
+        $this->settingsSections[$parent_id]['children'][] = $data;
+
+        return $this;
+    }
+
     /**
      * Check if database upgrade is required
-     * @param  string  $v
-     * @return boolean
+     *
+     * @param string $v
+     *
+     * @return bool
      */
     public function is_db_upgrade_required($v = '')
     {
-        if (!is_numeric($v)) {
+        if (! is_numeric($v)) {
             $v = $this->get_current_db_version();
         }
 
         $this->ci->load->config('migration');
-        if ((int) $this->ci->config->item('migration_version') !== (int) $v) {
-            return true;
-        }
 
-        return false;
+        return (bool) ((int) $this->ci->config->item('migration_version') !== (int) $v);
     }
 
     /**
      * Return current database version
+     *
      * @return string
      */
     public function get_current_db_version()
@@ -112,6 +174,7 @@ class App
 
     /**
      * Upgrade database
+     *
      * @return mixed
      */
     public function upgrade_database()
@@ -133,6 +196,7 @@ class App
 
     /**
      * Make request to server to get latest version info
+     *
      * @return mixed
      */
     public function get_update_info()
@@ -170,7 +234,7 @@ class App
         $result = curl_exec($curl);
         $error  = '';
 
-        if (!$curl || !$result) {
+        if (! $curl || ! $result) {
             $error = 'Curl Error - Contact your hosting provider with the following error as reference: Error: "' . curl_error($curl) . '" - Code: ' . curl_errno($curl);
         }
 
@@ -195,6 +259,7 @@ class App
 
     /**
      * Return all available languages in the application/language folder
+     *
      * @return array
      */
     public function get_available_languages()
@@ -202,18 +267,18 @@ class App
         return hooks()->apply_filters('before_get_languages', $this->available_languages);
     }
 
-    public function get_table_path($table, $my_prefixed = true) 
+    public function get_table_path($table, $my_prefixed = true)
     {
         $path = VIEWPATH . 'admin/tables/' . $table . EXT;
 
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             $path = $table;
-            if (!endsWith($path, EXT)) {
+            if (! endsWith($path, EXT)) {
                 $path .= EXT;
             }
-        } else if($my_prefixed) {
+        } elseif ($my_prefixed) {
             $myPrefixedPath = VIEWPATH . 'admin/tables/my_' . $table . EXT;
-            
+
             if (file_exists($myPrefixedPath)) {
                 $path = $myPrefixedPath;
             }
@@ -221,11 +286,13 @@ class App
 
         return $path;
     }
-    
+
     /**
      * Function that will parse table data from the tables folder for amin area
-     * @param  string $table  table filename
-     * @param  array  $params additional params
+     *
+     * @param string $table  table filename
+     * @param array  $params additional params
+     *
      * @return void
      */
     public function get_table_data($table, $params = [])
@@ -235,17 +302,19 @@ class App
         $customFieldsColumns = [];
 
         foreach ($params as $key => $val) {
-            $$key = $val;
+            ${$key} = $val;
         }
 
-        include_once($this->get_table_path($table));
+        include_once $this->get_table_path($table);
 
         echo json_encode($output);
-        die;
+
+        exit;
     }
 
     /**
      * All available reminders keys for the features
+     *
      * @return array
      */
     public function get_available_reminders_keys()
@@ -255,6 +324,7 @@ class App
 
     /**
      * Get all db options
+     *
      * @return array
      */
     public function get_options()
@@ -264,7 +334,9 @@ class App
 
     /**
      * Function that gets option based on passed name
-     * @param  string $name
+     *
+     * @param string $name
+     *
      * @return string
      */
     public function get_option($name)
@@ -272,7 +344,7 @@ class App
         $val  = '';
         $name = trim($name);
 
-        if (!isset($this->options[$name])) {
+        if (! isset($this->options[$name])) {
             // is not auto loaded
             $this->ci->db->select('value');
             $this->ci->db->where('name', $name);
@@ -289,11 +361,12 @@ class App
 
     /**
      * Add new quick action data
+     *
      * @param array $item
      */
     public function add_quick_actions_link($item = [])
     {
-        if (!isset($item['position'])) {
+        if (! isset($item['position'])) {
             $item['position'] = null;
         }
 
@@ -302,6 +375,7 @@ class App
 
     /**
      * Quick actions data set from core/AdminController.php
+     *
      * @return array
      */
     public function get_quick_actions_links()
@@ -311,6 +385,7 @@ class App
 
     /**
      * Aside.php will set the menu visibility here based on few conditions
+     *
      * @param int $total_setup_menu_items total setup menu items shown to the user
      */
     public function set_setup_menu_visibility($total_setup_menu_items)
@@ -320,7 +395,8 @@ class App
 
     /**
      * Check if should the script show the setup menu or not
-     * @return boolean
+     *
+     * @return bool
      */
     public function show_setup_menu()
     {
@@ -329,6 +405,7 @@ class App
 
     /**
      * Return tables that currency id is used
+     *
      * @return array
      */
     public function get_tables_with_currency()
@@ -338,6 +415,7 @@ class App
 
     /**
      * Return the media folder name
+     *
      * @return string
      */
     public function get_media_folder()
@@ -347,6 +425,7 @@ class App
 
     /**
      * Upgrade database without throwing any errors
+     *
      * @return mixed
      */
     private function upgrade_database_silent()
@@ -390,11 +469,11 @@ class App
         // Temporary checking for v1.8.0
         if ($this->ci->db->field_exists('autoload', db_prefix() . 'options')) {
             $options = $this->ci->db->select('name, value')
-            ->where('autoload', 1)
-            ->get(db_prefix() . 'options')->result_array();
+                ->where('autoload', 1)
+                ->get(db_prefix() . 'options')->result_array();
         } else {
             $options = $this->ci->db->select('name, value')
-            ->get(db_prefix() . 'options')->result_array();
+                ->get(db_prefix() . 'options')->result_array();
         }
 
         // Loop the options and store them in a array to prevent fetching again and again from database
@@ -413,12 +492,14 @@ class App
 
         /**
          * Media folder
+         *
          * @var string
          */
         $this->media_folder = hooks()->apply_filters('before_set_media_folder', 'media');
 
         /**
          * Tables with currency
+         *
          * @var array
          */
         $this->tables_with_currency = [
@@ -455,7 +536,9 @@ class App
 
     /**
      * Predefined contact permission
+     *
      * @deprecated 1.9.8 use get_contact_permissions() instead
+     *
      * @return array
      */
     public function get_contact_permissions()

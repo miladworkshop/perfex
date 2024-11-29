@@ -26,7 +26,7 @@ foreach ($rResult as $aRow) {
     for ($i = 0; $i < count($aColumns); $i++) {
         $_data = $aRow[$aColumns[$i]];
         if ($aColumns[$i] == 'subject') {
-            $_data = '<a href="' . admin_url('goals/goal/' . $aRow['id']) . '">' . e($_data) . '</a>';
+            $_data = '<a href="' . admin_url('goals/goal/' . $aRow['id']) . '" class="tw-font-medium">' . e($_data) . '</a>';
             $_data .= '<div class="row-options">';
             $_data .= '<a href="' . admin_url('goals/goal/' . $aRow['id']) . '">' . _l('view') . '</a>';
 

@@ -2,6 +2,11 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
+/**
+ * @property-read Announcements_model  $announcements_model
+ * @property-read Authentication_model $Authentication_model
+ * @property-read App_Form_validation  $form_validation
+ */
 class Authentication extends App_Controller
 {
     public function __construct()
@@ -56,7 +61,7 @@ class Authentication extends App_Controller
                         $this->Authentication_model->set_two_factor_auth_code($data['user']->staffid);
                         $sent = send_mail_template('staff_two_factor_auth_key', $data['user']);
 
-                        if (!$sent) {
+                        if (! $sent) {
                             set_alert('danger', _l('two_factor_auth_failed_to_send_code'));
                             redirect(admin_url('authentication'));
                         } else {
@@ -90,7 +95,7 @@ class Authentication extends App_Controller
 
     public function two_factor($type = 'email')
     {
-        if (!$this->session->has_userdata('_two_factor_auth_established')) {
+        if (! $this->session->has_userdata('_two_factor_auth_established')) {
             show_404();
         }
 
@@ -164,7 +169,7 @@ class Authentication extends App_Controller
 
     public function reset_password($staff, $userid, $new_pass_key)
     {
-        if (!$this->Authentication_model->can_reset_password($staff, $userid, $new_pass_key)) {
+        if (! $this->Authentication_model->can_reset_password($staff, $userid, $new_pass_key)) {
             set_alert('danger', _l('password_reset_key_expired'));
             redirect(admin_url('authentication'));
         }
@@ -196,7 +201,7 @@ class Authentication extends App_Controller
 
     public function set_password($staff, $userid, $new_pass_key)
     {
-        if (!$this->Authentication_model->can_set_password($staff, $userid, $new_pass_key)) {
+        if (! $this->Authentication_model->can_set_password($staff, $userid, $new_pass_key)) {
             set_alert('danger', _l('password_reset_key_expired'));
             if ($staff == 1) {
                 redirect(admin_url('authentication'));
@@ -254,7 +259,7 @@ class Authentication extends App_Controller
 
     public function get_qr()
     {
-        if (!is_staff_logged_in()) {
+        if (! is_staff_logged_in()) {
             ajax_access_denied();
         }
 
@@ -265,7 +270,7 @@ class Authentication extends App_Controller
             $company_name = rtrim(preg_replace('/^https?:\/\//', '', site_url()), '/') . ' - CRM';
         }
 
-        $data = $this->authentication_model->get_qr($company_name);
+        $data = $this->Authentication_model->get_qr($company_name);
         $this->load->view('admin/includes/google_two_factor', $data);
     }
 }

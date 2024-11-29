@@ -5,9 +5,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class App_tabs
 {
     private $ci;
-
-    private $tabs = [];
-
+    private $tabs  = [];
     private $child = [];
 
     public function __construct()
@@ -48,7 +46,9 @@ class App_tabs
 
     public function add_settings_tab($slug, $tab)
     {
-        $this->add($slug, $tab, 'settings');
+        $this->ci->app->add_settings_section_child('other', $slug, $tab);
+
+        _deprecated_function('app_tabs->add_settings_tab', '3.2.0', 'app->add_settings_section');
 
         return $this;
     }
@@ -56,6 +56,8 @@ class App_tabs
     public function add_settings_tab_children_item($parent_slug, $tab)
     {
         $this->add_child($parent_slug, $tab, 'settings');
+
+        _deprecated_function('app_tabs->add_settings_tab_children_item', '3.2.0', 'app->add_settings_section_child');
 
         return $this;
     }
@@ -67,13 +69,15 @@ class App_tabs
 
     /**
      * New Tab
-     * @param string $slug tab slug - unique
-     * @param array $tab item options
-     * name - The name of the item - - Required
-     * icon - item icon class
-     * view - the view file to load as tab content
-     * position - the position of the item
-     * visible - whether is visible or not, not applied if custom settings for visible tab applied by the user
+     *
+     * @param string $slug  tab slug - unique
+     * @param array  $tab   item options
+     *                      name - The name of the item - - Required
+     *                      icon - item icon class
+     *                      view - the view file to load as tab content
+     *                      position - the position of the item
+     *                      visible - whether is visible or not, not applied if custom settings for visible tab applied by the user
+     * @param mixed  $group
      */
     public function add($slug, $tab, $group)
     {
@@ -85,14 +89,17 @@ class App_tabs
 
     /**
      * Add children item to existing tab item
+     *
      * @param string $parent_slug parent slug
-     * @param array $item child tab item options
-     * slug - The slug of the item - Required and Unique
-     * name - The name of the item - - Required
-     * icon - item icon class
-     * view - the view file to load as tab content
-     * position - the position of the item
-     * visible - whether is visible or not, not applied if custom settings for visible tab applied by the user
+     * @param array  $item        child tab item options
+     *                            slug - The slug of the item - Required and Unique
+     *                            name - The name of the item - - Required
+     *                            icon - item icon class
+     *                            view - the view file to load as tab content
+     *                            position - the position of the item
+     *                            visible - whether is visible or not, not applied if custom settings for visible tab applied by the user
+     * @param mixed  $tab
+     * @param mixed  $group
      */
     public function add_child($parent_slug, $tab, $group)
     {
@@ -100,7 +107,7 @@ class App_tabs
 
         $tab = ['parent_slug' => $parent_slug] + $tab;
 
-        if ((!isset($this->child[$group][$parent_slug]) || !is_array($this->child[$group][$parent_slug]))) {
+        if ((! isset($this->child[$group][$parent_slug]) || ! is_array($this->child[$group][$parent_slug]))) {
             $this->child[$group][$parent_slug] = [];
         }
 
@@ -111,10 +118,10 @@ class App_tabs
     {
         hooks()->do_action('before_get_tabs', $group);
 
-        $tabs = isset($this->tabs[$group]) ? $this->tabs[$group] : [];
+        $tabs = $this->tabs[$group] ?? [];
 
         foreach ($tabs as $parent => $item) {
-            $tabs[$parent]['badge'] = isset($tabs[$parent]['badge']) ? $tabs[$parent]['badge'] : [];
+            $tabs[$parent]['badge'] ??= [];
             $tabs[$parent]['children'] = $this->get_child($parent, $group);
         }
 
@@ -127,10 +134,10 @@ class App_tabs
 
     public function get_child($parent_slug, $group)
     {
-        $children = isset($this->child[$group][$parent_slug]) ? $this->child[$group][$parent_slug] : [];
+        $children = $this->child[$group][$parent_slug] ?? [];
 
         foreach ($children as $key => $item) {
-            $children[$key]['badge'] = isset($children[$key]['badge']) ? $children[$key]['badge'] : [];
+            $children[$key]['badge'] ??= [];
         }
 
         $children = hooks()->apply_filters("{$group}_tabs_child_items", $children, $parent_slug);
@@ -141,6 +148,7 @@ class App_tabs
     public function filter_visible_tabs($tabs)
     {
         $newTabs = [];
+
         foreach ($tabs as $key => $tab) {
             $dropdown = isset($tab['collapse']) ? true : false;
 
@@ -166,7 +174,7 @@ class App_tabs
 
                 $newTabs[$tab['slug']] = $tab;
             } else {
-                if ((isset($tab['visible']) && $tab['visible'] == true) || !isset($tab['visible'])) {
+                if ((isset($tab['visible']) && $tab['visible'] == true) || ! isset($tab['visible'])) {
                     $newTabs[$tab['slug']] = $tab;
                 }
             }

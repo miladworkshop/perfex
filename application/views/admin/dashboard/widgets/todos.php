@@ -4,7 +4,7 @@
         <div class="panel-body padding-10">
             <div class="widget-dragger"></div>
             <div class="tw-flex tw-justify-between tw-items-center tw-p-1.5">
-                <p class="tw-font-medium tw-flex tw-items-center tw-mb-0 tw-space-x-1.5 rtl:tw-space-x-reverse">
+                <p class="tw-font-semibold tw-flex tw-items-center tw-mb-0 tw-space-x-1.5 rtl:tw-space-x-reverse">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="tw-w-6 tw-h-6 tw-text-neutral-500">
                         <path stroke-linecap="round" stroke-linejoin="round"

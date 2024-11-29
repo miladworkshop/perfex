@@ -33,7 +33,7 @@ return App_table::find('expenses_detailed_report')
             'LEFT JOIN ' . db_prefix() . 'taxes as taxes_2 ON taxes_2.id = ' . db_prefix() . 'expenses.tax2',
         ];
 
-        $where  = [];
+        $where = [];
 
         if ($filtersWhere = $this->getWhereFromRules()) {
             $where[] = $filtersWhere;
@@ -73,15 +73,16 @@ return App_table::find('expenses_detailed_report')
 
         foreach ($rResult as $aRow) {
             $row = [];
+
             for ($i = 0; $i < count($aColumns); $i++) {
-                if (strpos($aColumns[$i], 'as') !== false && !isset($aRow[$aColumns[$i]])) {
+                if (strpos($aColumns[$i], 'as') !== false && ! isset($aRow[$aColumns[$i]])) {
                     $_data = $aRow[strafter($aColumns[$i], 'as ')];
                 } else {
                     $_data = $aRow[$aColumns[$i]];
                 }
 
                 if ($aColumns[$i] == db_prefix() . 'expenses.category') {
-                    $_data = '<a href="' . admin_url('expenses/list_expenses/' . $aRow['id']) . '" target="_blank">' . e($aRow['category_name']) . '</a>';
+                    $_data = '<a href="' . admin_url('expenses/list_expenses/' . $aRow['id']) . '" target="_blank" class="tw-font-medium">' . e($aRow['category_name']) . '</a>';
                 } elseif ($aColumns[$i] == 'expense_name') {
                     $_data = '<a href="' . admin_url('expenses/list_expenses/' . $aRow['id']) . '" target="_blank">' . e($aRow['expense_name']) . '</a>';
                 } elseif ($aColumns[$i] == 'amount' || $i == 6) {
@@ -98,12 +99,12 @@ return App_table::find('expenses_detailed_report')
                         $footer_data['amount_with_tax'] += $total;
                     }
 
-                    $_data = e(app_format_money($total, $currency->name));
+                    $_data = '<span class="tw-font-medium">' . e(app_format_money($total, $currency->name)) . '</span>';
                 } elseif ($i == 9) {
                     $_data = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . e($aRow['company']) . '</a>';
                 } elseif ($aColumns[$i] == 'paymentmode') {
                     $_data = '';
-                    if ($aRow['paymentmode'] != '0' && !empty($aRow['paymentmode'])) {
+                    if ($aRow['paymentmode'] != '0' && ! empty($aRow['paymentmode'])) {
                         $payment_mode = $this->ci->payment_modes_model->get($aRow['paymentmode'], [], false, true);
                         if ($payment_mode) {
                             $_data = e($payment_mode->name);

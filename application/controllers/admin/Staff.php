@@ -2,6 +2,10 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
+/**
+ * @property-read Authentication_model $authentication_model
+ * @property-read Staff_model $staff_model
+ */
 class Staff extends AdminController
 {
     /* List all staff members */
@@ -69,7 +73,7 @@ class Staff extends AdminController
             }
         }
         if ($id == '') {
-            $title = _l('add_new', _l('staff_member_lowercase'));
+            $title = _l('add_new', _l('staff_member'));
         } else {
             $member = $this->staff_model->get($id);
             if (!$member) {

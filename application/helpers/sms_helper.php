@@ -28,7 +28,8 @@ function maybe_test_sms_gateway()
         $gateway->set_test_mode(false);
 
         echo json_encode($response);
-        die;
+
+        exit;
     }
 }
 
@@ -41,7 +42,7 @@ function _maybe_sms_gateways_settings_group($groups)
     $gateways = $CI->app_sms->get_gateways();
 
     if (count($gateways) > 0) {
-        $CI->app_tabs->add_settings_tab('sms', [
+        $CI->app->add_settings_section_child('other', 'sms', [
             'name'     => 'SMS',
             'view'     => 'admin/settings/includes/sms',
             'position' => 60,
@@ -74,7 +75,7 @@ function is_sms_trigger_active($trigger = '')
     $CI     = &get_instance();
     $active = $CI->app_sms->get_active_gateway();
 
-    if (!$active) {
+    if (! $active) {
         return false;
     }
 

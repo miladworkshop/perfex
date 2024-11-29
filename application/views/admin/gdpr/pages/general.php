@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <h4 class="no-mtop">
-    <?php echo _l('settings_group_general'); ?>
+    <?= _l('settings_group_general'); ?>
 </h4>
 <hr class="hr-panel-separator" />
 <?php render_yes_no_option('enable_gdpr', 'Enable GDPR'); ?>
@@ -12,4 +12,4 @@
 <p class="">
     GDPR page top information block
 </p>
-<?php echo render_textarea('settings[gdpr_page_top_information_block]', '', get_option('gdpr_page_top_information_block'), [], [], '', 'tinymce'); ?>
+<?= render_textarea('settings[gdpr_page_top_information_block]', '', get_option('gdpr_page_top_information_block'), [], [], '', 'tinymce'); ?>

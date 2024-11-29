@@ -5,20 +5,22 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><?php echo _l('invoice_attach_file'); ?></h4>
+                <h4 class="modal-title">
+                    <?= _l('invoice_attach_file'); ?>
+                </h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <?php echo form_open_multipart('admin/misc/upload_sales_file', ['id' => 'sales-upload', 'class' => 'dropzone']); ?>
+                        <?= form_open_multipart('admin/misc/upload_sales_file', ['id' => 'sales-upload', 'class' => 'dropzone']); ?>
                         <input type="file" name="file" multiple />
-                        <?php echo form_close(); ?>
+                        <?= form_close(); ?>
                         <div class="row mtop15" id="sales_uploaded_files_preview">
                         </div>
                         <div class="tw-flex tw-justify-end tw-items-center tw-space-x-2">
                             <button class="gpicker" data-on-pick="salesGoogleDriveSave">
                                 <i class="fa-brands fa-google" aria-hidden="true"></i>
-                                <?php echo _l('choose_from_google_drive'); ?>
+                                <?= _l('choose_from_google_drive'); ?>
                             </button>
                             <div id="dropbox-chooser-sales"></div>
                         </div>

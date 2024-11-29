@@ -6,6 +6,7 @@ $this->ci->load->model('expenses_model');
 $this->ci->load->model('payment_modes_model');
 
 return App_table::find('project_expenses')
+    ->setDbTableName('expenses')
     ->outputUsing(function ($params) {
         extract($params);
 

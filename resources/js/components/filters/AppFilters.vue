@@ -1,9 +1,7 @@
 <template>
   <div
-    class="btn-group btn-with-tooltip-group"
+    class="btn-group"
     ref="filterDropdownRef"
-    data-toggle="tooltip"
-    :data-title="$t('filter_by')"
   >
     <button
       type="button"
@@ -14,7 +12,7 @@
       aria-expanded="false"
     >
       <i class="fa fa-filter" aria-hidden="true"></i>
-      {{ activeFilterId ? activeFilter.name : "" }}
+      {{ activeFilterId ? activeFilter.name : $t('filters') }}
     </button>
 
     <ul
@@ -213,7 +211,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <div class="tw-flex tw-items-center tw-space-x-3">
+            <div class="tw-flex tw-items-center tw-space-x-3 tw-px-3">
               <button
                 v-if="activeFilterId && canDelete"
                 type="button"
@@ -229,10 +227,10 @@
                 {{ deleteBeingConfirmed ? $t("confirm") : "" }}
               </button>
               <div
-                class="tw-flex-1 tw-flex tw-items-center tw-space-x-2 tw-self-end tw-justify-end"
+                class="tw-flex-1 tw-flex tw-items-center tw-space-x-4 tw-self-end tw-justify-end"
               >
                 <span v-if="!activeFilter" class="relative tw-mt-1">
-                  <span class="tw-font-medium tw-mr-3 tw-absolute -tw-left-20">
+                  <span class="tw-font-medium tw-mr-3 tw-absolute -tw-left-20 rtl:-tw-left-0 rtl:tw-right-20 rtl:tw-ml-3">
                     {{ $t("filter_save") }}
                   </span>
                   <div class="onoffswitch">

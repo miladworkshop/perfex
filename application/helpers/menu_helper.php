@@ -10,7 +10,7 @@ function app_init_admin_sidebar_menu_items()
         'name'     => _l('als_dashboard'),
         'href'     => admin_url(),
         'position' => 1,
-        'icon'     => 'fa fa-home',
+        'icon'     => 'fa-regular fa-object-group',
         'badge'    => [],
     ]);
 
@@ -32,7 +32,7 @@ function app_init_admin_sidebar_menu_items()
         'collapse' => true,
         'name'     => _l('als_sales'),
         'position' => 10,
-        'icon'     => 'fa-solid fa-receipt',
+        'icon'     => 'fa-solid fa-bolt',
         'badge'    => [],
     ]);
 
@@ -129,7 +129,7 @@ function app_init_admin_sidebar_menu_items()
         $CI->app_menu->add_sidebar_menu_item('contracts', [
             'name'     => _l('contracts'),
             'href'     => admin_url('contracts'),
-            'icon'     => 'fa-solid fa-file-contract',
+            'icon'     => 'fa-regular fa-note-sticky',
             'position' => 25,
             'badge'    => [],
         ]);
@@ -185,7 +185,7 @@ function app_init_admin_sidebar_menu_items()
         $CI->app_menu->add_sidebar_menu_item('leads', [
             'name'     => _l('als_leads'),
             'href'     => admin_url('leads'),
-            'icon'     => 'fa fa-tty',
+            'icon'     => 'fa-solid fa-crosshairs',
             'position' => 45,
             'badge'    => [],
         ]);
@@ -205,7 +205,7 @@ function app_init_admin_sidebar_menu_items()
         $CI->app_menu->add_sidebar_menu_item('knowledge-base', [
             'name'     => _l('als_kb'),
             'href'     => admin_url('knowledge_base'),
-            'icon'     => 'fa-regular fa-folder-closed',
+            'icon'     => 'fa-regular fa-question-circle',
             'position' => 50,
             'badge'    => [],
         ]);
@@ -216,7 +216,7 @@ function app_init_admin_sidebar_menu_items()
         'collapse' => true,
         'name'     => _l('als_utilities'),
         'position' => 55,
-        'icon'     => 'fa fa-cogs',
+        'icon'     => 'fa-regular fa-circle-dot',
         'badge'    => [],
     ]);
 
@@ -278,7 +278,7 @@ function app_init_admin_sidebar_menu_items()
             'collapse' => true,
             'name'     => _l('als_reports'),
             'href'     => admin_url('reports'),
-            'icon'     => 'fa-regular fa-chart-bar',
+            'icon'     => 'fa-solid fa-chart-line',
             'position' => 60,
             'badge'    => [],
         ]);

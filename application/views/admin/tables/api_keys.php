@@ -36,7 +36,7 @@ foreach ($rResult as $aRow) {
     $full_name .= '<div class="row-options">';
 
     $full_name .= '<a href="' . admin_url('api/regenerate_key/' . $aRow['key']) . '" class="_delete">Regenerate</a>';
-    $full_name .= ' | <a href="' . admin_url('api/delete_key/' . $aRow['key']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+    $full_name .= ' | <a href="' . admin_url('api/delete_key/' . $aRow['key']) . '" class="_delete">' . _l('delete') . '</a>';
 
     $full_name .= '</div>';
 

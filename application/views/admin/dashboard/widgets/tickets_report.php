@@ -7,7 +7,7 @@
                 <div class="panel-body padding-10">
                     <div class="widget-dragger"></div>
                     <div class="tw-flex tw-justify-between tw-items-center tw-p-1.5">
-                        <p class="tw-font-medium tw-flex tw-items-center tw-mb-0 tw-space-x-1.5 rtl:tw-space-x-reverse">
+                        <p class="tw-font-semibold tw-flex tw-items-center tw-mb-0 tw-space-x-1.5 rtl:tw-space-x-reverse">
                             <i class="fa-regular fa-life-ring fa-lg tw-text-neutral-500"></i>
 
                             <span class="tw-text-neutral-700">

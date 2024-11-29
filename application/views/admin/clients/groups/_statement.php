@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <div class="col-md-5">
     <div class="text-right">
-        <h4 class="no-margin bold"><?php echo _l('account_summary'); ?></h4>
+        <h4 class="tw-my-0 tw-font-semibold"><?php echo _l('account_summary'); ?></h4>
         <p class="text-muted"><?php echo e(_l('statement_from_to', [$from, $to])); ?></p>
         <hr />
         <table class="table statement-account-summary">

@@ -5,7 +5,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $this->ci->load->model('gdpr_model');
 
 $consentContacts = get_option('gdpr_enable_consent_for_contacts');
-$aColumns        = [ 'firstname', 'lastname'];
+$aColumns        = ['firstname', 'lastname'];
 if (is_gdpr() && $consentContacts == '1') {
     array_push($aColumns, '1');
 }
@@ -58,7 +58,7 @@ $rResult = $result['rResult'];
 foreach ($rResult as $aRow) {
     $row = [];
 
-    $rowName = '<img src="' . e(contact_profile_image_url($aRow['id'])) . '" class="client-profile-image-small mright5"><a href="#" onclick="contact(' . $aRow['userid'] . ',' . $aRow['id'] . ');return false;">' . e($aRow['firstname']) . '</a>';
+    $rowName = '<img src="' . e(contact_profile_image_url($aRow['id'])) . '" class="client-profile-image-small mright5"><a href="#"  class="tw-font-medium" onclick="contact(' . $aRow['userid'] . ',' . $aRow['id'] . ');return false;">' . e($aRow['firstname']) . '</a>';
 
     $rowName .= '<div class="row-options tw-ml-9">';
 
@@ -70,9 +70,9 @@ foreach ($rResult as $aRow) {
           </a>';
     }
 
-    if (staff_can('delete',  'customers') || is_customer_admin($aRow['userid'])) {
+    if (staff_can('delete', 'customers') || is_customer_admin($aRow['userid'])) {
         if ($aRow['is_primary'] == 0 || ($aRow['is_primary'] == 1 && $aRow['total_contacts'] == 1)) {
-            $rowName .= ' | <a href="' . admin_url('clients/delete_contact/' . $aRow['userid'] . '/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+            $rowName .= ' | <a href="' . admin_url('clients/delete_contact/' . $aRow['userid'] . '/' . $aRow['id']) . '" class="_delete">' . _l('delete') . '</a>';
         }
     }
 
@@ -85,15 +85,16 @@ foreach ($rResult as $aRow) {
     if (is_gdpr() && $consentContacts == '1') {
         $consentHTML = '<p class="bold"><a href="#" onclick="view_contact_consent(' . $aRow['id'] . '); return false;">' . _l('view_consent') . '</a></p>';
         $consents    = $this->ci->gdpr_model->get_consent_purposes($aRow['id'], 'contact');
+
         foreach ($consents as $consent) {
-            $consentHTML .= '<p style="margin-bottom:0px;">' . e($consent['name']) . (!empty($consent['consent_given']) ? '<i class="fa fa-check text-success pull-right"></i>' : '<i class="fa fa-remove text-danger pull-right"></i>') . '</p>';
+            $consentHTML .= '<p style="margin-bottom:0px;">' . e($consent['name']) . (! empty($consent['consent_given']) ? '<i class="fa fa-check text-success pull-right"></i>' : '<i class="fa fa-remove text-danger pull-right"></i>') . '</p>';
         }
         $row[] = $consentHTML;
     }
 
     $row[] = '<a href="mailto:' . e($aRow['email']) . '">' . e($aRow['email']) . '</a>';
 
-    if (!empty($aRow['company'])) {
+    if (! empty($aRow['company'])) {
         $row[] = '<a href="' . admin_url('clients/client/' . $aRow['userid']) . '">' . e($aRow['company']) . '</a>';
     } else {
         $row[] = '';
@@ -103,25 +104,26 @@ foreach ($rResult as $aRow) {
 
     $row[] = $aRow['title'];
 
-    $row[] = (!empty($aRow['last_login']) ? '<span class="text-has-action is-date" data-toggle="tooltip" data-title="' . e(_dt($aRow['last_login'])) . '">' . e(time_ago($aRow['last_login'])) . '</span>' : '');
+    $row[] = (! empty($aRow['last_login']) ? '<span class="text-has-action is-date" data-toggle="tooltip" data-title="' . e(_dt($aRow['last_login'])) . '">' . e(time_ago($aRow['last_login'])) . '</span>' : '');
 
     $outputActive = '<div class="onoffswitch">
-                <input type="checkbox"' . ($aRow['registration_confirmed'] == 0 ? ' disabled' : '') . ' data-switch-url="' . admin_url() . 'clients/change_contact_status" name="onoffswitch" class="onoffswitch-checkbox" id="c_' . $aRow['id'] . '" data-id="' . $aRow['id'] . '"' . ($aRow['active'] == 1 ? ' checked': '') . '>
+                <input type="checkbox"' . ($aRow['registration_confirmed'] == 0 ? ' disabled' : '') . ' data-switch-url="' . admin_url() . 'clients/change_contact_status" name="onoffswitch" class="onoffswitch-checkbox" id="c_' . $aRow['id'] . '" data-id="' . $aRow['id'] . '"' . ($aRow['active'] == 1 ? ' checked' : '') . '>
                 <label class="onoffswitch-label" for="c_' . $aRow['id'] . '"></label>
             </div>';
     // For exporting
     $outputActive .= '<span class="hide">' . ($aRow['active'] == 1 ? _l('is_active_export') : _l('is_not_active_export')) . '</span>';
 
     $row[] = $outputActive;
+
     // Custom fields add values
     foreach ($customFieldsColumns as $customFieldColumn) {
         $row[] = (strpos($customFieldColumn, 'date_picker_') !== false ? _d($aRow[$customFieldColumn]) : $aRow[$customFieldColumn]);
     }
 
-    $row['DT_RowClass'] = 'has-row-options';
+    $row['DT_RowClass'] = 'has-row-options has-border-left';
 
     if ($aRow['registration_confirmed'] == 0) {
-        $row['DT_RowClass'] .= ' info requires-confirmation';
+        $row['DT_RowClass'] .= ' row-border-warning requires-confirmation';
         $row['Data_Title']  = _l('customer_requires_registration_confirmation');
         $row['Data_Toggle'] = 'tooltip';
     }

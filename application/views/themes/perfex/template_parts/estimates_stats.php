@@ -24,107 +24,115 @@ if (get_option('exclude_estimate_from_client_area_with_draft_status') == 0) {
 ?>
 <div class="row text-left estimates-stats">
     <?php if (get_option('exclude_estimate_from_client_area_with_draft_status') == 0) { ?>
-    <div class="<?php echo e($col_class); ?> estimates-stats-draft">
+    <div class="<?= e($col_class); ?> estimates-stats-draft">
         <div class="row">
             <div class="col-md-8 stats-status">
-                <a href="<?php echo site_url('clients/estimates/1'); ?>"
+                <a href="<?= site_url('clients/estimates/1'); ?>"
                     class="tw-text-neutral-600 hover:tw-text-neutral-800 active:tw-text-neutral-800 tw-font-medium">
-                    <?php echo _l('estimate_status_draft'); ?>
+                    <?= _l('estimate_status_draft'); ?>
                 </a>
             </div>
             <div class="col-md-4 text-right bold stats-numbers">
-                <?php echo e($total_draft); ?> / <?php echo e($total_estimates); ?>
+                <?= e($total_draft); ?> /
+                <?= e($total_estimates); ?>
             </div>
             <div class="col-md-12 tw-mt-1.5">
                 <div class="progress">
-                    <div class="progress-bar progress-bar-<?php echo estimate_status_color_class(1); ?>"
+                    <div class="progress-bar progress-bar-<?= estimate_status_color_class(1); ?>"
                         role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 0%"
-                        data-percent="<?php echo e($percent_draft); ?>">
+                        data-percent="<?= e($percent_draft); ?>">
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <?php } ?>
-    <div class="<?php echo e($col_class); ?> estimates-stats-sent">
+    <div class="<?= e($col_class); ?> estimates-stats-sent">
         <div class="row">
             <div class="col-md-8 stats-status">
-                <a href="<?php echo site_url('clients/estimates/2'); ?>"
+                <a href="<?= site_url('clients/estimates/2'); ?>"
                     class="tw-text-neutral-600 hover:tw-text-neutral-800 active:tw-text-neutral-800 tw-font-medium">
-                    <?php echo _l('estimate_status_sent'); ?>
+                    <?= _l('estimate_status_sent'); ?>
                 </a>
             </div>
             <div class="col-md-4 text-right bold stats-numbers">
-                <?php echo e($total_sent); ?> / <?php echo e($total_estimates); ?>
+                <?= e($total_sent); ?> /
+                <?= e($total_estimates); ?>
             </div>
             <div class="col-md-12 tw-mt-1.5">
                 <div class="progress">
-                    <div class="progress-bar progress-bar-<?php echo estimate_status_color_class(2); ?>"
+                    <div class="progress-bar progress-bar-<?= estimate_status_color_class(2); ?>"
                         role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 0%"
-                        data-percent="<?php echo e($percent_sent); ?>">
+                        data-percent="<?= e($percent_sent); ?>">
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="<?php echo e($col_class); ?> estimates-stats-expired">
+    <div
+        class="<?= e($col_class); ?> estimates-stats-expired">
         <div class="row">
             <div class="col-md-8 stats-status">
-                <a href="<?php echo site_url('clients/estimates/5'); ?>"
+                <a href="<?= site_url('clients/estimates/5'); ?>"
                     class="tw-text-neutral-600 hover:tw-text-neutral-800 active:tw-text-neutral-800 tw-font-medium">
-                    <?php echo _l('estimate_status_expired'); ?>
+                    <?= _l('estimate_status_expired'); ?>
                 </a>
             </div>
             <div class="col-md-4 text-right bold stats-numbers">
-                <?php echo e($total_expired); ?> / <?php echo e($total_estimates); ?>
+                <?= e($total_expired); ?> /
+                <?= e($total_estimates); ?>
             </div>
             <div class="col-md-12 tw-mt-1.5">
                 <div class="progress">
-                    <div class="progress-bar progress-bar-<?php echo estimate_status_color_class(5); ?>"
+                    <div class="progress-bar progress-bar-<?= estimate_status_color_class(5); ?>"
                         role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 0%"
-                        data-percent="<?php echo e($percent_expired); ?>">
+                        data-percent="<?= e($percent_expired); ?>">
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="<?php echo e($col_class); ?> estimates-stats-declined">
+    <div
+        class="<?= e($col_class); ?> estimates-stats-declined">
         <div class="row">
             <div class="col-md-8 stats-status">
-                <a href="<?php echo site_url('clients/estimates/3'); ?>"
+                <a href="<?= site_url('clients/estimates/3'); ?>"
                     class="tw-text-neutral-600 hover:tw-text-neutral-800 active:tw-text-neutral-800 tw-font-medium">
-                    <?php echo _l('estimate_status_declined'); ?>
+                    <?= _l('estimate_status_declined'); ?>
                 </a>
             </div>
             <div class="col-md-4 text-right bold stats-numbers">
-                <?php echo e($total_declined); ?> / <?php echo e($total_estimates); ?>
+                <?= e($total_declined); ?> /
+                <?= e($total_estimates); ?>
             </div>
             <div class="col-md-12 tw-mt-1.5">
                 <div class="progress">
-                    <div class="progress-bar progress-bar-<?php echo estimate_status_color_class(3); ?>"
+                    <div class="progress-bar progress-bar-<?= estimate_status_color_class(3); ?>"
                         role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 0%"
-                        data-percent="<?php echo e($percent_declined); ?>">
+                        data-percent="<?= e($percent_declined); ?>">
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="<?php echo e($col_class); ?> estimates-stats-accepted">
+    <div
+        class="<?= e($col_class); ?> estimates-stats-accepted">
         <div class="row">
             <div class="col-md-8 stats-status">
-                <a href="<?php echo site_url('clients/estimates/4'); ?>"
+                <a href="<?= site_url('clients/estimates/4'); ?>"
                     class="tw-text-neutral-600 hover:tw-text-neutral-800 active:tw-text-neutral-800 tw-font-medium">
-                    <?php echo _l('estimate_status_accepted'); ?>
+                    <?= _l('estimate_status_accepted'); ?>
                 </a>
             </div>
             <div class="col-md-4 text-right bold stats-numbers">
-                <?php echo e($total_accepted); ?> / <?php echo e($total_estimates); ?>
+                <?= e($total_accepted); ?> /
+                <?= e($total_estimates); ?>
             </div>
             <div class="col-md-12 tw-mt-1.5">
                 <div class="progress">
-                    <div class="progress-bar progress-bar-<?php echo estimate_status_color_class(4); ?>"
+                    <div class="progress-bar progress-bar-<?= estimate_status_color_class(4); ?>"
                         role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 0%"
-                        data-percent="<?php echo e($percent_accepted); ?>">
+                        data-percent="<?= e($percent_accepted); ?>">
                     </div>
                 </div>
             </div>

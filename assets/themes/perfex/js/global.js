@@ -11,6 +11,14 @@ $(function() {
         $(this).closest('.table-responsive').css("overflow", "auto");
     });
 
+    $("body").on("rendered.bs.select", "select", function () {
+        $(this).parents().removeClass("select-placeholder");
+        $(this)
+          .parents(".form-group")
+          .find(".select-placeholder")
+          .removeClass("select-placeholder");
+      });
+
     appSelectPicker($('body').find('select'));
     appProgressBar();
     appLightbox();

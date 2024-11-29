@@ -2,22 +2,23 @@
 
 namespace app\services\imap;
 
-use Exception;
 use DateTimeInterface;
-use Ddeboer\Imap\Message;
-use Ddeboer\Imap\MessageIterator;
-use Ddeboer\Imap\MailboxInterface;
-use Ddeboer\Imap\MessageInterface;
-use app\services\imap\ImapResource;
+use Ddeboer\Imap\Exception\ImapNumMsgException;
+use Ddeboer\Imap\Exception\ImapStatusException;
+use Ddeboer\Imap\Exception\InvalidSearchCriteriaException;
+use Ddeboer\Imap\Exception\MessageCopyException;
+use Ddeboer\Imap\Exception\MessageMoveException;
 use Ddeboer\Imap\ImapResourceInterface;
+use Ddeboer\Imap\MailboxInterface;
+use Ddeboer\Imap\Message;
+use Ddeboer\Imap\MessageInterface;
+use Ddeboer\Imap\MessageIterator;
 use Ddeboer\Imap\MessageIteratorInterface;
 use Ddeboer\Imap\Search\ConditionInterface;
 use Ddeboer\Imap\Search\LogicalOperator\All;
-use Ddeboer\Imap\Exception\ImapNumMsgException;
-use Ddeboer\Imap\Exception\ImapStatusException;
-use Ddeboer\Imap\Exception\MessageCopyException;
-use Ddeboer\Imap\Exception\MessageMoveException;
-use Ddeboer\Imap\Exception\InvalidSearchCriteriaException;
+use Exception;
+use ReturnTypeWillChange;
+use stdClass;
 
 /**
  * An IMAP mailbox (commonly referred to as a 'folder').
@@ -25,19 +26,17 @@ use Ddeboer\Imap\Exception\InvalidSearchCriteriaException;
 class Mailbox implements MailboxInterface
 {
     private ImapResourceInterface $resource;
-
     private string $name;
-
-    private \stdClass $info;
+    private stdClass $info;
 
     /**
      * Constructor.
      *
      * @param ImapResourceInterface $resource IMAP resource
      * @param string                $name     Mailbox decoded name
-     * @param \stdClass             $info     Mailbox info
+     * @param stdClass              $info     Mailbox info
      */
-    public function __construct(ImapResourceInterface $resource, string $name, \stdClass $info)
+    public function __construct(ImapResourceInterface $resource, string $name, stdClass $info)
     {
         $this->resource = new ImapResource($resource->getStream(), $this);
         $this->name     = $name;
@@ -72,7 +71,7 @@ class Mailbox implements MailboxInterface
         return $this->info->delimiter;
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function count()
     {
         $return = \imap_num_msg($this->resource->getStream());
@@ -84,7 +83,7 @@ class Mailbox implements MailboxInterface
         return $return;
     }
 
-    public function getStatus(int $flags = null): \stdClass
+    public function getStatus(?int $flags = null): stdClass
     {
         $return = \imap_status($this->resource->getStream(), $this->getFullEncodedName(), $flags ?? \SA_ALL);
 
@@ -105,7 +104,7 @@ class Mailbox implements MailboxInterface
         return \imap_clearflag_full($this->resource->getStream(), $this->prepareMessageIds($numbers), $flag, \ST_UID);
     }
 
-    public function getMessages(ConditionInterface $search = null, int $sortCriteria = null, bool $descending = false, string $charset = null): MessageIteratorInterface
+    public function getMessages(?ConditionInterface $search = null, ?int $sortCriteria = null, bool $descending = false, ?string $charset = null): MessageIteratorInterface
     {
         if (null === $search) {
             $search = new All();
@@ -186,7 +185,7 @@ class Mailbox implements MailboxInterface
         return $this->getMessages();
     }
 
-    public function addMessage(string $message, string $options = null, DateTimeInterface $internalDate = null): bool
+    public function addMessage(string $message, ?string $options = null, ?DateTimeInterface $internalDate = null): bool
     {
         $arguments = [
             $this->resource->getStream(),
@@ -217,31 +216,32 @@ class Mailbox implements MailboxInterface
 
     public function move($numbers, MailboxInterface $mailbox): void
     {
-        if (!\imap_mail_copy($this->resource->getStream(), $this->prepareMessageIds($numbers), $mailbox->getEncodedName(), \CP_UID | \CP_MOVE)) {
+        if (! \imap_mail_copy($this->resource->getStream(), $this->prepareMessageIds($numbers), $mailbox->getEncodedName(), \CP_UID | \CP_MOVE)) {
             throw new MessageMoveException(\sprintf('Messages cannot be moved to "%s"', $mailbox->getName()));
         }
     }
 
     public function copy($numbers, MailboxInterface $mailbox): void
     {
-        if (!\imap_mail_copy($this->resource->getStream(), $this->prepareMessageIds($numbers), $mailbox->getEncodedName(), \CP_UID)) {
+        if (! \imap_mail_copy($this->resource->getStream(), $this->prepareMessageIds($numbers), $mailbox->getEncodedName(), \CP_UID)) {
             throw new MessageCopyException(\sprintf('Messages cannot be copied to "%s"', $mailbox->getName()));
         }
     }
 
-    public function renameTo(string $newName): bool 
+    public function renameTo(string $newName): bool
     {
         $currentName = $this->mailboxName; // The current name of the mailbox
-        $imapStream = $this->connection; // Your IMAP connection resource
+        $imapStream  = $this->connection; // Your IMAP connection resource
 
-        $newNamePath = "INBOX.$newName"; // Adjust based on your server's naming convention
+        $newNamePath = "INBOX.{$newName}"; // Adjust based on your server's naming convention
 
         if (imap_renamemailbox($imapStream, $currentName, $newNamePath)) {
-           $this->mailboxName = $newNamePath;
-           return true;
-        } else {
-            throw new Exception('Failed to rename the mailbox: ' . imap_last_error());
+            $this->mailboxName = $newNamePath;
+
+            return true;
         }
+
+        throw new Exception('Failed to rename the mailbox: ' . imap_last_error());
     }
 
     /**

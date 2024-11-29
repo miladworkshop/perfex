@@ -2,10 +2,10 @@
 
 namespace app\services\imap;
 
-use Ddeboer\Imap\MailboxInterface;
-use Ddeboer\Imap\ImapResourceInterface;
+use Ddeboer\Imap\Exception\InvalidResourceException;
 use Ddeboer\Imap\Exception\ReopenMailboxException;
-use Ddeboer\Imap\ImapResource as BaseImapResource;
+use Ddeboer\Imap\ImapResourceInterface;
+use Ddeboer\Imap\MailboxInterface;
 
 class ImapResource implements ImapResourceInterface
 {
@@ -14,8 +14,7 @@ class ImapResource implements ImapResourceInterface
      */
     private $resource;
 
-    private ?MailboxInterface $mailbox = null;
-
+    private ?MailboxInterface $mailbox           = null;
     private static ?string $lastMailboxUsedCache = null;
 
     /**
@@ -23,7 +22,7 @@ class ImapResource implements ImapResourceInterface
      *
      * @param resource $resource
      */
-    public function __construct($resource, MailboxInterface $mailbox = null)
+    public function __construct($resource, ?MailboxInterface $mailbox = null)
     {
         $this->resource = $resource;
         $this->mailbox  = $mailbox;
@@ -84,7 +83,7 @@ class ImapResource implements ImapResourceInterface
     public function getStream()
     {
         if (
-            !$this->resource instanceof \IMAP\Connection
+            ! $this->resource instanceof \IMAP\Connection
             && (false === \is_resource($this->resource) || 'imap' !== \get_resource_type($this->resource))
         ) {
             throw new InvalidResourceException('Supplied resource is not a valid imap resource');

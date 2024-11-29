@@ -6,13 +6,13 @@ $dimensions = $pdf->getPageDimensions();
 
 $html = '<h1>' . $expense->category_name . '</h1>';
 
-if (!empty($expense->expense_name)) {
+if (! empty($expense->expense_name)) {
     $html .= '<h3>' . $expense->expense_name . '</h3>';
 }
 
 $html .= '<p>' . _l('expense_amount') . ' <strong>' . app_format_money($expense->amount, $expense->currency_data) . '</strong>';
 
-if ($expense->paymentmode != '0' && !empty($expense->paymentmode)) {
+if ($expense->paymentmode != '0' && ! empty($expense->paymentmode)) {
     $html .= '<br />' . _l('expense_paid_via', $expense->payment_mode_name);
 }
 
@@ -50,7 +50,7 @@ if ($expense->billable == 1) {
     }
 }
 
-if (!empty($expense->reference_no)) {
+if (! empty($expense->reference_no)) {
     $html .= '<p><strong>' . _l('expense_ref_noe') . '</strong> ' . $expense->reference_no . '</p>';
 }
 
@@ -62,7 +62,7 @@ if ($expense->project_id) {
     $html .= '<p><strong>' . _l('project') . ':</strong> ' . $expense->project_data->name . '</p>';
 }
 
-if (!empty($expense->note)) {
+if (! empty($expense->note)) {
     $html .= '<p><strong>' . _l('expense_note') . '</strong> ' . $expense->note . '</p>';
 }
 

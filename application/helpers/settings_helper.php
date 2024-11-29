@@ -7,20 +7,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
  *
  * @since  Version 1.0.1
  *
- * @param string  $name      Option name (required|unique)
- * @param string  $value     Option value
- * @param integer $autoload  Whether to autoload this option
- *
+ * @param string $name     Option name (required|unique)
+ * @param string $value    Option value
+ * @param int    $autoload Whether to autoload this option
  */
 function add_option($name, $value = '', $autoload = 1)
 {
-    if (!option_exists($name)) {
-        $CI = & get_instance();
+    if (! option_exists($name)) {
+        $CI = &get_instance();
 
         $newData = [
-                'name'  => $name,
-                'value' => $value,
-            ];
+            'name'  => $name,
+            'value' => $value,
+        ];
 
         if ($CI->db->field_exists('autoload', db_prefix() . 'options')) {
             $newData['autoload'] = $autoload;
@@ -30,11 +29,7 @@ function add_option($name, $value = '', $autoload = 1)
 
         $insert_id = $CI->db->insert_id();
 
-        if ($insert_id) {
-            return true;
-        }
-
-        return false;
+        return (bool) ($insert_id);
     }
 
     return false;
@@ -42,14 +37,16 @@ function add_option($name, $value = '', $autoload = 1)
 
 /**
  * Get option value
- * @param  string $name Option name
+ *
+ * @param string $name Option name
+ *
  * @return mixed
  */
 function get_option($name)
 {
-    $CI = & get_instance();
+    $CI = &get_instance();
 
-    if (!class_exists('app', false)) {
+    if (! class_exists('app', false)) {
         $CI->load->library('app');
     }
 
@@ -59,23 +56,24 @@ function get_option($name)
 /**
  * Updates option by name
  *
- * @param  string $name     Option name
- * @param  string $value    Option Value
- * @param  mixed $autoload  Whether to update the autoload
+ * @param string $name     Option name
+ * @param string $value    Option Value
+ * @param mixed  $autoload Whether to update the autoload
  *
- * @return boolean
+ * @return bool
  */
 function update_option($name, $value, $autoload = null)
 {
     /**
      * Create the option if not exists
+     *
      * @since  2.3.3
      */
-    if (!option_exists($name)) {
+    if (! option_exists($name)) {
         return add_option($name, $value, $autoload === null ? 1 : 0);
     }
 
-    $CI = & get_instance();
+    $CI = &get_instance();
 
     $CI->db->where('name', $name);
     $data = ['value' => $value];
@@ -86,18 +84,17 @@ function update_option($name, $value, $autoload = null)
 
     $CI->db->update(db_prefix() . 'options', $data);
 
-    if ($CI->db->affected_rows() > 0) {
-        return true;
-    }
-
-    return false;
+    return (bool) ($CI->db->affected_rows() > 0);
 }
 
 /**
  * Delete option
+ *
  * @since  Version 1.0.4
- * @param  mixed $name option name
- * @return boolean
+ *
+ * @param mixed $name option name
+ *
+ * @return bool
  */
 function delete_option($name)
 {
@@ -112,9 +109,9 @@ function delete_option($name)
  * @since  2.3.3
  * Check whether an option exists
  *
- * @param  string $name option name
+ * @param string $name option name
  *
- * @return boolean
+ * @return bool
  */
 function option_exists($name)
 {
@@ -127,136 +124,183 @@ function app_init_settings_tabs()
 {
     $CI = &get_instance();
 
-    $CI->app_tabs->add_settings_tab('general', [
-        'name'     => _l('settings_group_general'),
-        'view'     => 'admin/settings/includes/general',
+    $CI->app->add_settings_section('general', [
+        'title'    => _l('settings_group_general'),
+        'position' => 1,
+        'children' => [
+            [
+                'name'     => _l('settings_group_general'),
+                'view'     => 'admin/settings/includes/general',
+                'position' => 5,
+                'icon'     => 'fa fa-cog',
+            ],
+            [
+                'name'     => _l('company_information'),
+                'view'     => 'admin/settings/includes/company',
+                'position' => 10,
+                'icon'     => 'fa-solid fa-bars-staggered',
+            ],
+            [
+                'name'     => _l('settings_group_localization'),
+                'view'     => 'admin/settings/includes/localization',
+                'position' => 15,
+                'icon'     => 'fa-solid fa-globe',
+            ],
+            [
+                'name'     => _l('settings_group_email'),
+                'view'     => 'admin/settings/includes/email',
+                'position' => 20,
+                'icon'     => 'fa-regular fa-envelope',
+            ],
+        ],
+    ]);
+
+    $CI->app->add_settings_section('finance', [
+        'title'    => _l('settings_group_sales'),
         'position' => 5,
-        'icon'     => 'fa fa-cog',
+        'children' => [
+            [
+                'name'     => _l('settings_sales_general'),
+                'view'     => 'admin/settings/includes/sales_general',
+                'position' => 5,
+                'icon'     => 'fa fa-cog',
+            ],
+            [
+                'name'     => _l('invoices'),
+                'view'     => 'admin/settings/includes/invoices',
+                'position' => 10,
+                'icon'     => 'fa fa-file-text',
+            ],
+            [
+                'name'     => _l('proposals'),
+                'view'     => 'admin/settings/includes/proposals',
+                'position' => 15,
+                'icon'     => 'fa-regular fa-file-powerpoint',
+            ],
+            [
+                'name'     => _l('estimates'),
+                'view'     => 'admin/settings/includes/estimates',
+                'position' => 20,
+                'icon'     => 'fa-regular fa-file',
+            ],
+            [
+                'name'     => _l('credit_notes'),
+                'view'     => 'admin/settings/includes/credit_notes',
+                'position' => 25,
+                'icon'     => 'fa-regular fa-file-lines',
+            ],
+            [
+                'name'     => _l('subscriptions'),
+                'view'     => 'admin/settings/includes/subscriptions',
+                'position' => 30,
+                'icon'     => 'fa fa-repeat',
+            ],
+            [
+                'name'     => _l('settings_group_online_payment_modes'),
+                'view'     => 'admin/settings/includes/payment_gateways',
+                'position' => 35,
+                'icon'     => 'fa-regular fa-credit-card',
+            ],
+        ],
     ]);
 
-    $CI->app_tabs->add_settings_tab('company', [
-        'name'     => _l('company_information'),
-        'view'     => 'admin/settings/includes/company',
+    $CI->app->add_settings_section('configuration', [
+        'title'    => _l('settings_group_configure_features'),
         'position' => 10,
-        'icon'     => 'fa-solid fa-bars-staggered',
+        'children' => [
+            [
+                'name'     => _l('settings_group_clients'),
+                'view'     => 'admin/settings/includes/clients',
+                'position' => 5,
+                'icon'     => 'fa-regular fa-user',
+            ],
+            [
+                'name'     => _l('tasks'),
+                'view'     => 'admin/settings/includes/tasks',
+                'position' => 10,
+                'icon'     => 'fa-regular fa-circle-check',
+            ],
+            [
+                'name'     => _l('support'),
+                'view'     => 'admin/settings/includes/tickets',
+                'position' => 15,
+                'icon'     => 'fa-regular fa-life-ring',
+            ],
+            [
+                'name'     => _l('leads'),
+                'view'     => 'admin/settings/includes/leads',
+                'position' => 20,
+                'icon'     => 'fa-solid fa-crosshairs',
+            ],
+        ],
     ]);
 
-    $CI->app_tabs->add_settings_tab('localization', [
-        'name'     => _l('settings_group_localization'),
-        'view'     => 'admin/settings/includes/localization',
+    $CI->app->add_settings_section('integrations', [
+        'title'    => _l('integrations'),
         'position' => 15,
-        'icon'     => 'fa-solid fa-globe',
+        'children' => [
+            [
+                'name'     => 'Google',
+                'view'     => 'admin/settings/includes/google',
+                'position' => 5,
+                'icon'     => 'fa-brands fa-google',
+            ],
+            [
+                'name'     => 'Pusher.com',
+                'view'     => 'admin/settings/includes/pusher',
+                'position' => 10,
+                'icon'     => 'fa-regular fa-bell',
+            ],
+        ],
     ]);
 
-    $CI->app_tabs->add_settings_tab('email', [
-        'name'     => _l('settings_group_email'),
-        'view'     => 'admin/settings/includes/email',
+    $CI->app->add_settings_section('other', [
+        'title'    => _l('settings_group_other'),
         'position' => 20,
-        'icon'     => 'fa-regular fa-envelope',
+        'children' => [
+            [
+                'name'     => _l('settings_calendar'),
+                'view'     => 'admin/settings/includes/calendar',
+                'position' => 5,
+                'icon'     => 'fa-regular fa-calendar',
+            ],
+            [
+                'name'     => _l('settings_pdf'),
+                'view'     => 'admin/settings/includes/pdf',
+                'position' => 10,
+                'icon'     => 'fa-regular fa-file-pdf',
+            ],
+            [
+                'name'     => 'E-Sign',
+                'view'     => 'admin/settings/includes/e_sign',
+                'position' => 15,
+                'icon'     => 'fa-solid fa-signature',
+            ],
+            [
+                'name'     => _l('tags'),
+                'view'     => 'admin/settings/includes/tags',
+                'position' => 20,
+                'icon'     => 'fa-solid fa-tags',
+            ],
+        ],
     ]);
 
-    $CI->app_tabs->add_settings_tab('sales', [
-        'name'     => _l('settings_group_sales'),
-        'view'     => 'admin/settings/includes/sales',
+    $CI->app->add_settings_section('misc', [
+        'title'    => _l('settings_group_misc'),
         'position' => 25,
-        'icon'     => 'fa-solid fa-receipt',
-    ]);
-
-    $CI->app_tabs->add_settings_tab('subscriptions', [
-        'name'     => _l('subscriptions'),
-        'view'     => 'admin/settings/includes/subscriptions',
-        'position' => 30,
-        'icon'     => 'fa fa-repeat',
-    ]);
-
-    $CI->app_tabs->add_settings_tab('payment_gateways', [
-        'name'     => _l('settings_group_online_payment_modes'),
-        'view'     => 'admin/settings/includes/payment_gateways',
-        'position' => 35,
-        'icon'     => 'fa-regular fa-credit-card',
-    ]);
-
-    $CI->app_tabs->add_settings_tab('clients', [
-        'name'     => _l('settings_group_clients'),
-        'view'     => 'admin/settings/includes/clients',
-        'position' => 40,
-        'icon'     => 'fa-regular fa-user',
-    ]);
-
-    $CI->app_tabs->add_settings_tab('tasks', [
-        'name'     => _l('tasks'),
-        'view'     => 'admin/settings/includes/tasks',
-        'position' => 45,
-        'icon'     => 'fa-regular fa-circle-check',
-    ]);
-
-    $CI->app_tabs->add_settings_tab('tickets', [
-        'name'     => _l('support'),
-        'view'     => 'admin/settings/includes/tickets',
-        'position' => 50,
-        'icon'     => 'fa-regular fa-life-ring',
-    ]);
-
-    $CI->app_tabs->add_settings_tab('leads', [
-        'name'     => _l('leads'),
-        'view'     => 'admin/settings/includes/leads',
-        'position' => 55,
-        'icon'     => 'fa fa-tty',
-    ]);
-
-    $CI->app_tabs->add_settings_tab('calendar', [
-        'name'     => _l('settings_calendar'),
-        'view'     => 'admin/settings/includes/calendar',
-        'position' => 60,
-        'icon'     => 'fa-regular fa-calendar',
-    ]);
-
-    $CI->app_tabs->add_settings_tab('pdf', [
-        'name'     => _l('settings_pdf'),
-        'view'     => 'admin/settings/includes/pdf',
-        'position' => 65,
-        'icon'     => 'fa-regular fa-file-pdf',
-    ]);
-
-    $CI->app_tabs->add_settings_tab('e_sign', [
-        'name'     => 'E-Sign',
-        'view'     => 'admin/settings/includes/e_sign',
-        'position' => 70,
-        'icon'     => 'fa-solid fa-signature',
-    ]);
-
-    $CI->app_tabs->add_settings_tab('cronjob', [
-        'name'     => _l('settings_group_cronjob'),
-        'view'     => 'admin/settings/includes/cronjob',
-        'position' => 75,
-        'icon'     => 'fa-solid fa-microchip',
-    ]);
-
-    $CI->app_tabs->add_settings_tab('tags', [
-        'name'     => _l('tags'),
-        'view'     => 'admin/settings/includes/tags',
-        'position' => 80,
-        'icon'     => 'fa-solid fa-tags',
-    ]);
-
-    $CI->app_tabs->add_settings_tab('pusher', [
-        'name'     => 'Pusher.com',
-        'view'     => 'admin/settings/includes/pusher',
-        'position' => 85,
-        'icon'     => 'fa-regular fa-bell',
-    ]);
-
-    $CI->app_tabs->add_settings_tab('google', [
-        'name'     => 'Google',
-        'view'     => 'admin/settings/includes/google',
-        'position' => 90,
-        'icon'     => 'fa-brands fa-google',
-    ]);
-
-    $CI->app_tabs->add_settings_tab('misc', [
-        'name'     => _l('settings_group_misc'),
-        'view'     => 'admin/settings/includes/misc',
-        'position' => 95,
-        'icon'     => 'fa-solid fa-gears',
+        'children' => [
+            [
+                'name'     => _l('settings_group_cronjob'),
+                'view'     => 'admin/settings/includes/cronjob',
+                'position' => 5,
+                'icon'     => 'fa-solid fa-microchip',
+            ],
+            [
+                'name'     => _l('settings_group_misc'),
+                'view'     => 'admin/settings/includes/misc',
+                'position' => 10,
+                'icon'     => 'fa-solid fa-gears',
+            ],
+        ],
     ]);
 }

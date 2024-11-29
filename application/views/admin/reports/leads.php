@@ -4,11 +4,11 @@
     <div class="content">
         <div class="row">
             <div class="col-md-12">
-                <div class="tw-flex tw-items-center tw-space-x-4 tw-mb-4">
-                    <a href="<?php echo admin_url('reports/leads?type=staff'); ?>" class="btn btn-success">
+                <div class="tw-inline-flex tw-items-center tw-space-x-4 tw-mb-4">
+                    <a href="<?php echo admin_url('reports/leads?type=staff'); ?>" class="btn btn-primary">
                         <?php echo _l('switch_to_general_report'); ?>
                     </a>
-                    <p class="text-info inline-block" data-placement="bottom" data-toggle="tooltip"
+                    <p  class="tw-m-0" data-placement="bottom" data-toggle="tooltip"
                         data-title="<?php echo _l('leads_report_converted_notice'); ?>">
                         <i class="fa-regular fa-circle-question fa-lg"></i>
                     </p>

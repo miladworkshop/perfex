@@ -84,6 +84,7 @@ class TicketsReportByStaff
                         'ticket_replies', $this->modeWhere) . ') as total_replies',
                 ])
             )
+            ->where(db_prefix() . 'staff.active', 1)
             ->get('staff')
             ->result();
     }

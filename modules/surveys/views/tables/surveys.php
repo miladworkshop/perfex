@@ -21,7 +21,7 @@ foreach ($rResult as $aRow) {
     for ($i = 0; $i < count($aColumns); $i++) {
         $_data = $aRow[$aColumns[$i]];
         if ($aColumns[$i] == 'subject') {
-            $_data = '<a href="' . admin_url('surveys/survey/' . $aRow['surveyid']) . '">' . e($_data) . '</a>';
+            $_data = '<a href="' . admin_url('surveys/survey/' . $aRow['surveyid']) . '" class="tw-font-medium">' . e($_data) . '</a>';
 
             $_data .= '<div class="row-options">';
 
@@ -34,7 +34,7 @@ foreach ($rResult as $aRow) {
             $_data .= ' | <a href="' . admin_url('surveys/survey/' . $aRow['surveyid']) . '">' . _l('edit') . '</a>';
 
             if (staff_can('delete',  'surveys')) {
-                $_data .= ' | <a href="' . admin_url('surveys/delete/' . $aRow['surveyid']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+                $_data .= ' | <a href="' . admin_url('surveys/delete/' . $aRow['surveyid']) . '" class="_delete">' . _l('delete') . '</a>';
             }
 
             $_data .= '</div>';

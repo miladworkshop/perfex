@@ -25,7 +25,7 @@ register_activation_hook(THEME_STYLE_MODULE_NAME, 'theme_style_activation_hook')
 
 function theme_style_activation_hook()
 {
-    require_once(__DIR__ . '/install.php');
+    require_once __DIR__ . '/install.php';
 }
 
 /**
@@ -43,9 +43,13 @@ hooks()->add_action('app_admin_authentication_head', 'theme_style_general_and_bu
 hooks()->add_action('app_external_form_head', 'theme_style_general_and_buttons');
 hooks()->add_filter('module_theme_style_action_links', 'module_theme_style_action_links');
 hooks()->add_action('admin_init', 'theme_style_init_menu_items');
+hooks()->add_filter('admin_header_logo_url', 'determine_header_logo_url_based_on_background_color');
+
 /**
  * Add additional settings for this module in the module list area
- * @param  array $actions current actions
+ *
+ * @param array $actions current actions
+ *
  * @return array
  */
 function module_theme_style_action_links($actions)
@@ -56,40 +60,44 @@ function module_theme_style_action_links($actions)
 }
 /**
  * Admin area applied styles
+ *
  * @return null
  */
 function theme_style_admin_head()
 {
-    theme_style_render(['general', 'tabs', 'buttons', 'admin', 'modals', 'tags']);
+    theme_style_render(['general', 'tabs', 'buttons', 'admin', 'modals', 'tags', 'tables']);
     theme_style_custom_css('theme_style_custom_admin_area');
 }
 
 /**
  * Clients area theme applied styles
+ *
  * @return null
  */
 function theme_style_clients_area_head()
 {
-    theme_style_render(['general', 'tabs', 'buttons', 'customers', 'modals']);
+    theme_style_render(['general', 'tabs', 'buttons', 'customers', 'modals', 'tables']);
     theme_style_custom_css('theme_style_custom_clients_area');
 }
 
 /**
  * Custom CSS
- * @param  string $main_area clients or admin area options
+ *
+ * @param string $main_area clients or admin area options
+ *
  * @return null
  */
 function theme_style_custom_css($main_area)
 {
     $clients_or_admin_area             = get_option($main_area);
     $custom_css_admin_and_clients_area = get_option('theme_style_custom_clients_and_admin_area');
-    if (!empty($clients_or_admin_area) || !empty($custom_css_admin_and_clients_area)) {
+    if (! empty($clients_or_admin_area) || ! empty($custom_css_admin_and_clients_area)) {
         echo '<style id="theme_style_custom_css">' . PHP_EOL;
-        if (!empty($clients_or_admin_area)) {
+        if (! empty($clients_or_admin_area)) {
             $clients_or_admin_area = clear_textarea_breaks($clients_or_admin_area);
             echo $clients_or_admin_area . PHP_EOL;
         }
-        if (!empty($custom_css_admin_and_clients_area)) {
+        if (! empty($custom_css_admin_and_clients_area)) {
             $custom_css_admin_and_clients_area = clear_textarea_breaks($custom_css_admin_and_clients_area);
             echo $custom_css_admin_and_clients_area . PHP_EOL;
         }
@@ -98,6 +106,7 @@ function theme_style_custom_css($main_area)
 }
 /**
  * General and buttons styles
+ *
  * @return null
  */
 function theme_style_general_and_buttons()
@@ -107,6 +116,7 @@ function theme_style_general_and_buttons()
 
 /**
  * Init theme style module menu items in setup in admin_init hook
+ *
  * @return null
  */
 function theme_style_init_menu_items()

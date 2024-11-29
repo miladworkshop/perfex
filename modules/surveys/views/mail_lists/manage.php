@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-12">
                 <?php if (staff_can('create',  'surveys')) { ?>
-                <div class="_buttons tw-mb-2 sm:tw-mb-4">
+                <div class="_buttons tw-mb-2">
                     <a href="<?php echo admin_url('surveys/mail_list'); ?>"
                         class="btn btn-primary pull-left display-block">
                         <i class="fa-regular fa-plus tw-mr-1"></i>

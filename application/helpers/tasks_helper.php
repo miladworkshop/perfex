@@ -270,7 +270,7 @@ function tasks_rel_name_select_query()
  * @param  array  $table_attributes
  * @return string
  */
-function init_relation_tasks_table($table_attributes = [], $filtersWrapperId = 'vueApp')
+function init_relation_tasks_table($table_attributes = [], $filtersWrapperId = 'vueApp', $filtersDetached = false)
 {
     $table_data = [
         _l('the_number_sign'),
@@ -336,6 +336,7 @@ function init_relation_tasks_table($table_attributes = [], $filtersWrapperId = '
     $CI->load->view('admin/tasks/filters', [
         'tasks_table'=>$tasks_table,
         'filters_wrapper_id'=>$filtersWrapperId,
+        'detached'=>$filtersDetached,
     ]);
 
     if (staff_can('create',  'tasks')) {
@@ -356,11 +357,15 @@ function init_relation_tasks_table($table_attributes = [], $filtersWrapperId = '
     }
 
     if ($table_attributes['data-new-rel-type'] == 'project') {
-        echo "<a href='" . admin_url('tasks/list_tasks?project_id=' . $table_attributes['data-new-rel-id'] . '&kanban=true') . "' class='btn btn-default mright5 mbot15 hidden-xs' data-toggle='tooltip' data-title='" . _l('view_kanban') . "' data-placement='top'><i class='fa-solid fa-grip-vertical'></i></a>";
-        echo "<a href='" . admin_url('tasks/detailed_overview?project_id=' . $table_attributes['data-new-rel-id']) . "' class='btn btn-success pull-rigsht mbot15'>" . _l('detailed_overview') . '</a>';
+        echo "<div class='tw-mb-4 tw-space-x-1 rtl:tw-space-x-reverse'>";
+        echo "<a href='" . admin_url('tasks/detailed_overview?project_id=' . $table_attributes['data-new-rel-id']) . "' class='btn btn-primary'>" . _l('detailed_overview') . '</a>';
+        echo "<a href='" . admin_url('tasks/list_tasks?project_id=' . $table_attributes['data-new-rel-id'] . '&kanban=true') . "' class='btn btn-default hidden-xs !tw-px-3' data-toggle='tooltip' data-title='" . _l('view_kanban') . "' data-placement='top'><i class='fa-solid fa-grip-vertical'></i></a>";
+        echo '</div>';
         echo '<div class="clearfix"></div>';
         echo $CI->load->view('admin/tasks/_bulk_actions', ['table' => '.table-rel-tasks'], true);
+        echo '<div class="tw-mb-4">';
         echo $CI->load->view('admin/tasks/_summary', ['rel_id' => $table_attributes['data-new-rel-id'], 'rel_type' => 'project', 'table' => $table_name], true);
+        echo '</div>';
         echo '<a href="#" data-toggle="modal" data-target="#tasks_bulk_actions" class="hide bulk-actions-btn table-btn" data-table=".table-rel-tasks">' . _l('bulk_actions') . '</a>';
     } elseif ($table_attributes['data-new-rel-type'] == 'customer') {
         echo '<div class="clearfix"></div>';

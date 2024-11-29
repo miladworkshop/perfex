@@ -1,24 +1,26 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <h4 class="no-mtop mbot15">
-   <?php echo _l('gdpr_right_to_erasure'); ?>
+    <?= _l('gdpr_right_to_erasure'); ?>
     <small>
-        <a href="https://ico.org.uk/for-organisations/guide-to-the-general-data-protection-regulation-gdpr/individual-rights/right-to-erasure/" target="_blank"><?php echo _l('learn_more'); ?></a>
+        <a href="https://ico.org.uk/for-organisations/guide-to-the-general-data-protection-regulation-gdpr/individual-rights/right-to-erasure/"
+            target="_blank"><?= _l('learn_more'); ?></a>
     </small>
 </h4>
 <ul class="nav nav-tabs tabs-in-body-no-margin" role="tablist">
     <li role="presentation" class="active">
-       <a href="#forgotten_options" aria-controls="forgotten_options" role="tab" data-toggle="tab">
-          Config
-      </a>
-  </li>
-  <li role="presentation">
-   <a href="#removal_requests" aria-controls="removal_requests" role="tab" data-toggle="tab">
-       Removal Requests
-       <?php if ($not_pending_requests > 0) { ?>
-       <span class="badge"><?php echo e($not_pending_requests); ?></span>
-       <?php } ?>
-   </a>
-</li>
+        <a href="#forgotten_options" aria-controls="forgotten_options" role="tab" data-toggle="tab">
+            Config
+        </a>
+    </li>
+    <li role="presentation">
+        <a href="#removal_requests" aria-controls="removal_requests" role="tab" data-toggle="tab">
+            Removal Requests
+            <?php if ($not_pending_requests > 0) { ?>
+            <span
+                class="badge"><?= e($not_pending_requests); ?></span>
+            <?php } ?>
+        </a>
+    </li>
 </ul>
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="forgotten_options">
@@ -52,31 +54,39 @@
                 <?php
                 foreach ($requests as $request) { ?>
                 <tr>
-                    <td data-order="<?php echo e($request['id']); ?>"><?php echo e($request['id']); ?></td>
-                    <td><?php echo e($request['request_from']); ?>
-                        <?php if (!empty($request['contact_id'])) {
-                    echo '<span class="label label-info pull-right">Contact</span>';
-                } elseif (!empty($request['lead_id'])) {
-                    echo '<span class="label label-info pull-right">Lead</span>';
-                }
-                        ?>
+                    <td
+                        data-order="<?= e($request['id']); ?>">
+                        <?= e($request['id']); ?>
                     </td>
-                    <td><?php echo e($request['description']); ?></td>
-                    <td data-order="<?php echo e($request['status']); ?>">
-                        <select class="selectpicker removalStatus" name="status" data-id="<?php echo e($request['id']); ?>"  width="100%">
-                            <option value="pending"<?php if ($request['status'] == 'pending') {
-                            echo ' selected';
-                        } ?>>Pending</option>
-                            <option value="removed"<?php if ($request['status'] == 'removed') {
-                            echo ' selected';
-                        } ?>>Removed</option>
-                            <option value="refused"<?php if ($request['status'] == 'refused') {
-                            echo ' selected';
-                        } ?>>Refused</option>
+                    <td><?= e($request['request_from']); ?>
+                        <?php if (! empty($request['contact_id'])) {
+                            echo '<span class="label label-info pull-right">Contact</span>';
+                        } elseif (! empty($request['lead_id'])) {
+                            echo '<span class="label label-info pull-right">Lead</span>';
+                        }
+                    ?>
+                    </td>
+                    <td><?= e($request['description']); ?>
+                    </td>
+                    <td
+                        data-order="<?= e($request['status']); ?>">
+                        <select class="selectpicker removalStatus" name="status"
+                            data-id="<?= e($request['id']); ?>"
+                            width="100%">
+                            <option value="pending" <?php if ($request['status'] == 'pending') {
+                                echo ' selected';
+                            } ?>>Pending</option>
+                            <option value="removed" <?php if ($request['status'] == 'removed') {
+                                echo ' selected';
+                            } ?>>Removed</option>
+                            <option value="refused" <?php if ($request['status'] == 'refused') {
+                                echo ' selected';
+                            } ?>>Refused</option>
                         </select>
                     </td>
-                    <td data-order="<?php echo e($request['request_date']); ?>">
-                        <?php echo e(_dt($request['request_date'])); ?>
+                    <td
+                        data-order="<?= e($request['request_date']); ?>">
+                        <?= e(_dt($request['request_date'])); ?>
                     </td>
                 </tr>
                 <?php } ?>

@@ -13,7 +13,7 @@ register_language_files(EXPORTS_MODULE_NAME, [EXPORTS_MODULE_NAME]);
 hooks()->add_action('admin_init', 'export_module_init_menu_items');
 
 /**
- * Init goals module menu items in setup in admin_init hook
+ * Init Export module menu items in setup in admin_init hook
  * @return null
  */
 function export_module_init_menu_items()

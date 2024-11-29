@@ -76,7 +76,9 @@ class Contacts extends ClientsController
                 $this->form_validation->set_message('contact_email_profile_unique', _l('contact_form_validation_is_unique'));
                 $this->form_validation->set_rules('email', _l('clients_email'), 'trim|required|valid_email|callback_contact_email_profile_unique[' . $id . ']');
             } else {
-                $this->form_validation->set_rules('password', _l('client_password'), 'required');
+                if ($this->input->post('send_set_password_email') != 'on') {
+                    $this->form_validation->set_rules('password', _l('client_password'), 'required');
+                }
                 $this->form_validation->set_message('is_unique', _l('contact_form_validation_is_unique'));
                 $this->form_validation->set_rules('email', _l('client_email'), 'trim|required|is_unique[' . db_prefix() . 'contacts.email]|valid_email');
             }

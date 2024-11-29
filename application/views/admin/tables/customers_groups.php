@@ -13,18 +13,19 @@ $rResult = $result['rResult'];
 
 foreach ($rResult as $aRow) {
     $row = [];
-    for ($i = 0; $i < count($aColumns) ; $i++) {
-        $_data = '<a href="#" data-toggle="modal" data-target="#customer_group_modal" data-id="' . $aRow['id'] . '">' . e($aRow[$aColumns[$i]]) . '</a>';
+
+    for ($i = 0; $i < count($aColumns); $i++) {
+        $_data = '<a href="#" class="tw-font-medium" data-toggle="modal" data-target="#customer_group_modal" data-id="' . $aRow['id'] . '">' . e($aRow[$aColumns[$i]]) . '</a>';
 
         $row[] = $_data;
     }
-    $options = '<div class="tw-flex tw-items-center tw-space-x-3">';
+    $options = '<div class="tw-flex tw-items-center tw-space-x-2">';
     $options .= '<a href="#" class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700" data-toggle="modal" data-target="#customer_group_modal" data-id="' . $aRow['id'] . '">
         <i class="fa-regular fa-pen-to-square fa-lg"></i>
     </a>';
 
     $options .= '<a href="' . admin_url('clients/delete_group/' . $aRow['id']) . '"
-    class="tw-mt-px tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700 _delete">
+    class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700 _delete">
         <i class="fa-regular fa-trash-can fa-lg"></i>
     </a>';
     $options .= '</div>';

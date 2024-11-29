@@ -2,8 +2,8 @@
 
 use Carbon\Carbon;
 use GuzzleHttp\Client;
-use Illuminate\Support\Collection;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Collection;
 
 defined('BASEPATH') or exit('No direct script access allowed');
 header('Content-Type: text/html; charset=utf-8');
@@ -13,7 +13,7 @@ header('Content-Type: text/html; charset=utf-8');
  *
  * @since 3.0.0
  *
- * @param  string $language
+ * @param string $language
  *
  * @return void
  */
@@ -30,9 +30,11 @@ function load_custom_lang_file($language)
 
 /**
  * Generate short_url
+ *
  * @since  Version 2.7.3
  *
- * @param  array $data
+ * @param array $data
+ *
  * @return mixed Url
  */
 function app_generate_short_link($data)
@@ -44,7 +46,7 @@ function app_generate_short_link($data)
     try {
         $response = $client->request('POST', 'https://api-ssl.bitly.com/v4/bitlinks', [
             'headers' => [
-                'Authorization' => "Bearer $accessToken",
+                'Authorization' => "Bearer {$accessToken}",
                 'Accept'        => 'application/json',
             ],
             'json' => [
@@ -65,10 +67,12 @@ function app_generate_short_link($data)
 }
 /**
  * Archive/remove short url
+ *
  * @since  Version 2.7.3
  *
- * @param  string $link
- * @return boolean
+ * @param string $link
+ *
+ * @return bool
  */
 function app_archive_short_link($link)
 {
@@ -87,7 +91,7 @@ function app_archive_short_link($link)
     try {
         $client->patch('https://api-ssl.bitly.com/v4/bitlinks/' . $link, [
             'headers' => [
-                'Authorization' => "Bearer $accessToken",
+                'Authorization' => "Bearer {$accessToken}",
                 'Accept'        => 'application/json',
             ],
             'json' => [
@@ -105,14 +109,19 @@ function app_archive_short_link($link)
 
 /**
  * Get total number of days overdue
+ *
  * @since  Version 2.7.1
- * @param  object $duedate  due date
+ *
+ * @param object $duedate due date
+ *
  * @return int days overdue
  */
 function get_total_days_overdue($duedate)
 {
-    if (Carbon::parse($duedate)->isPast()) {
-        return Carbon::parse($duedate)->diffInDays();
+    $datetime = Carbon::parse($duedate);
+
+    if ($datetime->isPast()) {
+        return (int) $datetime->diffInDays();
     }
 
     return 0;
@@ -121,8 +130,10 @@ function get_total_days_overdue($duedate)
 /**
  * Check if the document should be RTL or LTR
  * The checking are performed in multiple ways eq Contact/Staff Direction from profile or from general settings *
- * @param  boolean $client_area
- * @return boolean
+ *
+ * @param bool $client_area
+ *
+ * @return bool
  */
 function is_rtl($client_area = false)
 {
@@ -133,16 +144,19 @@ function is_rtl($client_area = false)
 
         if ($direction == 'rtl') {
             return true;
-        } elseif ($direction == 'ltr') {
+        }
+        if ($direction == 'ltr') {
             return false;
-        } elseif (empty($direction)) {
+        }
+        if (empty($direction)) {
             if (get_option('rtl_support_client') == 1) {
                 return true;
             }
         }
 
         return false;
-    } elseif ($client_area == true) {
+    }
+    if ($client_area == true) {
         // Client not logged in and checked from clients area
         if (get_option('rtl_support_client') == 1) {
             return true;
@@ -157,9 +171,11 @@ function is_rtl($client_area = false)
 
         if ($direction == 'rtl') {
             return true;
-        } elseif ($direction == 'ltr') {
+        }
+        if ($direction == 'ltr') {
             return false;
-        } elseif (empty($direction)) {
+        }
+        if (empty($direction)) {
             if (get_option('rtl_support_admin') == 1) {
                 return true;
             }
@@ -178,12 +194,13 @@ function is_rtl($client_area = false)
 /**
  * Check whether the data is intended to be shown for the customer
  * For example this function is used for custom fields, pdf language loading etc...
- * @return boolean
+ *
+ * @return bool
  */
 function is_data_for_customer()
 {
     return is_client_logged_in()
-        || (!is_staff_logged_in() && !is_client_logged_in())
+        || (! is_staff_logged_in() && ! is_client_logged_in())
         || defined('SEND_MAIL_TEMPLATE')
         || defined('CLIENTS_AREA')
         || defined('GDPR_EXPORT');
@@ -191,6 +208,7 @@ function is_data_for_customer()
 
 /**
  * Generate encryption key for app-config.php
+ *
  * @return stirng
  */
 function generate_encryption_key()
@@ -205,6 +223,7 @@ function generate_encryption_key()
 
 /**
  * Return application version formatted
+ *
  * @return string
  */
 function get_app_version()
@@ -256,8 +275,10 @@ function maybe_redirect_to_previous_url()
 }
 /**
  * Function used to validate all recaptcha from google reCAPTCHA feature
- * @param  string $str
- * @return boolean
+ *
+ * @param string $str
+ *
+ * @return bool
  */
 function do_recaptcha_validation($str = '')
 {
@@ -274,7 +295,7 @@ function do_recaptcha_validation($str = '')
     $res = curl_exec($curl);
     curl_close($curl);
     $res = json_decode($res, true);
-    //reCaptcha success check
+    // reCaptcha success check
     if ($res['success']) {
         return true;
     }
@@ -284,6 +305,9 @@ function do_recaptcha_validation($str = '')
 }
 /**
  * Get current date format from options
+ *
+ * @param mixed $php
+ *
  * @return string
  */
 function get_current_date_format($php = false)
@@ -301,15 +325,17 @@ function get_current_date_format($php = false)
 }
 /**
  * Is user logged in
- * @return boolean
+ *
+ * @return bool
  */
 function is_logged_in()
 {
-    return (is_client_logged_in() || is_staff_logged_in());
+    return is_client_logged_in() || is_staff_logged_in();
 }
 /**
  * Is client logged in
- * @return boolean
+ *
+ * @return bool
  */
 function is_client_logged_in()
 {
@@ -317,7 +343,8 @@ function is_client_logged_in()
 }
 /**
  * Is staff logged in
- * @return boolean
+ *
+ * @return bool
  */
 function is_staff_logged_in()
 {
@@ -325,6 +352,7 @@ function is_staff_logged_in()
 }
 /**
  * Return logged staff User ID from session
+ *
  * @return mixed
  */
 function get_staff_user_id()
@@ -346,7 +374,7 @@ function get_staff_user_id()
         }
     }
 
-    if (!is_staff_logged_in()) {
+    if (! is_staff_logged_in()) {
         return false;
     }
 
@@ -354,11 +382,12 @@ function get_staff_user_id()
 }
 /**
  * Return logged client User ID from session
+ *
  * @return mixed
  */
 function get_client_user_id()
 {
-    if (!is_client_logged_in()) {
+    if (! is_client_logged_in()) {
         return false;
     }
 
@@ -367,12 +396,13 @@ function get_client_user_id()
 
 /**
  * Get contact user id
+ *
  * @return mixed
  */
 function get_contact_user_id()
 {
     $CI = &get_instance();
-    if (!$CI->session->has_userdata('contact_user_id')) {
+    if (! $CI->session->has_userdata('contact_user_id')) {
         return false;
     }
 
@@ -380,6 +410,7 @@ function get_contact_user_id()
 }
 /**
  * Get timezones list
+ *
  * @return array timezones
  */
 function get_timezones_list()
@@ -389,18 +420,16 @@ function get_timezones_list()
 
 /**
  * Check if visitor is on mobile
- * @return boolean
+ *
+ * @return bool
  */
 function is_mobile()
 {
-    if (get_instance()->agent->is_mobile()) {
-        return true;
-    }
-
-    return false;
+    return (bool) (get_instance()->agent->is_mobile());
 }
 /**
  * Set session alert / flashdata
+ *
  * @param string $type    Alert type
  * @param string $message Alert message
  */
@@ -410,8 +439,9 @@ function set_alert($type, $message)
 }
 /**
  * Redirect to blank admin page
- * @param  string $message Alert message
- * @param  string $alert   Alert type
+ *
+ * @param string $message Alert message
+ * @param string $alert   Alert type
  */
 function blank_page($message = '', $alert = 'danger')
 {
@@ -420,7 +450,8 @@ function blank_page($message = '', $alert = 'danger')
 }
 /**
  * Redirect to access danied page and log activity
- * @param  string $permission If permission based to check where user tried to acces
+ *
+ * @param string $permission If permission based to check where user tried to acces
  */
 function access_denied($permission = '')
 {
@@ -428,7 +459,7 @@ function access_denied($permission = '')
 
     log_activity('Tried to access page where don\'t have permission' . ($permission != '' ? ' [' . $permission . ']' : ''));
 
-    if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
+    if (isset($_SERVER['HTTP_REFERER']) && ! empty($_SERVER['HTTP_REFERER'])) {
         redirect($_SERVER['HTTP_REFERER']);
     } else {
         redirect(admin_url('access_denied'));
@@ -441,11 +472,14 @@ function ajax_access_denied()
 {
     header('HTTP/1.0 401 Unauthorized');
     echo _l('access_denied');
-    die;
+
+    exit;
 }
 /**
  * Set debug message - message wont be hidden in X seconds from javascript
+ *
  * @since  Version 1.0.1
+ *
  * @param string $message debug message
  */
 function set_debug_alert($message)
@@ -456,11 +490,12 @@ function set_debug_alert($message)
 /**
  * System popup message for admin area
  * This is used to show some general message for user within a big full screen div with white background
+ *
  * @param string $message message for the system popup
  */
 function set_system_popup($message)
 {
-    if (!is_admin()) {
+    if (! is_admin()) {
         return false;
     }
 
@@ -474,6 +509,7 @@ function set_system_popup($message)
 }
 /**
  * Available date formats
+ *
  * @return array
  */
 function get_available_date_formats()
@@ -492,6 +528,7 @@ function get_available_date_formats()
 }
 /**
  * Get weekdays as array
+ *
  * @return array
  */
 function get_weekdays()
@@ -509,6 +546,7 @@ function get_weekdays()
 /**
  * Get non translated week days for query help
  * Do not edit this
+ *
  * @return array
  */
 function get_weekdays_original()
@@ -525,10 +563,14 @@ function get_weekdays_original()
 }
 /**
  * Outputs language string based on passed line
+ *
  * @since  Version 1.0.1
- * @param  string $line   language line key
- * @param  mixed $label   sprint_f label
- * @return string         language text
+ *
+ * @param string $line       language line key
+ * @param mixed  $label      sprint_f label
+ * @param mixed  $log_errors
+ *
+ * @return string language text
  */
 function _l($line, $label = '', $log_errors = true)
 {
@@ -545,7 +587,7 @@ function _l($line, $label = '', $log_errors = true)
         if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
             try {
                 $_line = sprintf($CI->lang->line(trim($line), $log_errors), $label);
-            } catch (\ValueError|\ArgumentCountError $e) {
+            } catch (ValueError|ArgumentCountError $e) {
                 $_line = $CI->lang->line(trim($line), $log_errors);
             }
         } else {
@@ -559,7 +601,7 @@ function _l($line, $label = '', $log_errors = true)
     $line  = $hook_data['line'];
 
     if ($_line != '') {
-        if (preg_match('/"/', $_line) && !is_html($_line)) {
+        if (preg_match('/"/', $_line) && ! is_html($_line)) {
             $_line = html_escape($_line);
         }
 
@@ -575,7 +617,9 @@ function _l($line, $label = '', $log_errors = true)
 
 /**
  * Format date to selected dateformat
- * @param  string $date Valid date
+ *
+ * @param string $date Valid date
+ *
  * @return string
  */
 function _d($date)
@@ -604,7 +648,10 @@ function _d($date)
 
 /**
  * Format datetime to selected datetime format
- * @param  datetime $date datetime date
+ *
+ * @param datetime $date         datetime date
+ * @param mixed    $is_timesheet
+ *
  * @return datetime/string
  */
 function _dt($date, $is_timesheet = false)
@@ -646,7 +693,10 @@ function _dt($date, $is_timesheet = false)
 
 /**
  * Convert string to sql date based on current date format from options
- * @param  string $date date string
+ *
+ * @param string $date     date string
+ * @param mixed  $datetime
+ *
  * @return mixed
  */
 function to_sql_date($date, $datetime = false)
@@ -702,8 +752,10 @@ function to_sql_date($date, $datetime = false)
 /**
  * Function that will check the date before formatting and replace the date places
  * This function is custom developed because for some date formats converting to y-m-d format is not possible
- * @param  string $date        the date to check
- * @param  string $from_format from format
+ *
+ * @param string $date        the date to check
+ * @param string $from_format from format
+ *
  * @return string
  */
 function _simplify_date_fix($date, $from_format)
@@ -722,8 +774,10 @@ function _simplify_date_fix($date, $from_format)
 }
 /**
  * Check if passed string is valid date
- * @param  string  $date
- * @return boolean
+ *
+ * @param string $date
+ *
+ * @return bool
  */
 function is_date($date)
 {
@@ -736,27 +790,31 @@ function is_date($date)
 /**
  * Get available locaes predefined for the system
  * If you add a language and the locale do not exist in this array you can use action hook to add new locale
+ *
  * @return array
  */
 function get_locales()
 {
-    $locales = \app\services\utilities\Locale::app();
+    $locales = app\services\utilities\Locale::app();
 
     return hooks()->apply_filters('before_get_locales', $locales);
 }
 /**
  * Get locale key by system language
- * @param  string $language language name from (application/languages) folder name
+ *
+ * @param string $language language name from (application/languages) folder name
+ *
  * @return string
  */
 function get_locale_key($language = 'english')
 {
-    $locale = \app\services\utilities\Locale::getByLanguage($language);
+    $locale = app\services\utilities\Locale::getByLanguage($language);
 
     return hooks()->apply_filters('before_get_locale', $locale);
 }
 /**
  * Get current url with query vars
+ *
  * @return string
  */
 function current_full_url()
@@ -768,7 +826,9 @@ function current_full_url()
 }
 /**
  * Triggers
- * @param  array  $users id of users to receive notifications
+ *
+ * @param array $users id of users to receive notifications
+ *
  * @return null
  */
 function pusher_trigger_notification($users = [])
@@ -779,11 +839,12 @@ function pusher_trigger_notification($users = [])
         return false;
     }
 
-    if (!is_array($users) || count($users) == 0) {
+    if (! is_array($users) || count($users) == 0) {
         return false;
     }
 
     $channels = [];
+
     foreach ($users as $id) {
         array_push($channels, 'notifications-channel-' . $id);
     }
@@ -796,14 +857,14 @@ function pusher_trigger_notification($users = [])
 
     try {
         $CI->app_pusher->trigger($channels, 'notification', []);
-    } catch(\Exception $e) {
+    } catch (Exception $e) {
         update_option('pusher_realtime_notifications', '0');
     }
 }
 
-
 /**
  * Generate md5 hash
+ *
  * @return string
  */
 function app_generate_hash()
@@ -814,6 +875,7 @@ function app_generate_hash()
 /**
  * @since  2.3.2
  * Get CSRF formatter for AJAX usage
+ *
  * @return array
  */
 function get_csrf_for_ajax()
@@ -828,60 +890,63 @@ function get_csrf_for_ajax()
 
 /**
  * If user have enabled CSRF proctection this function will take care of the ajax requests and append custom header for CSRF
+ *
  * @return mixed
  */
 function csrf_jquery_token()
 {
     ?>
 <script>
-if (typeof(jQuery) === 'undefined' && !window.deferAfterjQueryLoaded) {
-    window.deferAfterjQueryLoaded = [];
-    Object.defineProperty(window, "$", {
-        set: function(value) {
-            window.setTimeout(function() {
-                $.each(window.deferAfterjQueryLoaded, function(index, fn) {
-                    fn();
+    if (typeof(jQuery) === 'undefined' && !window.deferAfterjQueryLoaded) {
+        window.deferAfterjQueryLoaded = [];
+        Object.defineProperty(window, "$", {
+            set: function(value) {
+                window.setTimeout(function() {
+                    $.each(window.deferAfterjQueryLoaded, function(index, fn) {
+                        fn();
+                    });
+                }, 0);
+                Object.defineProperty(window, "$", {
+                    value: value
                 });
-            }, 0);
-            Object.defineProperty(window, "$", {
-                value: value
-            });
-        },
-        configurable: true
-    });
-}
+            },
+            configurable: true
+        });
+    }
 
-var csrfData = <?php echo json_encode(get_csrf_for_ajax()); ?>;
+    var csrfData = <?= json_encode(get_csrf_for_ajax()); ?> ;
 
-if (typeof(jQuery) == 'undefined') {
-    window.deferAfterjQueryLoaded.push(function() {
+    if (typeof(jQuery) == 'undefined') {
+        window.deferAfterjQueryLoaded.push(function() {
+            csrf_jquery_ajax_setup();
+        });
+        window.addEventListener('load', function() {
+            csrf_jquery_ajax_setup();
+        }, true);
+    } else {
         csrf_jquery_ajax_setup();
-    });
-    window.addEventListener('load', function() {
-        csrf_jquery_ajax_setup();
-    }, true);
-} else {
-    csrf_jquery_ajax_setup();
-}
+    }
 
-function csrf_jquery_ajax_setup() {
-    $.ajaxSetup({
-        data: csrfData.formatted
-    });
+    function csrf_jquery_ajax_setup() {
+        $.ajaxSetup({
+            data: csrfData.formatted
+        });
 
-    $(document).ajaxError(function(event, request, settings) {
-        if (request.status === 419) {
-            alert_float('warning', 'Page expired, refresh the page make an action.')
-        }
-    });
-}
+        $(document).ajaxError(function(event, request, settings) {
+            if (request.status === 419) {
+                alert_float('warning', 'Page expired, refresh the page make an action.')
+            }
+        });
+    }
 </script>
 <?php
 }
 
 /**
  * In some places of the script we use app_happy_text function to output some words in orange color
- * @param  string $text the text to check
+ *
+ * @param string $text the text to check
+ *
  * @return string
  */
 function app_happy_text($text)
@@ -897,6 +962,7 @@ function app_happy_text($text)
     $app_happy_color = hooks()->apply_filters('app_happy_text_color', 'rgb(255, 59, 0)');
 
     preg_match_all($re, $text, $matches, PREG_SET_ORDER, 0);
+
     foreach ($matches as $match) {
         $text = preg_replace(
             '/' . $match[0] . '/i',
@@ -910,6 +976,7 @@ function app_happy_text($text)
 
 /**
  * Return server temporary directory
+ *
  * @return string
  */
 function get_temp_dir()
@@ -937,7 +1004,9 @@ function get_temp_dir()
 
 /**
  * Creates instance of phpass
+ *
  * @since  2.3.1
+ *
  * @return object PasswordHash class
  */
 function app_hasher()
@@ -945,7 +1014,7 @@ function app_hasher()
     global $app_hasher;
 
     if (empty($app_hasher)) {
-        require_once(APPPATH . 'third_party/phpass.php');
+        require_once APPPATH . 'third_party/phpass.php';
         // By default, use the portable hash from phpass
         $app_hasher = new PasswordHash(PHPASS_HASH_STRENGTH, PHPASS_HASH_PORTABLE);
     }
@@ -955,8 +1024,11 @@ function app_hasher()
 
 /**
  * Hashes password for user
+ *
  * @since  2.3.1
- * @param  string $password plain password
+ *
+ * @param string $password plain password
+ *
  * @return string
  */
 function app_hash_password($password)
@@ -967,6 +1039,7 @@ function app_hash_password($password)
 /**
  * @since  2.3.2
  * Get last upgrade copy data if exists
+ *
  * @return mixed
  */
 function get_last_upgrade_copy_data()
@@ -981,27 +1054,33 @@ function get_last_upgrade_copy_data()
     return false;
 }
 
-if (!function_exists('collect')) {
+if (! function_exists('collect')) {
     /**
      * Collect items in a Collection instance
+     *
      * @since  2.9.2
-     * @param  array $items
-     * @return \Illuminate\Support\Collection
+     *
+     * @param array $items
+     *
+     * @return Collection
      */
     function collect($items)
     {
-        return new Illuminate\Support\Collection($items);
+        return new Collection($items);
     }
 }
 
-if (!function_exists('previous_url')) {
+if (! function_exists('previous_url')) {
     /**
      * Get the previous URL.
+     *
      * @since  3.1.3
+     *
      * @return string|null
      */
-    function previous_url() 
+    function previous_url()
     {
         return get_instance()->session->userdata('_prev_url');
     }
 }
+?>

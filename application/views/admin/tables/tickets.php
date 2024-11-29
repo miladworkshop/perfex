@@ -11,32 +11,32 @@ $rules = [
     App_table_filter::new('department', 'SelectRule')->label(_l('ticket_dt_department'))->options(function ($ci) {
         return collect($ci->departments_model->get())->map(fn ($dep) => [
             'value' => $dep['departmentid'],
-            'label' => $dep['name']
+            'label' => $dep['name'],
         ])->all();
     })->isVisible(fn () => is_admin()),
     App_table_filter::new('status', 'MultiSelectRule')->label(_l('ticket_dt_status'))->options(function ($ci) use ($statuses) {
         return collect($statuses)->map(fn ($status) => [
             'value' => $status['ticketstatusid'],
-            'label' => ticket_status_translate($status['ticketstatusid'])
+            'label' => ticket_status_translate($status['ticketstatusid']),
         ])->all();
     }),
     App_table_filter::new('priority', 'SelectRule')->label(_l('ticket_dt_priority'))->options(function ($ci) {
         return collect($ci->tickets_model->get_priority())->map(fn ($priority) => [
             'value' => $priority['priorityid'],
-            'label' => ticket_priority_translate($priority['priorityid'])
+            'label' => ticket_priority_translate($priority['priorityid']),
         ])->all();
     }),
-    App_table_filter::new('service', 'SelectRule')->label(_l('ticket_dt_service'))->options(function ($ci) use ($statuses) {
+    App_table_filter::new('service', 'SelectRule')->label(_l('ticket_dt_service'))->options(function ($ci) {
         return collect($ci->tickets_model->get_service())->map(fn ($service) => [
             'value' => $service['serviceid'],
-            'label' => $service['name']
+            'label' => $service['name'],
         ])->all();
     }),
     App_table_filter::new('merged', 'BooleanRule')->label(_l('merged'))->raw(function ($value) {
-        return $value == "1" ? 'merged_ticket_id IS NOT NULL' : 'merged_ticket_id IS NULL';
+        return $value == '1' ? 'merged_ticket_id IS NOT NULL' : 'merged_ticket_id IS NULL';
     }),
     App_table_filter::new('my_tickets', 'BooleanRule')->label(_l('my_tickets_assigned'))->raw(function ($value) {
-        return $value == "1" ? 'assigned = ' . get_staff_user_id() : 'assigned != ' . get_staff_user_id();
+        return $value == '1' ? 'assigned = ' . get_staff_user_id() : 'assigned != ' . get_staff_user_id();
     }),
 ];
 
@@ -50,13 +50,13 @@ $rules[] = App_table_filter::new('assigned', 'SelectRule')->label(_l('ticket_ass
         return collect($staff)->map(function ($staff) {
             return [
                 'value' => $staff['staffid'],
-                'label' => $staff['firstname'] . ' ' . $staff['lastname']
+                'label' => $staff['firstname'] . ' ' . $staff['lastname'],
             ];
         })->all();
     });
 
 return App_table::find('tickets')
-    ->outputUsing(function ($params) use ($statuses) {
+    ->outputUsing(function ($params) {
         extract($params);
 
         $aColumns = [
@@ -98,6 +98,7 @@ return App_table::find('tickets')
         ];
 
         $custom_fields = get_table_custom_fields('tickets');
+
         foreach ($custom_fields as $key => $field) {
             $selectAs = (is_cf_date($field) ? 'date_picker_cvalue_' . $key : 'cvalue_' . $key);
             array_push($customFieldsColumns, $selectAs);
@@ -105,7 +106,7 @@ return App_table::find('tickets')
             array_push($join, 'LEFT JOIN ' . db_prefix() . 'customfieldsvalues as ctable_' . $key . ' ON ' . db_prefix() . 'tickets.ticketid = ctable_' . $key . '.relid AND ctable_' . $key . '.fieldto="' . $field['fieldto'] . '" AND ctable_' . $key . '.fieldid=' . $field['id']);
         }
 
-        $where  = [];
+        $where = [];
 
         if ($filtersWhere = $this->getWhereFromRules()) {
             $where[] = $filtersWhere;
@@ -126,12 +127,13 @@ return App_table::find('tickets')
         }
 
         // If userid is set, the the view is in client profile, should be shown all tickets
-        if (!is_admin()) {
+        if (! is_admin()) {
             if (get_option('staff_access_only_assigned_departments') == 1) {
                 $staff_deparments_ids = $this->ci->departments_model->get_staff_departments(get_staff_user_id(), true);
                 $departments_ids      = [];
                 if (count($staff_deparments_ids) == 0) {
                     $departments = $this->ci->departments_model->get();
+
                     foreach ($departments as $department) {
                         array_push($departments_ids, $department['departmentid']);
                     }
@@ -159,15 +161,16 @@ return App_table::find('tickets')
 
         foreach ($rResult as $aRow) {
             $row = [];
+
             for ($i = 0; $i < count($aColumns); $i++) {
-                if (strpos($aColumns[$i], 'as') !== false && !isset($aRow[$aColumns[$i]])) {
+                if (strpos($aColumns[$i], 'as') !== false && ! isset($aRow[$aColumns[$i]])) {
                     $_data = $aRow[strafter($aColumns[$i], 'as ')];
                 } else {
                     $_data = $aRow[$aColumns[$i]];
                 }
 
                 if ($aColumns[$i] == '1') {
-                    $_data = '<div class="checkbox"><input type="checkbox" value="' . $aRow['ticketid'] . '" data-name="' . $aRow['subject'] . '" data-status="' . $aRow['status'] . '"><label></label></div>';
+                    $_data = '<div class="checkbox"><input type="checkbox" value="' . $aRow['ticketid'] . '" data-name="' . e($aRow['subject']) . '" data-status="' . $aRow['status'] . '"><label></label></div>';
                 } elseif ($aColumns[$i] == 'lastreply') {
                     if ($aRow[$aColumns[$i]] == null) {
                         $_data = _l('ticket_no_reply_yet');
@@ -189,14 +192,16 @@ return App_table::find('tickets')
                     }
 
                     $url   = admin_url('tickets/ticket/' . $aRow['ticketid']);
-                    $_data = '<a href="' . $url . '" class="valign">' . $_data . '</a>';
+                    $_data = '<a href="' . $url . '" class="valign tw-truncate tw-max-w-xs tw-block tw-min-w-0 tw-font-medium" title="' . e($_data) . '">' . $_data . '</a>';
                     if ($aColumns[$i] == 'subject') {
                         $_data .= '<div class="row-options">';
                         $_data .= '<a href="' . $url . '">' . _l('view') . '</a>';
                         $_data .= ' | <a href="' . $url . '?tab=settings">' . _l('edit') . '</a>';
-                        $_data .= ' | <a href="' . get_ticket_public_url($aRow) . '" target="_blank">' . _l('view_public_form') . '</a>';
+                        if (get_option('disable_ticket_public_url') == '0') {
+                            $_data .= ' | <a href="' . get_ticket_public_url($aRow) . '" target="_blank">' . _l('view_public_form') . '</a>';
+                        }
                         if (can_staff_delete_ticket()) {
-                            $_data .= ' | <a href="' . admin_url('tickets/delete/' . $aRow['ticketid']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+                            $_data .= ' | <a href="' . admin_url('tickets/delete/' . $aRow['ticketid']) . '" class="_delete">' . _l('delete') . '</a>';
                         }
                         $_data .= '</div>';
                     }
@@ -205,7 +210,7 @@ return App_table::find('tickets')
                 } elseif ($i == $contactColumn) {
                     if ($aRow['userid'] != 0) {
                         $_data = '<a href="' . admin_url('clients/client/' . $aRow['userid'] . '?group=contacts') . '">' . e($aRow['contact_full_name']);
-                        if (!empty($aRow['company'])) {
+                        if (! empty($aRow['company'])) {
                             $_data .= ' (' . e($aRow['company']) . ')';
                         }
                         $_data .= '</a>';
@@ -216,7 +221,7 @@ return App_table::find('tickets')
                     $_data = '<span class="label ticket-status-' . $aRow['status'] . '" style="border:1px solid ' . adjust_hex_brightness($aRow['statuscolor'], 0.4) . '; color:' . $aRow['statuscolor'] . ';background: ' . adjust_hex_brightness($aRow['statuscolor'], 0.04) . ';">' . e(ticket_status_translate($aRow['status'])) . '</span>';
                 } elseif ($aColumns[$i] == db_prefix() . 'tickets.date') {
                     $_data = e(_dt($_data));
-                } elseif (strpos($aColumns[$i],'service_name') !== false) {
+                } elseif (strpos($aColumns[$i], 'service_name') !== false) {
                     $_data = e($_data);
                 } elseif ($aColumns[$i] == 'priority') {
                     $_data = e(ticket_priority_translate($aRow['priority']));
@@ -239,7 +244,7 @@ return App_table::find('tickets')
                 $row['DT_RowClass'] = 'has-row-options';
             }
 
-            $row = hooks()->apply_filters('admin_tickets_table_row_data', $row, $aRow);
+            $row                = hooks()->apply_filters('admin_tickets_table_row_data', $row, $aRow);
             $output['aaData'][] = $row;
         }
 

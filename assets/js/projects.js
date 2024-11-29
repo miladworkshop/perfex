@@ -885,7 +885,7 @@ function milestones_kanban() {
     "projects/milestones_kanban",
     milestones_kanban_update,
     ".project-milestone",
-    445,
+    400,
     360,
     after_milestones_kanban
   );

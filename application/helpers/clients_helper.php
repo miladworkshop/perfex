@@ -6,16 +6,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * Check whether the contact email is verified
+ *
  * @since  2.2.0
- * @param  mixed  $id contact id
- * @return boolean
+ *
+ * @param mixed $id contact id
+ *
+ * @return bool
  */
 function is_contact_email_verified($id = null)
 {
-    $id = !$id ? get_contact_user_id() : $id;
+    $id = ! $id ? get_contact_user_id() : $id;
 
     if (isset($GLOBALS['contact']) && $GLOBALS['contact']->id == $id) {
-        return !is_null($GLOBALS['contact']->email_verified_at);
+        return ! is_null($GLOBALS['contact']->email_verified_at);
     }
 
     $CI = &get_instance();
@@ -24,16 +27,17 @@ function is_contact_email_verified($id = null)
     $CI->db->where('id', $id);
     $contact = $CI->db->get(db_prefix() . 'contacts')->row();
 
-    if (!$contact) {
+    if (! $contact) {
         return false;
     }
 
-    return !is_null($contact->email_verified_at);
+    return ! is_null($contact->email_verified_at);
 }
 
 /**
  * Check whether the user disabled verification emails for contacts
- * @return boolean
+ *
+ * @return bool
  */
 function is_email_verification_enabled()
 {
@@ -41,8 +45,10 @@ function is_email_verification_enabled()
 }
 /**
  * Check if client id is used in the system
- * @param  mixed  $id client id
- * @return boolean
+ *
+ * @param mixed $id client id
+ *
+ * @return bool
  */
 function is_client_id_used($id)
 {
@@ -78,8 +84,10 @@ function is_client_id_used($id)
 }
 /**
  * Check if customer has subscriptions
- * @param  mixed $id customer id
- * @return boolean
+ *
+ * @param mixed $id customer id
+ *
+ * @return bool
  */
 function customer_has_subscriptions($id)
 {
@@ -87,7 +95,9 @@ function customer_has_subscriptions($id)
 }
 /**
  * Get client by ID or current queried client
- * @param  mixed $id client id
+ *
+ * @param mixed $id client id
+ *
  * @return mixed
  */
 function get_client($id = null)
@@ -107,6 +117,7 @@ function get_client($id = null)
 }
 /**
  * Get predefined tabs array, used in customer profile
+ *
  * @return array
  */
 function get_customer_profile_tabs()
@@ -116,8 +127,10 @@ function get_customer_profile_tabs()
 
 /**
  * Filter only visible tabs selected from the profile and add badge
- * @param  array $tabs available tabs
- * @param  int $id client
+ *
+ * @param array $tabs available tabs
+ * @param int   $id   client
+ *
  * @return array
  */
 function filter_client_visible_tabs($tabs, $id = '')
@@ -135,8 +148,8 @@ function filter_client_visible_tabs($tabs, $id = '')
     }
 
     $appliedSettings = is_array($visible);
-    foreach ($tabs as $key => $tab) {
 
+    foreach ($tabs as $key => $tab) {
         // Check visibility from settings too
         if ($key != 'profile' && $key != 'contacts' && $appliedSettings) {
             if (array_key_exists($key, $visible) && $visible[$key] == false) {
@@ -144,7 +157,7 @@ function filter_client_visible_tabs($tabs, $id = '')
             }
         }
 
-        if (!is_null($customerProfileBadges)) {
+        if (! is_null($customerProfileBadges)) {
             $tab['badge'] = $customerProfileBadges->getBadge($tab['slug']);
         }
 
@@ -156,7 +169,9 @@ function filter_client_visible_tabs($tabs, $id = '')
 /**
  * @todo
  * Find a way to get the customer_id inside this function or refactor the hook
- * @param  string $group the tabs groups
+ *
+ * @param string $group the tabs groups
+ *
  * @return null
  */
 function app_init_customer_profile_tabs()
@@ -194,8 +209,8 @@ function app_init_customer_profile_tabs()
     ]);
 
     $CI->app_tabs->add_customer_profile_tab('contacts', [
-        'name'     => !is_empty_customer_company($client_id) || empty($client_id) ? _l('customer_contacts') : _l('contact'),
-        'icon'     => 'fa fa-user',
+        'name'     => ! is_empty_customer_company($client_id) || empty($client_id) ? _l('customer_contacts') : _l('contact'),
+        'icon'     => 'fa-regular fa-user',
         'view'     => 'admin/clients/groups/contacts',
         'position' => 10,
         'badge'    => [],
@@ -213,7 +228,7 @@ function app_init_customer_profile_tabs()
         'name'     => _l('customer_statement'),
         'icon'     => 'fa fa-area-chart',
         'view'     => 'admin/clients/groups/statement',
-        'visible'  => staff_can('view',  'invoices'),
+        'visible'  => staff_can('view', 'invoices'),
         'position' => 20,
         'badge'    => [],
     ]);
@@ -222,7 +237,7 @@ function app_init_customer_profile_tabs()
         'name'     => _l('client_invoices_tab'),
         'icon'     => 'fa fa-file-text',
         'view'     => 'admin/clients/groups/invoices',
-        'visible'  => (staff_can('view',  'invoices') || staff_can('view_own',  'invoices') || (get_option('allow_staff_view_invoices_assigned') == 1 && staff_has_assigned_invoices())),
+        'visible'  => (staff_can('view', 'invoices') || staff_can('view_own', 'invoices') || (get_option('allow_staff_view_invoices_assigned') == 1 && staff_has_assigned_invoices())),
         'position' => 25,
         'badge'    => [],
     ]);
@@ -231,7 +246,7 @@ function app_init_customer_profile_tabs()
         'name'     => _l('client_payments_tab'),
         'icon'     => 'fa fa-line-chart',
         'view'     => 'admin/clients/groups/payments',
-        'visible'  => (staff_can('view',  'payments') || staff_can('view_own',  'invoices') || (get_option('allow_staff_view_invoices_assigned') == 1 && staff_has_assigned_invoices())),
+        'visible'  => (staff_can('view', 'payments') || staff_can('view_own', 'invoices') || (get_option('allow_staff_view_invoices_assigned') == 1 && staff_has_assigned_invoices())),
         'position' => 30,
         'badge'    => [],
     ]);
@@ -240,7 +255,7 @@ function app_init_customer_profile_tabs()
         'name'     => _l('proposals'),
         'icon'     => 'fa-regular fa-file-powerpoint',
         'view'     => 'admin/clients/groups/proposals',
-        'visible'  => (staff_can('view',  'proposals') || staff_can('view_own',  'proposals') || (get_option('allow_staff_view_proposals_assigned') == 1 && staff_has_assigned_proposals())),
+        'visible'  => (staff_can('view', 'proposals') || staff_can('view_own', 'proposals') || (get_option('allow_staff_view_proposals_assigned') == 1 && staff_has_assigned_proposals())),
         'position' => 35,
         'badge'    => [],
     ]);
@@ -249,7 +264,7 @@ function app_init_customer_profile_tabs()
         'name'     => _l('credit_notes'),
         'icon'     => 'fa-regular fa-file-lines',
         'view'     => 'admin/clients/groups/credit_notes',
-        'visible'  => (staff_can('view',  'credit_notes') || staff_can('view_own',  'credit_notes')),
+        'visible'  => (staff_can('view', 'credit_notes') || staff_can('view_own', 'credit_notes')),
         'position' => 40,
         'badge'    => [],
     ]);
@@ -258,7 +273,7 @@ function app_init_customer_profile_tabs()
         'name'     => _l('estimates'),
         'icon'     => 'fa-regular fa-file',
         'view'     => 'admin/clients/groups/estimates',
-        'visible'  => (staff_can('view',  'estimates') || staff_can('view_own',  'estimates') || (get_option('allow_staff_view_estimates_assigned') == 1 && staff_has_assigned_estimates())),
+        'visible'  => (staff_can('view', 'estimates') || staff_can('view_own', 'estimates') || (get_option('allow_staff_view_estimates_assigned') == 1 && staff_has_assigned_estimates())),
         'position' => 45,
         'badge'    => [],
     ]);
@@ -267,7 +282,7 @@ function app_init_customer_profile_tabs()
         'name'     => _l('subscriptions'),
         'icon'     => 'fa fa-repeat',
         'view'     => 'admin/clients/groups/subscriptions',
-        'visible'  => (staff_can('view',  'subscriptions') || staff_can('view_own',  'subscriptions')),
+        'visible'  => (staff_can('view', 'subscriptions') || staff_can('view_own', 'subscriptions')),
         'position' => 50,
         'badge'    => [],
     ]);
@@ -276,16 +291,16 @@ function app_init_customer_profile_tabs()
         'name'     => _l('expenses'),
         'icon'     => 'fa-regular fa-file-lines',
         'view'     => 'admin/clients/groups/expenses',
-        'visible'  => (staff_can('view',  'expenses') || staff_can('view_own',  'expenses')),
+        'visible'  => (staff_can('view', 'expenses') || staff_can('view_own', 'expenses')),
         'position' => 55,
         'badge'    => [],
     ]);
 
     $CI->app_tabs->add_customer_profile_tab('contracts', [
         'name'     => _l('contracts'),
-        'icon'     => 'fa fa-file-contract',
+        'icon'     => 'fa-regular fa-note-sticky',
         'view'     => 'admin/clients/groups/contracts',
-        'visible'  => (staff_can('view',  'contracts') || staff_can('view_own',  'contracts')),
+        'visible'  => (staff_can('view', 'contracts') || staff_can('view_own', 'contracts')),
         'position' => 60,
         'badge'    => [],
     ]);
@@ -300,7 +315,7 @@ function app_init_customer_profile_tabs()
 
     $CI->app_tabs->add_customer_profile_tab('tasks', [
         'name'     => _l('tasks'),
-        'icon'     => 'fa fa-tasks',
+        'icon'     => 'fa-regular fa-circle-check',
         'view'     => 'admin/clients/groups/tasks',
         'position' => 70,
         'badge'    => [],
@@ -310,7 +325,7 @@ function app_init_customer_profile_tabs()
         'name'     => _l('tickets'),
         'icon'     => 'fa-regular fa-life-ring',
         'view'     => 'admin/clients/groups/tickets',
-        'visible'  => ((get_option('access_tickets_to_none_staff_members') == 1 && !is_staff_member()) || is_staff_member()),
+        'visible'  => ((get_option('access_tickets_to_none_staff_members') == 1 && ! is_staff_member()) || is_staff_member()),
         'position' => 75,
         'badge'    => [],
     ]);
@@ -333,7 +348,7 @@ function app_init_customer_profile_tabs()
 
     $CI->app_tabs->add_customer_profile_tab('reminders', [
         'name'     => $remindersText,
-        'icon'     => 'fa-regular fa-clock',
+        'icon'     => 'fa-regular fa-bell',
         'view'     => 'admin/clients/groups/reminders',
         'position' => 90,
         'badge'    => [],
@@ -350,9 +365,12 @@ function app_init_customer_profile_tabs()
 
 /**
  * Get client id by lead id
+ *
  * @since  Version 1.0.1
- * @param  mixed $id lead id
- * @return mixed     client id
+ *
+ * @param mixed $id lead id
+ *
+ * @return mixed client id
  */
 function get_client_id_by_lead_id($id)
 {
@@ -365,29 +383,31 @@ function get_client_id_by_lead_id($id)
 /**
  * Check if contact id passed is primary contact
  * If you dont pass $contact_id the current logged in contact will be checked
- * @param  string  $contact_id
- * @return boolean
+ *
+ * @param string $contact_id
+ *
+ * @return bool
  */
 function is_primary_contact($contact_id = '')
 {
-    if (!is_numeric($contact_id)) {
+    if (! is_numeric($contact_id)) {
         $contact_id = get_contact_user_id();
     }
 
-    if (total_rows(db_prefix() . 'contacts', ['id' => $contact_id, 'is_primary' => 1]) > 0) {
-        return true;
-    }
-
-    return false;
+    return (bool) (total_rows(db_prefix() . 'contacts', ['id' => $contact_id, 'is_primary' => 1]) > 0);
 }
 
 /**
  * Check if client have invoices with multiple currencies
+ *
+ * @param mixed      $clientid
+ * @param mixed|null $table
+ *
  * @return booelan
  */
 function is_client_using_multiple_currencies($clientid = '', $table = null)
 {
-    if (!$table) {
+    if (! $table) {
         $table = db_prefix() . 'invoices';
     }
 
@@ -397,6 +417,7 @@ function is_client_using_multiple_currencies($clientid = '', $table = null)
     $CI->load->model('currencies_model');
     $currencies            = $CI->currencies_model->get();
     $total_currencies_used = 0;
+
     foreach ($currencies as $currency) {
         $CI->db->where('currency', $currency['id']);
         $CI->db->where('clientid', $clientid);
@@ -419,12 +440,13 @@ function is_client_using_multiple_currencies($clientid = '', $table = null)
     ]);
 }
 
-
 /**
  * Function used to check if is really empty customer company
  * Can happen user to have selected that the company field is not required and the primary contact name is auto added in the company field
- * @param  mixed  $id
- * @return boolean
+ *
+ * @param mixed $id
+ *
+ * @return bool
  */
 function is_empty_customer_company($id)
 {
@@ -434,11 +456,7 @@ function is_empty_customer_company($id)
     $CI->db->where('userid', $id);
     $row = $CI->db->get()->row();
     if ($row) {
-        if ($row->company == '') {
-            return true;
-        }
-
-        return false;
+        return (bool) ($row->company == '');
     }
 
     return true;
@@ -446,7 +464,9 @@ function is_empty_customer_company($id)
 
 /**
  * Get ids to check what files with contacts are shared
- * @param  array  $where
+ *
+ * @param array $where
+ *
  * @return array
  */
 function get_customer_profile_file_sharing($where = [])
@@ -459,7 +479,9 @@ function get_customer_profile_file_sharing($where = [])
 
 /**
  * Get customer id by passed contact id
- * @param  mixed $id
+ *
+ * @param mixed $id
+ *
  * @return mixed
  */
 function get_user_id_by_contact_id($id)
@@ -467,7 +489,7 @@ function get_user_id_by_contact_id($id)
     $CI = &get_instance();
 
     $userid = $CI->app_object_cache->get('user-id-by-contact-id-' . $id);
-    if (!$userid) {
+    if (! $userid) {
         $CI->db->select('userid')
             ->where('id', $id);
         $client = $CI->db->get(db_prefix() . 'contacts')->row();
@@ -483,7 +505,9 @@ function get_user_id_by_contact_id($id)
 
 /**
  * Get primary contact user id for specific customer
- * @param  mixed $userid
+ *
+ * @param mixed $userid
+ *
  * @return mixed
  */
 function get_primary_contact_user_id($userid)
@@ -502,7 +526,9 @@ function get_primary_contact_user_id($userid)
 
 /**
  * Get client full name
- * @param  string $contact_id Optional
+ *
+ * @param string $contact_id Optional
+ *
  * @return string Firstname and Lastname
  */
 function get_contact_full_name($contact_id = '')
@@ -513,7 +539,7 @@ function get_contact_full_name($contact_id = '')
 
     $contact = $CI->app_object_cache->get('contact-full-name-data-' . $contact_id);
 
-    if (!$contact) {
+    if (! $contact) {
         $CI->db->where('id', $contact_id);
         $contact = $CI->db->select('firstname,lastname')->from(db_prefix() . 'contacts')->get()->row();
         $CI->app_object_cache->add('contact-full-name-data-' . $contact_id, $contact);
@@ -527,8 +553,10 @@ function get_contact_full_name($contact_id = '')
 }
 /**
  * Return contact profile image url
- * @param  mixed $contact_id
- * @param  string $type
+ *
+ * @param mixed  $contact_id
+ * @param string $type
+ *
  * @return string
  */
 function contact_profile_image_url($contact_id, $type = 'small')
@@ -537,7 +565,7 @@ function contact_profile_image_url($contact_id, $type = 'small')
     $CI   = &get_instance();
     $path = $CI->app_object_cache->get('contact-profile-image-path-' . $contact_id);
 
-    if (!$path) {
+    if (! $path) {
         $CI->app_object_cache->add('contact-profile-image-path-' . $contact_id, $url);
 
         $CI->db->select('profile_image');
@@ -545,7 +573,7 @@ function contact_profile_image_url($contact_id, $type = 'small')
         $CI->db->where('id', $contact_id);
         $contact = $CI->db->get()->row();
 
-        if ($contact && !empty($contact->profile_image)) {
+        if ($contact && ! empty($contact->profile_image)) {
             $path = 'uploads/client_profile_images/' . $contact_id . '/' . $type . '_' . $contact->profile_image;
             $CI->app_object_cache->set('contact-profile-image-path-' . $contact_id, $path);
         }
@@ -562,7 +590,10 @@ function contact_profile_image_url($contact_id, $type = 'small')
  * Search contact tickets
  * Project dropdown quick switch
  * Calendar tooltips
+ *
  * @param  [type] $userid [description]
+ * @param mixed $prevent_empty_company
+ *
  * @return [type]         [description]
  */
 function get_company_name($userid, $prevent_empty_company = false)
@@ -587,15 +618,16 @@ function get_company_name($userid, $prevent_empty_company = false)
     return '';
 }
 
-
 /**
  * Get client default language
- * @param  mixed $clientid
+ *
+ * @param mixed $clientid
+ *
  * @return mixed
  */
 function get_client_default_language($clientid = '')
 {
-    if (!is_numeric($clientid)) {
+    if (! is_numeric($clientid)) {
         $clientid = get_client_user_id();
     }
 
@@ -613,9 +645,11 @@ function get_client_default_language($clientid = '')
 
 /**
  * Function is customer admin
- * @param  mixed  $id       customer id
- * @param  staff_id  $staff_id staff id to check
- * @return boolean
+ *
+ * @param mixed    $id       customer id
+ * @param staff_id $staff_id staff id to check
+ *
+ * @return bool
  */
 function is_customer_admin($id, $staff_id = '')
 {
@@ -639,8 +673,10 @@ function is_customer_admin($id, $staff_id = '')
 }
 /**
  * Check if staff member have assigned customers
- * @param  mixed $staff_id staff id
- * @return boolean
+ *
+ * @param mixed $staff_id staff id
+ *
+ * @return bool
  */
 function have_assigned_customers($staff_id = '')
 {
@@ -661,15 +697,17 @@ function have_assigned_customers($staff_id = '')
 }
 /**
  * Check if contact has permission
- * @param  string  $permission permission name
- * @param  string  $contact_id     contact id
- * @return boolean
+ *
+ * @param string $permission permission name
+ * @param string $contact_id contact id
+ *
+ * @return bool
  */
 function has_contact_permission($permission, $contact_id = '')
 {
     $CI = &get_instance();
 
-    if (!class_exists('app')) {
+    if (! class_exists('app')) {
         $CI->load->library('app');
     }
 
@@ -692,26 +730,28 @@ function has_contact_permission($permission, $contact_id = '')
 }
 /**
  * Load customers area language
- * @param  string $customer_id
+ *
+ * @param string $customer_id
+ *
  * @return string return loaded language
  */
 function load_client_language($customer_id = '')
 {
     $CI = &get_instance();
-    if (!$CI->load->is_loaded('cookie')) {
+    if (! $CI->load->is_loaded('cookie')) {
         $CI->load->helper('cookie');
     }
 
-    if (defined('CLIENTS_AREA') && get_contact_language() != '' && !is_language_disabled()) {
+    if (defined('CLIENTS_AREA') && get_contact_language() != '' && ! is_language_disabled()) {
         $language = get_contact_language();
     } else {
         $language = get_option('active_language');
 
-        if ((is_client_logged_in() || $customer_id != '') && !is_language_disabled()) {
+        if ((is_client_logged_in() || $customer_id != '') && ! is_language_disabled()) {
             $client_language = get_client_default_language($customer_id);
 
             if (
-                !empty($client_language)
+                ! empty($client_language)
                 && file_exists(APPPATH . 'language/' . $client_language)
             ) {
                 $language = $client_language;
@@ -739,8 +779,10 @@ function load_client_language($customer_id = '')
 }
 /**
  * Check if client have transactions recorded
- * @param  mixed $id clientid
- * @return boolean
+ *
+ * @param mixed $id clientid
+ *
+ * @return bool
  */
 function client_have_transactions($id)
 {
@@ -765,9 +807,9 @@ function client_have_transactions($id)
     return hooks()->apply_filters('customer_have_transactions', $total > 0, $id);
 }
 
-
 /**
  * Predefined contact permission
+ *
  * @return array
  */
 function get_contact_permissions()
@@ -824,7 +866,8 @@ function get_contact_permission($name)
 /**
  * Additional checking for customers area, when contact edit his profile
  * This function will check if the checkboxes for email notifications should be shown
- * @return boolean
+ *
+ * @return bool
  */
 function can_contact_view_email_notifications_options()
 {
@@ -836,7 +879,8 @@ function can_contact_view_email_notifications_options()
 
 /**
  * With this function staff can login as client in the clients area
- * @param  mixed $id client id
+ *
+ * @param mixed $id client id
  */
 function login_as_client($id)
 {
@@ -848,7 +892,7 @@ function login_as_client($id)
 
     $primary = $CI->db->get(db_prefix() . 'contacts')->row();
 
-    if (!$primary) {
+    if (! $primary) {
         set_alert('danger', _l('no_primary_contact'));
         redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     } elseif ($primary->active == '0') {
@@ -882,7 +926,9 @@ function send_customer_registered_email_to_administrators($client_id)
 
 /**
  * Return and perform additional checkings for contact consent url
- * @param  mixed $contact_id contact id
+ *
+ * @param mixed $contact_id contact id
+ *
  * @return string
  */
 function contact_consent_url($contact_id)
@@ -897,7 +943,7 @@ function contact_consent_url($contact_id)
         if (total_rows(db_prefix() . 'contacts', ['id' => $contact_id]) > 0) {
             $meta_id = add_contact_meta($contact_id, 'consent_key', $consent_key);
         }
-        if (!$meta_id) {
+        if (! $meta_id) {
             return '';
         }
     }
@@ -907,237 +953,289 @@ function contact_consent_url($contact_id)
 
 /**
  *  Get customer attachment
- * @param   mixed $id   customer id
- * @return  array
+ *
+ * @param mixed $id customer id
+ *
+ * @return array
  */
 function get_all_customer_attachments($id)
 {
     $CI = &get_instance();
 
-    $attachments                = [];
-    $attachments['invoice']     = [];
-    $attachments['estimate']    = [];
-    $attachments['credit_note'] = [];
-    $attachments['proposal']    = [];
-    $attachments['contract']    = [];
-    $attachments['lead']        = [];
-    $attachments['task']        = [];
-    $attachments['customer']    = [];
-    $attachments['ticket']      = [];
-    $attachments['expense']     = [];
+    $attachments = [];
 
-    $has_permission_expenses_view = staff_can('view',  'expenses');
-    $has_permission_expenses_own  = staff_can('view_own',  'expenses');
-    if ($has_permission_expenses_view || $has_permission_expenses_own) {
-        // Expenses
-        $CI->db->select('clientid,id');
-        $CI->db->where('clientid', $id);
-        if (!$has_permission_expenses_view) {
+    $attachment_types = [
+        'invoice' => [
+            'url'                => site_url() . 'download/file/sales_attachment/',
+            'upload_path'        => get_upload_path_by_type('invoice'),
+            'download_indicator' => 'attachment_key',
+            'key_indicator'      => 'rel_id',
+        ],
+        'estimate' => [
+            'url'                => site_url() . 'download/file/sales_attachment/',
+            'upload_path'        => get_upload_path_by_type('estimate'),
+            'download_indicator' => 'attachment_key',
+            'key_indicator'      => 'rel_id',
+        ],
+        'credit_note' => [
+            'url'                => site_url() . 'download/file/sales_attachment/',
+            'upload_path'        => get_upload_path_by_type('credit_note'),
+            'download_indicator' => 'attachment_key',
+            'key_indicator'      => 'rel_id',
+        ],
+        'proposal' => [
+            'url'                => site_url() . 'download/file/sales_attachment/',
+            'upload_path'        => get_upload_path_by_type('proposal'),
+            'download_indicator' => 'attachment_key',
+            'key_indicator'      => 'rel_id',
+        ],
+        'contract' => [
+            'url'                => site_url() . 'download/file/contract/',
+            'upload_path'        => get_upload_path_by_type('contract'),
+            'download_indicator' => 'attachment_key',
+            'key_indicator'      => 'rel_id',
+        ],
+        'lead' => [
+            'url'                => site_url() . 'download/file/lead_attachment/',
+            'upload_path'        => get_upload_path_by_type('lead'),
+            'download_indicator' => 'id',
+            'key_indicator'      => 'rel_id',
+        ],
+        'task' => [
+            'url'                => site_url() . 'download/file/taskattachment/',
+            'upload_path'        => get_upload_path_by_type('task'),
+            'download_indicator' => 'attachment_key',
+            'key_indicator'      => 'rel_id',
+        ],
+        'customer' => [
+            'url'                => site_url() . 'download/file/client/',
+            'upload_path'        => get_upload_path_by_type('customer'),
+            'download_indicator' => 'attachment_key',
+            'key_indicator'      => 'rel_id',
+        ],
+        'ticket' => [
+            'url'                => site_url() . 'download/file/ticket/',
+            'upload_path'        => get_upload_path_by_type('ticket'),
+            'download_indicator' => 'id',
+            'key_indicator'      => 'ticketid',
+        ],
+        'expense' => [
+            'url'                => site_url() . 'download/file/expense/',
+            'upload_path'        => get_upload_path_by_type('expense'),
+            'download_indicator' => 'rel_id',
+            'key_indicator'      => 'rel_id',
+        ],
+    ];
+
+    foreach ($attachment_types as $type => $settings) {
+        $attachments[$type] = []; // create empty array for each type
+    }
+
+    $can_view_expenses     = staff_can('view', 'expenses');
+    $can_view_own_expenses = staff_can('view_own', 'expenses');
+    if ($can_view_expenses || $can_view_own_expenses) {
+        $CI->db->select('clientid,id')->where('clientid', $id);
+        if (! $can_view_expenses) {
             $CI->db->where('addedfrom', get_staff_user_id());
         }
-
         $CI->db->from(db_prefix() . 'expenses');
         $expenses = $CI->db->get()->result_array();
         $ids      = array_column($expenses, 'id');
         if (count($ids) > 0) {
-            $CI->db->where_in('rel_id', $ids);
-            $CI->db->where('rel_type', 'expense');
+            $CI->db->where_in('rel_id', $ids)->where('rel_type', 'expense');
             $_attachments = $CI->db->get(db_prefix() . 'files')->result_array();
+
             foreach ($_attachments as $_att) {
+                $_att['download_url'] = $attachment_types['expense']['url'] . $_att[$attachment_types['expense']['download_indicator']];
+                $_att['upload_path']  = $attachment_types['expense']['upload_path'] . $_att[$attachment_types['expense']['key_indicator']] . '/' . $_att['file_name'];
                 array_push($attachments['expense'], $_att);
             }
         }
     }
 
-
-    $has_permission_invoices_view = staff_can('view',  'invoices');
-    $has_permission_invoices_own  = staff_can('view_own',  'invoices');
-    if ($has_permission_invoices_view || $has_permission_invoices_own || get_option('allow_staff_view_invoices_assigned') == 1) {
+    if (staff_can('view', 'invoices') || staff_can('view_own', 'invoices') || get_option('allow_staff_view_invoices_assigned') == 1) {
         $noPermissionQuery = get_invoices_where_sql_for_staff(get_staff_user_id());
-        // Invoices
-        $CI->db->select('clientid,id');
-        $CI->db->where('clientid', $id);
+        $CI->db->select('clientid,id')->where('clientid', $id);
 
-        if (!$has_permission_invoices_view) {
+        if (! staff_can('view', 'invoices')) {
             $CI->db->where($noPermissionQuery);
         }
 
         $CI->db->from(db_prefix() . 'invoices');
         $invoices = $CI->db->get()->result_array();
+        $ids      = array_column($invoices, 'id');
 
-        $ids = array_column($invoices, 'id');
-        if (count($ids) > 0) {
-            $CI->db->where_in('rel_id', $ids);
-            $CI->db->where('rel_type', 'invoice');
+        if (! empty($ids)) {
+            $CI->db->where_in('rel_id', $ids)->where('rel_type', 'invoice');
             $_attachments = $CI->db->get(db_prefix() . 'files')->result_array();
+
             foreach ($_attachments as $_att) {
+                $_att['download_url'] = $attachment_types['invoice']['url'] . $_att[$attachment_types['invoice']['download_indicator']];
+                $_att['upload_path']  = $attachment_types['invoice']['upload_path'] . $_att[$attachment_types['invoice']['key_indicator']] . '/' . $_att['file_name'];
                 array_push($attachments['invoice'], $_att);
             }
         }
     }
+    if (staff_can('view', 'credit_notes') || staff_can('view_own', 'credit_notes')) {
+        $CI->db->select('clientid,id')->where('clientid', $id);
 
-    $has_permission_credit_notes_view = staff_can('view',  'credit_notes');
-    $has_permission_credit_notes_own  = staff_can('view_own',  'credit_notes');
-
-    if ($has_permission_credit_notes_view || $has_permission_credit_notes_own) {
-        // credit_notes
-        $CI->db->select('clientid,id');
-        $CI->db->where('clientid', $id);
-
-        if (!$has_permission_credit_notes_view) {
+        if (! staff_can('view', 'credit_notes')) {
             $CI->db->where('addedfrom', get_staff_user_id());
         }
 
         $CI->db->from(db_prefix() . 'creditnotes');
         $credit_notes = $CI->db->get()->result_array();
+        $ids          = array_column($credit_notes, 'id');
 
-        $ids = array_column($credit_notes, 'id');
-        if (count($ids) > 0) {
-            $CI->db->where_in('rel_id', $ids);
-            $CI->db->where('rel_type', 'credit_note');
+        if (! empty($ids)) {
+            $CI->db->where_in('rel_id', $ids)->where('rel_type', 'credit_note');
             $_attachments = $CI->db->get(db_prefix() . 'files')->result_array();
+
             foreach ($_attachments as $_att) {
+                $_att['download_url'] = $attachment_types['credit_note']['url'] . $_att[$attachment_types['credit_note']['download_indicator']];
+                $_att['upload_path']  = $attachment_types['credit_note']['upload_path'] . $_att[$attachment_types['credit_note']['key_indicator']] . '/' . $_att['file_name'];
                 array_push($attachments['credit_note'], $_att);
             }
         }
     }
 
-    $permission_estimates_view = staff_can('view',  'estimates');
-    $permission_estimates_own  = staff_can('view_own',  'estimates');
-
-    if ($permission_estimates_view || $permission_estimates_own || get_option('allow_staff_view_proposals_assigned') == 1) {
+    if (staff_can('view', 'estimates') || staff_can('view_own', 'estimates') || get_option('allow_staff_view_proposals_assigned') == 1) {
         $noPermissionQuery = get_estimates_where_sql_for_staff(get_staff_user_id());
-        // Estimates
-        $CI->db->select('clientid,id');
-        $CI->db->where('clientid', $id);
-        if (!$permission_estimates_view) {
+        $CI->db->select('clientid,id')->where('clientid', $id);
+
+        if (! staff_can('view', 'estimates')) {
             $CI->db->where($noPermissionQuery);
         }
+
         $CI->db->from(db_prefix() . 'estimates');
         $estimates = $CI->db->get()->result_array();
+        $ids       = array_column($estimates, 'id');
 
-        $ids = array_column($estimates, 'id');
-        if (count($ids) > 0) {
-            $CI->db->where_in('rel_id', $ids);
-            $CI->db->where('rel_type', 'estimate');
+        if (! empty($ids)) {
+            $CI->db->where_in('rel_id', $ids)->where('rel_type', 'estimate');
             $_attachments = $CI->db->get(db_prefix() . 'files')->result_array();
 
             foreach ($_attachments as $_att) {
+                $_att['download_url'] = $attachment_types['estimate']['url'] . $_att[$attachment_types['estimate']['download_indicator']];
+                $_att['upload_path']  = $attachment_types['estimate']['upload_path'] . $_att[$attachment_types['estimate']['key_indicator']] . '/' . $_att['file_name'];
                 array_push($attachments['estimate'], $_att);
             }
         }
     }
 
-    $has_permission_proposals_view = staff_can('view',  'proposals');
-    $has_permission_proposals_own  = staff_can('view_own',  'proposals');
-
-    if ($has_permission_proposals_view || $has_permission_proposals_own || get_option('allow_staff_view_proposals_assigned') == 1) {
+    if (staff_can('view', 'proposals') || staff_can('view_own', 'proposals') || get_option('allow_staff_view_proposals_assigned') == 1) {
         $noPermissionQuery = get_proposals_sql_where_staff(get_staff_user_id());
-        // Proposals
-        $CI->db->select('rel_id,id');
-        $CI->db->where('rel_id', $id);
-        $CI->db->where('rel_type', 'customer');
-        if (!$has_permission_proposals_view) {
+        $CI->db->select('rel_id,id')->where('rel_id', $id)->where('rel_type', 'customer');
+
+        if (! staff_can('view', 'proposals')) {
             $CI->db->where($noPermissionQuery);
         }
+
         $CI->db->from(db_prefix() . 'proposals');
         $proposals = $CI->db->get()->result_array();
+        $ids       = array_column($proposals, 'id');
 
-        $ids = array_column($proposals, 'id');
-
-        if (count($ids) > 0) {
-            $CI->db->where_in('rel_id', $ids);
-            $CI->db->where('rel_type', 'proposal');
+        if (! empty($ids)) {
+            $CI->db->where_in('rel_id', $ids)->where('rel_type', 'proposal');
             $_attachments = $CI->db->get(db_prefix() . 'files')->result_array();
 
             foreach ($_attachments as $_att) {
+                $_att['download_url'] = $attachment_types['proposal']['url'] . $_att[$attachment_types['proposal']['download_indicator']];
+                $_att['upload_path']  = $attachment_types['proposal']['upload_path'] . $_att[$attachment_types['proposal']['key_indicator']] . '/' . $_att['file_name'];
                 array_push($attachments['proposal'], $_att);
             }
         }
     }
 
-    $permission_contracts_view = staff_can('view',  'contracts');
-    $permission_contracts_own  = staff_can('view_own',  'contracts');
-    if ($permission_contracts_view || $permission_contracts_own) {
-        // Contracts
-        $CI->db->select('client,id');
-        $CI->db->where('client', $id);
-        if (!$permission_contracts_view) {
+    $can_view_contracts = staff_can('view', 'contracts');
+    if ($can_view_contracts || staff_can('view_own', 'contracts')) {
+        $CI->db->select('client,id')->where('client', $id);
+
+        if (! $can_view_contracts) {
             $CI->db->where('addedfrom', get_staff_user_id());
         }
+
         $CI->db->from(db_prefix() . 'contracts');
         $contracts = $CI->db->get()->result_array();
+        $ids       = array_column($contracts, 'id');
 
-        $ids = array_column($contracts, 'id');
-
-        if (count($ids) > 0) {
-            $CI->db->where_in('rel_id', $ids);
-            $CI->db->where('rel_type', 'contract');
+        if (! empty($ids)) {
+            $CI->db->where_in('rel_id', $ids)->where('rel_type', 'contract');
             $_attachments = $CI->db->get(db_prefix() . 'files')->result_array();
 
             foreach ($_attachments as $_att) {
+                $_att['download_url'] = $attachment_types['contract']['url'] . $_att[$attachment_types['contract']['download_indicator']];
+                $_att['upload_path']  = $attachment_types['contract']['upload_path'] . $_att[$attachment_types['contract']['key_indicator']] . '/' . $_att['file_name'];
                 array_push($attachments['contract'], $_att);
             }
         }
     }
 
-    $CI->db->select('leadid')
-        ->where('userid', $id);
+    $CI->db->select('leadid')->where('userid', $id);
     $customer = $CI->db->get(db_prefix() . 'clients')->row();
 
-    if ($customer->leadid != null) {
-        $CI->db->where('rel_id', $customer->leadid);
-        $CI->db->where('rel_type', 'lead');
+    if (! empty($customer->leadid)) {
+        $CI->db->where('rel_id', $customer->leadid)->where('rel_type', 'lead');
         $_attachments = $CI->db->get(db_prefix() . 'files')->result_array();
+
         foreach ($_attachments as $_att) {
+            $_att['download_url'] = $attachment_types['lead']['url'] . $_att[$attachment_types['lead']['download_indicator']];
+            $_att['upload_path']  = $attachment_types['lead']['upload_path'] . $_att[$attachment_types['lead']['key_indicator']] . '/' . $_att['file_name'];
             array_push($attachments['lead'], $_att);
         }
     }
 
-    $CI->db->select('ticketid,userid');
-    $CI->db->where('userid', $id);
-    $CI->db->from(db_prefix() . 'tickets');
-    $tickets = $CI->db->get()->result_array();
+    $CI->db->select('ticketid,userid')->where('userid', $id);
+    $tickets = $CI->db->get(db_prefix() . 'tickets')->result_array();
 
     $ids = array_column($tickets, 'ticketid');
 
-    if (count($ids) > 0) {
+    if (! empty($ids)) {
         $CI->db->where_in('ticketid', $ids);
         $_attachments = $CI->db->get(db_prefix() . 'ticket_attachments')->result_array();
 
         foreach ($_attachments as $_att) {
+            $_att['download_url'] = $attachment_types['ticket']['url'] . $_att[$attachment_types['ticket']['download_indicator']];
+            $_att['upload_path']  = $attachment_types['ticket']['upload_path'] . $_att[$attachment_types['ticket']['key_indicator']] . '/' . $_att['file_name'];
             array_push($attachments['ticket'], $_att);
         }
     }
 
-    $has_permission_tasks_view = staff_can('view',  'tasks');
-    $noPermissionQuery         = get_tasks_where_string(false);
-    $CI->db->select('rel_id, id');
-    $CI->db->where('rel_id', $id);
-    $CI->db->where('rel_type', 'customer');
+    if (staff_can('view', 'tasks')) {
+        $noPermissionQuery = get_tasks_where_string(false);
+        $CI->db->select('rel_id, id')->where('rel_id', $id)->where('rel_type', 'customer');
 
-    if (!$has_permission_tasks_view) {
-        $CI->db->where($noPermissionQuery);
-    }
+        if (! staff_can('view', 'tasks')) {
+            $CI->db->where($noPermissionQuery);
+        }
 
-    $CI->db->from(db_prefix() . 'tasks');
-    $tasks = $CI->db->get()->result_array();
+        $tasks = $CI->db->get(db_prefix() . 'tasks')->result_array();
+        $ids   = array_column($tasks, 'id'); // Corrected to fetch 'id' (was 'ticketid')
 
-    $ids = array_column($tasks, 'ticketid');
-    if (count($ids) > 0) {
-        $CI->db->where_in('rel_id', $ids);
-        $CI->db->where('rel_type', 'task');
+        if (! empty($ids)) {
+            $CI->db->where_in('rel_id', $ids)->where('rel_type', 'task');
+            $_attachments = $CI->db->get(db_prefix() . 'files')->result_array();
 
-        $_attachments = $CI->db->get(db_prefix() . 'files')->result_array();
-
-        foreach ($_attachments as $_att) {
-            array_push($attachments['task'], $_att);
+            foreach ($_attachments as $_att) {
+                $_att['download_url'] = $attachment_types['task']['url'] . $_att[$attachment_types['task']['download_indicator']];
+                $_att['upload_path']  = $attachment_types['task']['upload_path'] . $_att[$attachment_types['task']['key_indicator']] . '/' . $_att['file_name'];
+                array_push($attachments['task'], $_att);
+            }
         }
     }
 
-    $CI->db->where('rel_id', $id);
-    $CI->db->where('rel_type', 'customer');
+    $CI->db->where('rel_id', $id)->where('rel_type', 'customer');
     $client_main_attachments = $CI->db->get(db_prefix() . 'files')->result_array();
+
+    foreach ($client_main_attachments as &$attachment) {
+        $attachment['total_shares'] = total_rows(db_prefix() . 'shared_customer_files', ['file_id' => $attachment['id']]);
+        $attachment['shared_with']  = $attachment['total_shares'] > 0 ?
+            get_customer_profile_file_sharing(['file_id' => $attachment['id']]) :
+            [];
+
+        $attachment['download_url'] = $attachment_types['customer']['url'] . $attachment[$attachment_types['customer']['download_indicator']];
+        $attachment['upload_path']  = $attachment_types['customer']['upload_path'] . $attachment[$attachment_types['customer']['key_indicator']] . '/' . $attachment['file_name'];
+    }
 
     $attachments['customer'] = $client_main_attachments;
 
@@ -1146,17 +1244,21 @@ function get_all_customer_attachments($id)
 
 /**
  * Used in customer profile vaults feature to determine if the vault should be shown for staff
- * @param  array $entries vault entries from database
+ *
+ * @param array $entries vault entries from database
+ *
  * @return array
  */
 function _check_vault_entries_visibility($entries)
 {
     $new = [];
+
     foreach ($entries as $entry) {
         if ($entry['visibility'] != 1) {
-            if ($entry['visibility'] == 2 && !is_admin() && $entry['creator'] != get_staff_user_id()) {
+            if ($entry['visibility'] == 2 && ! is_admin() && $entry['creator'] != get_staff_user_id()) {
                 continue;
-            } elseif ($entry['visibility'] == 3 && $entry['creator'] != get_staff_user_id() && !is_admin()) {
+            }
+            if ($entry['visibility'] == 3 && $entry['creator'] != get_staff_user_id() && ! is_admin()) {
                 continue;
             }
         }
@@ -1184,7 +1286,8 @@ function get_sql_select_client_company($as = 'company')
 /**
  * @since  2.7.0
  * check if logged in user can manage contacts
- * @return boolean
+ *
+ * @return bool
  */
 function can_loggged_in_user_manage_contacts()
 {
@@ -1195,17 +1298,14 @@ function can_loggged_in_user_manage_contacts()
         return false;
     }
 
-    if (is_individual_client()) {
-        return false;
-    }
-
-    return true;
+    return ! (is_individual_client());
 }
 
 /**
  * @since  2.7.0
  * check if logged in customer is an individual
- * @return boolean
+ *
+ * @return bool
  */
 function is_individual_client()
 {
@@ -1216,6 +1316,10 @@ function is_individual_client()
 /**
  * @since  2.7.0
  * Set logged in contact language
+ *
+ * @param mixed $lang
+ * @param mixed $duration
+ *
  * @return void
  */
 function set_contact_language($lang, $duration = 60 * 60 * 24 * 31 * 3)
@@ -1225,14 +1329,14 @@ function set_contact_language($lang, $duration = 60 * 60 * 24 * 31 * 3)
 
 /**
  * @since  2.7.0
- * 
+ *
  * get logged in contact language
- * 
+ *
  * @return string
  */
 function get_contact_language()
 {
-    if (!is_null(get_cookie('contact_language'))) {
+    if (! is_null(get_cookie('contact_language'))) {
         $language = get_cookie('contact_language');
 
         $availableLanguages = get_instance()->app->get_available_languages();
@@ -1252,7 +1356,7 @@ function get_contact_language()
  * appended calling codes feature is enabled based on the
  * customer selected country
  *
- * @return boolean
+ * @return bool
  */
 function is_automatic_calling_codes_enabled()
 {
@@ -1261,10 +1365,10 @@ function is_automatic_calling_codes_enabled()
 
 /**
  * @since 3.1.2
- * 
+ *
  * Get the required fields for registration.
- * 
- * @return array 
+ *
+ * @return array
  */
 function get_required_fields_for_registration()
 {
@@ -1274,22 +1378,22 @@ function get_required_fields_for_registration()
 
     return [
         'contact' => [
-            'contact_firstname' => ['label' => _l('clients_firstname'), 'is_required' => true, 'disabled' => true],
-            'contact_lastname' => ['label' => _l('clients_lastname'), 'is_required' => true, 'disabled' => true],
-            'contact_email' => ['label' => _l('clients_email'), 'is_required' => true, 'disabled' => true],
+            'contact_firstname'           => ['label' => _l('clients_firstname'), 'is_required' => true, 'disabled' => true],
+            'contact_lastname'            => ['label' => _l('clients_lastname'), 'is_required' => true, 'disabled' => true],
+            'contact_email'               => ['label' => _l('clients_email'), 'is_required' => true, 'disabled' => true],
             'contact_contact_phonenumber' => ['label' => _l('clients_phone'), 'is_required' => in_array('contact_contact_phonenumber', $required), 'disabled' => false],
-            'contact_website' => ['label' => _l('client_website'), 'is_required' => in_array('contact_website', $required), 'disabled' => false],
-            'contact_title' => ['label' => _l('contact_position'), 'is_required' => in_array('contact_title', $required), 'disabled' => false],
+            'contact_website'             => ['label' => _l('client_website'), 'is_required' => in_array('contact_website', $required), 'disabled' => false],
+            'contact_title'               => ['label' => _l('contact_position'), 'is_required' => in_array('contact_title', $required), 'disabled' => false],
         ],
         'company' => [
-            'company_company' => ['label' => _l('clients_company'), 'is_required' => (bool) get_option('company_is_required'), 'disabled' => true],
-            'company_vat' => ['label' => _l('clients_vat'), 'is_required' => in_array('company_vat', $required), 'disabled' => false],
+            'company_company'     => ['label' => _l('clients_company'), 'is_required' => (bool) get_option('company_is_required'), 'disabled' => true],
+            'company_vat'         => ['label' => _l('clients_vat'), 'is_required' => in_array('company_vat', $required), 'disabled' => false],
             'company_phonenumber' => ['label' => _l('clients_phone'), 'is_required' => in_array('company_phonenumber', $required), 'disabled' => false],
-            'company_country' => ['label' => _l('clients_country'), 'is_required' => in_array('company_country', $required), 'disabled' => false],
-            'company_city' => ['label' => _l('clients_city'), 'is_required' => in_array('company_city', $required), 'disabled' => false],
-            'company_address' => ['label' => _l('clients_address'), 'is_required' => in_array('company_address', $required), 'disabled' => false],
-            'company_zip' => ['label' => _l('clients_zip'), 'is_required' => in_array('company_zip', $required), 'disabled' => false],
-            'company_state' => ['label' => _l('clients_state'), 'is_required' => in_array('company_state', $required), 'disabled' => false],
+            'company_country'     => ['label' => _l('clients_country'), 'is_required' => in_array('company_country', $required), 'disabled' => false],
+            'company_city'        => ['label' => _l('clients_city'), 'is_required' => in_array('company_city', $required), 'disabled' => false],
+            'company_address'     => ['label' => _l('clients_address'), 'is_required' => in_array('company_address', $required), 'disabled' => false],
+            'company_zip'         => ['label' => _l('clients_zip'), 'is_required' => in_array('company_zip', $required), 'disabled' => false],
+            'company_state'       => ['label' => _l('clients_state'), 'is_required' => in_array('company_state', $required), 'disabled' => false],
         ],
     ];
 }

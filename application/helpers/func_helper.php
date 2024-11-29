@@ -326,7 +326,7 @@ if (!function_exists('check_for_links')) {
             return $text;
         }
 
-        $text = htmlspecialchars_decode($text);
+        // $text = htmlspecialchars_decode($text);
 
         return \app\services\utilities\Str::clickable($text);
      
@@ -565,4 +565,39 @@ function app_unserialize($data)
     restore_error_handler();
 
     return $unserialized;
+}
+
+function determine_color_type($hexColor) {
+    // Remove '#' if it exists
+    $hexColor = ltrim($hexColor, '#');
+
+    // Expand shorthand hex (e.g., 'abc' => 'aabbcc')
+    if (strlen($hexColor) === 3) {
+        $hexColor = str_repeat($hexColor[0], 2) .
+                    str_repeat($hexColor[1], 2) .
+                    str_repeat($hexColor[2], 2);
+    }
+
+    if (strlen($hexColor) !== 6) {
+        return ['error' => 'Invalid hex color format'];
+    }
+
+    // Convert hex to RGB
+    $r = hexdec(substr($hexColor, 0, 2));
+    $g = hexdec(substr($hexColor, 2, 2));
+    $b = hexdec(substr($hexColor, 4, 2));
+
+    // Calculate relative luminance
+    $luminance = (0.2126 * $r + 0.7152 * $g + 0.0722 * $b) / 255;
+
+    // Convert luminance to percentage
+    $percentage = round($luminance * 100, 2);
+
+    // Determine light or dark
+    $type = $luminance > 0.5 ? 'light' : 'dark';
+
+    return [
+        'type' => $type,
+        'percentage' => $percentage
+    ];
 }

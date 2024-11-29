@@ -360,7 +360,7 @@ abstract class App_import
         $form = '';
         $form .= form_open($this->ci->uri->uri_string());
         $form .= form_hidden('download_sample', 'true');
-        $form .= '<button type="submit" class="btn btn-success">Download Sample</button>';
+        $form .= '<button type="submit" class="btn btn-default">Download Sample</button>';
         $form .= form_close();
 
         return $form;
@@ -463,7 +463,7 @@ abstract class App_import
             array_push($allFields, $field);
             $dbFieldKeys[$key] = $field;
 
-            $table .= '<th class="bold database_field_' . $field . '" style="white-space: nowrap;">';
+            $table .= '<th class="bold tw-bg-neutral-50 database_field_' . $field . '" style="white-space: nowrap;">';
             if (in_array($field, $this->getRequiredFields())) {
                 $table .= '<span class="text-danger">*</span> ';
             }
@@ -478,7 +478,7 @@ abstract class App_import
 
         foreach ($this->getCustomFields() as $field) {
             array_push($allFields, $field['name']);
-            $table .= '<th class="bold custom_field_' . $field['id'] . '">';
+            $table .= '<th class="bold tw-bg-neutral-50 custom_field_' . $field['id'] . '" style="white-space: nowrap;">';
             $table .= $field['name'];
             $table .= '</th>';
         }
@@ -495,7 +495,7 @@ abstract class App_import
                 for ($x = 0; $x < $totalFields; $x++) {
                     $sampleDataText = $this->getTableRowDataText(isset($dbFieldKeys[$x]) ? $dbFieldKeys[$x] :  null);
 
-                    $table .= '<td>' . $sampleDataText . '</td>';
+                    $table .= '<td style="white-space: nowrap;">' . $sampleDataText . '</td>';
                 }
                 $table .= '</tr>';
             }
