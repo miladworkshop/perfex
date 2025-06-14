@@ -1,7 +1,7 @@
 <?php foreach ($ticket_replies as $reply) { ?>
 <div class="panel_s">
     <div
-        class="panel-body<?= $reply['admin'] == null ? ' client-reply' : ''; ?>">
+        class="panel-body<?= $reply['admin'] == null ? ' client-reply' : ''; ?> ticket-thread">
         <div class="tw-flex tw-flex-wrap tw-mb-6">
             <div class="tw-grow">
                 <div class="tw-flex tw-items-center tw-gap-3">

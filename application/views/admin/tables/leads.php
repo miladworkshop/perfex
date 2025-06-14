@@ -227,7 +227,7 @@ return App_table::find('leads')
                 }
             } else {
                 if (! $locked) {
-                    $outputStatus .= '<div class="dropdown inline-block table-export-exclude">';
+                    $outputStatus .= '<div class="dropdown inline-block">';
                     $outputStatus .= '<a href="#" class="dropdown-toggle tw-flex tw-items-center tw-gap-1 tw-flex-nowrap hover:tw-opacity-80 tw-align-middle lead-status-' . $aRow['status'] . ' label' . (empty($aRow['color']) ? ' label-default' : '') . '" style="color:' . $aRow['color'] . ';border:1px solid ' . adjust_hex_brightness($aRow['color'], 0.4) . ';background: ' . adjust_hex_brightness($aRow['color'], 0.04) . ';" id="tableLeadsStatus-' . $aRow['id'] . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
                     $outputStatus .= e($aRow['status_name']);
                     $outputStatus .= '<i class="chevron"></i>';

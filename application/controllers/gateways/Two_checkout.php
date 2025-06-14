@@ -112,40 +112,41 @@ class Two_checkout extends App_Controller
 
     <?php echo payment_gateway_scripts(); ?>
     <script type="text/javascript">
-    window.document.getElementById('buy-button').addEventListener('click', function() {
+        window.addEventListener('load', function () {
+            TwoCoInlineCart.events.subscribe('cart:closed', function (e) {
+                window.location.replace(
+                    "<?php echo site_url('gateways/two_checkout/cancelled/' . $data['invoice']->id . '/' . $data['invoice']->hash); ?>"
+                );
+            });
 
-        TwoCoInlineCart.events.subscribe('cart:closed', function(e) {
-            window.location.replace(
-                "<?php echo site_url('gateways/two_checkout/cancelled/' . $data['invoice']->id . '/' . $data['invoice']->hash); ?>"
-            );
+            TwoCoInlineCart.setup.setMerchant("<?php echo $data['merchant_code'] ?>");
+            TwoCoInlineCart.setup.setMode('DYNAMIC'); // product type
+            TwoCoInlineCart.register();
+
+            TwoCoInlineCart.products.add({
+                name: "<?php echo $data['description']; ?>",
+                quantity: 1,
+                price: "<?php echo $data['total']; ?>",
+            });
+
+            TwoCoInlineCart.cart.setOrderExternalRef("<?php echo $data['reference'] ?>");
+            TwoCoInlineCart.cart.setExternalCustomerReference(
+                "<?php echo $data['invoice']->client->userid ?>"); // external customer reference
+            TwoCoInlineCart.cart.setCurrency("<?php echo $data['invoice']->currency_name ?>");
+            TwoCoInlineCart.cart.setTest(new Boolean("<?php echo $data['testMode'] ?>"));
+            TwoCoInlineCart.cart.setReturnMethod({
+                type: 'redirect',
+                url: "<?php echo site_url('gateways/two_checkout/verify/' . $data['invoice']->id . '/' . $data['invoice']->hash); ?>",
+            });
+
+            window.document.getElementById('buy-button').addEventListener('click', function () {
+                TwoCoInlineCart.cart.checkout(); // start checkout process
+            });
+
+            setTimeout(function () {
+                $('#buy-button').removeClass('disabled');
+            }, 3000);
         });
-
-        TwoCoInlineCart.setup.setMerchant("<?php echo $data['merchant_code'] ?>");
-        TwoCoInlineCart.setup.setMode('DYNAMIC'); // product type
-        TwoCoInlineCart.register();
-
-        TwoCoInlineCart.products.add({
-            name: "<?php echo $data['description']; ?>",
-            quantity: 1,
-            price: "<?php echo $data['total']; ?>",
-        });
-
-        TwoCoInlineCart.cart.setOrderExternalRef("<?php echo $data['reference'] ?>");
-        TwoCoInlineCart.cart.setExternalCustomerReference(
-            "<?php echo $data['invoice']->client->userid ?>"); // external customer reference
-        TwoCoInlineCart.cart.setCurrency("<?php echo $data['invoice']->currency_name ?>");
-        TwoCoInlineCart.cart.setTest(new Boolean("<?php echo $data['testMode'] ?>"));
-        TwoCoInlineCart.cart.setReturnMethod({
-            type: 'redirect',
-            url: "<?php echo site_url('gateways/two_checkout/verify/' . $data['invoice']->id . '/' . $data['invoice']->hash); ?>",
-        });
-
-        TwoCoInlineCart.cart.checkout(); // start checkout process
-    });
-
-    setTimeout(function() {
-        $('#buy-button').removeClass('disabled');
-    }, 3000);
     </script>
     <?php echo payment_gateway_footer(); ?>
     <?php

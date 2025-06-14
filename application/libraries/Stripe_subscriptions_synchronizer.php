@@ -7,7 +7,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Stripe_subscriptions_synchronizer extends Stripe_core
 {
     protected $dbSubscription;
-
     protected $subscription;
 
     public function sync()
@@ -20,7 +19,7 @@ class Stripe_subscriptions_synchronizer extends Stripe_core
         foreach ($this->get_all_subscriptions() as $subscription) {
             $this->subscription = $subscription;
 
-            if (!isset($subscription->metadata['pcrm-subscription-hash'])) {
+            if (! isset($subscription->metadata['pcrm-subscription-hash'])) {
                 echo 'Skipping sync for subscription' . $subscription->id . ', not created from application<br /><br /><br />';
 
                 continue;
@@ -28,7 +27,7 @@ class Stripe_subscriptions_synchronizer extends Stripe_core
 
             $dbSubscription = $this->ci->subscriptions_model->get_by_hash($subscription->metadata['pcrm-subscription-hash']);
 
-            if (!$dbSubscription) {
+            if (! $dbSubscription) {
                 echo 'Skipping sync for subscription' . $subscription->id . ', not in database<br /><br /><br />';
 
                 continue;
@@ -36,9 +35,9 @@ class Stripe_subscriptions_synchronizer extends Stripe_core
 
             $this->dbSubscription = $dbSubscription;
 
-            if (!is_null($dbSubscription->in_test_environment)) {
-                if ($dbSubscription->in_test_environment && !$this->ci->stripe_gateway->is_test() ||
-                $this->ci->stripe_gateway->is_test() && !$dbSubscription->in_test_environment
+            if (! is_null($dbSubscription->in_test_environment)) {
+                if ($dbSubscription->in_test_environment && ! $this->ci->stripe_gateway->is_test()
+                || $this->ci->stripe_gateway->is_test() && ! $dbSubscription->in_test_environment
                 ) {
                     echo 'Skipping sync for subscription' . $subscription->id . ', environment not match<br /><br /><br />';
 
@@ -60,63 +59,53 @@ class Stripe_subscriptions_synchronizer extends Stripe_core
             $invoices = $this->get_subscription_invoices($subscription->id);
 
             foreach ($invoices->data as $invoice) {
-                if ($invoice->status === 'paid' && !$this->ci->payments_model->transaction_exists($invoice->charge)) {
-                    if (!defined('STRIPE_SUBSCRIPTION_INVOICE')) {
-                        define('STRIPE_SUBSCRIPTION_INVOICE', true);
-                    }
+                $invoiceId = $this->ci->invoices_model->add(create_subscription_invoice_data($dbSubscription, $invoice));
 
-                    $invoiceId = $this->ci->invoices_model->add(
-                        $invoiceData = create_subscription_invoice_data($dbSubscription, $invoice)
-                    );
+                foreach ($invoice->payments->data as $invoicePayment) {
+                    if ($invoicePayment->status === 'paid' && ! $this->ci->payments_model->transaction_exists($invoicePayment->payment->payment_intent)) {
+                        if (! defined('STRIPE_SUBSCRIPTION_INVOICE')) {
+                            define('STRIPE_SUBSCRIPTION_INVOICE', true);
+                        }
 
-                    if ($invoiceId) {
-                        $this->ci->db->where('id', $invoiceId)->update('invoices', [
-                            'addedfrom' => $dbSubscription->created_from,
-                        ]);
+                        if ($invoiceId) {
+                            $this->ci->db->where('id', $invoiceId)->update('invoices', [
+                                'addedfrom' => $dbSubscription->created_from,
+                            ]);
 
-                        $this->ci->payments_model->add([
-                            'paymentmode'   => 'stripe',
-                            'amount'        => $invoiceData['total'],
-                            'invoiceid'     => $invoiceId,
-                            'transactionid' => $invoice->charge,
-                        ], $dbSubscription->id);
+                            $this->ci->payments_model->add([
+                                'paymentmode'   => 'stripe',
+                                'amount'        => strcasecmp($dbSubscription->currency_name, 'JPY') == 0 ? $invoicePayment->amount_paid : $invoicePayment->amount_paid / 100,
+                                'invoiceid'     => $invoiceId,
+                                'transactionid' => $invoicePayment->payment->payment_intent,
+                            ], $dbSubscription->id);
+                        }
                     }
                 }
             }
 
-            if ($subscription->default_payment_method) {
-                $this->update_customer($subscription->customer, [
-                    'invoice_settings' => [
-                        'default_payment_method' => $subscription->default_payment_method,
-                    ],
-                ]);
-
-                \Stripe\Subscription::update($subscription->id, ['default_payment_method' => '']);
-            }
-
             $update = [
-                'next_billing_cycle'     => $subscription->current_period_end,
+                'next_billing_cycle'     => $subscription->items->data[0]->current_period_end,
                 'stripe_subscription_id' => $subscription->id,
                 'status'                 => $subscription->status,
                 'date_subscribed'        => date('Y-m-d H:i:s', $subscription->start_date),
                 'date'                   => date('Y-m-d', $subscription->start_date),
                 'quantity'               => $subscription->items->data[0]->quantity,
-                'ends_at'                => $subscription->cancel_at_period_end ? $subscription->current_period_end : null,
+                'ends_at'                => $subscription->cancel_at_period_end ? $subscription->cancel_at : null,
             ];
 
             if ($subscription->status == 'canceled') {
                 $update['next_billing_cycle'] = null;
                 // Was future and now canceled, use the same date
                 if (is_null($subscription->latest_invoice)) {
-                    $update['date'] = date('Y-m-d', $subscription->current_period_end);
+                    $update['date'] = date('Y-m-d', $subscription->items->data[0]->current_period_end);
                 }
             } elseif (is_null($subscription->latest_invoice) && $subscription->status == 'active') {
                 // If canceled before first payment is made?
-                if (!$subscription->cancel_at_period_end) {
+                if (! $subscription->cancel_at_period_end) {
                     // is future
                     $update['status'] = 'future';
                     // This is the anchor period, start end
-                    $update['date'] = date('Y-m-d', $subscription->current_period_end);
+                    $update['date'] = date('Y-m-d', $subscription->items->data[0]->current_period_end);
                 }
             }
             // elseif (in_array($subscription->status, ['incomplete', 'incomplete_expired'])) {
@@ -129,7 +118,7 @@ class Stripe_subscriptions_synchronizer extends Stripe_core
 
     protected function get_subscription_invoices($id)
     {
-        return \Stripe\Invoice::all(['subscription' => $id, 'limit' => 100]);
+        return Stripe\Invoice::all(['subscription' => $id, 'limit' => 100, 'expand' => ['data.payments']]);
     }
 
     protected function check_stripe_client_id()

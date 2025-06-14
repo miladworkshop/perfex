@@ -5,8 +5,7 @@
 namespace Stripe\Billing;
 
 /**
- * A billing meter event represents a customer's usage of a product. Meter events are used to bill a customer based on their usage.
- * Meter events are associated with billing meters, which define the shape of the event's payload and how those events are aggregated for billing.
+ * Meter events represent actions that customers take in your system. You can use meter events to bill a customer based on their usage. Meter events are associated with billing meters, which define both the contents of the event’s payload and how to aggregate those events.
  *
  * @property string $object String representing the object's type. Objects of the same type share the same value.
  * @property int $created Time at which the object was created. Measured in seconds since the Unix epoch.
@@ -23,12 +22,12 @@ class MeterEvent extends \Stripe\ApiResource
     /**
      * Creates a billing meter event.
      *
-     * @param null|array $params
+     * @param null|array{event_name: string, expand?: string[], identifier?: string, payload: \Stripe\StripeObject, timestamp?: int} $params
      * @param null|array|string $options
      *
-     * @throws \Stripe\Exception\ApiErrorException if the request fails
+     * @return MeterEvent the created resource
      *
-     * @return \Stripe\Billing\MeterEvent the created resource
+     * @throws \Stripe\Exception\ApiErrorException if the request fails
      */
     public static function create($params = null, $options = null)
     {

@@ -46,7 +46,7 @@
             <h4 class="tw-text-lg tw-font-bold tw-text-neutral-800 tw-mt-0">
                 <div class="tw-space-x-3 tw-flex tw-items-center">
                     <span class="tw-truncate">
-                        #<?= $client->userid . ' ' . $title; ?>
+                        #<?= e($client->userid . ' ' . $title); ?>
                     </span>
                     <?php if (staff_can('delete', 'customers') || is_admin()) { ?>
                     <div class="btn-group">

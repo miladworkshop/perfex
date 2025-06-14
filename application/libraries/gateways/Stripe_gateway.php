@@ -5,7 +5,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Stripe_gateway extends App_gateway
 {
     public $webhookEndPoint;
-
     public bool $processingFees = true;
 
     public function __construct()
@@ -13,15 +12,15 @@ class Stripe_gateway extends App_gateway
         $this->webhookEndPoint = site_url('gateways/stripe/webhook_endpoint');
 
         /**
-        * Call App_gateway __construct function
-        */
+         * Call App_gateway __construct function
+         */
         parent::__construct();
 
         /**
-        * REQUIRED
-        * Gateway unique id
-        * The ID must be alpha/alphanumeric
-        */
+         * REQUIRED
+         * Gateway unique id
+         * The ID must be alpha/alphanumeric
+         */
         $this->setId('stripe');
 
         /**
@@ -32,7 +31,7 @@ class Stripe_gateway extends App_gateway
 
         /**
          * Add gateway settings
-        */
+         */
         $this->setSettings([
             [
                 'name'  => 'api_publishable_key',
@@ -68,11 +67,11 @@ class Stripe_gateway extends App_gateway
     /**
      * Get the current webhook object based on the endpoint
      *
-     * @return boolean|\Stripe\WebhookEndpoint
+     * @return bool|Stripe\WebhookEndpoint
      */
     public function get_webhook_object()
     {
-        if (!class_exists('stripe_core', false)) {
+        if (! class_exists('stripe_core', false)) {
             $this->ci->load->library('stripe_core');
         }
 
@@ -110,7 +109,7 @@ class Stripe_gateway extends App_gateway
     /**
      * Check whether the environment is test
      *
-     * @return boolean
+     * @return bool
      */
     public function is_test()
     {
@@ -120,7 +119,7 @@ class Stripe_gateway extends App_gateway
     /**
      * Process the payment
      *
-     * @param  array $data
+     * @param array $data
      *
      * @return mixed
      */
@@ -131,42 +130,48 @@ class Stripe_gateway extends App_gateway
         $description = str_replace('{invoice_number}', format_invoice_number($data['invoiceid']), $this->getSetting('description_dashboard'));
 
         $items = [
-                'name'     => $description,
-                'amount'   => strcasecmp($data['invoice']->currency_name, 'JPY') == 0 ? intval($data['amount']) : $data['amount'] * 100,
-                'currency' => strtolower($data['invoice']->currency_name),
-                'quantity' => 1,
+            'price_data' => [
+                'currency'     => strtolower($data['invoice']->currency_name),
+                'product_data' => [
+                    'name' => $description,
+                ],
+                'unit_amount' => strcasecmp($data['invoice']->currency_name, 'JPY') == 0 ? intval($data['amount']) : intval($data['amount'] * 100),
+            ],
+            'quantity' => 1,
         ];
 
         $successUrl = site_url('gateways/stripe/success/' . $data['invoice']->id . '/' . $data['invoice']->hash);
         $cancelUrl  = site_url('invoice/' . $data['invoiceid'] . '/' . $data['invoice']->hash);
 
         $sessionData = [
-              'payment_method_types' => ['card'],
-              'line_items'           => [$items],
-              'success_url'          => $successUrl,
-              'cancel_url'           => $cancelUrl,
-              'payment_intent_data'  => [
-                  'description' => $description,
-                  'metadata'    => [
-                        'ClientId'    => $data['invoice']->clientid,
-                        'InvoiceId'   => $data['invoice']->id,
-                        'InvoiceHash' => $data['invoice']->hash,
-                        'payment_attempt_reference' => $data['payment_attempt']->reference,
+            // 'payment_method_types' => ['card'],
+            'line_items'          => [$items],
+            'mode'                => 'payment',
+            'success_url'         => $successUrl,
+            'cancel_url'          => $cancelUrl,
+            'customer_creation'   => 'always',
+            'payment_intent_data' => [
+                'description' => $description,
+                'metadata'    => [
+                    'ClientId'                  => $data['invoice']->clientid,
+                    'InvoiceId'                 => $data['invoice']->id,
+                    'InvoiceHash'               => $data['invoice']->hash,
+                    'payment_attempt_reference' => $data['payment_attempt']->reference,
                 ],
-                  'setup_future_usage' => 'off_session'
-              ],
+            ],
             'payment_method_options' => [
                 'card' => [
-                    'setup_future_usage' => 'off_session'
-                ]
-            ]
+                    'setup_future_usage' => 'off_session',
+                ],
+            ],
         ];
 
         if ($data['invoice']->client->stripe_id) {
             $sessionData['customer'] = $data['invoice']->client->stripe_id;
+            unset($sessionData['customer_creation']);
         }
 
-        if (is_client_logged_in() && !$data['invoice']->client->stripe_id) {
+        if (is_client_logged_in() && ! $data['invoice']->client->stripe_id) {
             $contact = $this->ci->clients_model->get_contact(get_contact_user_id());
             if ($contact->email) {
                 $sessionData['customer_email'] = $contact->email;
@@ -217,7 +222,7 @@ function stripe_gateway_webhook_check($gateway)
                 echo '</div>';
             }
 
-            if (!$webhook || !startsWith($webhook->url, site_url())) {
+            if (! $webhook || ! startsWith($webhook->url, site_url())) {
                 echo '<div class="alert alert-warning">';
                 echo 'Webhook endpoint (' . $endpoint . ') not found for ' . $environment . ' environment.';
                 echo '<br />Click <a href="' . site_url('gateways/stripe/create_webhook') . '">here</a> to create the webhook directly in Stripe.';
@@ -230,6 +235,11 @@ function stripe_gateway_webhook_check($gateway)
             } elseif ($webhook && $webhook->status != 'enabled') {
                 echo '<div class="alert alert-warning">';
                 echo 'Your Stripe configured webhook is disabled, you should consider enabling your webhook via Stripe dashboard or by clicking <a href="' . site_url('gateways/stripe/enable_webhook') . '">here</a>.';
+                echo '</div>';
+            } elseif ($webhook && $webhook->api_version != Stripe\Stripe::getApiVersion()) {
+                echo '<div class="alert alert-warning">';
+                echo 'The Stripe API version used by the application does not match the configured webhook.';
+                echo '<br />Click <a href="' . site_url('gateways/stripe/create_webhook?recreate=true') . '">here</a> to re-create the webhook directly in Stripe and delete the old webhook.';
                 echo '</div>';
             }
         }

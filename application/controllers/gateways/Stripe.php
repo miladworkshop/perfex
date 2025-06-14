@@ -20,9 +20,9 @@ class Stripe extends App_Controller
                 $webhooks = $this->stripe_core->list_webhook_endpoints();
 
                 foreach ($webhooks->data as $webhook) {
-                    if ((isset($webhook->metadata->identification_key) &&
-                                            $webhook->metadata->identification_key == get_option('identification_key')) ||
-                        $webhook->url == $this->stripe_gateway->webhookEndPoint) {
+                    if ((isset($webhook->metadata->identification_key)
+                                            && $webhook->metadata->identification_key == get_option('identification_key'))
+                        || $webhook->url == $this->stripe_gateway->webhookEndPoint) {
                         $this->stripe_core->delete_webhook($webhook->id);
                     }
                 }
@@ -75,21 +75,23 @@ class Stripe extends App_Controller
         $payload = @file_get_contents('php://input');
         $event   = null;
 
-        if (!isset($_SERVER['HTTP_STRIPE_SIGNATURE'])) {
+        if (! isset($_SERVER['HTTP_STRIPE_SIGNATURE'])) {
             return;
         }
 
         // Validate the webhook
         try {
             $event = $this->stripe_core->construct_event($payload, get_option('stripe_webhook_signing_secret'));
-        } catch (\UnexpectedValueException $e) {
+        } catch (UnexpectedValueException $e) {
             // Invalid payload
-          http_response_code(400); // PHP 5.4 or greater
-          exit();
-        } catch (\Stripe\Exception\SignatureVerificationException $e) {
+            http_response_code(400); // PHP 5.4 or greater
+
+            exit();
+        } catch (Stripe\Exception\SignatureVerificationException $e) {
             // Invalid signature
-              http_response_code(400); // PHP 5.4 or greater
-              exit();
+            http_response_code(400); // PHP 5.4 or greater
+
+            exit();
         }
 
         try {
@@ -114,16 +116,16 @@ class Stripe extends App_Controller
                         if ($invoice) {
                             $payment_attempt_reference = $payment->metadata->payment_attempt_reference ?? null;
                             $this->load->model('payments_model');
-                            if (!$this->payments_model->transaction_exists($payment->id, $invoice->id)) {
+                            if (! $this->payments_model->transaction_exists($payment->id, $invoice->id)) {
                                 $this->stripe_gateway->addPayment([
-                                      'amount'        => (strcasecmp($invoice->currency_name, 'JPY') == 0 ? $payment->amount : $payment->amount / 100),
-                                      'invoiceid'     => $invoice->id,
-                                      'transactionid' => $payment->id,
-                                      'payment_attempt_reference' => $payment_attempt_reference,
+                                    'amount'                    => (strcasecmp($invoice->currency_name, 'JPY') == 0 ? $payment->amount : $payment->amount / 100),
+                                    'invoiceid'                 => $invoice->id,
+                                    'transactionid'             => $payment->id,
+                                    'payment_attempt_reference' => $payment_attempt_reference,
                                 ]);
                             }
 
-                            if (!$this->stripe_gateway->is_test()) {
+                            if (! $this->stripe_gateway->is_test()) {
                                 $this->db->where('userid', $payment->metadata->ClientId);
                                 $this->db->update('clients', ['stripe_id' => $payment->customer]);
                             }
@@ -145,7 +147,7 @@ class Stripe extends App_Controller
             } elseif ($event->type == 'customer.deleted') {
                 $this->customerDeletedEvent($event);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             log_activity('Stripe webhook error: ' . $e->getMessage());
         }
     }
@@ -154,8 +156,8 @@ class Stripe extends App_Controller
      * After stripe checkout succcess
      * Used only to display success message to the customer
      *
-     * @param  string $invoice_id   The invoice id the payment is made to
-     * @param  strgin $invoice_hash invoice hash
+     * @param string $invoice_id   The invoice id the payment is made to
+     * @param strgin $invoice_hash invoice hash
      *
      * @return mixed
      */
@@ -169,7 +171,7 @@ class Stripe extends App_Controller
     /**
      * Handle subscription created event
      *
-     * @param  \stdClass $event
+     * @param stdClass $event
      *
      * @return void
      */
@@ -178,23 +180,24 @@ class Stripe extends App_Controller
         $subscription = $event->data->object;
 
         if (isset($subscription->metadata[$this->subscriptionMetaKey])) {
-            $subscription = $this->stripe_subscriptions->get_subscription($subscription->id);
-
-            $this->stripe_core->update_customer($subscription->customer, [
-                    'invoice_settings' => [
-                      'default_payment_method' => $subscription->default_payment_method,
-                    ],
-            ]);
-
-            \Stripe\Subscription::update($subscription->id, ['default_payment_method' => '']);
-
+            $subscription   = $this->stripe_subscriptions->get_subscription($subscription->id);
             $dbSubscription = $this->subscriptions_model->get_by_hash($subscription->metadata[$this->subscriptionMetaKey]);
             $update         = ['in_test_environment' => $this->stripe_gateway->is_test() ? 1 : 0];
 
-            if (!empty($dbSubscription->date)) {
+            $subscription = $this->stripe_subscriptions->get_subscription($subscription->id);
+
+            $this->stripe_core->update_customer($subscription->customer, [
+                'invoice_settings' => [
+                    'default_payment_method' => $subscription->default_payment_method,
+                ],
+            ]);
+
+            Stripe\Subscription::update($subscription->id, ['default_payment_method' => '']);
+
+            if (! empty($dbSubscription->date)) {
                 if ($dbSubscription->date <= date('Y-m-d')) {
                     // Updates the first billing date to be today because
-                    // in the create_subscription method is now
+                    // in the create_subscription_data method is now
                     $update['date'] = date('Y-m-d');
                 }
 
@@ -208,6 +211,11 @@ class Stripe extends App_Controller
 
             $this->subscriptions_model->update($dbSubscription->id, $update);
 
+            if (! $this->stripe_gateway->is_test()) {
+                $this->db->where('userid', $dbSubscription->clientid);
+                $this->db->update('clients', ['stripe_id' => $subscription->customer]);
+            }
+
             send_email_customer_subscribed_to_subscription_to_staff($dbSubscription);
 
             hooks()->do_action('customer_subscribed_to_subscription', $dbSubscription);
@@ -217,14 +225,14 @@ class Stripe extends App_Controller
     /**
      * Handle subscription invoice payment succeded event
      *
-     * @param  \stdClass $event
+     * @param stdClass $event
      *
      * @return void
      */
     protected function invoicePaymentSucceededEvent($event)
     {
-        $invoice             = $event->data->object;
         $crmSubscriptionItem = null;
+        $invoice             = $event->data->object;
 
         // Let's check if it's really subscription created from CRM
         foreach ($invoice->lines->data as $item) {
@@ -235,22 +243,22 @@ class Stripe extends App_Controller
             }
         }
 
-        if (!is_null($crmSubscriptionItem)) {
+        if (! is_null($crmSubscriptionItem)) {
+            $invoicePayments = Stripe\InvoicePayment::all([
+                'invoice' => $invoice->id,
+                'status'  => 'paid',
+            ]);
+
             $dbSubscription = $this->subscriptions_model->get_by_hash($crmSubscriptionItem->metadata[$this->subscriptionMetaKey]);
 
             if ($dbSubscription) {
-                if (!$this->stripe_gateway->is_test()) {
-                    $this->db->where('userid', $dbSubscription->clientid);
-                    $this->db->update('clients', ['stripe_id' => $invoice->customer]);
-                }
-
                 $this->subscriptions_model->update($dbSubscription->id, ['next_billing_cycle' => $crmSubscriptionItem->period->end]);
                 $this->load->model('payments_model');
 
                 $new_invoice_data = create_subscription_invoice_data($dbSubscription, $invoice);
                 $this->load->model('invoices_model');
 
-                if (!defined('STRIPE_SUBSCRIPTION_INVOICE')) {
+                if (! defined('STRIPE_SUBSCRIPTION_INVOICE')) {
                     define('STRIPE_SUBSCRIPTION_INVOICE', true);
                 }
 
@@ -263,19 +271,21 @@ class Stripe extends App_Controller
                     ]);
 
                     // Probably created via the checkout.session.completed event type
-                    if (! $this->payments_model->transaction_exists($invoice->charge)) {
-                        $payment_data['paymentmode']   = 'stripe';
-                        $payment_data['amount']        = $new_invoice_data['total'];
-                        $payment_data['invoiceid']     = $id;
-                        $payment_data['transactionid'] = $invoice->charge;
+                    foreach ($invoicePayments->data as $invoicePayment) {
+                        if (! $this->payments_model->transaction_exists($invoicePayment->payment->payment_intent)) {
+                            $payment_data['invoiceid']     = $id;
+                            $payment_data['paymentmode']   = 'stripe';
+                            $payment_data['amount']        = strcasecmp($dbSubscription->currency_name, 'JPY') == 0 ? $invoicePayment->amount_paid : $invoicePayment->amount_paid / 100;
+                            $payment_data['transactionid'] = $invoicePayment->payment->payment_intent;
 
-                        $this->load->model('payments_model');
-                        $this->payments_model->add($payment_data, $dbSubscription->id);
+                            $this->load->model('payments_model');
+                            $this->payments_model->add($payment_data, $dbSubscription->id);
+                        }
                     }
 
                     $update = [
                         'status'                 => 'active',
-                        'stripe_subscription_id' => $invoice->subscription,
+                        'stripe_subscription_id' => $invoice->parent->subscription_details->subscription,
                     ];
 
                     // In case updated previously in subscription.created event and the subscription was in future
@@ -296,7 +306,7 @@ class Stripe extends App_Controller
     /**
      * Handle subscription invoice payment failed event
      *
-     * @param  \stdClass $event
+     * @param stdClass $event
      *
      * @return void
      */
@@ -308,7 +318,7 @@ class Stripe extends App_Controller
 
             if ($dbSubscription) {
                 $payment_intent = $this->stripe_core->retrieve_payment_intent($invoice->payment_intent);
-                //log_message('error', json_encode($payment_intent, JSON_PRETTY_PRINT));
+                // log_message('error', json_encode($payment_intent, JSON_PRETTY_PRINT));
                 // Will handle requires action in the event invoice.payment_action_required
                 if ($payment_intent->status != 'requires_action') {
                     $this->subscriptions_model->send_email_template(
@@ -324,7 +334,7 @@ class Stripe extends App_Controller
     /**
      * Handle subscription invoice payment require action event event
      *
-     * @param  \stdClass $event
+     * @param stdClass $event
      *
      * @return void
      */
@@ -332,7 +342,6 @@ class Stripe extends App_Controller
     {
         $invoice = $event->data->object;
         if (isset($invoice->lines->data[0]->metadata[$this->subscriptionMetaKey])) {
-
             // Customer was on session while trying to subscribe to the invoice
             // In this case, in the Subscription.php class he will be redirected to the
             // invoice hosted url to confirm the payment
@@ -347,7 +356,7 @@ class Stripe extends App_Controller
             if ($dbSubscription) {
                 $contact = $this->clients_model->get_contact(get_primary_contact_user_id($dbSubscription->clientid));
 
-                if (!$contact) {
+                if (! $contact) {
                     return false;
                 }
 
@@ -365,7 +374,7 @@ class Stripe extends App_Controller
     /**
      * Handle subscription updated event
      *
-     * @param  \stdClass $event
+     * @param stdClass $event
      *
      * @return void
      */
@@ -380,14 +389,13 @@ class Stripe extends App_Controller
                     // in case not yet updated e.q. because of hook or event handler failure
                     'stripe_subscription_id' => $subscription->id,
                     'status'                 => $subscription->status,
-                    'next_billing_cycle'     => $subscription->current_period_end,
+                    'next_billing_cycle'     => $subscription->items->data[0]->current_period_end,
                     'quantity'               => $subscription->items->data[0]->quantity,
-                    'ends_at'                => $subscription->cancel_at_period_end ? $subscription->current_period_end : null,
+                    'ends_at'                => $subscription->cancel_at_period_end ? $subscription->cancel_at : null,
                 ];
 
                 if ($dbSubscription->status == 'future') {
-                    unset($update['status']);
-                    unset($update['next_billing_cycle']);
+                    unset($update['status'], $update['next_billing_cycle']);
                 }
 
                 $this->subscriptions_model->update($dbSubscription->id, $update);
@@ -398,7 +406,7 @@ class Stripe extends App_Controller
     /**
      * Handle subscription deleted event
      *
-     * @param  \stdClass $event
+     * @param stdClass $event
      *
      * @return void
      */
@@ -424,12 +432,12 @@ class Stripe extends App_Controller
     }
 
     /**
-      * Handle customer deleted
-      *
-      * @param  \stdClass $event
-      *
-      * @return void
-      */
+     * Handle customer deleted
+     *
+     * @param stdClass $event
+     *
+     * @return void
+     */
     protected function customerDeletedEvent($event)
     {
         $stripeClient = $event->data->object;
@@ -444,15 +452,15 @@ class Stripe extends App_Controller
     /**
      * Get CC for the subscription mail template
      *
-     * @param  int $staff_id
+     * @param int $staff_id
      *
      * @return string
      */
     protected function getStaffCCForMailTemplate($staff_id)
     {
         $this->db->select('email')
-                ->from(db_prefix() . 'staff')
-                ->where('staffid', $staff_id);
+            ->from(db_prefix() . 'staff')
+            ->where('staffid', $staff_id);
         $staff = $this->db->get()->row();
 
         return $staff ? $staff->email : '';

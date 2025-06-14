@@ -858,6 +858,10 @@ function get_datatable_buttons(table) {
         data = newTmpRow.html().trim();
       }
 
+      if (newTmpRow.find(".dropdown-toggle").length > 0) {
+        data = newTmpRow.find(".dropdown-toggle").text().trim();
+      }
+
       if (newTmpRow.find(".table-export-exclude").length > 0) {
         newTmpRow.find(".table-export-exclude").remove();
         data = newTmpRow.html().trim();

@@ -16,12 +16,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Stripe_core
 {
     protected $ci;
-
     protected $secretKey;
-
     protected $publishableKey;
-
-    protected $apiVersion = '2020-03-02';
+    protected $apiVersion = '2025-03-31.basil';
 
     /**
      * Initialize Stripe_core class
@@ -32,8 +29,8 @@ class Stripe_core
         $this->secretKey      = $this->ci->stripe_gateway->decryptSetting('api_secret_key');
         $this->publishableKey = $this->ci->stripe_gateway->getSetting('api_publishable_key');
 
-        \Stripe\Stripe::setApiVersion($this->apiVersion);
-        \Stripe\Stripe::setApiKey($this->secretKey);
+        Stripe\Stripe::setApiVersion($this->apiVersion);
+        Stripe\Stripe::setApiKey($this->secretKey);
     }
 
     /**
@@ -41,7 +38,6 @@ class Stripe_core
      *
      * @param array $data
      *
-     * @return Customer
      * @throws ApiErrorException
      */
     public function create_customer($data): Customer
@@ -54,7 +50,6 @@ class Stripe_core
      *
      * @param array|string $id
      *
-     * @return Customer
      * @throws ApiErrorException
      */
     public function get_customer($id): Customer
@@ -66,9 +61,8 @@ class Stripe_core
      * Update customer
      *
      * @param string $id
-     * @param array $payload
+     * @param array  $payload
      *
-     * @return Customer
      * @throws ApiErrorException
      */
     public function update_customer($id, $payload): Customer
@@ -78,8 +72,6 @@ class Stripe_core
 
     /**
      * Get Stripe publishable key
-     *
-     * @return string|null
      */
     public function get_publishable_key(): ?string
     {
@@ -89,7 +81,6 @@ class Stripe_core
     /**
      * List the created webhook endpoint for the current environment
      *
-     * @return Collection
      * @throws ApiErrorException
      */
     public function list_webhook_endpoints(): Collection
@@ -99,8 +90,6 @@ class Stripe_core
 
     /**
      * Get the necessary Stripe integration webhook events
-     *
-     * @return array
      */
     public function get_webhook_events(): array
     {
@@ -121,7 +110,6 @@ class Stripe_core
     /**
      * Get available Stripe tax rates
      *
-     * @return Collection
      * @throws ApiErrorException
      */
     public function get_tax_rates(): Collection
@@ -134,7 +122,6 @@ class Stripe_core
      *
      * @param array|string $id
      *
-     * @return TaxRate
      * @throws ApiErrorException
      */
     public function retrieve_tax_rate($id): TaxRate
@@ -145,7 +132,6 @@ class Stripe_core
     /**
      * Create webhook in Stripe for the integration
      *
-     * @return WebhookEndpoint
      * @throws ApiErrorException
      */
     public function create_webhook(): WebhookEndpoint
@@ -168,14 +154,13 @@ class Stripe_core
      *
      * @param string $id
      *
-     * @return void
      * @throws ApiErrorException
      */
     public function enable_webhook($id): void
     {
         WebhookEndpoint::update($id, [
             'disabled' => false,
-          ]);
+        ]);
     }
 
     /**
@@ -183,7 +168,6 @@ class Stripe_core
      *
      * @param string $id
      *
-     * @return void
      * @throws ApiErrorException
      */
     public function delete_webhook($id): void
@@ -197,7 +181,6 @@ class Stripe_core
      *
      * @param array $data
      *
-     * @return Session
      * @throws ApiErrorException
      */
     public function create_session($data): Session
@@ -210,7 +193,6 @@ class Stripe_core
      *
      * @param array|string $data
      *
-     * @return Session
      * @throws ApiErrorException
      */
     public function retrieve_session($data): Session
@@ -223,7 +205,6 @@ class Stripe_core
      *
      * @param array|string $data
      *
-     * @return PaymentIntent
      * @throws ApiErrorException
      */
     public function retrieve_payment_intent($data): PaymentIntent
@@ -236,7 +217,6 @@ class Stripe_core
      *
      * @param array|string $data
      *
-     * @return PaymentMethod
      * @throws ApiErrorException
      */
     public function retrieve_payment_method($data): PaymentMethod
@@ -247,27 +227,24 @@ class Stripe_core
     /**
      * Create constturct event
      *
-     * @param array $payload
+     * @param array  $payload
      * @param string $secret
      *
-     * @return \Stripe\Event
      * @throws SignatureVerificationException
      */
-    public function construct_event($payload, $secret): \Stripe\Event
+    public function construct_event($payload, $secret): Stripe\Event
     {
         $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
 
         return Webhook::constructEvent(
-                $payload,
-                $sig_header,
-                $secret
-          );
+            $payload,
+            $sig_header,
+            $secret
+        );
     }
 
     /**
      * Check whether there is api key added for the integration
-     *
-     * @return boolean
      */
     public function has_api_key(): bool
     {

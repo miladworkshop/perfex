@@ -2,6 +2,9 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
+/**
+ * @mixin TCPDF
+ */
 trait PDF_Signature
 {
     public function processSignature()
@@ -13,10 +16,15 @@ trait PDF_Signature
     {
         $dimensions       = $this->getPageDimensions();
         $leftColumnExists = false;
-        $companySignature = $this->getCompanySignature();
+        $lineBreaksBefore = hooks()->apply_filters('pdf_signature_line_breaks_before', 1);
+        $companySignature = $this->getCompanySignature($lineBreaksBefore);
+
+        $this->Ln(10);
 
         if ($companySignature) {
-            $this->MultiCell(($dimensions['wk'] / 2) - $dimensions['lm'], 0, _l('authorized_signature_text') . ' ' . $companySignature, 0, 'J', 0, 0, '', '', true, 0, true, true, 0);
+            $companySignatureHtml = '<div nobr="true">' . _l('authorized_signature_text') . ' ' . $companySignature . '</div>';
+
+            $this->MultiCell(($dimensions['wk'] / 2) - $dimensions['lm'], 0, $companySignatureHtml, 0, 'J', 0, 0, '', '', true, 0, true, true, 0);
 
             $leftColumnExists = true;
         }
@@ -25,7 +33,7 @@ trait PDF_Signature
         $record = $this->getSignatureableInstance();
         $path   = $this->getSignaturePath();
 
-        if (!empty($path) && file_exists($path)) {
+        if (! empty($path) && file_exists($path)) {
             $signature = _l('document_customer_signature_text');
 
             if ($this->type() == 'contract') {
@@ -51,9 +59,8 @@ trait PDF_Signature
 
             $width = ($dimensions['wk'] / 2) - $dimensions['rm'];
 
-            if (!$leftColumnExists) {
+            if (! $leftColumnExists) {
                 $width = $dimensions['wk'] - ($dimensions['rm'] + $dimensions['lm']);
-                $this->ln(13);
             }
 
             $hookData = [
@@ -64,18 +71,21 @@ trait PDF_Signature
 
             hooks()->do_action('before_customer_pdf_signature', $hookData);
 
-            $imageData = file_get_contents($path);
-            $this->MultiCell($width, 0, $signature, 0, 'R', 0, 1, '', '', true, 0, true, false, 0);
-
             $customerSignatureSize = hooks()->apply_filters('customer_pdf_signature_size', 0);
+            if (is_int($customerSignatureSize) && $customerSignatureSize > 0) {
+                $customerSignatureSize = $customerSignatureSize . 'px';
+            }
 
-            $this->Image('@' . $imageData, $this->getX(), $this->getY(), $customerSignatureSize, 0, 'PNG', '', 'R', true, 300, 'R', false, false, 0, true);
+            $imageData = base64_encode(file_get_contents($path));
+            $signature .= str_repeat('<br />', $lineBreaksBefore) . '<img src="@' . $imageData . '" width="' . $customerSignatureSize . '" />';
+
+            $this->MultiCell($width, 0, '<div nobr="true">' . $signature . '</div>', 0, 'R', 0, 1, '', '', true, 0, true, false, 0);
 
             hooks()->do_action('after_customer_pdf_signature', $hookData);
         }
     }
 
-    public function getCompanySignature()
+    public function getCompanySignature($lineBreaksBefore = 1)
     {
         if (($this->type() == 'invoice' && get_option('show_pdf_signature_invoice') == 1)
         || ($this->type() == 'estimate' && get_option('show_pdf_signature_estimate') == 1)
@@ -93,11 +103,11 @@ trait PDF_Signature
                 $blankSignatureLine = '';
             }
 
-            $this->ln(13);
+            // $this->ln(13);
 
             if ($signatureImage != '' && $signatureExists) {
                 $imageData = base64_encode(file_get_contents($signaturePath));
-                $blankSignatureLine .= str_repeat('<br />', hooks()->apply_filters('pdf_signature_break_lines', 1)) . '<img src="@' . $imageData . '" / />';
+                $blankSignatureLine .= str_repeat('<br />', $lineBreaksBefore) . '<img src="@' . $imageData . '" />';
             }
 
             return $blankSignatureLine;
@@ -110,7 +120,7 @@ trait PDF_Signature
     {
         $instance = $this->getSignatureableInstance();
 
-        if (!$instance) {
+        if (! $instance) {
             return '';
         }
 
@@ -125,11 +135,13 @@ trait PDF_Signature
 
     public function getSignatureableInstance()
     {
-        if (isset($GLOBALS['estimate_pdf']) && !empty($GLOBALS['estimate_pdf']->signature)) {
+        if (isset($GLOBALS['estimate_pdf']) && ! empty($GLOBALS['estimate_pdf']->signature)) {
             return $GLOBALS['estimate_pdf'];
-        } elseif (isset($GLOBALS['proposal_pdf']) && !empty($GLOBALS['proposal_pdf']->signature)) {
+        }
+        if (isset($GLOBALS['proposal_pdf']) && ! empty($GLOBALS['proposal_pdf']->signature)) {
             return $GLOBALS['proposal_pdf'];
-        } elseif (isset($GLOBALS['contract_pdf']) && !empty($GLOBALS['contract_pdf']->signature)) {
+        }
+        if (isset($GLOBALS['contract_pdf']) && ! empty($GLOBALS['contract_pdf']->signature)) {
             return $GLOBALS['contract_pdf'];
         }
     }

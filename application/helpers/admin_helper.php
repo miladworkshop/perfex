@@ -375,6 +375,7 @@ function render_admin_js_variables()
         'google_client_id'                            => get_option('google_client_id'),
         'google_api'                                  => get_option('google_api_key'),
         'has_permission_create_task'                  => staff_can('create', 'tasks'),
+        'is_ai_provider_enabled'                      => is_ai_provider_enabled(),
     ];
 
     // by remove it means do not prefix it
@@ -477,6 +478,10 @@ function render_admin_js_variables()
         'filter_operator_less_or_equal'    => _l('filter_operator_less_or_equal'),
         'filter_use_dynamic_dates'         => _l('filter_use_dynamic_dates'),
         'no_filters_found'                 => _l('no_filters_found'),
+        'warn_ticket_thread_too_long'      => _l('warn_ticket_thread_too_long'),
+        'text_enhancement_make_friendly'   => _l('text_enhancement_make_friendly'),
+        'text_enhancement_make_polite'     => _l('text_enhancement_make_polite'),
+        'text_enhancement_make_formal'     => _l('text_enhancement_make_formal'),
     ];
 
     echo '<script>';

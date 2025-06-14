@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 05, 2024 at 05:55 PM
+-- Generation Time: Apr 22, 2025 at 08:14 AM
 -- Server version: 8.4.2
--- PHP Version: 8.2.25
+-- PHP Version: 8.2.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -1556,7 +1556,7 @@ CREATE TABLE `tblmigrations` (
 --
 
 INSERT INTO `tblmigrations` (`version`) VALUES
-(321);
+(331);
 
 -- --------------------------------------------------------
 
@@ -2039,7 +2039,17 @@ INSERT INTO `tbloptions` (`id`, `name`, `value`, `autoload`) VALUES
 (334, 'proposal_auto_convert_to_invoice_on_client_accept', '0', 1),
 (335, 'show_project_on_proposal', '1', 1),
 (336, 'disable_ticket_public_url', '0', 1),
-(337, 'upgraded_from_version', '', 0);
+(337, 'upgraded_from_version', '', 0),
+(338, 'openai_max_token', '500', 1),
+(339, 'ai_provider', '', 1),
+(340, 'ai_enable_ticket_summarization', '0', 0),
+(341, 'ai_enable_ticket_reply_suggestions', '0', 0),
+(342, 'openai_use_fine_tuning', '0', 1),
+(343, 'openai_fine_tuning_base_model', '', 1),
+(344, 'openai_fine_tuning_last_job_id', '', 1),
+(345, 'openai_fine_tuned_model', '', 1),
+(346, 'openai_our_fine_tuned_model', '', 1),
+(347, 'openai_last_fine_tuning_file_id', '', 1);
 
 -- --------------------------------------------------------
 
@@ -2412,6 +2422,13 @@ CREATE TABLE `tblsessions` (
   `timestamp` int UNSIGNED NOT NULL DEFAULT '0',
   `data` blob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tblsessions`
+--
+
+INSERT INTO `tblsessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES
+('83712d5431ece64e817f70ff619ba888', '127.0.0.1', 1745309668, 0x5f5f63695f6c6173745f726567656e65726174657c693a313734353330393636343b5f707265765f75726c7c733a33383a22687474703a2f2f70657266657863726d2e746573742f70726f64756374696f6e2f696e646578223b73746166665f757365725f69647c733a313a2231223b73746166665f6c6f676765645f696e7c623a313b73657475702d6d656e752d6f70656e7c733a303a22223b7265645f75726c7c733a32323a22687474703a2f2f70657266657863726d2e746573742f223b);
 
 -- --------------------------------------------------------
 
@@ -4172,7 +4189,7 @@ ALTER TABLE `tblnotifications`
 -- AUTO_INCREMENT for table `tbloptions`
 --
 ALTER TABLE `tbloptions`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=338;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=348;
 
 --
 -- AUTO_INCREMENT for table `tblpayment_attempts`

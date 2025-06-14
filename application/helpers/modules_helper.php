@@ -282,7 +282,7 @@ function register_language_files($module, $languages = [])
  */
 function uninstallable_modules()
 {
-    return ['theme_style', 'menu_setup', 'backup', 'surveys', 'goals', 'exports'];
+    return ['theme_style', 'menu_setup', 'backup', 'surveys', 'goals', 'exports', 'openai'];
 }
 
 /**

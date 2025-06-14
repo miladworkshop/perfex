@@ -4269,7 +4269,7 @@ input#tags {
 .popover-title {
   background: #f9fafc;
   border-bottom: 1px solid #e4e5e7;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 @media (min-width: 769px) {

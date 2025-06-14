@@ -100,6 +100,13 @@ if (isset($article)) {
 <script>
     $(function() {
         init_editor('#description', {
+            quickbars_selection_toolbar: `bold link ${app.options.is_ai_provider_enabled ? 'ai' : ''}`,
+            append_plugins: 'quickbars',
+            setup: function (editor) {
+                if(app.options.is_ai_provider_enabled) {
+                    configure_ai_editor(editor);
+                }
+            },
             toolbar_sticky: true,
         });
 

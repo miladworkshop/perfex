@@ -4,17 +4,13 @@
     <div class="content">
         <div class="row">
             <div class="col-md-12">
-                <div class="collapse" id="importHints">
-                    <div class="panel_s">
-                        <div class="panel-body tw-bg-gradient-to-l tw-from-transparent tw-to-neutral-50">
-                            <?= $this->import->importGuidelinesInfoHtml(); ?>
-                        </div>
+                <div class="panel_s">
+                    <div class="panel-body tw-bg-gradient-to-l tw-from-transparent tw-to-neutral-50">
+                        <?= $this->import->importGuidelinesInfoHtml(); ?>
                     </div>
                 </div>
                 <div class="tw-flex tw-justify-between tw-items-center tw-mb-3">
                     <h4 class="tw-my-0 tw-font-bold tw-text-lg tw-text-neutral-700 tw-flex tw-items-center tw-gap-x-2">
-                        <i class="fa fa-question-circle tw-cursor-pointer" data-toggle="collapse" href="#importHints"
-                            aria-expanded="false" aria-controls="importHints"></i>
                         <?= _l('import_customers'); ?>
                     </h4>
                     <?= $this->import->downloadSampleFormHtml(); ?>

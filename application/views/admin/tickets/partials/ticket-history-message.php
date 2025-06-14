@@ -1,6 +1,6 @@
 <div class="panel_s tw-mt-5">
     <div
-        class="panel-body<?= $ticket->admin == null ? ' client-reply' : ''; ?> tw-bg-info-50/30">
+        class="panel-body<?= $ticket->admin == null ? ' client-reply' : ''; ?> tw-bg-info-50/30 ticket-thread">
         <div class="tw-flex tw-flex-wrap tw-mb-6">
             <div class="tw-grow">
                 <div class="tw-flex tw-items-center tw-gap-3">

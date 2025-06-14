@@ -52,7 +52,7 @@ foreach ($rResult as $aRow) {
     for ($i = 0; $i < count($aColumns); $i++) {
         $_data = $aRow[$aColumns[$i]];
         if ($aColumns[$i] == 'articlegroup') {
-            $_data = $aRow['name'];
+            $_data = e($aRow['name']);
         } elseif ($aColumns[$i] == 'subject') {
             $link = admin_url('knowledge_base/view/' . $aRow['slug']);
             if ($aRow['staff_article'] == 0) {
@@ -60,9 +60,9 @@ foreach ($rResult as $aRow) {
             }
 
             if (staff_can('edit', 'knowledge_base')) {
-                $_data = '<a href="' . admin_url('knowledge_base/article/' . $aRow['articleid']) . '" class="tw-font-medium">' . $_data . '</a>';
+                $_data = '<a href="' . admin_url('knowledge_base/article/' . $aRow['articleid']) . '" class="tw-font-medium">' . e($_data) . '</a>';
             } else {
-                $_data = '<a href="' . $link . '" target="_blank" class="tw-font-medium">' . $_data . '</a>';
+                $_data = '<a href="' . $link . '" target="_blank" class="tw-font-medium">' . e($_data) . '</a>';
             }
 
             if ($aRow['staff_article'] == 1) {
@@ -83,7 +83,7 @@ foreach ($rResult as $aRow) {
 
             $_data .= '</div>';
         } elseif ($aColumns[$i] == 'datecreated') {
-            $_data = _dt($_data);
+            $_data = e(_dt($_data));
         }
 
         $row[]              = $_data;

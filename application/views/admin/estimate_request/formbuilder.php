@@ -310,9 +310,9 @@ if (isset($form) && $form->notify_type == 'roles') {
 </script>
 <script>
     var buildWrap = document.getElementById('build-wrap');
-    var formData = <?= json_encode($formData); ?> ;
+    var
+        formData = <?= $formData ? json_encode($formData) : '[]'; ?> ;
     var predefinedFields = <?= json_encode($predefinedFields); ?> ;
-
     if (formData.length) {
         // If user paste with styling eq from some editor word and the Codeigniter XSS feature remove and apply xss=remove, may break the json.
         formData = formData.replace(/=\\/gm, "=''");

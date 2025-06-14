@@ -166,7 +166,7 @@ class Projects_merge_fields extends App_merge_fields
         $fields['{project_name}']        = e($project->name);
         $fields['{project_deadline}']    = e(_d($project->deadline));
         $fields['{project_start_date}']  = e(_d($project->start_date));
-        $fields['{project_description}'] = e($project->description);
+        $fields['{project_description}'] = html_purify($project->description);
         $fields['{project_status}'] = get_project_status_by_id($project->status)['name'];
 
         $custom_fields = get_custom_fields('projects');

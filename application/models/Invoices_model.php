@@ -1635,7 +1635,7 @@ class Invoices_model extends App_Model
 
             $status_updated = update_invoice_status($invoice->id, true, true);
 
-            $invoice_number = format_invoice_number($invoice);
+            $invoice_number = format_invoice_number($invoice->id);
 
             if ($attachpdf) {
                 set_mailing_constant();

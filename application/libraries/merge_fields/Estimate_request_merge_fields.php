@@ -116,13 +116,15 @@ class Estimate_request_merge_fields extends App_merge_fields
         foreach ($submissions as $data) {
             $submitted_data .= e($data->label) . ': ';
 
-            if (is_string($data->value)) {
+            if (str_starts_with($data->name, 'textarea-') || str_starts_with($data->name, 'select-')) {
+                $submitted_data .= html_purify($data->value);
+            } elseif (is_string($data->value)) {
                 $submitted_data .= e($data->value);
             } elseif (is_array($data->value)) {
                 $submitted_data .= e(implode(",", $data->value));
             }
 
-            $submitted_data .= "\n";
+            $submitted_data .= "<br />";
         }
 
         $fields['{estimate_request_submitted_data}'] = $submitted_data;

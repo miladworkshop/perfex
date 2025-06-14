@@ -379,7 +379,7 @@ function common_allowed_html_tags()
         'a'     => ['href', 'target', 'rel'],
         'br'    => [], 'em' => [], 'p' => [], 'ul' => [], 'ol' => [], 'li' => [],
         'h1'    => [], 'h2' => [], 'h3' => [], 'h4' => [], 'h5' => [], 'pre' => [], 'code' => [],
-        'img'   => ['src', 'alt'], 'strong' => [], 'b' => [], 'blockquote' => [], 'strong' => [],
+        'img'   => ['src', 'alt', 'width', 'height'], 'strong' => [], 'b' => [], 'blockquote' => [],
         'table' => ['cellspacing', 'cellpadding', 'border', 'width'],
         'thead' => ['align'],
         'th'    => ['colspan', 'rowspan'],

@@ -31,7 +31,7 @@ class Subscriptions extends AdminController
         if (staff_cant('view', 'subscriptions') && staff_cant('view_own', 'subscriptions')) {
             ajax_access_denied();
         }
-        
+
         App_table::find('subscriptions')->output();
     }
 
@@ -95,7 +95,7 @@ class Subscriptions extends AdminController
 
         $subscription = $this->subscriptions_model->get_by_id($id);
 
-        if (!$subscription || (staff_cant('view', 'subscriptions') && $subscription->created_from != get_staff_user_id())) {
+        if (! $subscription || (staff_cant('view', 'subscriptions') && $subscription->created_from != get_staff_user_id())) {
             show_404();
         }
 
@@ -123,11 +123,10 @@ class Subscriptions extends AdminController
                 'stripe_tax_id'       => $this->input->post('stripe_tax_id') ? $this->input->post('stripe_tax_id') : false,
                 'stripe_tax_id_2'     => $this->input->post('stripe_tax_id_2') ? $this->input->post('stripe_tax_id_2') : false,
                 'currency'            => $this->input->post('currency'),
-             ];
+            ];
 
-            if (!empty($stripeSubscriptionId)) {
-                unset($update['clientid']);
-                unset($update['date']);
+            if (! empty($stripeSubscriptionId)) {
+                unset($update['clientid'], $update['date']);
             }
 
             try {
@@ -152,19 +151,20 @@ class Subscriptions extends AdminController
             $this->load->library('stripe_core');
             $data['stripe_tax_rates'] = $this->stripe_core->get_tax_rates();
 
-            if (!empty($subscription->stripe_subscription_id)) {
+            if (! empty($subscription->stripe_subscription_id)) {
                 $data['stripeSubscription'] = $this->stripe_subscriptions->get_subscription($subscription->stripe_subscription_id);
 
                 /*                              $data['stripeSubscription']->billing_cycle_anchor = 'now';
                                               $data['stripeSubscription']->save();
                                               die;*/
 
-                if ($subscription->status != 'canceled' && $subscription->status !== 'incomplete_expired') {
+                if ($subscription->status != 'canceled' && $subscription->status !== 'incomplete_expired' && ! $subscription->ends_at) {
                     $data['upcoming_invoice'] = $this->stripe_subscriptions->get_upcoming_invoice($subscription->stripe_subscription_id);
 
                     $data['upcoming_invoice'] = subscription_invoice_preview_data($subscription, $data['upcoming_invoice'], $data['stripeSubscription']);
+
                     // Throwing errors when not set in the invoice preview area
-                    if (!isset($data['upcoming_invoice']->include_shipping)) {
+                    if (! isset($data['upcoming_invoice']->include_shipping)) {
                         $data['upcoming_invoice']->include_shipping = 0;
                     }
                 }
@@ -213,7 +213,7 @@ class Subscriptions extends AdminController
 
         $subscription = $this->subscriptions_model->get_by_id($id);
 
-        if (!$subscription) {
+        if (! $subscription) {
             show_404();
         }
 
@@ -222,7 +222,7 @@ class Subscriptions extends AdminController
             $ends_at = time();
             if ($type == 'immediately') {
                 $this->stripe_subscriptions->cancel($subscription->stripe_subscription_id);
-            // The mail sent via the webhook
+                // The mail sent via the webhook
                 // $this->subscriptions_model->send_email_template($subscription->id, '', 'subscription_cancelled_to_customer');
             } elseif ($type == 'at_period_end') {
                 $ends_at = $this->stripe_subscriptions->cancel_at_end_of_billing_period($subscription->stripe_subscription_id);
@@ -249,7 +249,7 @@ class Subscriptions extends AdminController
 
     public function sync()
     {
-        if (!is_admin()) {
+        if (! is_admin()) {
             access_denied('Sync subscriptions');
         }
 
@@ -267,7 +267,7 @@ class Subscriptions extends AdminController
         }
 
         $subscription = $this->subscriptions_model->get_by_id($id);
-        if (!$subscription) {
+        if (! $subscription) {
             show_404();
         }
 
@@ -288,7 +288,7 @@ class Subscriptions extends AdminController
         }
 
         if ($subscription = $this->subscriptions_model->delete($id)) {
-            if (!empty($subscription->stripe_subscription_id)) {
+            if (! empty($subscription->stripe_subscription_id)) {
                 try {
                     // In case already deleted in Stripe
                     $this->stripe_subscriptions->cancel($subscription->stripe_subscription_id);

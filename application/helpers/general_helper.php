@@ -719,9 +719,15 @@ function to_sql_date($date, $datetime = false)
             return $date;
         }
 
+        $dateTimeInstance = DateTime::createFromFormat($from_format, $date);
+
+        if ($dateTimeInstance === false) {
+            return $date;
+        }
+
         return hooks()->apply_filters(
             'to_sql_date_formatted',
-            DateTime::createFromFormat($from_format, $date)->format($to_date)
+            $dateTimeInstance->format($to_date)
         );
     }
 
@@ -1081,6 +1087,14 @@ if (! function_exists('previous_url')) {
     function previous_url()
     {
         return get_instance()->session->userdata('_prev_url');
+    }
+}
+
+if (!function_exists('is_ai_provider_enabled')) {
+    function is_ai_provider_enabled(): bool
+    {
+        $providers = \app\services\ai\AiProviderRegistry::getAllProviders();
+        return  !empty($providers) && isset($providers[get_option('ai_provider')]);
     }
 }
 ?>

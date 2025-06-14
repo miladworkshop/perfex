@@ -231,12 +231,12 @@ if (isset($netMonthlyTotal)) {
                         <hr />
                         <div class="row">
                             <div class="col-md-6">
-                                <p class="text-muted mbot20">
+                                <p class="text-muted tw-font-semibold mbot30">
                                     <?= _l('not_billable_expenses_by_categories'); ?>
                                 </p>
                             </div>
                             <div class="col-md-6">
-                                <p class="text-muted mbot20">
+                                <p class="text-muted tw-font-semibold mbot30">
                                     <?= _l('billable_expenses_by_categories'); ?>
                                 </p>
                             </div>

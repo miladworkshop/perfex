@@ -90,8 +90,8 @@ class Two_checkout_gateway extends App_gateway
 
         if ($this->processingFees) {
             $this->ci->session->set_userdata([
-                'attempt_fee' => $data['payment_attempt']['amount'],
-                'attempt_amount' => $data['payment_attempt']['fee'],
+                'attempt_fee' => $data['payment_attempt']->fee,
+                'attempt_amount' => $data['payment_attempt']->amount,
             ]);
         }
 

@@ -332,7 +332,7 @@ if (!function_exists('format_customer_info')) {
             isset($data->client->show_primary_contact) &&
             $data->client->show_primary_contact == 1 &&
             $primaryContactId = get_primary_contact_user_id($clientId)) {
-            $companyName = get_contact_full_name($primaryContactId) . '<br />' . $companyName;
+            $companyName = e(get_contact_full_name($primaryContactId)) . '<br />' . e($companyName);
         }
 
         $companyName = hooks()->apply_filters('customer_info_format_company_name', $companyName, $filterData);

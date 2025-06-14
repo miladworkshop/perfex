@@ -2,7 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-include_once(APPPATH . 'libraries/Stripe_core.php');
+include_once APPPATH . 'libraries/Stripe_core.php';
 
 class Stripe_subscriptions extends Stripe_core
 {
@@ -13,7 +13,7 @@ class Stripe_subscriptions extends Stripe_core
 
     public function get_upcoming_invoice($subscription_id)
     {
-        return \Stripe\Invoice::upcoming(['subscription' => $subscription_id]);
+        return Stripe\Invoice::createPreview(['subscription' => $subscription_id]);
     }
 
     public function get_plans()
@@ -21,8 +21,9 @@ class Stripe_subscriptions extends Stripe_core
         $hasMore       = true;
         $data          = null;
         $startingAfter = null;
+
         do {
-            $plans = \Stripe\Plan::all(
+            $plans = Stripe\Plan::all(
                 array_merge(['limit' => 100, 'active' => true, 'expand' => ['data.product']], $startingAfter ? ['starting_after' => $startingAfter] : [])
             );
 
@@ -57,17 +58,17 @@ class Stripe_subscriptions extends Stripe_core
 
     public function get_plan($id)
     {
-        return \Stripe\Plan::retrieve($id);
+        return Stripe\Plan::retrieve($id);
     }
 
     public function get_product($id)
     {
-        return \Stripe\Product::retrieve($id);
+        return Stripe\Product::retrieve($id);
     }
 
     public function get_subscription($data)
     {
-        return \Stripe\Subscription::retrieve($data);
+        return Stripe\Subscription::retrieve($data);
     }
 
     public function cancel($id)
@@ -80,7 +81,7 @@ class Stripe_subscriptions extends Stripe_core
     {
         $sub = $this->get_subscription($id);
 
-        \Stripe\Subscription::update($id, [
+        Stripe\Subscription::update($id, [
             'cancel_at_period_end' => true,
         ]);
 
@@ -91,25 +92,21 @@ class Stripe_subscriptions extends Stripe_core
     {
         $stripeSubscription = $this->get_subscription($id);
 
-        \Stripe\Subscription::update($id, [
-        'cancel_at_period_end' => false,
-        'items'                => [
-            [
-                'id'   => $stripeSubscription->items->data[0]->id,
-                'plan' => $plan_id,
+        Stripe\Subscription::update($id, [
+            'cancel_at_period_end' => false,
+            'items'                => [
+                [
+                    'id'   => $stripeSubscription->items->data[0]->id,
+                    'plan' => $plan_id,
+                ],
             ],
-        ],
-    ]);
-    }
-
-    public function pause()
-    {
-        $sub = $this->get_subscription($id);
-        $sub->cancel();
+        ]);
     }
 
     public function update_subscription($subscription_id, $update_values, $db_subscription, $prorate = false)
     {
+        $params = [];
+
         if (empty($subscription_id)) {
             return false;
         }
@@ -118,55 +115,68 @@ class Stripe_subscriptions extends Stripe_core
                     || $update_values['stripe_tax_id_2'] != $db_subscription->stripe_tax_id_2
                     || $update_values['quantity'] != $db_subscription->quantity
                     || $update_values['stripe_plan_id'] != $db_subscription->stripe_plan_id
-                ) {
+        ) {
             $stripeSubscription = $this->get_subscription($subscription_id);
 
             if (empty($update_values['stripe_tax_id']) && empty($update_values['stripe_tax_id_2'])) {
-                $stripeSubscription->default_tax_rates = null;
+                $params['default_tax_rates'] = '';
             } else {
-                $taxRates = null;
+                $taxRates = '';
+
                 foreach (['stripe_tax_id', 'stripe_tax_id_2'] as $key) {
-                    if (!empty($update_values[$key])) {
-                        if (!is_array($taxRates)) {
+                    if (! empty($update_values[$key])) {
+                        if (! is_array($taxRates)) {
                             $taxRates = [];
                         }
                         $taxRates[] = $update_values[$key];
                     }
                 }
-                $stripeSubscription->default_tax_rates = $taxRates;
+                $params['default_tax_rates'] = $taxRates;
             }
-
 
             // Causing issue when changin both plan/items and quantity
             if ($update_values['quantity'] != $db_subscription->quantity && $update_values['stripe_plan_id'] == $db_subscription->stripe_plan_id) {
-                $stripeSubscription->quantity = $update_values['quantity'];
+                $params['quantity'] = $update_values['quantity'];
             }
 
             if ($update_values['stripe_plan_id'] != $db_subscription->stripe_plan_id) {
                 $items = [
-                            [
-                                'id'   => $stripeSubscription->items->data[0]->id,
-                                'plan' => $update_values['stripe_plan_id'],
-                            ],
-                         ];
+                    [
+                        'id'    => $stripeSubscription->items->data[0]->id,
+                        'price' => $update_values['stripe_plan_id'],
+                    ],
+                ];
 
                 // If quantity is changed, update quantity too
                 if ($update_values['quantity'] != $db_subscription->quantity) {
                     $items[0]['quantity'] = $update_values['quantity'];
                 }
-
-                $stripeSubscription->items = $items;
+                $params['items'] = $items;
             }
 
-            $stripeSubscription->prorate = $prorate;
-            $stripeSubscription->save();
+            $params['proration_behavior'] = $prorate ? 'create_prorations' : 'none';
+            Stripe\Subscription::update($subscription_id, $params);
         }
     }
 
-    public function subscribe($customer_id, $params = [])
+    /**
+     * Create a new subscription
+     *
+     * @param string $customer_id
+     * @param array  $options
+     *
+     * @return Stripe\Subscription
+     */
+    public function subscribe($customer_id, $options = [])
     {
-        return \Stripe\Subscription::create(array_merge([
+        $defaultOptions = [
+            'payment_behavior' => 'allow_incomplete',
+        ];
+
+        $options = array_merge($defaultOptions, $options);
+
+        return Stripe\Subscription::create(array_merge([
             'customer' => $customer_id,
-        ], $params));
+        ], $options));
     }
 }

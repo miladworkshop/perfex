@@ -41,7 +41,7 @@ if (get_option('google_api_key') !== '') {
     if ($client->longitude == '' && $client->latitude == '') {
         echo '<div class="alert alert-info tw-mb-0">' . _l('customer_map_notice') . '</div>';
     } else {
-        echo 'hr />';
+        echo '<hr />';
         echo '<div id="map" class="customer_map"></div>';
     }
 } else {

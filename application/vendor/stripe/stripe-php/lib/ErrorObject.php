@@ -76,6 +76,7 @@ class ErrorObject extends StripeObject
     const CODE_CHARGE_ALREADY_REFUNDED = 'charge_already_refunded';
     const CODE_CHARGE_DISPUTED = 'charge_disputed';
     const CODE_CHARGE_EXCEEDS_SOURCE_LIMIT = 'charge_exceeds_source_limit';
+    const CODE_CHARGE_EXCEEDS_TRANSACTION_LIMIT = 'charge_exceeds_transaction_limit';
     const CODE_CHARGE_EXPIRED_FOR_CAPTURE = 'charge_expired_for_capture';
     const CODE_CHARGE_INVALID_PARAMETER = 'charge_invalid_parameter';
     const CODE_CHARGE_NOT_REFUNDABLE = 'charge_not_refundable';
@@ -93,6 +94,7 @@ class ErrorObject extends StripeObject
     const CODE_FINANCIAL_CONNECTIONS_NO_SUCCESSFUL_TRANSACTION_REFRESH = 'financial_connections_no_successful_transaction_refresh';
     const CODE_FORWARDING_API_INACTIVE = 'forwarding_api_inactive';
     const CODE_FORWARDING_API_INVALID_PARAMETER = 'forwarding_api_invalid_parameter';
+    const CODE_FORWARDING_API_RETRYABLE_UPSTREAM_ERROR = 'forwarding_api_retryable_upstream_error';
     const CODE_FORWARDING_API_UPSTREAM_CONNECTION_ERROR = 'forwarding_api_upstream_connection_error';
     const CODE_FORWARDING_API_UPSTREAM_CONNECTION_TIMEOUT = 'forwarding_api_upstream_connection_timeout';
     const CODE_IDEMPOTENCY_KEY_IN_USE = 'idempotency_key_in_use';
@@ -113,6 +115,7 @@ class ErrorObject extends StripeObject
     const CODE_INVALID_CVC = 'invalid_cvc';
     const CODE_INVALID_EXPIRY_MONTH = 'invalid_expiry_month';
     const CODE_INVALID_EXPIRY_YEAR = 'invalid_expiry_year';
+    const CODE_INVALID_MANDATE_REFERENCE_PREFIX_FORMAT = 'invalid_mandate_reference_prefix_format';
     const CODE_INVALID_NUMBER = 'invalid_number';
     const CODE_INVALID_SOURCE_USAGE = 'invalid_source_usage';
     const CODE_INVALID_TAX_LOCATION = 'invalid_tax_location';
@@ -188,6 +191,7 @@ class ErrorObject extends StripeObject
     const CODE_SETUP_INTENT_AUTHENTICATION_FAILURE = 'setup_intent_authentication_failure';
     const CODE_SETUP_INTENT_INVALID_PARAMETER = 'setup_intent_invalid_parameter';
     const CODE_SETUP_INTENT_MANDATE_INVALID = 'setup_intent_mandate_invalid';
+    const CODE_SETUP_INTENT_MOBILE_WALLET_UNSUPPORTED = 'setup_intent_mobile_wallet_unsupported';
     const CODE_SETUP_INTENT_SETUP_ATTEMPT_EXPIRED = 'setup_intent_setup_attempt_expired';
     const CODE_SETUP_INTENT_UNEXPECTED_STATE = 'setup_intent_unexpected_state';
     const CODE_SHIPPING_ADDRESS_INVALID = 'shipping_address_invalid';
@@ -201,6 +205,7 @@ class ErrorObject extends StripeObject
     const CODE_TERMINAL_LOCATION_COUNTRY_UNSUPPORTED = 'terminal_location_country_unsupported';
     const CODE_TERMINAL_READER_BUSY = 'terminal_reader_busy';
     const CODE_TERMINAL_READER_HARDWARE_FAULT = 'terminal_reader_hardware_fault';
+    const CODE_TERMINAL_READER_INVALID_LOCATION_FOR_ACTIVATION = 'terminal_reader_invalid_location_for_activation';
     const CODE_TERMINAL_READER_INVALID_LOCATION_FOR_PAYMENT = 'terminal_reader_invalid_location_for_payment';
     const CODE_TERMINAL_READER_OFFLINE = 'terminal_reader_offline';
     const CODE_TERMINAL_READER_TIMEOUT = 'terminal_reader_timeout';
@@ -220,8 +225,9 @@ class ErrorObject extends StripeObject
      * @param array $values
      * @param null|array|string|Util\RequestOptions $opts
      * @param bool $partial defaults to false
+     * @param 'v1'|'v2' $apiMode
      */
-    public function refreshFrom($values, $opts, $partial = false)
+    public function refreshFrom($values, $opts, $partial = false, $apiMode = 'v1')
     {
         // Unlike most other API resources, the API will omit attributes in
         // error objects when they have a null value. We manually set default

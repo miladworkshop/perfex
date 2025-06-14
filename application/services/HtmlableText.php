@@ -2,6 +2,10 @@
 
 namespace app\services;
 
+use HTMLPurifier;
+use HTMLPurifier_Config;
+use HTMLPurifier_Filter;
+
 class HtmlableText
 {
     protected $text;
@@ -15,76 +19,68 @@ class HtmlableText
     {
         $text = $this->text;
 
-        // Do not process if the text is not a string
         if (! is_string($text)) {
             return '';
         }
 
-        // Early return
         if (empty($text)) {
             return $text;
         }
 
-        include_once APPPATH . 'third_party/simple_html_dom.php';
+        return $this->purify($text);
+    }
 
-        // Remove any not allowed tags
-        $allowedTags = array_map(fn ($tag) => "<{$tag}>", array_keys(common_allowed_html_tags()));
+    protected function purify($text)
+    {
+        $allowedTags = $this->getAllowedTags();
 
-        $text = strip_tags($text, implode(', ', $allowedTags));
+        $config = HTMLPurifier_Config::createDefault();
+        $config->set('HTML.Allowed', $allowedTags . ',div');
+        $config->set('Attr.AllowedFrameTargets', ['_blank']);
+        $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
+        $config->set('Attr.EnableID', true); // Allow `id` attributes
+        $config->set('AutoFormat.Linkify', true);
+        $config->set('Filter.Custom', [$this->getLinksFilter()]);
 
-        // Remove any inline styles
-        $html = str_get_html($text);
+        $purifier = new HTMLPurifier($config);
 
-        if ($html === false) {
-            return $text;
-        }
+        return $purifier->purify($text);
+    }
 
-        foreach ($html->find('*[style]') as $item) {
-            $item->style = null;
-        }
+    protected function getLinksFilter()
+    {
+        return new class () extends HTMLPurifier_Filter {
+            public $name = 'TargetBlankFilter';
 
-        foreach ($html->find('a') as $item) {
-            $item->setAttribute('target', '_blank');
-            $item->setAttribute('rel', 'nofollow');
-        }
+            public function preFilter($html, $config, $context)
+            {
+                return preg_replace_callback('/<a\s+([^>]+)>/i', function ($matches) {
+                    $attrs = $matches[1];
 
-        $text = $html->save();
-
-        // Escape the entire text first
-        $text = e($text, false);
-
-        // Process each allowed tag
-        foreach (common_allowed_html_tags() as $tagName => $attributes) {
-            // Start tag, capturing attributes
-            $text = preg_replace_callback("/&lt;({$tagName})(.*?)&gt;/i", function ($matches) use ($attributes) {
-                // Decode the tag
-                $attrsString = htmlspecialchars_decode($matches[2]);
-                // Filter and rebuild attributes
-                $attrsString = preg_replace_callback('/(\w+)=("[^"]*"|\'[^\']*\')/', function ($attrMatches) use ($attributes) {
-                    // Check if the attribute is allowed for this tag
-                    if (in_array(strtolower($attrMatches[1]), $attributes)) {
-                        // Return the original attribute string
-                        return $attrMatches[0];
+                    // Ensure target="_blank" is set
+                    if (! preg_match('/\btarget=/', $attrs)) {
+                        $attrs .= ' target="_blank"';
                     }
 
-                    // Exclude the attribute by returning an empty string
-                    return '';
-                }, $attrsString);
+                    return '<a ' . $attrs . '>';
+                }, $html);
+            }
 
-                return "<{$matches[1]}{$attrsString}>";
-            }, $text);
+            public function postFilter($html, $config, $context)
+            {
+                return $html;
+            }
+        };
+    }
 
-            // End tag
-            $text = preg_replace("/&lt;\\/{$tagName}&gt;/i", "</{$tagName}>", $text);
-        }
+    protected function getAllowedTags()
+    {
+        return collect(common_allowed_html_tags())->map(function ($attributes, $tag) {
+            if (empty($attributes)) {
+                return $tag;
+            }
 
-        // Convert URLs to clickable links if they are not already in an anchor tag
-        $text = preg_replace_callback('/(?<!href=")(?<!href=\')(?<!src=")(?<!src=\')\b(http|https):\/\/[^\s<]+/i', function ($urlMatches) {
-            $url = htmlspecialchars_decode($urlMatches[0]);
-
-            return "<a href=\"{$url}\" target=\"_blank\" rel=\"nofollow\">{$url}</a>";
-        }, $text);
-
-        return $text;
+            return $tag . '[' . implode('|', $attributes) . ']';
+        })->values()->implode(', ');
     }
 }

@@ -1431,6 +1431,10 @@ form.dropzone {
   list-style-type: decimal;
 }
 
+.tc-content ul {
+  list-style-type: disc;
+}
+
 .tc-content table {
   margin-top: 0px;
   border-collapse: initial;

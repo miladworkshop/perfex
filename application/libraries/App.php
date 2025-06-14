@@ -97,7 +97,7 @@ class App
 
     public function get_settings_sections()
     {
-        $sections = $this->settingsSections;
+        $sections = app_sort_by_position($this->settingsSections);
 
         foreach ($sections as $key => $section) {
             $sections[$key]['children'] = app_sort_by_position($section['children']);
@@ -108,25 +108,25 @@ class App
 
     public function add_settings_section($id, $data)
     {
-        if (array_key_exists($id, $this->settingsSections)) {
-            throw new Exception("Settings section with '{$id}' already exist.");
-        }
-
         foreach ($data['children'] ?? [] as $key => $child) {
             if (! isset($child['id'])) {
                 $data['children'][$key]['id'] = basename($child['view']);
             }
         }
 
-        $this->settingsSections[$id] = $data;
+        if (array_key_exists($id, $this->settingsSections)) {
+            $this->settingsSections[$id] = array_merge($this->settingsSections[$id], $data);
+        } else {
+            $this->settingsSections[$id] = $data;
+        }
 
         return $this;
     }
 
     public function add_settings_section_child($parent_id, $id, $data)
     {
-        if (! array_key_exists($parent_id, $this->settingsSections)) {
-            throw new Exception("Settings section with '{$parent_id}' does not exist.");
+        if (! isset($this->settingsSections[$parent_id])) {
+            $this->settingsSections[$parent_id] = [];
         }
 
         if (! isset($this->settingsSections[$parent_id]['children'])) {

@@ -320,7 +320,7 @@ class Clients extends AdminController
 
             $clientCountry = get_country($clientCountryId);
             
-            $callingCode   = $clientCountry->calling_code ? 
+            $callingCode   = $clientCountry && $clientCountry->calling_code ?
                 ($clientCountry ? '+' . ltrim($clientCountry->calling_code, '+') : null) : 
                 null;
         } else {

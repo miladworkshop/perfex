@@ -48,7 +48,7 @@
 .bootstrap-select.btn-group > .disabled,
 .bootstrap-select.disabled,
 .bootstrap-select > .disabled {
-  @apply tw-bg-neutral-100 tw-border-neutral-900/10 tw-pointer-events-none tw-text-neutral-400 tw-cursor-not-allowed;
+  @apply tw-bg-neutral-100 tw-border-neutral-900/10 tw-pointer-events-none tw-text-neutral-400 tw-cursor-not-allowed tw-rounded-lg;
 }
 
 /* Not support for other button sizes? */

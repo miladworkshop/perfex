@@ -3,7 +3,7 @@
         'name' => '__root__',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'd2bebeed7d8e6489a8c006bdbb219e5a8ecd3008',
+        'reference' => 'ebdd844ff44174bd3e4b8addee3eda5cdb26c8a2',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         '__root__' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'd2bebeed7d8e6489a8c006bdbb219e5a8ecd3008',
+            'reference' => 'ebdd844ff44174bd3e4b8addee3eda5cdb26c8a2',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -164,9 +164,9 @@
             'dev_requirement' => false,
         ),
         'illuminate/collections' => array(
-            'pretty_version' => 'v10.48.22',
-            'version' => '10.48.22.0',
-            'reference' => '37c863cffb345869dd134eff8e646bc82a19cc96',
+            'pretty_version' => 'v10.48.28',
+            'version' => '10.48.28.0',
+            'reference' => '48de3d6bc6aa779112ddcb608a3a96fc975d89d8',
             'type' => 'library',
             'install_path' => __DIR__ . '/../illuminate/collections',
             'aliases' => array(),
@@ -205,6 +205,15 @@
             'reference' => '8b5a7f76c74d156b23f91c64413bda00a2329ea5',
             'type' => 'library',
             'install_path' => __DIR__ . '/../instamojo/instamojo-php',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'league/html-to-markdown' => array(
+            'pretty_version' => '5.1.1',
+            'version' => '5.1.1.0',
+            'reference' => '0b4066eede55c48f38bcee4fb8f0aa85654390fd',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../league/html-to-markdown',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -473,8 +482,8 @@
         'psr/http-client-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0',
-                1 => '*',
+                0 => '*',
+                1 => '1.0',
             ),
         ),
         'psr/http-factory' => array(
@@ -489,8 +498,8 @@
         'psr/http-factory-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0',
-                1 => '*',
+                0 => '*',
+                1 => '1.0',
             ),
         ),
         'psr/http-message' => array(
@@ -505,8 +514,8 @@
         'psr/http-message-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0',
-                1 => '*',
+                0 => '*',
+                1 => '1.0',
             ),
         ),
         'psr/log' => array(
@@ -555,9 +564,9 @@
             'dev_requirement' => false,
         ),
         'stripe/stripe-php' => array(
-            'pretty_version' => 'v15.4.0',
-            'version' => '15.4.0.0',
-            'reference' => '13581553ea8725b9d0cfff93d24462c4149abec9',
+            'pretty_version' => 'v17.1.1',
+            'version' => '17.1.1.0',
+            'reference' => '01ca9b5fdd899b8e4b69f83b85e09d96f6240220',
             'type' => 'library',
             'install_path' => __DIR__ . '/../stripe/stripe-php',
             'aliases' => array(),

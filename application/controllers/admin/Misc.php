@@ -12,17 +12,17 @@ class Misc extends AdminController
 
     public function fetch_address_info_gmaps()
     {
-        include_once(APPPATH . 'third_party/JD_Geocoder_Request.php');
+        include_once APPPATH . 'third_party/JD_Geocoder_Request.php';
 
         $data    = $this->input->post();
         $address = '';
 
         $address .= $data['address'];
-        if (!empty($data['city'])) {
+        if (! empty($data['city'])) {
             $address .= ', ' . $data['city'];
         }
 
-        if (!empty($data['country'])) {
+        if (! empty($data['country'])) {
             $address .= ', ' . $data['country'];
         }
 
@@ -34,7 +34,8 @@ class Misc extends AdminController
                     'error_message' => 'Add Google API Key in Setup->Settings->Google',
                 ],
             ]);
-            die;
+
+            exit;
         }
 
         $georequest = new JD_Geocoder_Request($apiKey);
@@ -98,7 +99,8 @@ class Misc extends AdminController
 
             $relOptions = init_relation_options($data, $type, $rel_id);
             echo json_encode($relOptions);
-            die;
+
+            exit;
         }
     }
 
@@ -112,7 +114,13 @@ class Misc extends AdminController
 
     public function upload_sales_file()
     {
-        handle_sales_attachments($this->input->post('rel_id'), $this->input->post('type'));
+        $rel_id = $this->input->post('rel_id');
+
+        if (! is_numeric($rel_id)) {
+            ajax_access_denied();
+        }
+
+        handle_sales_attachments($rel_id, $this->input->post('type'));
     }
 
     public function add_sales_external_attachment()
@@ -176,6 +184,7 @@ class Misc extends AdminController
     public function update_ei_items_order($type)
     {
         $data = $this->input->post();
+
         foreach ($data['data'] as $order) {
             $this->db->where('id', $order[0]);
             $this->db->update(db_prefix() . 'itemable', [
@@ -184,7 +193,7 @@ class Misc extends AdminController
         }
     }
 
-    /* Since version 1.0.2 add client reminder */
+    // Since version 1.0.2 add client reminder
     public function add_reminder($rel_id_id, $rel_type)
     {
         $message    = '';
@@ -235,11 +244,11 @@ class Misc extends AdminController
         }
     }
 
-    /* Since version 1.0.2 delete client reminder */
+    // Since version 1.0.2 delete client reminder
     public function delete_reminder($rel_id, $id, $rel_type)
     {
-        if (!$id && !$rel_id) {
-            die('No reminder found');
+        if (! $id && ! $rel_id) {
+            exit('No reminder found');
         }
         $success    = $this->misc_model->delete_reminder($id);
         $alert_type = 'warning';
@@ -272,9 +281,9 @@ class Misc extends AdminController
         if ($reminder && ($reminder->creator == get_staff_user_id() || is_admin()) && $reminder->isnotified == 0) {
             $success = $this->misc_model->edit_reminder($this->input->post(), $id);
             echo json_encode([
-                    'alert_type' => 'success',
-                    'message'    => ($success ? _l('updated_successfully', _l('reminder')) : ''),
-                ]);
+                'alert_type' => 'success',
+                'message'    => ($success ? _l('updated_successfully', _l('reminder')) : ''),
+            ]);
         }
     }
 
@@ -287,7 +296,7 @@ class Misc extends AdminController
         }
     }
 
-    /* Since Version 1.0.1 - General search */
+    // Since Version 1.0.1 - General search
     public function search()
     {
         $q = $this->input->post('q');
@@ -326,13 +335,13 @@ class Misc extends AdminController
     public function edit_note($id)
     {
         if ($this->input->post()) {
-            $data = $this->input->post();
+            $data    = $this->input->post();
             $success = $this->misc_model->edit_note($data, $id);
-            
+
             echo json_encode([
-                'description'=> process_text_content_for_display(nl2br($data['description'])),
-                'success' => $success,
-                'message' => _l('note_updated_successfully'),
+                'description' => process_text_content_for_display(nl2br($data['description'])),
+                'success'     => $success,
+                'message'     => _l('note_updated_successfully'),
             ]);
         }
     }
@@ -341,7 +350,7 @@ class Misc extends AdminController
     {
         $success = $this->misc_model->delete_note($id);
 
-        if (!$this->input->is_ajax_request()) {
+        if (! $this->input->is_ajax_request()) {
             if ($success) {
                 set_alert('success', _l('deleted', _l('note')));
             }
@@ -351,7 +360,7 @@ class Misc extends AdminController
         }
     }
 
-    /* Remove customizer open from database */
+    // Remove customizer open from database
     public function set_setup_menu_closed()
     {
         if ($this->input->is_ajax_request()) {
@@ -361,7 +370,7 @@ class Misc extends AdminController
         }
     }
 
-    /* Set session that user clicked on setup_menu menu link to stay open */
+    // Set session that user clicked on setup_menu menu link to stay open
     public function set_setup_menu_open()
     {
         if ($this->input->is_ajax_request()) {
@@ -371,14 +380,14 @@ class Misc extends AdminController
         }
     }
 
-    /* User dismiss announcement */
+    // User dismiss announcement
     public function dismiss_announcement($id)
     {
         $this->misc_model->dismiss_announcement($id);
         redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
-    /* Set notifications to read */
+    // Set notifications to read
     public function set_notifications_read()
     {
         if ($this->input->is_ajax_request()) {
@@ -417,12 +426,12 @@ class Misc extends AdminController
         }
 
         echo json_encode([
-        'html'             => $this->load->view('admin/includes/notifications', [], true),
-        'notificationsIds' => $notificationsIds,
+            'html'             => $this->load->view('admin/includes/notifications', [], true),
+            'notificationsIds' => $notificationsIds,
         ]);
     }
 
-    /* Check if staff email exists / ajax */
+    // Check if staff email exists / ajax
     public function staff_email_exists()
     {
         if ($this->input->is_ajax_request()) {
@@ -434,7 +443,8 @@ class Misc extends AdminController
                     $_current_email = $this->db->get(db_prefix() . 'staff')->row();
                     if ($_current_email->email == $this->input->post('email')) {
                         echo json_encode(true);
-                        die();
+
+                        exit();
                     }
                 }
                 $this->db->where('email', $this->input->post('email'));
@@ -444,12 +454,13 @@ class Misc extends AdminController
                 } else {
                     echo json_encode(true);
                 }
-                die();
+
+                exit();
             }
         }
     }
 
-    /* Check if client email exists/  ajax */
+    // Check if client email exists/  ajax
     public function contact_email_exists()
     {
         if ($this->input->is_ajax_request()) {
@@ -461,7 +472,8 @@ class Misc extends AdminController
                     $_current_email = $this->db->get(db_prefix() . 'contacts')->row();
                     if ($_current_email->email == $this->input->post('email')) {
                         echo json_encode(true);
-                        die();
+
+                        exit();
                     }
                 }
                 $this->db->where('email', $this->input->post('email'));
@@ -471,18 +483,19 @@ class Misc extends AdminController
                 } else {
                     echo json_encode(true);
                 }
-                die();
+
+                exit();
             }
         }
     }
 
-    /* Goes blank page but with messagae access danied / message set from session flashdata */
+    // Goes blank page but with messagae access danied / message set from session flashdata
     public function access_denied()
     {
         $this->load->view('admin/blank_page');
     }
 
-    /* Goes to blank page with message page not found / message set from session flashdata */
+    // Goes to blank page with message page not found / message set from session flashdata
     public function not_found()
     {
         $this->load->view('admin/blank_page');
@@ -495,6 +508,7 @@ class Misc extends AdminController
             $tables = $this->db->query("SELECT *
                 FROM INFORMATION_SCHEMA.TABLES
                 WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='" . APP_DB_NAME . "'")->result_array();
+
             foreach ($tables as $table_data) {
                 $table  = $table_data['TABLE_NAME'];
                 $fields = $this->db->list_fields($table);
@@ -519,7 +533,7 @@ class Misc extends AdminController
                             $field_default_value = ' DEFAULT 0.' . str_repeat(0, $total_decimals);
                         }
 
-                        $this->db->query("ALTER TABLE $table CHANGE $field $field DECIMAL($digits,$total_decimals) $field_is_null$field_default_value;");
+                        $this->db->query("ALTER TABLE {$table} CHANGE {$field} {$field} DECIMAL({$digits},{$total_decimals}) {$field_is_null}{$field_default_value};");
                     }
                 }
             }
@@ -544,7 +558,7 @@ class Misc extends AdminController
                 $fields = $this->db->list_fields($table);
 
                 foreach ($fields as $field) {
-                    if (!in_array($field, $notChangableFields)) {
+                    if (! in_array($field, $notChangableFields)) {
                         $field_info = $this->db->query('SHOW FIELDS
                             FROM ' . $table . " where Field ='" . $field . "'")->result_array();
                         $field_type = strtolower($field_info[0]['Type']);
@@ -560,7 +574,7 @@ class Misc extends AdminController
                             } else {
                                 $field_default_value = ' DEFAULT 0.' . str_repeat(0, $total_decimals);
                             }
-                            $this->db->query("ALTER TABLE $table CHANGE $field $field DECIMAL(15,$total_decimals) $field_is_null$field_default_value;");
+                            $this->db->query("ALTER TABLE {$table} CHANGE {$field} {$field} DECIMAL(15,{$total_decimals}) {$field_is_null}{$field_default_value};");
                         }
                     }
                 }
@@ -578,11 +592,11 @@ class Misc extends AdminController
             $tables       = $this->db->query("SELECT TABLE_NAME,
                              ENGINE
                             FROM information_schema.TABLES
-                            WHERE TABLE_SCHEMA = '$databaseName' and ENGINE = 'myISAM'")->result_array();
+                            WHERE TABLE_SCHEMA = '{$databaseName}' and ENGINE = 'myISAM'")->result_array();
 
             foreach ($tables as $table) {
                 $tableName = $table['TABLE_NAME'];
-                $this->db->query("ALTER TABLE $tableName ENGINE=InnoDB;");
+                $this->db->query("ALTER TABLE {$tableName} ENGINE=InnoDB;");
             }
             echo 'Table engines successfully changed to InnoDB';
         } else {
@@ -599,12 +613,12 @@ class Misc extends AdminController
         $charset = $this->db->char_set;
         $collat  = $this->db->dbcollat;
 
-        if (!is_admin()) {
-            die('You must be logged in as administrator to perform this action');
+        if (! is_admin()) {
+            exit('You must be logged in as administrator to perform this action');
         }
 
         if (get_option('_232_upgrade_db_queries_performed') === '1') {
-            die('This action is already processed');
+            exit('This action is already processed');
         }
 
         $this->db->query('ALTER TABLE `' . db_prefix() . 'contacts` CHANGE `lastname` `lastname` VARCHAR(191) CHARACTER SET ' . $charset . ' COLLATE ' . $collat . ' NOT NULL;');

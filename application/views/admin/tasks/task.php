@@ -368,9 +368,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group<?php if ($rel_id == '') {
-                                echo ' hide';
-                            } ?>" id="rel_id_wrapper">
+                                <div class="form-group<?= $rel_id == '' ? ' hide' : ''; ?>" id="rel_id_wrapper">
                                     <label for="rel_id" class="control-label"><span class="rel_id_label"></span></label>
                                     <div id="rel_id_select">
                                         <select name="rel_id" id="rel_id" class="ajax-sesarch" data-width="100%"
@@ -389,15 +387,13 @@
                         <?php if (!isset($task)) { ?>
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group select-placeholder>">
+                            <div class="form-group select-placeholder>">
                                     <label for="assignees"><?php echo _l('task_single_assignees'); ?></label>
                                     <select name="assignees[]" id="assignees" class="selectpicker" data-width="100%"
                                         data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>"
                                         multiple data-live-search="true">
                                         <?php foreach ($members as $member) { ?>
-                                        <option value="<?php echo e($member['staffid']); ?>" <?php if ((get_option('new_task_auto_assign_current_member') == '1') && get_staff_user_id() == $member['staffid']) {
-                                echo 'selected';
-                            } ?>>
+                                        <option value="<?php echo e($member['staffid']); ?>" <?= (get_option('new_task_auto_assign_current_member') == '1') && get_staff_user_id() == $member['staffid'] ? 'selected' : ''; ?>>
                                             <?php echo e($member['firstname'] . ' ' . $member['lastname']); ?>
                                         </option>
                                         <?php } ?>

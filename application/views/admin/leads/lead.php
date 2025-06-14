@@ -8,7 +8,7 @@
             <?php if (isset($lead)) { ?>
             <?php $name = ! empty($lead->name) ? $lead->name : (! empty($lead->company) ? $lead->company : _l('lead')); ?>
             #<?= $lead->id; ?> -
-            <?= $name; ?>
+            <?= e($name); ?>
             <div class="tw-ml-3 -tw-mt-px">
                 <?php if ($lead->lost == 1) { ?>
                 <span

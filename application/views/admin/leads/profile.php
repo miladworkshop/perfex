@@ -79,8 +79,7 @@
                     </a>
                 </li>
                 <?php } ?>
-                <?php
-                } ?>
+                <?php } ?>
                 <!-- mark as junk -->
                 <?php if ($lead->lost == 0) {
                     if ($lead->junk == 0 && (total_rows(db_prefix() . 'clients', ['leadid' => $lead->id]) == 0)) { ?>
@@ -195,8 +194,8 @@
                     <dt class="lead-field-heading tw-font-normal tw-text-neutral-500">
                         <?= _l('lead_address'); ?>
                     </dt>
-                    <dd class="tw-text-neutral-900 tw-mt-1">
-                        <?= isset($lead) && $lead->address != '' ? process_text_content_for_display($lead->address) : '-' ?>
+                    <dd class="tw-text-neutral-900 tw-mt-1 tw-whitespace-pre-line">
+                        <?= isset($lead) && $lead->address != '' ? e(clear_textarea_breaks($lead->address)) : '-' ?>
                     </dd>
                     <dt class="lead-field-heading tw-font-normal tw-text-neutral-500">
                         <?= _l('lead_city'); ?>
@@ -492,7 +491,7 @@ echo render_select('country', $countries, ['country_id', ['short_name']], 'lead_
                         <div
                             class="checkbox-inline checkbox<?= isset($lead) ? ' hide' : ''; ?><?= isset($lead) && (is_lead_creator($lead->id) || staff_can('edit', 'leads')) ? ' lead-edit' : ''; ?>">
                             <input type="checkbox" name="is_public"
-                                <?= isset($lead) ? 'checked' : ''; ?>
+                                <?= isset($lead) && $lead->is_public ? 'checked' : ''; ?>
                             id="lead_public">
                             <label for="lead_public">
                                 <?= _l('lead_public'); ?>

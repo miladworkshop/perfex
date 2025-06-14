@@ -2122,7 +2122,7 @@ class Tasks_model extends App_Model
     {
         $task_id = $this->db->escape_str($task_id);
 
-        return $this->db->query("SELECT id,note,start_time,end_time,task_id,staff_id, CONCAT(firstname, ' ', lastname) as full_name,
+        return $this->db->query("SELECT id," . db_prefix() . "taskstimers.note as note, start_time,end_time,task_id,staff_id, CONCAT(firstname, ' ', lastname) as full_name,
         end_time - start_time time_spent FROM " . db_prefix() . 'taskstimers JOIN ' . db_prefix() . 'staff ON ' . db_prefix() . 'staff.staffid=' . db_prefix() . "taskstimers.staff_id WHERE task_id = '$task_id' ORDER BY start_time DESC")->result_array();
     }
 

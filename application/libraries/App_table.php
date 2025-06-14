@@ -3,108 +3,93 @@
 use app\services\utilities\Js;
 use app\services\utilities\Str;
 
-defined("BASEPATH") or exit("No direct script access allowed");
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class App_table
 {
     public $ci;
-
     protected $viewPath;
-
     protected $view;
-
     protected $rules = [];
-
     protected $id;
-
-    protected $tableName = null;
-
+    protected $tableName;
     protected $outputUsing;
-
     protected $relatedTo;
-
     protected $primaryKeyName = 'id';
-
     protected $customfieldable;
-
-    protected $excludedCustomFields = ['colorpicker', 'link'];
-
+    protected $excludedCustomFields  = ['colorpicker', 'link'];
     protected $customFieldsToRuleMap = [
-        'input' => 'TextRule',
-        'number' => 'NumberRule',
-        'select' => 'SelectRule',
-        'multiselect' => 'MultiSelectRule',
-        'checkbox' => 'CheckboxRule',
-        'date_picker' => 'DateRule',
+        'input'            => 'TextRule',
+        'number'           => 'NumberRule',
+        'select'           => 'SelectRule',
+        'multiselect'      => 'MultiSelectRule',
+        'checkbox'         => 'CheckboxRule',
+        'date_picker'      => 'DateRule',
         'date_picker_time' => 'DateRule',
     ];
-
-    protected static $registered = [];
-
+    protected static $registered  = [];
     protected static $customRules = [];
-
-    protected static $compatibility = null;
-
-    protected static $customFields = null;
+    protected static $compatibility;
+    protected static $customFields;
 
     /**
      * Available query operators.
      */
     protected array $operators = [
-        "dynamic" => ['apply_to' => "DateRule"],
-        "equal" => ["apply_to" => ["TextRule", "NumberRule", "DateRule", "RadioRule", "SelectRule"]],
-        "not_equal" => ["apply_to" => ["TextRule", "NumberRule", "DateRule", "SelectRule"]],
-        "in" => ["apply_to" => ["MultiSelectRule", "CheckboxRule"]],
-        "not_in" => ["apply_to" => ["MultiSelectRule", "CheckboxRule"]],
-        "less" => ["apply_to" => ["NumberRule", "DateRule"]],
-        "less_or_equal" => ["apply_to" => ["NumberRule", "DateRule"]],
-        "greater" => ["apply_to" => ["NumberRule", "DateRule"]],
-        "greater_or_equal" => ["apply_to" => ["NumberRule", "DateRule"]],
-        'between' => ['apply_to' => ['NumberRule', 'DateRule']],
-        'not_between' => ['apply_to' => ['NumberRule', 'DateRule']],
-        "begins_with" => ["apply_to" => ["TextRule"]],
-        "not_begins_with" => ["apply_to" => ["TextRule"]],
-        "contains" => ["apply_to" => ["TextRule"]],
-        "not_contains" => ["apply_to" => ["TextRule"]],
-        "ends_with" => ["apply_to" => ["TextRule"]],
-        "not_ends_with" => ["apply_to" => ["TextRule"]],
-        'is_empty' => ['apply_to' => []],
-        'is_not_empty' => ['apply_to' => []],
+        'dynamic'          => ['apply_to' => 'DateRule'],
+        'equal'            => ['apply_to' => ['TextRule', 'NumberRule', 'DateRule', 'RadioRule', 'SelectRule']],
+        'not_equal'        => ['apply_to' => ['TextRule', 'NumberRule', 'DateRule', 'SelectRule']],
+        'in'               => ['apply_to' => ['MultiSelectRule', 'CheckboxRule']],
+        'not_in'           => ['apply_to' => ['MultiSelectRule', 'CheckboxRule']],
+        'less'             => ['apply_to' => ['NumberRule', 'DateRule']],
+        'less_or_equal'    => ['apply_to' => ['NumberRule', 'DateRule']],
+        'greater'          => ['apply_to' => ['NumberRule', 'DateRule']],
+        'greater_or_equal' => ['apply_to' => ['NumberRule', 'DateRule']],
+        'between'          => ['apply_to' => ['NumberRule', 'DateRule']],
+        'not_between'      => ['apply_to' => ['NumberRule', 'DateRule']],
+        'begins_with'      => ['apply_to' => ['TextRule']],
+        'not_begins_with'  => ['apply_to' => ['TextRule']],
+        'contains'         => ['apply_to' => ['TextRule']],
+        'not_contains'     => ['apply_to' => ['TextRule']],
+        'ends_with'        => ['apply_to' => ['TextRule']],
+        'not_ends_with'    => ['apply_to' => ['TextRule']],
+        'is_empty'         => ['apply_to' => []],
+        'is_not_empty'     => ['apply_to' => []],
     ];
 
     /**
      * SQL Operators.
      */
     protected array $operator_sql = [
-        "equal" => ["operator" => "="],
-        "not_equal" => ["operator" => "!="],
-        "in" => ["operator" => "IN"],
-        "not_in" => ["operator" => "NOT IN"],
-        "less" => ["operator" => "<"],
-        "less_or_equal" => ["operator" => "<="],
-        "greater" => ["operator" => ">"],
-        "greater_or_equal" => ["operator" => ">="],
-        'between' => ['operator' => 'BETWEEN'],
-        'not_between' => ['operator' => 'NOT BETWEEN'],
-        "begins_with" => ["operator" => "LIKE", "append" => "%"],
-        "not_begins_with" => ["operator" => "NOT LIKE", "append" => "%"],
-        "contains" => ["operator" => "LIKE", "prepend" => "%", "append" => "%"],
-        "not_contains" => ["operator" => "NOT LIKE", "prepend" => "%", "append" => "%"],
-        "ends_with" => ["operator" => "LIKE", "prepend" => "%"],
-        "not_ends_with" => ["operator" => "NOT LIKE", "prepend" => "%"],
-        'is_empty' => ['operator' => '='],
-        'is_not_empty' => ['operator' => '!='],
+        'equal'            => ['operator' => '='],
+        'not_equal'        => ['operator' => '!='],
+        'in'               => ['operator' => 'IN'],
+        'not_in'           => ['operator' => 'NOT IN'],
+        'less'             => ['operator' => '<'],
+        'less_or_equal'    => ['operator' => '<='],
+        'greater'          => ['operator' => '>'],
+        'greater_or_equal' => ['operator' => '>='],
+        'between'          => ['operator' => 'BETWEEN'],
+        'not_between'      => ['operator' => 'NOT BETWEEN'],
+        'begins_with'      => ['operator' => 'LIKE', 'append' => '%'],
+        'not_begins_with'  => ['operator' => 'NOT LIKE', 'append' => '%'],
+        'contains'         => ['operator' => 'LIKE', 'prepend' => '%', 'append' => '%'],
+        'not_contains'     => ['operator' => 'NOT LIKE', 'prepend' => '%', 'append' => '%'],
+        'ends_with'        => ['operator' => 'LIKE', 'prepend' => '%'],
+        'not_ends_with'    => ['operator' => 'NOT LIKE', 'prepend' => '%'],
+        'is_empty'         => ['operator' => '='],
+        'is_not_empty'     => ['operator' => '!='],
     ];
 
     /**
      * The operator that needs array.
      */
-    protected array $needs_array = ["IN", "NOT IN", "BETWEEN", "NOT BETWEEN"];
+    protected array $needs_array = ['IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN'];
 
     public function __construct($id = null, $viewPath = null)
     {
-        $this->ci = &get_instance();
-        $this->id = $id;
+        $this->ci       = &get_instance();
+        $this->id       = $id;
         $this->viewPath = $viewPath ?? $id;
 
         if (is_null(static::$compatibility)) {
@@ -113,12 +98,13 @@ class App_table
     }
 
     /**
-     * @param \App_table  $table
+     * @param App_table $table
+     *
      * @return void
      */
     public static function register($table)
     {
-        if (!$table->id) {
+        if (! $table->id) {
             throw new Exception('A table must have an ID.');
         }
 
@@ -133,8 +119,8 @@ class App_table
 
     protected function init()
     {
-        $incompatible = false;
-        $comp_check_key = 'my_' . $this->viewPath . '.php';
+        $incompatible         = false;
+        $comp_check_key       = 'my_' . $this->viewPath . '.php';
         $comp_check_view_path = VIEWPATH . DIRECTORY_SEPARATOR . 'admin' . DIRECTORY_SEPARATOR . 'tables' . DIRECTORY_SEPARATOR . $comp_check_key;
 
         if (isset(static::$compatibility[$comp_check_key]) && is_file($comp_check_key)) {
@@ -143,7 +129,7 @@ class App_table
             );
         }
 
-        include_once($this->ci->app->get_table_path($this->viewPath, $incompatible === false));
+        include_once $this->ci->app->get_table_path($this->viewPath, $incompatible === false);
     }
 
     public function relatedTo($tableId)
@@ -152,9 +138,11 @@ class App_table
 
         return $this;
     }
+
     /**
-     * @param string $id 
-     * @return \App_table 
+     * @param string $id
+     *
+     * @return App_table
      */
     public static function find($id)
     {
@@ -168,7 +156,7 @@ class App_table
 
     public static function rule($tableId, $rule)
     {
-        if (!array_key_exists($tableId, static::$customRules)) {
+        if (! array_key_exists($tableId, static::$customRules)) {
             static::$customRules[$tableId] = [];
         }
 
@@ -194,7 +182,7 @@ class App_table
 
     protected function rememberCustomFields()
     {
-        if (!is_null(static::$customFields)) {
+        if (! is_null(static::$customFields)) {
             return static::$customFields;
         }
 
@@ -220,17 +208,17 @@ class App_table
     protected function createRulesFromCustomFields()
     {
         $rulesMap = hooks()->apply_filters('table_custom_field_rules_map', $this->customFieldsToRuleMap);
-        $isAdmin = is_admin();
+        $isAdmin  = is_admin();
 
-        if (!$this->customfieldable) {
+        if (! $this->customfieldable) {
             return [];
         }
 
         return $this->getCustomFields()->reject(function ($field) use ($rulesMap) {
-            return in_array($field['type'], $this->excludedCustomFields) ||
-                !array_key_exists($field['type'], $rulesMap);
+            return in_array($field['type'], $this->excludedCustomFields)
+                || ! array_key_exists($field['type'], $rulesMap);
         })->map(function ($field) use ($rulesMap, $isAdmin) {
-            $options = collect(explode(',', $field['options']))
+            $options = collect(explode(',', $field['options'] ?? ''))
                 ->map(fn ($option) => trim($option))
                 ->filter()
                 ->map(fn ($option) => ['value' => $option, 'label' => $option]);
@@ -240,22 +228,23 @@ class App_table
                 $rulesMap[$field['type']]
             )->label($field['name']);
 
-            if (!$isAdmin && $field['only_admin'] == '1') {
+            if (! $isAdmin && $field['only_admin'] == '1') {
                 $rule->isVisible(fn () => false);
             }
 
-            if (!empty($options->all())) {
+            if (! empty($options->all())) {
                 $rule->options($options);
             }
 
             $rule->raw(function ($value, $operator, $operatorSql, $ruleInstance, $table) use ($field, $options) {
                 $prefix = 'exists';
 
-                if (!empty($options->all())) {
+                if (! empty($options->all())) {
                     if ($ruleInstance->type === 'MultiSelectRule' || $ruleInstance->type === 'CheckboxRule') {
                         $whereValueSql = '(';
+
                         foreach ($value as $option) {
-                            $whereValueSql .= ' value ' . 'LIKE' . ' "%' . $option . '%" OR';
+                            $whereValueSql .= ' value LIKE "%' . $option . '%" OR';
                         }
 
                         $whereValueSql = trim(substr_replace($whereValueSql, '', -3));
@@ -271,20 +260,18 @@ class App_table
                     $valueSqlColumn = 'value';
 
                     if ($ruleInstance->type === 'NumberRule') {
-                        $valueSqlColumn = 'CAST(value as DECIMAL(10, '.get_decimal_places().'))';
-                    } else if ($ruleInstance->type === 'DateRule') {
+                        $valueSqlColumn = 'CAST(value as DECIMAL(10, ' . get_decimal_places() . '))';
+                    } elseif ($ruleInstance->type === 'DateRule') {
                         $valueSqlColumn = 'CAST(value as DATE)';
                     }
 
                     $whereValueSql = $this->toSql($value, $operator, $operatorSql, $valueSqlColumn, $ruleInstance);
-                }   
+                }
 
                 return $prefix . $this->customFieldWhereSql($whereValueSql, $table, $field['fieldto'], $field['id']);
             });
 
-            $rule = hooks()->apply_filters('table_' . $this->id() . '_custom_field_rule', $rule, $field);
-
-            return $rule;
+            return hooks()->apply_filters('table_' . $this->id() . '_custom_field_rule', $rule, $field);
         })->all();
     }
 
@@ -341,7 +328,7 @@ class App_table
     public function rules()
     {
         return hooks()->apply_filters(
-            "table_" . $this->id() . "_rules",
+            'table_' . $this->id() . '_rules',
             array_merge($this->rules, static::$customRules[$this->id()] ?? [], $this->createRulesFromCustomFields())
         );
     }
@@ -354,6 +341,7 @@ class App_table
     public function setViewName($view)
     {
         return $this->view = $view;
+
         return $this;
     }
 
@@ -392,9 +380,9 @@ class App_table
     protected function castRules($filters, $table)
     {
         foreach ($filters as $key => $filter) {
-            if(!isset($filter['builder']['rules'])) {
+            if (! isset($filter['builder']['rules'])) {
                 $filters[$key]['builder']['rules'] = [];
-                $filter['builder']['rules'] = [];
+                $filter['builder']['rules']        = [];
             }
 
             foreach ($filter['builder']['rules'] as $rk => $rule) {
@@ -414,6 +402,7 @@ class App_table
                 }
             }
         }
+
         return $filters;
     }
 
@@ -463,48 +452,47 @@ class App_table
         return Js::from($this->rules());
     }
 
-
     public function getWhereFromRules()
     {
-        $whereSqls = [];
-        $matchType = $this->ci->input->post("filters")["match_type"] ?? "and";
-        $appliedRules = $this->ci->input->post("filters")["rules"] ?? [];
+        $whereSqls    = [];
+        $matchType    = $this->ci->input->post('filters')['match_type'] ?? 'and';
+        $appliedRules = $this->ci->input->post('filters')['rules'] ?? [];
 
         $fullTableName = db_prefix() . $this->getDbTableName();
 
         foreach ($appliedRules as $rule) {
-            $ruleInstance = $this->findRule($rule["id"])->dynamic($rule['has_dynamic_value']);
+            $ruleInstance = $this->findRule($rule['id'])->dynamic($rule['has_dynamic_value']);
 
-            if (!$ruleInstance) {
+            if (! $ruleInstance) {
                 continue;
             }
 
             $sqlColumn = $ruleInstance->column ?? $ruleInstance->id;
 
-            if (!$ruleInstance->column && !Str::startsWith($fullTableName . ".", $sqlColumn)) {
-                $sqlColumn = $fullTableName . "." . $sqlColumn;
+            if (! $ruleInstance->column && ! Str::startsWith($fullTableName . '.', $sqlColumn)) {
+                $sqlColumn = $fullTableName . '.' . $sqlColumn;
             }
 
-            $operator = ($rule["operator"] ?? '') ?: "equal";
+            $operator    = ($rule['operator'] ?? '') ?: 'equal';
             $operatorSql = $this->operator_sql[$operator] ?? null;
 
-            if ($ruleInstance->hasDynamicValue && !$operatorSql && $operator === 'dynamic') {
+            if ($ruleInstance->hasDynamicValue && ! $operatorSql && $operator === 'dynamic') {
                 $operatorSql = ['operator' => '='];
             }
 
             $value = $this->getRuleValueForSql($rule);
-                       
+
             if (is_callable($ruleInstance->callback)) {
                 $whereSqls[] = call_user_func_array($ruleInstance->callback, [
                     $value,
                     $operator,
                     $operatorSql,
                     $ruleInstance,
-                    $fullTableName
+                    $fullTableName,
                 ]);
+
                 continue;
             }
-
 
             $whereSqls[] = $this->toSql($value, $operator, $operatorSql, $sqlColumn, $ruleInstance);
         }
@@ -516,11 +504,11 @@ class App_table
                 continue;
             }
 
-            $whereSqls[$key] = $matchType . " " . $sql;
+            $whereSqls[$key] = $matchType . ' ' . $sql;
         }
 
         if (count($whereSqls) > 0) {
-            return "AND (" . implode(" ", $whereSqls) . ")";
+            return 'AND (' . implode(' ', $whereSqls) . ')';
         }
 
         return null;
@@ -528,73 +516,72 @@ class App_table
 
     protected function toSql($value, $operator, $operatorSql, $sqlColumn, $rule)
     {
-        if($rule->type === 'DateRule') {
-            $sqlColumn = 'CAST('.$sqlColumn.' as DATE)';
+        if ($rule->type === 'DateRule') {
+            $sqlColumn = 'CAST(' . $sqlColumn . ' as DATE)';
         }
 
         if (
             $this->operatorRequiresArray(
-                strtoupper($operatorSql["operator"])
+                strtoupper($operatorSql['operator'])
             )
         ) {
             if (
-                $operatorSql["operator"] === "IN" ||
-                $operatorSql["operator"] === "NOT IN"
+                $operatorSql['operator'] === 'IN'
+                || $operatorSql['operator'] === 'NOT IN'
             ) {
                 $value = "'" . implode("','", $value) . "'";
+
                 return
                     $sqlColumn .
-                    " " .
-                    $operatorSql["operator"] .
-                    " (" .
+                    ' ' .
+                    $operatorSql['operator'] .
+                    ' (' .
                     $value .
-                    ")";
-            } else if (
-                $operatorSql["operator"] === "BETWEEN" ||
-                $operatorSql["operator"] === "NOT BETWEEN"
+                    ')';
+            }
+            if (
+                $operatorSql['operator'] === 'BETWEEN'
+                || $operatorSql['operator'] === 'NOT BETWEEN'
             ) {
-
                 if ($value[0] == $value[1]) {
-                    return $sqlColumn . " = " . $this->wrapValueInQuotes($value[0]);
-                } else {
-                    return
-                        $sqlColumn .
-                        " " .
-                        $operatorSql["operator"] . " " .
-                        $this->wrapValueInQuotes($value[0]) .
-                        " AND " .
-                        $this->wrapValueInQuotes($value[1]);
+                    return $sqlColumn . ' = ' . $this->wrapValueInQuotes($value[0]);
                 }
+
+                return
+                    $sqlColumn .
+                    ' ' .
+                    $operatorSql['operator'] . ' ' .
+                    $this->wrapValueInQuotes($value[0]) .
+                    ' AND ' .
+                    $this->wrapValueInQuotes($value[1]);
             }
         }
 
-        $appendAfter = "";
+        $appendAfter = '';
 
         if (
-            $operatorSql["operator"] === "LIKE" ||
-            $operatorSql["operator"] === "NOT LIKE"
+            $operatorSql['operator'] === 'LIKE'
+            || $operatorSql['operator'] === 'NOT LIKE'
         ) {
-            $value = $this->ci->db->escape_like_str($value);
+            $value       = $this->ci->db->escape_like_str($value);
             $appendAfter = " ESCAPE '!'";
         }
 
         if (in_array($operator, ['is_empty', 'is_not_empty'])) {
             if ($rule->emptyOperatorValue === null) {
                 $operatorSql['operator'] = $operator === 'is_empty' ? 'IS NULL' : 'IS NOT NULL';
-                $value = null;
+                $value                   = null;
             } else {
                 $value = $rule->emptyOperatorValue;
             }
         }
 
-
-        $sql =
-            ($sqlColumn .
-                " " .
-                $operatorSql["operator"]) .
-            ($value !== null ? $this->wrapValueInQuotes((($operatorSql["prepend"] ?? "") .
+        $sql = ($sqlColumn .
+                ' ' .
+                $operatorSql['operator']) .
+            ($value !== null ? $this->wrapValueInQuotes((($operatorSql['prepend'] ?? '') .
                 $value .
-                ($operatorSql["append"] ?? ""))) : '');
+                ($operatorSql['append'] ?? ''))) : '');
 
         $sql .= $appendAfter;
 
@@ -620,9 +607,10 @@ class App_table
 
         $closure = $closure->bindTo($this);
 
-        $params = array_merge(["customFieldsColumns" => []], $params);
+        $params = array_merge(['customFieldsColumns' => []], $params);
 
         echo json_encode($closure($params, $this->rules()));
-        die();
+
+        exit();
     }
 }

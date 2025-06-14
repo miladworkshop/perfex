@@ -161,7 +161,7 @@
         <i class="fa-regular fa-circle-question pull-left tw-mt-0.5 tw-mr-1" data-toggle="tooltip"
             data-title="<?= _l('tasks_reminder_notification_before_help'); ?>"></i>
         <?= render_input('settings[tasks_reminder_notification_before]', 'tasks_reminder_notification_before', get_option('tasks_reminder_notification_before'), 'number'); ?>
-
+        <hr />
         <?= render_input('settings[automatically_stop_task_timer_after_hours]', 'automatically_stop_task_timer_after_hours', get_option('automatically_stop_task_timer_after_hours'), 'number'); ?>
         <hr />
         <?php

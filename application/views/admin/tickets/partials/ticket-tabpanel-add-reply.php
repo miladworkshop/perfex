@@ -118,8 +118,7 @@
                 </div>
                 <?php } ?>
             </div>
-            <?= render_textarea('message', '', '', ['placeholder' => _l('ticket_single_add_reply')], [], '', 'tinymce'); ?>
-
+            <?= render_textarea('message', '', '', ['placeholder' => _l('ticket_single_add_reply')], [], '', 'tinymce tinymce-manual'); ?>
         </div>
         <div class="ticket-reply-tools">
             <div>
@@ -186,10 +185,20 @@
                             <?php } ?>
                         </div>
                         <div
-                            class="sm:tw-flex sm:tw-items-center sm:tw-space-x-2.5 tw-mt-4 sm:tw-mt-0 rtl:tw-space-x-reverse">
-                            <label class="sm:tw-shrink-0"
+                            class="md:tw-flex md:tw-flex-wrap md:tw-items-center sm:tw-space-x-2.5 tw-mt-4 md:tw-mt-0 rtl:tw-space-x-reverse ">
+                            <label class="sm:tw-shrink-0 tw-mt-1"
                                 for="status"><?= _l('ticket_status'); ?></label>
                             <?= render_select('status', $statuses, ['ticketstatusid', 'name'], '', get_option('default_ticket_reply_status'), [], [], 'tw-mb-0 tw-w-full sm:tw-w-[200px]', '', false); ?>
+
+                            <?php if ($ticket->merged_ticket_id === null && is_ai_provider_enabled() && get_option('ai_enable_ticket_reply_suggestions') == '1') { ?>
+                            <button id="btn-ai-suggest" type="button"
+                                class="btn btn-secondary tw-w-full sm:tw-w-auto tw-mt-2 sm:tw-mt-0"
+                                data-rephrase-text="<?= _l('ticket_rephrase_reply'); ?>"
+                                data-loading-text="<?= _l('wait_text'); ?>">
+                                <i class="fa-solid fa-robot"></i>
+                                <?= _l('ticket_suggest_reply'); ?>
+                            </button>
+                            <?php } ?>
                             <button type="submit" class="btn btn-primary tw-w-full sm:tw-w-auto tw-mt-2 sm:tw-mt-0"
                                 <?= $ticket->merged_ticket_id != null ? 'disabled' : ''; ?>
                                 data-form="#single-ticket-form" autocomplete="off"

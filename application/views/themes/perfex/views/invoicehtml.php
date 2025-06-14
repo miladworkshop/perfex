@@ -118,31 +118,27 @@
                         <?= e(get_project_name_by_id($invoice->project_id)); ?>
                     </p>
                     <?php } ?>
-                    <?php $pdf_custom_fields = get_custom_fields('invoice', ['show_on_pdf' => 1, 'show_on_client_portal' => 1]);
-
-foreach ($pdf_custom_fields as $field) {
-    $value = get_custom_field_value($invoice->id, $field['id'], 'invoice');
-    if ($value == '') {
-        continue;
-    } ?>
+                    <?php $pdf_custom_fields = get_custom_fields('invoice', ['show_on_pdf' => 1, 'show_on_client_portal' => 1]); ?>
+                    <?php foreach ($pdf_custom_fields as $field) {
+                        $value = get_custom_field_value($invoice->id, $field['id'], 'invoice');
+                        if ($value == '') {
+                            continue;
+                        } ?>
                     <p class="tw-mb-0 tw-text-normal">
                         <span
                             class="tw-font-medium tw-text-neutral-700"><?= e($field['name']); ?>:
                         </span>
                         <?= $value; ?>
                     </p>
-                    <?php
-} ?>
+                    <?php } ?>
                     <?php hooks()->do_action('after_right_panel_invoicehtml', $invoice); ?>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="table-responsive">
-                        <?php
-             $items = get_items_table_data($invoice, 'invoice');
-echo $items->table();
-?>
+                        <?php $items = get_items_table_data($invoice, 'invoice'); ?>
+                        <?= $items->table(); ?>
                     </div>
                 </div>
                 <div class="col-md-6 col-md-offset-6">
@@ -342,7 +338,8 @@ if ($total_payments > 0) { ?>
                                 <td><?= e($payment['name']); ?>
                                     <?php if (! empty($payment['paymentmethod'])) {
                                         echo ' - ' . $payment['paymentmethod'];
-                                    } ?></td>
+                                    } ?>
+                                </td>
                                 <td><?= e(_d($payment['date'])); ?>
                                 </td>
                                 <td><?= e(app_format_money($payment['amount'], $invoice->currency_name)); ?>

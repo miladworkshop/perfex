@@ -45,7 +45,7 @@ function create_subscription_invoice_data($subscription, $invoice)
     // $new_invoice_data['include_shipping']         = 0;
     $new_invoice_data['status'] = 1;
 
-    if (!empty($client->shipping_street)) {
+    if (! empty($client->shipping_street)) {
         $new_invoice_data['show_shipping_on_invoice'] = 1;
         $new_invoice_data['include_shipping']         = 1;
     }
@@ -58,6 +58,7 @@ function create_subscription_invoice_data($subscription, $invoice)
     $key                          = 1;
     $items                        = is_array($invoice) ? $invoice['lines']['data'] : $invoice->lines->data;
     $totalItems                   = count($items);
+
     foreach ($items as $item) {
         $descCheck1 = $item['quantity'] . ' × ';
         $descCheck2 = $item['quantity'] . ' x ';
@@ -101,7 +102,7 @@ function subscription_invoice_preview_data($subscription, $upcomingInvoice = nul
     define('INVOICE_PREVIEW_SUBSCRIPTION', true);
     $CI = &get_instance();
 
-    if (!isset($upcomingInvoice)) {
+    if (! isset($upcomingInvoice)) {
         $upcomingInvoice = $CI->stripe_subscriptions->get_upcoming_invoice($subscription->stripe_subscription_id);
     }
 
@@ -131,8 +132,8 @@ function subscription_invoice_preview_data($subscription, $upcomingInvoice = nul
     $upcomingInvoice->items = $itemsArray;
 
     // Fake data
-    if (isset($stripeSubscription->current_period_end)) {
-        $date                  = date('Y-m-d', $stripeSubscription->current_period_end);
+    if (isset($stripeSubscription->items->data[0]->current_period_end)) {
+        $date                  = date('Y-m-d', $stripeSubscription->items->data[0]->current_period_end);
         $upcomingInvoice->date = _d($date);
 
         if (get_option('invoice_due_after') != 0) {
@@ -212,8 +213,9 @@ function get_subscriptions_statuses()
 function subscriptions_summary()
 {
     $statuses            = get_subscriptions_statuses();
-    $has_permission_view = staff_can('view',  'subscriptions');
+    $has_permission_view = staff_can('view', 'subscriptions');
     $summary             = [];
+
     foreach ($statuses as $status) {
         $where = ['status' => $status['id']];
         if (staff_cant('view', 'subscriptions')) {
@@ -227,7 +229,7 @@ function subscriptions_summary()
     }
 
     array_unshift($summary, [
-        'total' => total_rows(db_prefix() . 'subscriptions', 'date_subscribed IS NULL' . (!$has_permission_view ? ' AND created_from =' . get_staff_user_id() . '' : '')),
+        'total' => total_rows(db_prefix() . 'subscriptions', 'date_subscribed IS NULL' . (! $has_permission_view ? ' AND created_from =' . get_staff_user_id() . '' : '')),
         'color' => '#03a9f4',
         'id'    => 'not_subscribed',
     ]);
@@ -250,7 +252,7 @@ function send_email_customer_subscribed_to_subscription_to_staff($subscription)
 
 function can_logged_in_contact_view_subscriptions()
 {
-    if (!is_client_logged_in()) {
+    if (! is_client_logged_in()) {
         return false;
     }
 
@@ -261,14 +263,14 @@ function can_logged_in_contact_view_subscriptions()
 
 function can_logged_in_contact_update_credit_card()
 {
-    if (!is_client_logged_in()) {
+    if (! is_client_logged_in()) {
         return false;
     }
 
     $stripeOption = get_instance()->stripe_gateway->getSetting('allow_primary_contact_to_update_credit_card');
 
     return $GLOBALS['contact']->is_primary == '1'
-                        && !empty($GLOBALS['client']->stripe_id)
+                        && ! empty($GLOBALS['client']->stripe_id)
                         && $stripeOption == '1';
 }
 
@@ -276,31 +278,21 @@ function customer_can_delete_credit_card($client_id = null)
 {
     $client_id = $client_id === null ? get_client_user_id() : get_instance()->db->escape_str($client_id);
 
-    if (total_rows('subscriptions', "clientid={$client_id} AND status != 'canceled' AND status != 'incomplete_expired' AND status IS NOT NULL") > 0) {
-        return false;
-    }
-
-    return true;
+    return ! (total_rows('subscriptions', "clientid={$client_id} AND status != 'canceled' AND status != 'incomplete_expired' AND status IS NOT NULL") > 0);
 }
-
 
 function is_future_subscription_date($date)
 {
     $anchor = strtotime($date);
 
-    if ($date <= date('Y-m-d')) {
-        return false;
-    }
-
-    return true;
+    return ! ($date <= date('Y-m-d'));
 }
-
 
 function redirect_to_stripe_checkout($session_id)
 {
     $CI = &get_instance();
 
-    if (!class_exists('stripe_core', false)) {
+    if (! class_exists('stripe_core', false)) {
         $CI->load->library('stripe_core');
     }
 
@@ -312,16 +304,18 @@ function redirect_to_stripe_checkout($session_id)
                 sessionId: "' . $session_id . '"
             }).then(function (result) {});
     </script>';
-    die;
+
+    exit;
 }
 
 function check_stripe_subscription_environment($subscription)
 {
-    if ($subscription->in_test_environment === '1' && !get_instance()->stripe_gateway->is_test()) {
+    if ($subscription->in_test_environment === '1' && ! get_instance()->stripe_gateway->is_test()) {
         echo '<h2>This subscription was created in test environment, now the system has switched to live environment, hence, cannot be viewed.</h4>';
         if (staff_can('delete', 'subscriptions')) {
             echo '<h3>Feel free to delete the subscription from the system.</h4>';
         }
-        die;
+
+        exit;
     }
 }

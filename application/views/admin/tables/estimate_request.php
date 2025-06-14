@@ -97,7 +97,7 @@ foreach ($rResult as $aRow) {
     if (! $has_permission_edit) {
         $outputStatus = '<span class="label estimate_request-status-' . $aRow['status'] . '" style="color:' . $aRow['color'] . ';border:1px solid ' . adjust_hex_brightness($aRow['color'], 0.4) . ';background: ' . adjust_hex_brightness($aRow['color'], 0.04) . ';">' . e($aRow['status_name']);
 
-        $outputStatus .= '<div class="dropdown inline-block mleft5 table-export-exclude">';
+        $outputStatus .= '<div class="dropdown inline-block mleft5">';
         $outputStatus .= '<a href="#" style="font-size:14px;vertical-align:middle;" class="dropdown-toggle text-dark" id="tableestimate_requestsStatus-' . $aRow['id'] . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
         $outputStatus .= '<span data-toggle="tooltip" title="' . _l('ticket_single_change_status') . '"><i class="fa-solid fa-chevron-down"></i></span>';
         $outputStatus .= '</a>';

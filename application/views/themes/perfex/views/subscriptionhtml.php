@@ -15,7 +15,8 @@
             <div class="sm:tw-flex sm:tw-justify-between -tw-mx-4">
                 <div class="sm:tw-self-end">
                     <h4 class="bold tw-my-0 subscription-html-name">
-                        <?= e($subscription->name); ?></h4>
+                        <?= e($subscription->name); ?>
+                    </h4>
                     <div class="proposal-html-description">
                         <?= process_text_content_for_display($subscription->description); ?>
                     </div>
@@ -32,15 +33,13 @@
               } elseif (isset($stripeSubscription) && $stripeSubscription->status === 'incomplete') {
                   echo '<a href="' . $stripeSubscription->latest_invoice->hosted_invoice_url . '" class="btn btn-primary">' . _l('subscription_complete_payment') . '</a>';
               }
-          }
-if (can_logged_in_contact_view_subscriptions()) {
-    ?>
+          } ?>
+                    <?php if (can_logged_in_contact_view_subscriptions()) { ?>
                     <a href="<?= site_url('clients/subscriptions/'); ?>"
                         class="btn btn-default action-button go-to-portal">
                         <?= _l('client_go_to_dashboard'); ?>
                     </a>
-                    <?php
-} ?>
+                    <?php } ?>
                 </div>
             </div>
         </div>

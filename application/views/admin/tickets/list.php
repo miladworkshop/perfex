@@ -28,7 +28,7 @@
                                 <i class="fa fa-bar-chart"></i>
                             </a>
 
-                            <div class="md:tw-ml-6 rtl:md:tw-mr-6 tw-hidden md:tw-block">
+                            <div class="tw-grow md:tw-ml-6 rtl:md:tw-mr-6 tw-hidden md:tw-block">
                                 <?php $this->load->view('admin/tickets/summary', [
                                     'hrefAttrs' => function ($status) use ($table) {
                                         return '@click.prevent="extra.ticketsRules = ' . app\services\utilities\Js::from($table->findRule('status')->setValue([(int) $status['ticketstatusid']])) . '"';

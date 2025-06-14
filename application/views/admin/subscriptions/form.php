@@ -7,7 +7,8 @@
 <?= form_open('', ['id' => 'subscriptionForm', 'class' => '_transaction_form']); ?>
 <div class="row">
     <div class="col-md-12">
-        <div class="tw-bg-neutral-50 tw-rounded-md tw-p-6 tw-border tw-border-solid tw-border-neutral-200 tw-mb-4">
+        <div
+            class="tw-bg-neutral-50 tw-overflow-hidden tw-rounded-t-md tw-p-6 tw-border-b -tw-mt-6 -tw-mx-6 tw-border-solid tw-border-neutral-200 tw-mb-4">
             <div class="form-group select-placeholder">
                 <label
                     for="stripe_plan_id"><?= _l('billing_plan'); ?></label>

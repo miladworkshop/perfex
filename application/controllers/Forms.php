@@ -36,7 +36,7 @@ class Forms extends ClientsController
         // the proper localization file
         $GLOBALS['locale'] = get_locale_key($form->language);
 
-        $data['form_fields'] = json_decode($form->form_data);
+        $data['form_fields'] = $form->form_data ? json_decode($form->form_data) : [];
         if (! $data['form_fields']) {
             $data['form_fields'] = [];
         }

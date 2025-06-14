@@ -1103,7 +1103,7 @@ echo $comments;
                         <?php } ?>
 
                     </div>
-                    <div class="tw-truncate">
+                    <div class="tw-truncate hover:tw-text-clip hover:tw-overflow-auto hover:tw-whitespace-normal">
                         <?php if (! empty($reminder['description'])) {
                             echo process_text_content_for_display($reminder['description']);
                         } else {

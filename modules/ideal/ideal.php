@@ -91,6 +91,11 @@ function prevent_activate_ideal_gateway($systemOptions): void
     $ci->load->library('ideal_gateway');
     $options = $systemOptions['settings'];
 
+    if (!is_array($options)) {
+        // prevent bugs from module breaking the feature, e.g. third-party module developer did not wrap add value to settings[]
+        return;
+    }
+
     if (! array_key_exists('paymentmethod_Ideal_gateway_active', $options)) {
         return;
     }

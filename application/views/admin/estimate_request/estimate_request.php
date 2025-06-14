@@ -50,7 +50,7 @@
                                 <li>
                                     <a href="#" data-template="estimate"
                                         onclick="return mark_estimate_request_as(<?= $status['id'] ?>, <?= $estimate_request->id ?>)">
-                                        <?= _l('mark_estimate_request_as', $status['name']) ?></a>
+                                        <?= e(_l('mark_estimate_request_as', $status['name'])) ?></a>
                                 </li>
                                 <?php } ?>
                                 <?php if (staff_can('delete', 'estimate_request')) { ?>
@@ -101,7 +101,7 @@
                                 <?= _l('estimate_request_status') ?>
                             </p>
                             <p id="est_request_status_name" class="tw-text-neutral-500 tw-mt-1">
-                                <?= $estimate_request->status_name ?>
+                                <?= e($estimate_request->status_name) ?>
                             </p>
                         </div>
                         <?php $submissions = json_decode($estimate_request->submission); ?>
@@ -109,12 +109,11 @@
                         <?php foreach ($submissions as $data) { ?>
                         <div>
                             <p class="tw-text-neutral-800 tw-font-medium tw-mb-0">
-                                <?= $data->label ?>
+                                <?= e($data->label) ?>
                             </p>
-                            <p class="tw-text-neutral-500 tw-mt-1">
-                                <?php
+                            <p class="tw-text-neutral-500 tw-mt-1 tw-whitespace-pre-line"><?php
     if (is_string($data->value)) {
-        echo $data->value;
+        echo e(clear_textarea_breaks($data->value));
     } elseif (is_null($data->value)) {
         if (count($estimate_request->attachments) > 0) { ?>
                                 <?php $this->load->view(
@@ -123,7 +122,9 @@
                                 ); ?>
                                 <?php }
         } else {
-            echo implode('<br>', $data->value);
+            echo collect($data->value)->map(function ($item) {
+                return e($item);
+            })->implode('<br>');
         } ?>
                             </p>
                         </div>

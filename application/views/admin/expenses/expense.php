@@ -1,149 +1,147 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <?php init_head(); ?>
+
+<?php $hideTaxFields   = ! isset($expense) || ($expense->tax == 0 && $expense->tax2 == 0); ?>
+<?php $hidePaymentMode = ! isset($expense) || empty($expense->paymentmode); ?>
+<?php $hideName        = ! isset($expense) || empty($expense->expense_name); ?>
+<?php $hideNote        = ! isset($expense) || empty($expense->note); ?>
+<?php $hideReference   = ! isset($expense) || empty($expense->reference_no); ?>
+<?php $hideRecurring   = ! isset($expense) || $expense->recurring == 0; ?>
+
 <div id="wrapper">
     <div class="content">
         <div class="tw-max-w-4xl tw-mx-auto">
             <h4 class="tw-mt-0 tw-font-bold tw-text-lg tw-text-neutral-700">
                 <?= e($title); ?>
             </h4>
-            <div class="horizontal-scrollable-tabs">
-                <div class="scroller arrow-left"><i class="fa fa-angle-left"></i></div>
-                <div class="scroller arrow-right"><i class="fa fa-angle-right"></i></div>
-                <div class="horizontal-tabs">
-                    <ul class="nav nav-tabs nav-tabs-horizontal nav-tabs-segmented tw-mb-3" role="tablist">
-                        <li role="presentation" class="active">
-                            <a href="#tab_expense" aria-controls="tab_expense" role="tab" data-toggle="tab">
-                                <?= _l('expense'); ?>
-                            </a>
-                        </li>
-                        <li role="presentation">
-                            <a href="#tab_advanced_options" aria-controls="tab_advanced_options" role="tab"
-                                data-toggle="tab">
-                                <?= _l('advanced_options'); ?>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
             <?php if (isset($expense)) {
                 echo form_hidden('is_edit', 'true');
             } ?>
             <?= form_open_multipart($this->uri->uri_string(), ['id' => 'expense-form', 'class' => 'dropzone dropzone-manual']); ?>
             <div class="panel_s">
                 <div class="panel-body">
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="tab_expense">
-                            <?php if (isset($expense) && $expense->recurring_from != null) {
-                                $recurring_expense = $this->expenses_model->get($expense->recurring_from);
-                                echo '<div class="alert alert-info">' . _l('expense_recurring_from', '<a href="' . admin_url('expenses/list_expenses/' . $expense->recurring_from) . '" class="alert-link" target="_blank">' . $recurring_expense->category_name . (! empty($recurring_expense->expense_name) ? ' (' . $recurring_expense->expense_name . ')' : '') . '</a></div>');
-                            } ?>
-                            <?php if (isset($expense) && $expense->attachment !== '') { ?>
-                            <div class="row">
-                                <div class="col-md-10">
-                                    <i class="fa-solid fa-paperclip tw-text-neutral-500 ltr:tw-mr-1 rtl:tw-ml-1"></i>
-                                    <a class="text-muted"
-                                        href="<?= site_url('download/file/expense/' . $expense->expenseid); ?>"><?= e($expense->attachment); ?>
-                                    </a>
-                                </div>
-                                <?php if ($expense->attachment_added_from == get_staff_user_id() || is_admin()) { ?>
-                                <div class="col-md-2 text-right">
-                                    <a href="<?= admin_url('expenses/delete_expense_attachment/' . $expense->expenseid); ?>"
-                                        class="_delete tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700"><i
-                                            class="fa-regular fa-trash-can"></i></a>
-                                </div>
-                                <?php } ?>
+                    <?php if (isset($expense) && $expense->recurring_from != null) {
+                        $recurring_expense = $this->expenses_model->get($expense->recurring_from);
+                        echo '<div class="alert alert-info">' . _l('expense_recurring_from', '<a href="' . admin_url('expenses/list_expenses/' . $expense->recurring_from) . '" class="alert-link" target="_blank">' . e($recurring_expense->category_name) . (! empty($recurring_expense->expense_name) ? ' (' . e($recurring_expense->expense_name) . ')' : '') . '</a></div>');
+                    } ?>
+                    <div
+                        class="tw-bg-neutral-50 tw-overflow-hidden tw-rounded-t-md tw-p-6 tw-border-b -tw-mt-6 -tw-mx-6 tw-border-solid tw-border-neutral-200 tw-mb-4">
+                        <?php if (isset($expense) && $expense->attachment !== '') { ?>
+                        <div class="row">
+                            <div class="col-md-10">
+                                <h4 class="tw-mt-0 tw-font-bold tw-text-base">
+                                    <?= _l('expense_receipt'); ?>
+                                </h4>
+                                <i class="fa-solid fa-paperclip tw-text-neutral-500 ltr:tw-mr-1 rtl:tw-ml-1"></i>
+                                <a
+                                    href="<?= site_url('download/file/expense/' . $expense->expenseid); ?>">
+                                    <?= e($expense->attachment); ?>
+                                </a>
+                            </div>
+                            <?php if ($expense->attachment_added_from == get_staff_user_id() || is_admin()) { ?>
+                            <div class="col-md-2 text-right">
+                                <a href="<?= admin_url('expenses/delete_expense_attachment/' . $expense->expenseid); ?>"
+                                    class="_delete tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700"><i
+                                        class="fa-regular fa-trash-can"></i></a>
                             </div>
                             <?php } ?>
-                            <?php if (! isset($expense) || (isset($expense) && $expense->attachment == '')) { ?>
-                            <div id="dropzoneDragArea" class="dz-default dz-message">
-                                <span><?= _l('expense_add_edit_attach_receipt'); ?></span>
-                            </div>
-                            <div class="dropzone-previews"></div>
-                            <?php } ?>
-                            <hr class="hr-panel-separator" />
-
-                            <?php hooks()->do_action('before_expense_form_name', $expense ?? null); ?>
-
-                            <i class="fa-regular fa-circle-question pull-left tw-mt-0.5 ltr:tw-mr-1 rtl:tw-ml-1"
-                                data-toggle="tooltip"
-                                data-title="<?= _l('expense_name_help'); ?> - <?= e(_l('expense_field_billable_help', _l('expense_name'))); ?>"></i>
-                            <?php $value = (isset($expense) ? $expense->expense_name : ''); ?>
-                            <?= render_input('expense_name', 'expense_name', $value); ?>
-                            <i class="fa-regular fa-circle-question pull-left tw-mt-0.5 ltr:tw-mr-1 rtl:tw-ml-1"
-                                data-toggle="tooltip"
-                                data-title="<?= e(_l('expense_field_billable_help', _l('expense_add_edit_note'))); ?>"></i>
-                            <?php $value = (isset($expense) ? $expense->note : ''); ?>
-                            <?= render_textarea('note', 'expense_add_edit_note', $value, ['rows' => 4], []); ?>
-                            <?php $selected = (isset($expense) ? $expense->category : ''); ?>
-                            <?php if (is_admin() || get_option('staff_members_create_inline_expense_categories') == '1') {
-                                echo render_select_with_input_group('category', $categories, ['id', 'name'], 'expense_category', $selected, '<div class="input-group-btn"><a href="#" class="btn btn-default" onclick="new_category();return false;"><i class="fa fa-plus"></i></a></div>');
-                            } else {
-                                echo render_select('category', $categories, ['id', 'name'], 'expense_category', $selected);
-                            } ?>
-                            <?php
-                            $value            = (isset($expense) ? _d($expense->date) : _d(date('Y-m-d'))); ?>
-                            <?php $date_attrs = []; ?>
-                            <?php if (isset($expense) && $expense->recurring > 0 && $expense->last_recurring_date != null) {
-                                $date_attrs['disabled'] = true;
-                            } ?>
-                            <?= render_date_input('date', 'expense_add_edit_date', $value, $date_attrs); ?>
-                            <?php $value = (isset($expense) ? $expense->amount : ''); ?>
-                            <?= render_input('amount', 'expense_add_edit_amount', $value, 'number'); ?>
-                            <?php $hide_billable_options = 'hide'; ?>
-
-                            <?php if ((isset($expense) && ($expense->billable == 1 || $expense->clientid)) || isset($customer_id)) {
-                                $hide_billable_options = '';
-                            } ?>
-                            <div
-                                class="checkbox checkbox-primary billable <?= e($hide_billable_options); ?>">
-                                <input type="checkbox" id="billable" <?php if (isset($expense) && $expense->invoiceid !== null) {
-                                    echo 'disabled';
-                                } ?> name="billable" <?php if (isset($expense)) {
-                                    if ($expense->billable == 1) {
-                                        echo 'checked';
-                                    }
-                                } ?>>
-                                <label for="billable"
-                                    <?php if (isset($expense) && $expense->invoiceid !== null) {
-                                        echo 'data-toggle="tooltip" title="' . _l('expense_already_invoiced') . '"';
-                                    } ?>><?= _l('expense_add_edit_billable'); ?></label>
-                            </div>
-                            <div class="form-group select-placeholder">
-                                <label for="clientid"
-                                    class="control-label"><?= _l('expense_add_edit_customer'); ?></label>
-                                <select id="clientid" name="clientid" data-live-search="true" data-width="100%"
-                                    class="ajax-search"
-                                    data-none-selected-text="<?= _l('dropdown_non_selected_tex'); ?>">
-                                    <?php $selected = (isset($expense) ? $expense->clientid : ($customer_id ?? '')); ?>
-                                    <?php if ($selected != '') {
-                                        $rel_data = get_relation_data('customer', $selected);
-                                        $rel_val  = get_relation_values($rel_data, 'customer');
-                                        echo '<option value="' . $rel_val['id'] . '" selected>' . $rel_val['name'] . '</option>';
-                                    } ?>
-                                </select>
-                            </div>
-                            <!-- // Show selector only if expense is already added and there is no client linked to the expense or isset customer id -->
-                            <?php $hide_project_selector = (isset($expense) && $expense->clientid) || isset($customer_id) ? '' : ' hide'; ?>
-                            <div
-                                class="form-group projects-wrapper<?= e($hide_project_selector); ?>">
-                                <label
-                                    for="project_id"><?= _l('project'); ?></label>
-                                <div id="project_ajax_search_wrapper">
-                                    <select name="project_id" id="project_id" class="projects ajax-search"
-                                        data-live-search="true" data-width="100%"
-                                        data-none-selected-text="<?= _l('dropdown_non_selected_tex'); ?>">
-                                        <?php if (isset($expense) && $expense->project_id) {
-                                            echo '<option value="' . $expense->project_id . '" selected>' . e(get_project_name_by_id($expense->project_id)) . '</option>';
-                                        } ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <?php $rel_id = (isset($expense) ? $expense->expenseid : false); ?>
-                            <?= render_custom_fields('expenses', $rel_id); ?>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="tab_advanced_options">
+                        <?php } ?>
+                        <?php if (! isset($expense) || (isset($expense) && $expense->attachment == '')) { ?>
+                        <div id="dropzoneDragArea" class="dz-default dz-message">
+                            <span><?= _l('expense_add_edit_attach_receipt'); ?></span>
+                        </div>
+                        <div class="dropzone-previews"></div>
+                        <?php } ?>
+                    </div>
+                    <?php if ($hideRecurring) { ?>
+                    <a href="#" class="tw-mb-4 -tw-mt-1 tw-block"
+                        onclick="return onExpenseAddFieldClick(this, 'expenseRecurringOptions')">
+                        +
+                        <?= _l('expense_recurring_indicator'); ?>
+                    </a>
+                    <?php } ?>
+                    <div id="expenseRecurringOptions"
+                        style="<?= $hideRecurring ? 'display:none' : ''; ?>">
+                        <?php $this->load->view('admin/expenses/expense_recurring_options'); ?>
+                    </div>
+
+                    <?php hooks()->do_action('before_expense_form_name', $expense ?? null); ?>
+
+                    <?php if ($hideName) { ?>
+                    <a href="#" class="tw-mb-4 -tw-mt-1 tw-block"
+                        onclick="return onExpenseAddFieldClick(this, 'expenseNameField')">
+                        +
+                        <?= _l('expense_name'); ?>
+                    </a>
+                    <?php } ?>
+
+                    <div id="expenseNameField"
+                        style="<?= $hideName ? 'display:none' : ''; ?>">
+                        <i class="fa-regular fa-circle-question pull-left tw-mt-0.5 ltr:tw-mr-1 rtl:tw-ml-1"
+                            data-toggle="tooltip"
+                            data-title="<?= _l('expense_name_help'); ?> - <?= e(_l('expense_field_billable_help', _l('expense_name'))); ?>"></i>
+
+                        <?php $value = (isset($expense) ? $expense->expense_name : ''); ?>
+                        <?= render_input('expense_name', 'expense_name', $value); ?>
+                    </div>
+
+                    <?php if ($hideReference) { ?>
+                    <a href="#" class="tw-mb-4 -tw-mt-1 tw-block"
+                        onclick="return onExpenseAddFieldClick(this, 'expenseReferenceField')">
+                        +
+                        <?= _l('expense_add_edit_reference_no'); ?>
+                    </a>
+                    <?php } ?>
+
+                    <div id="expenseReferenceField"
+                        style="<?= $hideReference ? 'display:none' : ''; ?>">
+                        <?php $value = (isset($expense) ? $expense->reference_no : ''); ?>
+                        <?= render_input('reference_no', 'expense_add_edit_reference_no', $value); ?>
+                    </div>
+
+                    <?php if ($hideNote) { ?>
+                    <a href="#" class="tw-mb-4 -tw-mt-1 tw-block"
+                        onclick="return onExpenseAddFieldClick(this, 'expenseNoteField')">
+                        +
+                        <?= _l('expense_add_edit_note'); ?>
+                    </a>
+                    <?php } ?>
+
+                    <div id="expenseNoteField"
+                        style="<?= $hideNote ? 'display:none' : ''; ?>">
+                        <i class="fa-regular fa-circle-question pull-left tw-mt-0.5 ltr:tw-mr-1 rtl:tw-ml-1"
+                            data-toggle="tooltip"
+                            data-title="<?= e(_l('expense_field_billable_help', _l('expense_add_edit_note'))); ?>"></i>
+                        <?php $value = (isset($expense) ? $expense->note : ''); ?>
+                        <?= render_textarea('note', 'expense_add_edit_note', $value, ['rows' => 2], []); ?>
+                    </div>
+
+                    <div class="tw-mt-6">
+                        <?php $selected = (isset($expense) ? $expense->category : ''); ?>
+                        <?php if (is_admin() || get_option('staff_members_create_inline_expense_categories') == '1') {
+                            echo render_select_with_input_group('category', $categories, ['id', 'name'], 'expense_category', $selected, '<div class="input-group-btn"><a href="#" class="btn btn-default" onclick="new_category();return false;"><i class="fa fa-plus"></i></a></div>');
+                        } else {
+                            echo render_select('category', $categories, ['id', 'name'], 'expense_category', $selected);
+                        } ?>
+                    </div>
+                    <?php
+                        $value        = (isset($expense) ? _d($expense->date) : _d(date('Y-m-d'))); ?>
+                    <?php $date_attrs = []; ?>
+                    <?php if (isset($expense) && $expense->recurring > 0 && $expense->last_recurring_date != null) {
+                        $date_attrs['disabled'] = true;
+                    } ?>
+                    <?= render_date_input('date', 'expense_add_edit_date', $value, $date_attrs); ?>
+
+                    <div
+                        class="tw-bg-neutral-50/30 tw-shadow-sm tw-px-5 tw-py-4 tw-rounded-lg tw-border tw-border-solid tw-border-neutral-200 tw-mt-4 tw-mb-6">
+                        <div class="tw-flex tw-gap-x-1.5">
+                            <div class="tw-grow">
+                                <?php $value = (isset($expense) ? $expense->amount : ''); ?>
+                                <?= render_input('amount', 'expense_add_edit_amount', $value, 'number'); ?>
+                            </div>
                             <?php
-$currency_attr = ['disabled' => true, 'data-show-subtext' => true];
+$currency_attr = ['disabled' => true, 'data-show-subtext' => true, 'data-width' => '120px'];
 
 $currency_attr = apply_filters_deprecated('expense_currency_disabled', [$currency_attr], '2.3.0', 'expense_currency_attributes');
 
@@ -177,9 +175,20 @@ foreach ($currencies as $currency) {
 }
 $currency_attr = hooks()->apply_filters('expense_currency_attributes', $currency_attr);
 ?>
-                            <div id="expense_currency">
-                                <?= render_select('currency', $currencies, ['id', 'name', 'symbol'], 'expense_currency', $selected, $currency_attr); ?>
+                            <div id="expense_currency" class="tw-self-end">
+                                <?= render_select('currency', $currencies, ['id', 'name', 'symbol'], '', $selected, $currency_attr); ?>
                             </div>
+                        </div>
+
+                        <?php if ($hideTaxFields) { ?>
+                        <a href="#" class="tw-mb-4 -tw-mt-2 tw-block"
+                            onclick="return onExpenseAddFieldClick(this, 'taxFields')">
+                            + <?= _l('tax'); ?>
+                        </a>
+                        <?php } ?>
+
+                        <div id="taxFields"
+                            style="<?= $hideTaxFields ? 'display:none' : ''; ?>">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group select-placeholder">
@@ -256,157 +265,78 @@ $currency_attr = hooks()->apply_filters('expense_currency_attributes', $currency
                                 </div>
                                 <?php } ?>
                             </div>
-                            <div class="clearfix mtop15"></div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <?php $selected = (isset($expense) ? $expense->paymentmode : ''); ?>
-                                    <?= render_select('paymentmode', $payment_modes, ['id', 'name'], 'payment_mode', $selected); ?>
-                                </div>
-                                <div class="col-md-6">
-                                    <?php $value = (isset($expense) ? $expense->reference_no : ''); ?>
-                                    <?= render_input('reference_no', 'expense_add_edit_reference_no', $value); ?>
-                                </div>
-                            </div>
-                            <div class="form-group select-placeholder" <?php if (isset($expense) && ! empty($expense->recurring_from)) { ?>
-                                data-toggle="tooltip"
-                                data-title="<?= _l('create_recurring_from_child_error_message', [_l('expense_lowercase'), _l('expense_lowercase'), _l('expense_lowercase')]); ?>"
-                                <?php } ?>>
-                                <label for="repeat_every"
-                                    class="control-label"><?= _l('expense_repeat_every'); ?></label>
-                                <select name="repeat_every" id="repeat_every" class="selectpicker" data-width="100%"
-                                    data-none-selected-text="<?= _l('dropdown_non_selected_tex'); ?>"
-                                    <?php if (isset($expense) && ! empty($expense->recurring_from)) { ?>
-                                    disabled <?php } ?>>
-                                    <option value=""></option>
-                                    <option value="1-week" <?php if (isset($expense) && $expense->repeat_every == 1 && $expense->recurring_type == 'week') {
-                                        echo 'selected';
-                                    } ?>><?= _l('week'); ?>
-                                    </option>
-                                    <option value="2-week" <?php if (isset($expense) && $expense->repeat_every == 2 && $expense->recurring_type == 'week') {
-                                        echo 'selected';
-                                    } ?>>2
-                                        <?= _l('weeks'); ?>
-                                    </option>
-                                    <option value="1-month" <?php if (isset($expense) && $expense->repeat_every == 1 && $expense->recurring_type == 'month') {
-                                        echo 'selected';
-                                    } ?>>1
-                                        <?= _l('month'); ?>
-                                    </option>
-                                    <option value="2-month" <?php if (isset($expense) && $expense->repeat_every == 2 && $expense->recurring_type == 'month') {
-                                        echo 'selected';
-                                    } ?>>2
-                                        <?= _l('months'); ?>
-                                    </option>
-                                    <option value="3-month" <?php if (isset($expense) && $expense->repeat_every == 3 && $expense->recurring_type == 'month') {
-                                        echo 'selected';
-                                    } ?>>3
-                                        <?= _l('months'); ?>
-                                    </option>
-                                    <option value="6-month" <?php if (isset($expense) && $expense->repeat_every == 6 && $expense->recurring_type == 'month') {
-                                        echo 'selected';
-                                    } ?>>6
-                                        <?= _l('months'); ?>
-                                    </option>
-                                    <option value="1-year" <?php if (isset($expense) && $expense->repeat_every == 1 && $expense->recurring_type == 'year') {
-                                        echo 'selected';
-                                    } ?>>1
-                                        <?= _l('year'); ?>
-                                    </option>
-                                    <option value="custom" <?php if (isset($expense) && $expense->custom_recurring == 1) {
-                                        echo 'selected';
-                                    } ?>><?= _l('recurring_custom'); ?>
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="recurring_custom <?php if ((isset($expense) && $expense->custom_recurring != 1) || (! isset($expense))) {
-                                echo 'hide';
-                            } ?>">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <?php $value = (isset($expense) && $expense->custom_recurring == 1 ? $expense->repeat_every : 1); ?>
-                                        <?= render_input('repeat_every_custom', '', $value, 'number', ['min' => 1]); ?>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <select name="repeat_type_custom" id="repeat_type_custom" class="selectpicker"
-                                            data-width="100%"
-                                            data-none-selected-text="<?= _l('dropdown_non_selected_tex'); ?>">
-                                            <option value="day" <?php if (isset($expense) && $expense->custom_recurring == 1 && $expense->recurring_type == 'day') {
-                                                echo 'selected';
-                                            } ?>><?= _l('expense_recurring_days'); ?>
-                                            </option>
-                                            <option value="week" <?php if (isset($expense) && $expense->custom_recurring == 1 && $expense->recurring_type == 'week') {
-                                                echo 'selected';
-                                            } ?>><?= _l('expense_recurring_weeks'); ?>
-                                            </option>
-                                            <option value="month" <?php if (isset($expense) && $expense->custom_recurring == 1 && $expense->recurring_type == 'month') {
-                                                echo 'selected';
-                                            } ?>><?= _l('expense_recurring_months'); ?>
-                                            </option>
-                                            <option value="year" <?php if (isset($expense) && $expense->custom_recurring == 1 && $expense->recurring_type == 'year') {
-                                                echo 'selected';
-                                            } ?>><?= _l('expense_recurring_years'); ?>
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="cycles_wrapper" class="<?php if (! isset($expense) || (isset($expense) && $expense->recurring == 0)) {
-                                echo ' hide';
-                            }?>">
-                                <?php $value = (isset($expense) ? $expense->cycles : 0); ?>
-                                <div class="form-group recurring-cycles">
-                                    <label
-                                        for="cycles"><?= _l('recurring_total_cycles'); ?>
-                                        <?php if (isset($expense) && $expense->total_cycles > 0) {
-                                            echo '<small>' . e(_l('cycles_passed', $expense->total_cycles)) . '</small>';
-                                        }
-?>
-                                    </label>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control" <?php if ($value == 0) {
-                                            echo ' disabled';
-                                        } ?> name="cycles" id="cycles"
-                                        value="<?= e($value); ?>"
-                                        <?php if (isset($expense) && $expense->total_cycles > 0) {
-                                            echo 'min="' . e($expense->total_cycles) . '"';
-                                        } ?>>
-                                        <div class="input-group-addon">
-                                            <div class="checkbox">
-                                                <input type="checkbox" <?php if ($value == 0) {
-                                                    echo ' checked';
-                                                } ?> id="unlimited_cycles">
-                                                <label
-                                                    for="unlimited_cycles"><?= _l('cycles_infinity'); ?></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <?php $hide_invoice_recurring_options = (isset($expense) && $expense->billable == 1) ? '' : 'hide'; ?>
-                                <div
-                                    class="checkbox checkbox-primary billable_recurring_options <?= e($hide_invoice_recurring_options); ?>">
-                                    <input type="checkbox" id="create_invoice_billable" name="create_invoice_billable"
-                                        <?php if (isset($expense)) {
-                                            if ($expense->create_invoice_billable == 1) {
-                                                echo 'checked';
-                                            }
-                                        } ?>>
-                                    <label for="create_invoice_billable"><i class="fa-regular fa-circle-question"
-                                            data-toggle="tooltip"
-                                            title="<?= _l('expense_recurring_autocreate_invoice_tooltip'); ?>"></i>
-                                        <?= _l('expense_recurring_auto_create_invoice'); ?></label>
-                                </div>
-                            </div>
-                            <div
-                                class="checkbox checkbox-primary billable_recurring_options <?= e($hide_invoice_recurring_options); ?>">
-                                <input type="checkbox" name="send_invoice_to_customer" id="send_invoice_to_customer"
-                                    <?= isset($expense) && $expense->send_invoice_to_customer == 1 ? 'checked' : ''; ?>>
-                                <label
-                                    for="send_invoice_to_customer"><?= _l('expense_recurring_send_custom_on_renew'); ?></label>
-                            </div>
+                        </div>
+
+                        <?php if ($hidePaymentMode) { ?>
+                        <a href="#" class="-tw-mt-2 tw-block"
+                            onclick="return onExpenseAddFieldClick(this, 'paymentModeField')">
+                            +
+                            <?= _l('payment_mode'); ?>
+                        </a>
+                        <?php } ?>
+
+
+                        <div id="paymentModeField"
+                            style="<?= $hidePaymentMode ? 'display:none' : ''; ?>">
+                            <?php $selected = (isset($expense) ? $expense->paymentmode : ''); ?>
+                            <?= render_select('paymentmode', $payment_modes, ['id', 'name'], 'payment_mode', $selected); ?>
                         </div>
                     </div>
+
+                    <div class="form-group select-placeholder">
+                        <label for="clientid"
+                            class="control-label"><?= _l('expense_add_edit_customer'); ?></label>
+                        <select id="clientid" name="clientid" data-live-search="true" data-width="100%"
+                            class="ajax-search"
+                            data-none-selected-text="<?= _l('dropdown_non_selected_tex'); ?>">
+                            <?php $selected = (isset($expense) ? $expense->clientid : ($customer_id ?? '')); ?>
+                            <?php if ($selected != '') {
+                                $rel_data = get_relation_data('customer', $selected);
+                                $rel_val  = get_relation_values($rel_data, 'customer');
+                                echo '<option value="' . $rel_val['id'] . '" selected>' . $rel_val['name'] . '</option>';
+                            } ?>
+                        </select>
+                    </div>
+                    <?php $hide_billable_options = 'hide'; ?>
+
+                    <?php if ((isset($expense) && ($expense->billable == 1 || $expense->clientid)) || isset($customer_id)) {
+                        $hide_billable_options = '';
+                    } ?>
+
+                    <div
+                        class="checkbox checkbox-primary billable <?= e($hide_billable_options); ?>">
+                        <input type="checkbox" id="billable" <?php if (isset($expense) && $expense->invoiceid !== null) {
+                            echo 'disabled';
+                        } ?> name="billable" <?php if (isset($expense)) {
+                            if ($expense->billable == 1) {
+                                echo 'checked';
+                            }
+                        } ?>>
+                        <label for="billable"
+                            <?php if (isset($expense) && $expense->invoiceid !== null) {
+                                echo 'data-toggle="tooltip" title="' . _l('expense_already_invoiced') . '"';
+                            } ?>><?= _l('expense_add_edit_billable'); ?></label>
+                    </div>
+                    <!-- // Show selector only if expense is already added and there is no client linked to the expense or isset customer id -->
+                    <?php $hide_project_selector = (isset($expense) && $expense->clientid) || isset($customer_id) ? '' : ' hide'; ?>
+                    <div
+                        class="form-group projects-wrapper<?= e($hide_project_selector); ?>">
+                        <label
+                            for="project_id"><?= _l('project'); ?></label>
+                        <div id="project_ajax_search_wrapper">
+                            <select name="project_id" id="project_id" class="projects ajax-search"
+                                data-live-search="true" data-width="100%"
+                                data-none-selected-text="<?= _l('dropdown_non_selected_tex'); ?>">
+                                <?php if (isset($expense) && $expense->project_id) {
+                                    echo '<option value="' . $expense->project_id . '" selected>' . e(get_project_name_by_id($expense->project_id)) . '</option>';
+                                } ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <?php $rel_id = (isset($expense) ? $expense->expenseid : false); ?>
+                    <?= render_custom_fields('expenses', $rel_id); ?>
+
                     <div class="text-right">
                         <button type="submit" class="btn btn-primary">
                             <?= _l('submit'); ?>
@@ -414,6 +344,7 @@ $currency_attr = hooks()->apply_filters('expense_currency_attributes', $currency
                     </div>
                 </div>
             </div>
+
             <?php hooks()->do_action('before_expense_form_template_close', $expense ?? null); ?>
             <?= form_close(); ?>
         </div>
@@ -432,6 +363,14 @@ $currency_attr = hooks()->apply_filters('expense_currency_attributes', $currency
     <?php if (isset($customer_currency)) { ?>
     var customer_currency = '<?= e($customer_currency); ?>';
     <?php } ?>
+
+    function onExpenseAddFieldClick(el, id) {
+        window[id].style.display = 'block';
+        el.style.display = 'none'
+        let formEl = $('#' + id).find('textarea,input,select');
+        formEl.focus()
+        return false;
+    }
 
     $(function() {
         $('body').on('change', '#project_id', function() {
